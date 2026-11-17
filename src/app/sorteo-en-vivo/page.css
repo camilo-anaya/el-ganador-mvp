@@ -5038,8 +5038,11 @@
    ============================================================================ */
 @media (min-width: 821px) {
   .liveDemoPage {
-    padding-left: clamp(14px, 2vw, 36px) !important;
-    padding-right: clamp(14px, 2vw, 36px) !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
   }
 
   .liveDemoHeader,
@@ -5047,19 +5050,30 @@
   .liveDemoStage,
   .liveDemoAudit,
   .liveDemoFooter {
-    max-width: min(98vw, 1780px) !important;
+    max-width: 100% !important;
     width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .liveDemoStage {
+    border-radius: 18px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .liveDemoStageGrid {
-    grid-template-columns: minmax(460px, 1.4fr) minmax(360px, 1fr) !important;
+    grid-template-columns: minmax(540px, 1.45fr) minmax(380px, 1fr) !important;
     gap: clamp(24px, 2.5vw, 56px) !important;
-    padding: 24px clamp(18px, 2.5vw, 44px) 34px !important;
+    padding: 24px clamp(16px, 2vw, 36px) 34px !important;
     align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
   .liveDemoMachine {
-    min-height: 700px;
+    min-height: clamp(740px, 78vh, 940px) !important;
     padding: 28px 20px;
     border-radius: 26px;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -5067,7 +5081,7 @@
   }
 
   .wheelCasinoWrapper {
-    --wheel-size: clamp(340px, 38vw, 580px);
+    --wheel-size: clamp(360px, 42vw, 740px) !important;
   }
 
   .liveDemoDetails {
@@ -5076,8 +5090,8 @@
   }
 
   .globeChassis {
-    width: min(96%, clamp(560px, 45vw, 780px)) !important;
-    max-width: clamp(560px, 45vw, 780px) !important;
+    width: min(98%, clamp(600px, 50vw, 920px)) !important;
+    max-width: clamp(600px, 50vw, 920px) !important;
   }
 
   .machineHalo {
@@ -6255,23 +6269,25 @@
 
 @media (min-width: 980px) {
   .liveDemoStageGrid {
-    grid-template-columns: minmax(520px, 1.42fr) minmax(380px, 1fr) !important;
-    gap: clamp(28px, 3vw, 60px) !important;
-    padding: 28px clamp(20px, 3vw, 52px) 36px !important;
+    grid-template-columns: minmax(560px, 1.45fr) minmax(380px, 1fr) !important;
+    gap: clamp(28px, 2.8vw, 56px) !important;
+    padding: 28px clamp(18px, 2.5vw, 36px) 36px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
   .liveDemoMachine {
-    min-height: clamp(740px, 78vh, 880px) !important;
+    min-height: clamp(760px, 80vh, 960px) !important;
   }
   .wheelCasinoWrapper {
-    --wheel-size: clamp(380px, 40vw, 680px) !important;
+    --wheel-size: clamp(400px, 44vw, 780px) !important;
   }
   .liveDemoDetails {
     max-width: 100% !important;
     width: 100% !important;
   }
   .globeChassis {
-    width: min(98%, clamp(600px, 48vw, 820px)) !important;
-    max-width: clamp(600px, 48vw, 820px) !important;
+    width: min(98%, clamp(640px, 50vw, 940px)) !important;
+    max-width: clamp(640px, 50vw, 940px) !important;
   }
 }
 

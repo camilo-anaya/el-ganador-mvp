@@ -14254,10 +14254,42 @@ body {
   text-decoration: none;
 }
 
-/* OCULTAR CONTROLES MANUALES DE TEMA (100% AUTOMÁTICO SEGÚN EL CELULAR) */
-.welcome-theme-bar,
+/* BOTÓN DE CAMBIO DE TEMA MANUAL 100% VISIBLE (MODO CLARO / OSCURO A VOLUNTAD) */
 .theme-toggle-btn {
-  display: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(212, 175, 55, 0.45) !important;
+  background: rgba(212, 175, 55, 0.12) !important;
+  color: var(--text-color, inherit) !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-1px) !important;
+  background: rgba(212, 175, 55, 0.22) !important;
+  border-color: #d4af37 !important;
+}
+
+[data-theme='dark'] .theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+[data-theme='light'] .theme-toggle-btn {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
 }
 
 /* SINCRONIZACIÓN AUTOMÁTICA MODO CLARO / OSCURO DEL SISTEMA (data-theme="dark") */
@@ -16585,13 +16617,10 @@ html[data-theme='dark'] .tab-item.active {
 }
 
 /* =========================================================
-   ESTACIONES PRÓXIMOS A JUGAR & PRÓXIMOS SORTEOS: AZUL VIBRANTE Y SUTIL (ESTILO BANNER)
+   ESTACIONES PRÓXIMOS A JUGAR & PRÓXIMOS SORTEOS (ADAPTACIÓN PRECISA CLARO / OSCURO)
    ========================================================= */
 
-#estacion-urgentes,
-#estacion-urgentes.station-urgent,
-#estacion-proximos,
-#estacion-proximos.station-upcoming,
+/* MODO OSCURO: Estilo Azul Noche Neón */
 [data-theme='dark'] #estacion-urgentes,
 [data-theme='dark'] #estacion-urgentes.station-urgent,
 [data-theme='dark'] #estacion-proximos,
@@ -16599,13 +16628,7 @@ html[data-theme='dark'] .tab-item.active {
 html[data-theme='dark'] #estacion-urgentes,
 html[data-theme='dark'] #estacion-urgentes.station-urgent,
 html[data-theme='dark'] #estacion-proximos,
-html[data-theme='dark'] #estacion-proximos.station-upcoming,
-[data-theme='light'] #estacion-urgentes,
-[data-theme='light'] #estacion-urgentes.station-urgent,
-[data-theme='light'] #estacion-proximos,
-[data-theme='light'] #estacion-proximos.station-upcoming,
-:root:not([data-theme='dark']) #estacion-urgentes.station-urgent,
-:root:not([data-theme='dark']) #estacion-proximos.station-upcoming {
+html[data-theme='dark'] #estacion-proximos.station-upcoming {
   background: linear-gradient(135deg, #0284c7 0%, #1e40af 45%, #0c2340 100%) !important;
   background-color: #0c2340 !important;
   border: 1.5px solid rgba(56, 189, 248, 0.65) !important;
@@ -16616,16 +16639,10 @@ html[data-theme='dark'] #estacion-proximos.station-upcoming,
   overflow: hidden !important;
 }
 
-#estacion-urgentes .compact-section-title h2,
-#estacion-proximos .compact-section-title h2,
 [data-theme='dark'] #estacion-urgentes .compact-section-title h2,
 [data-theme='dark'] #estacion-proximos .compact-section-title h2,
 html[data-theme='dark'] #estacion-urgentes .compact-section-title h2,
-html[data-theme='dark'] #estacion-proximos .compact-section-title h2,
-[data-theme='light'] #estacion-urgentes .compact-section-title h2,
-[data-theme='light'] #estacion-proximos .compact-section-title h2,
-:root:not([data-theme='dark']) #estacion-urgentes .compact-section-title h2,
-:root:not([data-theme='dark']) #estacion-proximos .compact-section-title h2 {
+html[data-theme='dark'] #estacion-proximos .compact-section-title h2 {
   color: #ffffff !important;
   text-shadow: 0 2px 14px rgba(2, 132, 199, 0.65), 0 0 24px rgba(56, 189, 248, 0.45) !important;
   font-weight: 800 !important;
@@ -16644,31 +16661,130 @@ html[data-theme='dark'] #estacion-proximos .compact-raffle-card {
   color: #ffffff !important;
 }
 
-#estacion-urgentes .compact-raffle-card:hover,
-#estacion-proximos .compact-raffle-card:hover {
+[data-theme='dark'] #estacion-urgentes .compact-raffle-card:hover,
+[data-theme='dark'] #estacion-proximos .compact-raffle-card:hover,
+html[data-theme='dark'] #estacion-urgentes .compact-raffle-card:hover,
+html[data-theme='dark'] #estacion-proximos .compact-raffle-card:hover {
   border-color: #38bdf8 !important;
   box-shadow: 0 10px 28px rgba(2, 132, 199, 0.5) !important;
   transform: translateY(-3px);
 }
 
-#estacion-urgentes .compact-raffle-card h3,
-#estacion-proximos .compact-raffle-card h3 {
+[data-theme='dark'] #estacion-urgentes .compact-raffle-card h3,
+[data-theme='dark'] #estacion-proximos .compact-raffle-card h3,
+html[data-theme='dark'] #estacion-urgentes .compact-raffle-card h3,
+html[data-theme='dark'] #estacion-proximos .compact-raffle-card h3 {
   color: #f8fafc !important;
 }
 
-#estacion-urgentes .compact-raffle-card small.compact-merchant,
-#estacion-proximos .compact-raffle-card small.compact-merchant {
+[data-theme='dark'] #estacion-urgentes .compact-raffle-card small.compact-merchant,
+[data-theme='dark'] #estacion-proximos .compact-raffle-card small.compact-merchant,
+html[data-theme='dark'] #estacion-urgentes .compact-raffle-card small.compact-merchant,
+html[data-theme='dark'] #estacion-proximos .compact-raffle-card small.compact-merchant {
   color: #93c5fd !important;
 }
 
-#estacion-urgentes .compact-raffle-card .progress-labels span,
-#estacion-proximos .compact-raffle-card .progress-labels span {
+[data-theme='dark'] #estacion-urgentes .compact-raffle-card .progress-labels span,
+[data-theme='dark'] #estacion-proximos .compact-raffle-card .progress-labels span,
+html[data-theme='dark'] #estacion-urgentes .compact-raffle-card .progress-labels span,
+html[data-theme='dark'] #estacion-proximos .compact-raffle-card .progress-labels span {
   color: #93c5fd !important;
 }
 
-#estacion-urgentes .compact-raffle-card .progress-labels strong,
-#estacion-proximos .compact-raffle-card .progress-labels strong {
+[data-theme='dark'] #estacion-urgentes .compact-raffle-card .progress-labels strong,
+[data-theme='dark'] #estacion-proximos .compact-raffle-card .progress-labels strong,
+html[data-theme='dark'] #estacion-urgentes .compact-raffle-card .progress-labels strong,
+html[data-theme='dark'] #estacion-proximos .compact-raffle-card .progress-labels strong {
   color: #38bdf8 !important;
+}
+
+/* MODO CLARO (FONDO BLANCO IMPECABLE Y TEXTOS DE ALTO CONTRASTE) */
+[data-theme='light'] #estacion-urgentes,
+[data-theme='light'] #estacion-urgentes.station-urgent,
+[data-theme='light'] #estacion-proximos,
+[data-theme='light'] #estacion-proximos.station-upcoming,
+html[data-theme='light'] #estacion-urgentes,
+html[data-theme='light'] #estacion-proximos,
+html:not([data-theme='dark']) #estacion-urgentes,
+html:not([data-theme='dark']) #estacion-proximos {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04) !important;
+  border-radius: 20px !important;
+}
+
+[data-theme='light'] #estacion-urgentes .compact-section-title h2,
+[data-theme='light'] #estacion-proximos .compact-section-title h2,
+html[data-theme='light'] #estacion-urgentes .compact-section-title h2,
+html[data-theme='light'] #estacion-proximos .compact-section-title h2,
+html:not([data-theme='dark']) #estacion-urgentes .compact-section-title h2,
+html:not([data-theme='dark']) #estacion-proximos .compact-section-title h2 {
+  color: #0f172a !important;
+  text-shadow: none !important;
+  font-weight: 800 !important;
+}
+
+[data-theme='light'] #estacion-urgentes .station-subtitle,
+[data-theme='light'] #estacion-proximos .station-subtitle,
+html[data-theme='light'] #estacion-urgentes .station-subtitle,
+html[data-theme='light'] #estacion-proximos .station-subtitle,
+html:not([data-theme='dark']) #estacion-urgentes .station-subtitle,
+html:not([data-theme='dark']) #estacion-proximos .station-subtitle {
+  color: #475569 !important;
+}
+
+[data-theme='light'] #estacion-urgentes .compact-raffle-card,
+[data-theme='light'] #estacion-proximos .compact-raffle-card,
+html[data-theme='light'] #estacion-urgentes .compact-raffle-card,
+html[data-theme='light'] #estacion-proximos .compact-raffle-card,
+html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card,
+html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06) !important;
+}
+
+[data-theme='light'] #estacion-urgentes .compact-raffle-card h3,
+[data-theme='light'] #estacion-proximos .compact-raffle-card h3,
+html[data-theme='light'] #estacion-urgentes .compact-raffle-card h3,
+html[data-theme='light'] #estacion-proximos .compact-raffle-card h3,
+html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card h3,
+html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card h3 {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+[data-theme='light'] #estacion-urgentes .compact-raffle-card small.compact-merchant,
+[data-theme='light'] #estacion-proximos .compact-raffle-card small.compact-merchant,
+html[data-theme='light'] #estacion-urgentes .compact-raffle-card small.compact-merchant,
+html[data-theme='light'] #estacion-proximos .compact-raffle-card small.compact-merchant,
+html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card small.compact-merchant,
+html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card small.compact-merchant {
+  color: #475569 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme='light'] #estacion-urgentes .compact-raffle-card .progress-labels span,
+[data-theme='light'] #estacion-proximos .compact-raffle-card .progress-labels span,
+html[data-theme='light'] #estacion-urgentes .compact-raffle-card .progress-labels span,
+html[data-theme='light'] #estacion-proximos .compact-raffle-card .progress-labels span,
+html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card .progress-labels span,
+html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card .progress-labels span {
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+
+[data-theme='light'] #estacion-urgentes .compact-raffle-card .progress-labels strong,
+[data-theme='light'] #estacion-proximos .compact-raffle-card .progress-labels strong,
+html[data-theme='light'] #estacion-urgentes .compact-raffle-card .progress-labels strong,
+html[data-theme='light'] #estacion-proximos .compact-raffle-card .progress-labels strong,
+html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card .progress-labels strong,
+html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card .progress-labels strong {
+  color: #0f172a !important;
+  font-weight: 800 !important;
 }
 
 

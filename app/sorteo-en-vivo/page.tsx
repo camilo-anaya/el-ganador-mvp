@@ -23,6 +23,7 @@ import {
   buildCasinoWheelConicGradient,
   JEWEL_BEZEL_COLORS,
 } from "../../lib/draw-engine/wheel-physics";
+import { useTheme } from "../../context/ThemeContext";
 import "./page.css";
 
 type GameMode = "balotas" | "ruleta";
@@ -368,6 +369,7 @@ export default function LiveDrawDemoPage() {
   const spectatorSessionIdRef = useRef<string>(`spec-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`);
 
   // Patrocinador oficial en la transmisión con posición y estado colapsable
+  const { theme, toggleTheme } = useTheme();
   const [sponsorPos, setSponsorPos] = useState<"bottom" | "top">("bottom");
   const [sponsorBumper, setSponsorBumper] = useState<{
     visible: boolean;
@@ -384,6 +386,36 @@ export default function LiveDrawDemoPage() {
     triggerKey: 1,
     collapsed: false,
   });
+
+  const [showSponsorModal, setShowSponsorModal] = useState(false);
+  const [sponsorFollowers, setSponsorFollowers] = useState(1580);
+  const [isFollowingSponsor, setIsFollowingSponsor] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("eg_followed_sponsors");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed[sponsorBumper.brand || "TechStore Colombia"]) {
+          setIsFollowingSponsor(true);
+          setSponsorFollowers(1581);
+        }
+      }
+    } catch {}
+  }, [sponsorBumper.brand]);
+
+  const handleToggleFollowSponsor = () => {
+    const brand = sponsorBumper.brand || "TechStore Colombia";
+    const nextState = !isFollowingSponsor;
+    setIsFollowingSponsor(nextState);
+    setSponsorFollowers((prev) => (nextState ? prev + 1 : prev - 1));
+    try {
+      const stored = localStorage.getItem("eg_followed_sponsors") || "{}";
+      const parsed = JSON.parse(stored);
+      parsed[brand] = nextState;
+      localStorage.setItem("eg_followed_sponsors", JSON.stringify(parsed));
+    } catch {}
+  };
 
   const formatWatchTime = (sec: number) => {
     const mins = Math.floor(sec / 60);
@@ -2315,6 +2347,28 @@ export default function LiveDrawDemoPage() {
             </div>
 
             <div className="liveDemoHeaderActions" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              {/* BOTÓN MODO OSCURO / MODO CLARO A VOLUNTAD */}
+              <button
+                type="button"
+                onClick={toggleTheme}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '7px 14px',
+                  borderRadius: '10px',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  color: '#ffffff',
+                  fontSize: '0.78rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                title={`Cambiar a modo ${theme === 'dark' ? 'claro' : 'oscuro'}`}
+              >
+                <span>{theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}</span>
+              </button>
               {availableDraws.length > 1 && (
                 <button
                   type="button"
@@ -2620,11 +2674,19 @@ export default function LiveDrawDemoPage() {
                   </div>
                 </div>
                 {!sponsorBumper.collapsed && (
-                  <div className="tvSponsorBody">
+                  <div
+                    className="tvSponsorBody"
+                    onClick={() => setShowSponsorModal(true)}
+                    style={{ cursor: 'pointer' }}
+                    title="Click para ver la vitrina del negocio y seguir sus sorteos"
+                  >
                     <div className="tvSponsorLogoBadge">{sponsorBumper.logo}</div>
                     <div className="tvSponsorInfo">
-                      <strong className="tvSponsorBrand">{sponsorBumper.brand}</strong>
+                      <strong className="tvSponsorBrand">{sponsorBumper.brand} ↗</strong>
                       <span className="tvSponsorSub">{sponsorBumper.subtitle}</span>
+                      <small style={{ color: '#f5b82e', fontSize: '9.5px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                        👥 {sponsorFollowers.toLocaleString()} pendientes · Ver Vitrina
+                      </small>
                     </div>
                   </div>
                 )}
@@ -2643,6 +2705,161 @@ export default function LiveDrawDemoPage() {
               >
                 <span>⚡ Patrocinador</span>
               </button>
+            )}
+
+            {/* MODAL / VITRINA COMERCIAL DEL PATROCINADOR DE LA TRANSMISIÓN */}
+            {showSponsorModal && (
+              <div
+                style={{
+                  position: 'fixed',
+                  inset: 0,
+                  zIndex: 2500,
+                  background: 'rgba(0, 0, 0, 0.85)',
+                  backdropFilter: 'blur(8px)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '16px'
+                }}
+                onClick={() => setShowSponsorModal(false)}
+              >
+                <div
+                  style={{
+                    background: '#121212',
+                    color: '#ffffff',
+                    border: '1.5px solid #d4af37',
+                    borderRadius: '20px',
+                    maxWidth: '460px',
+                    width: '100%',
+                    padding: '24px',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.8)'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span style={{ fontSize: '28px', background: 'rgba(212,175,55,0.15)', padding: '6px', borderRadius: '12px', border: '1px solid #d4af37' }}>
+                        {sponsorBumper.logo}
+                      </span>
+                      <div>
+                        <span style={{ background: '#d4af37', color: '#000', fontSize: '10px', fontWeight: 900, padding: '2px 6px', borderRadius: '4px' }}>
+                          PATROCINADOR OFICIAL
+                        </span>
+                        <h3 style={{ margin: '4px 0 0', fontSize: '18px', fontWeight: 900, color: '#ffffff' }}>
+                          {sponsorBumper.brand}
+                        </h3>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowSponsorModal(false)}
+                      style={{ background: 'transparent', border: 'none', color: '#aaa', fontSize: '20px', cursor: 'pointer', padding: '4px' }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  <p style={{ fontSize: '13px', color: '#ccc', lineHeight: 1.5, margin: '0 0 16px' }}>
+                    {sponsorBumper.subtitle}. Conéctate con las mejores ofertas, garantías certificadas y beneficios directos para compradores de boletas en El Ganador.
+                  </p>
+
+                  {/* Medición de personas pendientes y botón Seguir Negocio */}
+                  <div style={{
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    borderRadius: '12px',
+                    padding: '12px 16px',
+                    marginBottom: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '10px'
+                  }}>
+                    <div>
+                      <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>AUDIENCIA PENDIENTE:</span>
+                      <strong style={{ fontSize: '15px', color: '#f5b82e' }}>
+                        👥 {sponsorFollowers.toLocaleString()} personas
+                      </strong>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleToggleFollowSponsor}
+                      style={{
+                        padding: '8px 14px',
+                        borderRadius: '10px',
+                        border: 'none',
+                        background: isFollowingSponsor ? '#10b981' : 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+                        color: '#ffffff',
+                        fontWeight: 800,
+                        fontSize: '12px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {isFollowingSponsor ? '✓ Siguiendo (+1)' : '🔔 Seguir Negocio'}
+                    </button>
+                  </div>
+
+                  {/* Beneficio exclusivo */}
+                  <div style={{
+                    background: 'rgba(212,175,55,0.1)',
+                    border: '1.5px dashed #d4af37',
+                    borderRadius: '10px',
+                    padding: '10px 14px',
+                    marginBottom: '16px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <div>
+                      <span style={{ fontSize: '10px', color: '#d4af37', fontWeight: 800 }}>CUPÓN DE BIENVENIDA:</span>
+                      <div style={{ fontWeight: 800, fontSize: '14px' }}>ELGANADOR</div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard?.writeText('ELGANADOR');
+                        alert('¡Cupón ELGANADOR copiado!');
+                      }}
+                      style={{ padding: '6px 12px', background: '#d4af37', color: '#000', fontWeight: 800, border: 'none', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                    >
+                      Copiar
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <Link
+                      href="/"
+                      onClick={() => setShowSponsorModal(false)}
+                      style={{
+                        textAlign: 'center',
+                        padding: '12px',
+                        background: 'linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%)',
+                        color: '#000',
+                        fontWeight: 800,
+                        fontSize: '13px',
+                        borderRadius: '10px',
+                        textDecoration: 'none'
+                      }}
+                    >
+                      🏪 Ver Vitrina Comercial en el Marketplace →
+                    </Link>
+                    <Link
+                      href="/publicidad"
+                      onClick={() => setShowSponsorModal(false)}
+                      style={{
+                        textAlign: 'center',
+                        padding: '8px',
+                        background: 'transparent',
+                        color: '#93c5fd',
+                        fontSize: '11px',
+                        textDecoration: 'underline'
+                      }}
+                    >
+                      📢 ¿Quieres que tu negocio patrocine sorteos en vivo? Conoce más ↗
+                    </Link>
+                  </div>
+                </div>
+              </div>
             )}
 
             {/* PARTÍCULAS DE REACCIONES DEL PÚBLICO FLOTANTES */}

@@ -528,6 +528,57 @@ export default function CompactWhiteMarketplacePage() {
 
       const currentAdTheme = VIBRANT_AD_THEMES[currentAdIndex % VIBRANT_AD_THEMES.length];
   const { theme, toggleTheme } = useTheme();
+
+  // Estados para Vitrina Comercial B2B y Seguir Negocios Patrocinadores
+  const [selectedVitrinaAd, setSelectedVitrinaAd] = useState<(typeof SPONSOR_CAROUSEL_ADS)[0] | null>(null);
+  const [followedBrands, setFollowedBrands] = useState<Record<string, boolean>>({});
+  const [brandFollowerCounts, setBrandFollowerCounts] = useState<Record<string, number>>({
+    'TechStore Colombia': 1580,
+    'Motos Caribe & 4x4': 2340,
+    'AutoNorte Camionetas': 3120,
+    'Joyería & Diamantes Imperial': 1890,
+    'Tu Empresa Aquí': 4850,
+  });
+  const [vitrinaToast, setVitrinaToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('elganador_followed_brands');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setFollowedBrands(parsed);
+        setBrandFollowerCounts((prev) => {
+          const nextCounts = { ...prev };
+          Object.keys(parsed).forEach((brand) => {
+            if (parsed[brand]) {
+              nextCounts[brand] = (nextCounts[brand] || 1500) + 1;
+            }
+          });
+          return nextCounts;
+        });
+      }
+    } catch {}
+  }, []);
+
+  const handleToggleFollow = (brandName: string) => {
+    const isNowFollowing = !followedBrands[brandName];
+    const nextFollowed = { ...followedBrands, [brandName]: isNowFollowing };
+    setFollowedBrands(nextFollowed);
+    setBrandFollowerCounts((prev) => ({
+      ...prev,
+      [brandName]: isNowFollowing ? (prev[brandName] || 1500) + 1 : Math.max((prev[brandName] || 1500) - 1, 0),
+    }));
+    try {
+      localStorage.setItem('elganador_followed_brands', JSON.stringify(nextFollowed));
+    } catch {}
+    setVitrinaToast(
+      isNowFollowing
+        ? `¡Ahora sigues a ${brandName}! Recibirás notificaciones de sus próximos sorteos y ofertas.`
+        : `Has dejado de seguir a ${brandName}.`
+    );
+    setTimeout(() => setVitrinaToast(null), 3500);
+  };
+
   const [activeStoriesList, setActiveStoriesList] = useState<MerchantStory[]>(MERCHANT_STORIES);
   const [customRaffles, setCustomRaffles] = useState<CompactRaffleItem[]>([]);
 
@@ -894,12 +945,22 @@ export default function CompactWhiteMarketplacePage() {
           {/* BOTÓN RÁPIDO DE CAMBIO DE TEMA NATIVO 🌙 / ☀️ */}
           <button
             type="button"
-            className="notif-bell-btn theme-toggle-btn"
+            className="theme-toggle-btn"
             onClick={toggleTheme}
             title={`Cambiar a modo ${theme === 'dark' ? 'claro' : 'oscuro'}`}
             aria-label="Cambiar tema de la app"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 12px',
+              borderRadius: '999px',
+              fontWeight: 800,
+              fontSize: '12px',
+              cursor: 'pointer',
+            }}
           >
-            <span>{theme === 'dark' ? '☀️' : '🌙'}</span>
+            <span>{theme === 'dark' ? '☀️ Claro' : '🌙 Oscuro'}</span>
           </button>
 
           {/* CAMPANA DE NOTIFICACIONES ESTILO FACEBOOK CON BADGE ROJO 🔔 */}
@@ -1039,8 +1100,10 @@ export default function CompactWhiteMarketplacePage() {
             background: currentAdTheme.bg,
             borderColor: currentAdTheme.border,
             boxShadow: currentAdTheme.shadow,
+            cursor: 'pointer',
             transition: 'background 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease',
           } as React.CSSProperties}
+          onClick={() => setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex])}
           onMouseEnter={() => setIsAdPaused(true)}
           onMouseLeave={() => setIsAdPaused(false)}
           onTouchStart={() => setIsAdPaused(true)}
@@ -1063,18 +1126,53 @@ export default function CompactWhiteMarketplacePage() {
                 </div>
                 <h3>{SPONSOR_CAROUSEL_ADS[currentAdIndex].title}</h3>
                 <p>{SPONSOR_CAROUSEL_ADS[currentAdIndex].description}</p>
+
+                {/* MÉTRICA EN VIVO DE CLIENTES PENDIENTES Y BOTÓN SEGUIR NEGOCIO */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', margin: '6px 0 10px' }}>
+                  <span style={{ fontSize: '0.78rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '4px 10px', borderRadius: '8px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                    👥 {(brandFollowerCounts[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] || 1580).toLocaleString()} pendientes a sus sorteos
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleToggleFollow(SPONSOR_CAROUSEL_ADS[currentAdIndex].brand);
+                    }}
+                    style={{
+                      padding: '4px 12px',
+                      borderRadius: '8px',
+                      border: '1.5px solid #ffffff',
+                      background: followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
+                      color: '#ffffff',
+                      fontSize: '0.76rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                    title="Seguir empresa para recibir alertas de sus rifas y descuentos"
+                  >
+                    {followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '✓ Siguiendo (+1 pendiente)' : '🔔 Seguir Negocio'}
+                  </button>
+                </div>
+
                 <div className="official-ad-actions">
-                  <Link
+                  <button
+                    type="button"
                     className="btn-ad-emerald"
-                    href={SPONSOR_CAROUSEL_ADS[currentAdIndex].ctaLink}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
+                    }}
                     style={{
                       background: currentAdTheme.btnBg,
                       color: currentAdTheme.btnText,
                       fontWeight: 800,
+                      cursor: 'pointer',
+                      border: 'none',
                     }}
                   >
-                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].ctaText}
-                  </Link>
+                    🏪 Ver Vitrina & Sorteo →
+                  </button>
                   <span
                     className="ad-coupon-tag"
                     style={{
@@ -2027,6 +2125,245 @@ export default function CompactWhiteMarketplacePage() {
                 >
                   {copiedLink ? '¡Copiado! ✓' : 'Copiar'}
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* NOTIFICACIÓN TOAST AL SEGUIR UN NEGOCIO */}
+      {vitrinaToast && (
+        <div style={{
+          position: 'fixed',
+          bottom: '24px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 9999,
+          background: '#0f172a',
+          color: '#ffffff',
+          border: '1.5px solid #10b981',
+          borderRadius: '14px',
+          padding: '12px 20px',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+          fontWeight: 700,
+          fontSize: '0.88rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          <span>🎉</span>
+          <span>{vitrinaToast}</span>
+        </div>
+      )}
+
+      {/* MODAL OFICIAL: VITRINA COMERCIAL DEL NEGOCIO / PATROCINADOR CON SEGUIMIENTO */}
+      {selectedVitrinaAd && (
+        <div
+          className="modal-overlay"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 3000,
+            background: 'rgba(0, 0, 0, 0.8)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+            animation: 'fadeIn 0.2s ease-out'
+          }}
+          onClick={() => setSelectedVitrinaAd(null)}
+        >
+          <div
+            style={{
+              background: theme === 'dark' ? '#18181b' : '#ffffff',
+              color: theme === 'dark' ? '#ffffff' : '#0f172a',
+              borderRadius: '24px',
+              maxWidth: '540px',
+              width: '100%',
+              overflow: 'hidden',
+              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
+              border: theme === 'dark' ? '1px solid rgba(255,255,255,0.15)' : '1px solid #e2e8f0',
+              maxHeight: '90vh',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Cabecera con imagen del negocio */}
+            <div style={{ position: 'relative', height: '180px', width: '100%', background: '#000' }}>
+              <img
+                src={selectedVitrinaAd.image}
+                alt={selectedVitrinaAd.brand}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)' }} />
+              <button
+                type="button"
+                onClick={() => setSelectedVitrinaAd(null)}
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  background: 'rgba(0,0,0,0.6)',
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  display: 'grid',
+                  placeItems: 'center',
+                  cursor: 'pointer',
+                  fontWeight: 900
+                }}
+              >
+                ✕
+              </button>
+              <div style={{ position: 'absolute', bottom: '12px', left: '16px', right: '16px' }}>
+                <span style={{ fontSize: '10px', background: '#d4af37', color: '#000', fontWeight: 900, padding: '3px 8px', borderRadius: '6px' }}>
+                  MARCA PATROCINADORA VERIFICADA
+                </span>
+                <h2 style={{ fontSize: '20px', fontWeight: 900, color: '#ffffff', margin: '6px 0 2px' }}>
+                  {selectedVitrinaAd.brand}
+                </h2>
+                <p style={{ fontSize: '12px', color: '#cbd5e1', margin: 0 }}>
+                  {selectedVitrinaAd.category}
+                </p>
+              </div>
+            </div>
+
+            {/* Contenido de la Vitrina */}
+            <div style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {/* Barra de métrica de audiencia y botón Seguir Negocio */}
+              <div style={{
+                background: theme === 'dark' ? '#27272a' : '#f8fafc',
+                border: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+                borderRadius: '16px',
+                padding: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px',
+                flexWrap: 'wrap'
+              }}>
+                <div>
+                  <div style={{ fontSize: '11px', color: theme === 'dark' ? '#a1a1aa' : '#64748b', fontWeight: 700 }}>
+                    AUDIENCIA EN TIEMPO REAL
+                  </div>
+                  <div style={{ fontSize: '16px', fontWeight: 900, color: '#f59e0b', marginTop: '2px' }}>
+                    👥 {(brandFollowerCounts[selectedVitrinaAd.brand] || 1580).toLocaleString()} pendientes
+                  </div>
+                  <small style={{ fontSize: '11px', color: theme === 'dark' ? '#71717a' : '#94a3b8' }}>
+                    Compradores activos atentos a sus próximos sorteos
+                  </small>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleToggleFollow(selectedVitrinaAd.brand)}
+                  style={{
+                    padding: '10px 18px',
+                    borderRadius: '12px',
+                    border: 'none',
+                    background: followedBrands[selectedVitrinaAd.brand] ? '#10b981' : 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(2, 132, 199, 0.3)',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  {followedBrands[selectedVitrinaAd.brand] ? '✓ Siguiendo (+1 pendiente)' : '🔔 Seguir Negocio'}
+                </button>
+              </div>
+
+              {/* Descripción de la empresa y oferta comercial */}
+              <div>
+                <h4 style={{ margin: '0 0 6px', fontSize: '15px', fontWeight: 800 }}>
+                  {selectedVitrinaAd.title}
+                </h4>
+                <p style={{ margin: 0, fontSize: '13px', lineHeight: 1.6, color: theme === 'dark' ? '#d4d4d8' : '#475569' }}>
+                  {selectedVitrinaAd.description}
+                </p>
+              </div>
+
+              {/* Cupón oficial exclusivo */}
+              <div style={{
+                background: 'rgba(245, 184, 46, 0.1)',
+                border: '1.5px dashed #f5b82e',
+                borderRadius: '12px',
+                padding: '12px 16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '10px'
+              }}>
+                <div>
+                  <span style={{ fontSize: '11px', fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase' }}>
+                    Beneficio Oficial
+                  </span>
+                  <div style={{ fontSize: '14px', fontWeight: 800, color: theme === 'dark' ? '#fff' : '#0f172a' }}>
+                    {selectedVitrinaAd.coupon}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard?.writeText('ELGANADOR');
+                    alert('¡Cupón ELGANADOR copiado con éxito al portapapeles!');
+                  }}
+                  style={{
+                    padding: '8px 14px',
+                    background: '#f5b82e',
+                    color: '#000',
+                    fontWeight: 900,
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '12px'
+                  }}
+                >
+                  Copiar Cupón 📋
+                </button>
+              </div>
+
+              {/* Botones de acción directa para llevar al sorteo o catálogo */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '4px' }}>
+                <Link
+                  href={selectedVitrinaAd.ctaLink}
+                  onClick={() => setSelectedVitrinaAd(null)}
+                  style={{
+                    display: 'block',
+                    textAlign: 'center',
+                    padding: '14px',
+                    background: 'linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%)',
+                    color: '#000000',
+                    fontWeight: 900,
+                    fontSize: '14px',
+                    borderRadius: '12px',
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 14px rgba(212, 175, 55, 0.35)'
+                  }}
+                >
+                  🎯 Ver Sorteo Vinculado de esta Empresa →
+                </Link>
+
+                <Link
+                  href="/publicidad"
+                  onClick={() => setSelectedVitrinaAd(null)}
+                  style={{
+                    display: 'block',
+                    textAlign: 'center',
+                    padding: '11px',
+                    background: 'transparent',
+                    color: theme === 'dark' ? '#93c5fd' : '#0284c7',
+                    fontWeight: 700,
+                    fontSize: '12px',
+                    textDecoration: 'underline'
+                  }}
+                >
+                  📢 ¿Quieres pautar tu propia empresa o marca aquí? Conoce los planes B2B ↗
+                </Link>
               </div>
             </div>
           </div>
