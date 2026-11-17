@@ -306,6 +306,13 @@ export default function LiveDrawDemoPage() {
   const [latestAct, setLatestAct] = useState<any>(null);
   const [isMuted, setIsMuted] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
+  const [showAuditSection, setShowAuditSection] = useState(false);
+
+  useEffect(() => {
+    if (latestAct) {
+      setShowAuditSection(true);
+    }
+  }, [latestAct]);
   const [winnerTicket, setWinnerTicket] = useState<WinnerTicket | null>(null);
   const [showTicketModal, setShowTicketModal] = useState(false);
   const [ticketViewMode, setTicketViewMode] = useState<"public" | "private">("public");
@@ -3981,7 +3988,55 @@ export default function LiveDrawDemoPage() {
 
       {!isViewerMode && (
         <>
-          <section className="liveDemoAudit" aria-labelledby="liveDemoAuditTitle">
+          {/* Botón desplegable para optimizar la carga visual y móvil */}
+          <div className="auditToggleWrapper" style={{ maxWidth: "1180px", margin: "24px auto 12px auto", padding: "0 14px", width: "100%", boxSizing: "border-box" }}>
+            <button
+              type="button"
+              className="btnAuditToggle"
+              onClick={() => setShowAuditSection((v) => !v)}
+              style={{
+                width: "100%",
+                padding: "14px 18px",
+                background: "linear-gradient(135deg, rgba(8, 30, 20, 0.95), rgba(4, 16, 10, 0.95))",
+                border: "1.2px solid rgba(229, 196, 104, 0.4)",
+                borderRadius: "14px",
+                color: "#ffd778",
+                fontWeight: "700",
+                fontSize: "14px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "10px",
+                boxShadow: "0 6px 18px rgba(0, 0, 0, 0.45)",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <span style={{ display: "flex", alignItems: "center", gap: "10px", textAlign: "left" }}>
+                <span style={{ fontSize: "18px" }}>🛡️</span>
+                <span>
+                  {showAuditSection
+                    ? "Ocultar Transparencia y Auditoría Técnica"
+                    : "Ver Transparencia y Certificación Criptográfica"}
+                </span>
+              </span>
+              <span style={{
+                fontSize: "12px",
+                background: "rgba(212, 175, 55, 0.18)",
+                border: "1px solid rgba(212, 175, 55, 0.3)",
+                color: "#ffe082",
+                padding: "5px 12px",
+                borderRadius: "8px",
+                fontWeight: "800",
+                whiteSpace: "nowrap"
+              }}>
+                {showAuditSection ? "▲ Ocultar" : "▼ Desplegar"}
+              </span>
+            </button>
+          </div>
+
+          {showAuditSection && (
+            <section className="liveDemoAudit" aria-labelledby="liveDemoAuditTitle">
         <div className="liveDemoAuditIntro">
           <span className="auditShield">✓</span>
           <div>
@@ -4165,6 +4220,7 @@ export default function LiveDrawDemoPage() {
           </div>
         )}
       </section>
+      )}
 
       <footer className="liveDemoFooter">
         <a href="/">EL GANADOR</a>
