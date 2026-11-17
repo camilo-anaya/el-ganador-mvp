@@ -4749,7 +4749,7 @@
   min-height: 100dvh !important;
   max-width: none !important;
   margin: 0 !important;
-  padding: calc(68px + env(safe-area-inset-top, 0px)) 16px calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  padding: calc(44px + env(safe-area-inset-top, 0px)) 12px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
   border-radius: 0 !important;
   border: none !important;
   background-color: #0f4627 !important;
@@ -4773,14 +4773,20 @@
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
-  margin-top: 12px !important;
-  flex: 1 1 auto !important;
+  margin-top: 0 !important;
+  padding-top: 4px !important;
+  flex: 0 1 auto !important;
+  max-height: 100% !important;
 }
 
 .liveDemoMachine.cinemaFullscreenActive .globeChassis {
-  width: min(92vw, 80dvh, 760px) !important;
+  width: min(88vw, calc(100dvh - 180px), 720px) !important;
+  height: min(88vw, calc(100dvh - 180px), 720px) !important;
+  max-height: calc(100dvh - 180px) !important;
+  max-width: calc(100dvh - 180px) !important;
   aspect-ratio: 1 / 1 !important;
   margin: 0 auto !important;
+  flex-shrink: 1 !important;
 }
 
 .liveDemoMachine.cinemaFullscreenActive .heroExtractedBall {
@@ -4815,11 +4821,13 @@
 }
 
 .liveDemoMachine.cinemaFullscreenActive .suctionTube {
-  width: 78px !important;
+  width: clamp(56px, 6vw, 70px) !important;
   height: auto !important;
-  margin-bottom: -2.5px !important;
+  margin-top: 0 !important;
+  margin-bottom: -3px !important;
   z-index: 45 !important;
   display: flex !important;
+  flex-shrink: 0 !important;
 }
 
 .liveDemoMachine.cinemaFullscreenActive .ballChute {
@@ -5029,18 +5037,29 @@
    (El diseño móvil <= 820px conserva intactas sus medidas ideales para celular)
    ============================================================================ */
 @media (min-width: 821px) {
-  .liveDemoStage {
-    max-width: 1460px;
+  .liveDemoPage {
+    padding-left: clamp(14px, 2vw, 36px) !important;
+    padding-right: clamp(14px, 2vw, 36px) !important;
+  }
+
+  .liveDemoHeader,
+  .liveDemoHero,
+  .liveDemoStage,
+  .liveDemoAudit,
+  .liveDemoFooter {
+    max-width: min(98vw, 1780px) !important;
+    width: 100% !important;
   }
 
   .liveDemoStageGrid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: clamp(20px, 2.8vw, 44px);
-    padding: 24px clamp(18px, 3vw, 44px) 34px;
+    grid-template-columns: minmax(460px, 1.4fr) minmax(360px, 1fr) !important;
+    gap: clamp(24px, 2.5vw, 56px) !important;
+    padding: 24px clamp(18px, 2.5vw, 44px) 34px !important;
+    align-items: center !important;
   }
 
   .liveDemoMachine {
-    min-height: 660px;
+    min-height: 700px;
     padding: 28px 20px;
     border-radius: 26px;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -5048,16 +5067,17 @@
   }
 
   .wheelCasinoWrapper {
-    --wheel-size: clamp(300px, 54vw, 440px);
+    --wheel-size: clamp(340px, 38vw, 580px);
   }
 
   .liveDemoDetails {
-    max-width: 100%;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 
   .globeChassis {
-    width: min(94%, 620px);
-    max-width: 100%;
+    width: min(96%, clamp(560px, 45vw, 780px)) !important;
+    max-width: clamp(560px, 45vw, 780px) !important;
   }
 
   .machineHalo {
@@ -5172,16 +5192,21 @@
     aspect-ratio: 1 / 1 !important;
   }
 
-  /* En Pantalla Completa en PC y Móvil: La Balotera / Ruleta es la ÚNICA protagonista monumental a pantalla completa */
+  /* En Pantalla Completa en PC: La Balotera / Ruleta enmarcada y visible en su totalidad sin cortes superiores */
   .liveDemoMachine.cinemaFullscreenActive .globeChassis {
-    width: min(94vw, 88dvh, 860px) !important;
-    height: min(94vw, 88dvh, 860px) !important;
+    width: min(88vw, calc(100dvh - 180px), 760px) !important;
+    height: min(88vw, calc(100dvh - 180px), 760px) !important;
+    max-height: calc(100dvh - 180px) !important;
+    max-width: calc(100dvh - 180px) !important;
     aspect-ratio: 1 / 1 !important;
+    margin: 0 auto !important;
   }
 
   .liveDemoMachine.cinemaFullscreenActive .wheelCasinoWrapper {
-    width: min(94vw, 88dvh, 840px) !important;
-    height: min(94vw, 88dvh, 840px) !important;
+    width: min(88vw, calc(100dvh - 180px), 740px) !important;
+    height: min(88vw, calc(100dvh - 180px), 740px) !important;
+    max-height: calc(100dvh - 180px) !important;
+    max-width: calc(100dvh - 180px) !important;
   }
 
   .liveDemoMachine.cinemaFullscreenActive .heroExtractedBall {
@@ -5202,7 +5227,23 @@
 
 @media (max-width: 768px) {
   .liveDemoMachine.cinemaFullscreenActive {
-    padding: calc(56px + env(safe-area-inset-top, 0px)) 12px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
+    padding: calc(44px + env(safe-area-inset-top, 0px)) 10px calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  .liveDemoMachine.cinemaFullscreenActive .pneumaticCageWrapper {
+    margin-top: 0 !important;
+    padding-top: 2px !important;
+  }
+  .liveDemoMachine.cinemaFullscreenActive .suctionTube {
+    width: 52px !important;
+    margin-bottom: -2px !important;
+  }
+  .liveDemoMachine.cinemaFullscreenActive .globeChassis {
+    width: min(92vw, calc(100dvh - 150px), 440px) !important;
+    height: min(92vw, calc(100dvh - 150px), 440px) !important;
+    max-height: calc(100dvh - 150px) !important;
+    max-width: calc(100dvh - 150px) !important;
+    aspect-ratio: 1 / 1 !important;
+    margin: 0 auto !important;
   }
   .cinemaStageTopHud {
     left: 10px;
@@ -6214,19 +6255,32 @@
 
 @media (min-width: 980px) {
   .liveDemoStageGrid {
-    grid-template-columns: minmax(0, 1.54fr) minmax(320px, 0.94fr);
-    gap: clamp(24px, 3vw, 48px);
-    padding: 28px clamp(20px, 3.2vw, 46px) 36px;
+    grid-template-columns: minmax(520px, 1.42fr) minmax(380px, 1fr) !important;
+    gap: clamp(28px, 3vw, 60px) !important;
+    padding: 28px clamp(20px, 3vw, 52px) 36px !important;
   }
   .liveDemoMachine {
-    min-height: 800px;
+    min-height: clamp(740px, 78vh, 880px) !important;
   }
   .wheelCasinoWrapper {
-    --wheel-size: clamp(340px, 38vw, 560px);
+    --wheel-size: clamp(380px, 40vw, 680px) !important;
   }
   .liveDemoDetails {
-    max-width: 440px;
+    max-width: 100% !important;
+    width: 100% !important;
   }
+  .globeChassis {
+    width: min(98%, clamp(600px, 48vw, 820px)) !important;
+    max-width: clamp(600px, 48vw, 820px) !important;
+  }
+}
+
+#liveDemoDrawTitle,
+.liveDemoDetails h2,
+.clientWaitingTitle {
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7) !important;
+  font-weight: 800 !important;
 }
 
 @media (max-width: 760px) {
