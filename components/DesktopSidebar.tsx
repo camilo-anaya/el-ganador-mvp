@@ -36,6 +36,9 @@ export default function DesktopSidebar({
           <Link href="/" className={`toc-link ${pathname === '/' ? 'active' : ''}`}>
             <span>🏠</span> Inicio / Vitrina General
           </Link>
+          <Link href="/favoritos" className={`toc-link ${pathname === '/favoritos' ? 'active' : ''}`}>
+            <span>⭐</span> Mis Favoritos & Seguidos
+          </Link>
 
           {/* ACCESOS DIRECTOS EMPRESARIALES DEBAJO DE INICIO */}
           <Link
@@ -156,6 +159,12 @@ export default function DesktopSidebar({
       <div className="toc-section">
         <span className="toc-heading">👤 MI CUENTA</span>
         <nav className="toc-nav-list">
+          <Link
+            href="/favoritos"
+            className={`toc-link ${pathname === '/favoritos' ? 'active' : ''}`}
+          >
+            <span>❤️</span> Mis Empresas y Favoritos
+          </Link>
           <Link
             href="/mis-boletas"
             className={`toc-link ${pathname === '/mis-boletas' ? 'active' : ''}`}

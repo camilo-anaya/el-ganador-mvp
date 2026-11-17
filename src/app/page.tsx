@@ -579,6 +579,51 @@ export default function CompactWhiteMarketplacePage() {
     setTimeout(() => setVitrinaToast(null), 3500);
   };
 
+  // Estados para Me Gusta en Sorteos y Publicaciones
+  const [likedRaffles, setLikedRaffles] = useState<string[]>([]);
+  const [raffleLikes, setRaffleLikes] = useState<Record<string, number>>({
+    'rf-1': 342,
+    'rf-2': 518,
+    'rf-3': 189,
+    'rf-4': 240,
+    'rf-5': 612,
+    'rf-6': 420,
+    'rf-7': 195,
+    'rf-8': 288,
+  });
+
+  useEffect(() => {
+    try {
+      const storedLikes = localStorage.getItem('el_ganador_liked_raffles');
+      if (storedLikes) {
+        setLikedRaffles(JSON.parse(storedLikes));
+      } else {
+        const initial = ['rf-1', 'rf-2', 'rf-3'];
+        setLikedRaffles(initial);
+        localStorage.setItem('el_ganador_liked_raffles', JSON.stringify(initial));
+      }
+    } catch {}
+  }, []);
+
+  const handleToggleLikeRaffle = (raffleId: string, raffleTitle: string) => {
+    const isLiked = likedRaffles.includes(raffleId);
+    const next = isLiked ? likedRaffles.filter((id) => id !== raffleId) : [...likedRaffles, raffleId];
+    setLikedRaffles(next);
+    setRaffleLikes((prev) => ({
+      ...prev,
+      [raffleId]: (prev[raffleId] || 75) + (isLiked ? -1 : 1),
+    }));
+    try {
+      localStorage.setItem('el_ganador_liked_raffles', JSON.stringify(next));
+    } catch {}
+    setVitrinaToast(
+      isLiked
+        ? `Quitaste "${raffleTitle}" de tus favoritos`
+        : `¡Te gusta "${raffleTitle}"! Guardado en ⭐ Mis Favoritos.`
+    );
+    setTimeout(() => setVitrinaToast(null), 3500);
+  };
+
   const [activeStoriesList, setActiveStoriesList] = useState<MerchantStory[]>(MERCHANT_STORIES);
   const [customRaffles, setCustomRaffles] = useState<CompactRaffleItem[]>([]);
 
@@ -889,10 +934,16 @@ export default function CompactWhiteMarketplacePage() {
   const liveRoomsList = feed?.liveRooms ?? LIVE_MINI_ROOMS;
   const rafflesList = [...customRaffles, ...(feed?.raffles ?? RAFFLES_CATALOG)];
 
-  const filterByCat = (list: typeof RAFFLES_CATALOG) =>
-    selectedCategory === 'all'
-      ? list
-      : list.filter((r) => r.category === selectedCategory);
+  const filterByCat = (list: typeof RAFFLES_CATALOG) => {
+    if (selectedCategory === 'all') return list;
+    if (selectedCategory === 'favoritos') {
+      const filtered = list.filter(
+        (r) => likedRaffles.includes(r.id) || !!followedBrands[r.merchant]
+      );
+      return filtered.length > 0 ? filtered : list.slice(0, 3);
+    }
+    return list.filter((r) => r.category === selectedCategory);
+  };
 
   const closingSoonRaffles = filterByCat(
     rafflesList.filter((r) => r.stage === 'closing_soon')
@@ -1286,6 +1337,7 @@ export default function CompactWhiteMarketplacePage() {
           <DesktopScrollStrip ariaLabel="Categorías">
             {[
               { id: 'all', label: '✨ Todos' },
+              { id: 'favoritos', label: '⭐ Mis Favoritos' },
               { id: 'motos', label: '🏍️ Motos & 4x4' },
               { id: 'vehiculos', label: '🚙 Vehículos & Camionetas' },
               { id: 'joyas', label: '💎 Joyas & Relojería' },
@@ -1356,7 +1408,20 @@ export default function CompactWhiteMarketplacePage() {
                 </div>
 
                 <div className="compact-raffle-body">
-                  <small className="compact-merchant">🏪 {item.merchant}</small>
+                  <div className="compact-merchant-row">
+                    <small className="compact-merchant">🏪 {item.merchant}</small>
+                    <button
+                      type="button"
+                      className={`btn-follow-merchant ${followedBrands[item.merchant] ? 'is-following' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleFollow(item.merchant);
+                      }}
+                      title={followedBrands[item.merchant] ? 'Siguiendo a esta empresa' : 'Seguir a esta empresa'}
+                    >
+                      {followedBrands[item.merchant] ? '✓ Siguiendo' : '+ Seguir'}
+                    </button>
+                  </div>
                   <h3
                     onClick={() => handleOpenTicketModal(item)}
                     style={{ cursor: 'pointer' }}
@@ -1392,9 +1457,22 @@ export default function CompactWhiteMarketplacePage() {
                     </button>
                     <button
                       type="button"
+                      className={`btn-like-card-compact ${likedRaffles.includes(item.id) ? 'is-liked' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleLikeRaffle(item.id, item.title);
+                      }}
+                      title="Me gusta este sorteo"
+                    >
+                      <span>{likedRaffles.includes(item.id) ? '❤️' : '🤍'}</span>
+                      <span>{(raffleLikes[item.id] || 45) + (likedRaffles.includes(item.id) ? 1 : 0)} Me gusta</span>
+                    </button>
+                    <button
+                      type="button"
                       className="btn-share-card-compact"
                       onClick={() => handleShareRaffle(item)}
                       title="Compartir enlace de este sorteo"
+                      style={{ color: '#000000', fontWeight: 800 }}
                     >
                       📤 Compartir
                     </button>
@@ -1426,7 +1504,20 @@ export default function CompactWhiteMarketplacePage() {
                 </div>
 
                 <div className="compact-raffle-body">
-                  <small className="compact-merchant">🏪 {item.merchant}</small>
+                  <div className="compact-merchant-row">
+                    <small className="compact-merchant">🏪 {item.merchant}</small>
+                    <button
+                      type="button"
+                      className={`btn-follow-merchant ${followedBrands[item.merchant] ? 'is-following' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleFollow(item.merchant);
+                      }}
+                      title={followedBrands[item.merchant] ? 'Siguiendo a esta empresa' : 'Seguir a esta empresa'}
+                    >
+                      {followedBrands[item.merchant] ? '✓ Siguiendo' : '+ Seguir'}
+                    </button>
+                  </div>
                   <h3
                     onClick={() => handleOpenTicketModal(item)}
                     style={{ cursor: 'pointer' }}
@@ -1462,9 +1553,22 @@ export default function CompactWhiteMarketplacePage() {
                     </button>
                     <button
                       type="button"
+                      className={`btn-like-card-compact ${likedRaffles.includes(item.id) ? 'is-liked' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleLikeRaffle(item.id, item.title);
+                      }}
+                      title="Me gusta este sorteo"
+                    >
+                      <span>{likedRaffles.includes(item.id) ? '❤️' : '🤍'}</span>
+                      <span>{(raffleLikes[item.id] || 45) + (likedRaffles.includes(item.id) ? 1 : 0)} Me gusta</span>
+                    </button>
+                    <button
+                      type="button"
                       className="btn-share-card-compact"
                       onClick={() => handleShareRaffle(item)}
                       title="Compartir enlace de este sorteo"
+                      style={{ color: '#000000', fontWeight: 800 }}
                     >
                       📤 Compartir
                     </button>

@@ -63,6 +63,14 @@ export function IosPlusIcon({ active = false, size = 24 }: { active?: boolean; s
   );
 }
 
+export function IosHeartIcon({ active = false, size = 24 }: { active?: boolean; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={active ? '#ef4444' : 'none'} stroke={active ? '#ef4444' : 'currentColor'} strokeWidth={active ? '0' : '1.8'} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    </svg>
+  );
+}
+
 export function IosStoreIcon({ active = false, size = 24 }: { active?: boolean; size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? '0' : '1.8'} strokeLinecap="round" strokeLinejoin="round">
@@ -74,7 +82,7 @@ export function IosStoreIcon({ active = false, size = 24 }: { active?: boolean; 
 }
 
 interface NativeBottomTabBarProps {
-  currentTab: 'explorar' | 'en-vivo' | 'boletas' | 'perfil';
+  currentTab: 'explorar' | 'favoritos' | 'en-vivo' | 'boletas' | 'perfil';
   onExploreClick?: () => void;
 }
 
@@ -108,6 +116,16 @@ export default function NativeBottomTabBar({
           <IosHomeIcon active={currentTab === 'explorar'} />
         </span>
         <span className="tab-text">Explorar</span>
+      </Link>
+
+      <Link
+        className={`tab-item ${currentTab === 'favoritos' ? 'active' : ''}`}
+        href="/favoritos"
+      >
+        <span className="tab-icon">
+          <IosHeartIcon active={currentTab === 'favoritos'} />
+        </span>
+        <span className="tab-text">Favoritos</span>
       </Link>
 
       <Link

@@ -448,67 +448,45 @@ export default function LiveDrawDemoPage() {
   useEffect(() => {
     if (phase !== "winner" || !winner) return;
 
-    if (isUserWinner) {
-      // 1. DESACTIVA POR COMPLETO EL CIERRE AUTOMÁTICO PARA EL GANADOR
-      if (autoCloseTimerRef.current) {
-        window.clearTimeout(autoCloseTimerRef.current);
-        autoCloseTimerRef.current = null;
-      }
-      if (autoCloseIntervalRef.current) {
-        window.clearInterval(autoCloseIntervalRef.current);
-        autoCloseIntervalRef.current = null;
-      }
-      setAutoCloseCountdown(null);
+    // 1. DESACTIVA POR COMPLETO EL CIERRE AUTOMÁTICO (EL TIQUETE Y RESULTADO PERMANECEN HASTA QUE EL USUARIO ACCIONE QUITAR)
+    if (autoCloseTimerRef.current) {
+      window.clearTimeout(autoCloseTimerRef.current);
+      autoCloseTimerRef.current = null;
+    }
+    if (autoCloseIntervalRef.current) {
+      window.clearInterval(autoCloseIntervalRef.current);
+      autoCloseIntervalRef.current = null;
+    }
+    setAutoCloseCountdown(null);
 
-      // 2. REGISTRO DE PREMIOS GANADOS ACUMULADOS EN localStorage (elganador_won_prizes)
-      try {
-        const wonPrize = {
-          id: `prize-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-          drawId: activeDrawId || "RIF-2026-000184",
-          title: activeDrawTitle || (mode === "balotas" ? "El Círculo Dorado" : "La ruleta de tu comunidad"),
-          winnerNumber: String(winner),
-          merchant: sponsorBumper.brand || "TechStore Colombia",
-          date: new Date().toLocaleDateString("es-CO", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-          sha256Hash: auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-          status: "Pendiente de entrega" as const,
-          createdAt: Date.now(),
-        };
-        const raw = localStorage.getItem("elganador_won_prizes");
-        const list = raw ? JSON.parse(raw) : [];
-        if (!list.some((p: any) => p.drawId === wonPrize.drawId && p.winnerNumber === wonPrize.winnerNumber)) {
-          list.unshift(wonPrize);
-          localStorage.setItem("elganador_won_prizes", JSON.stringify(list));
-          window.dispatchEvent(new Event("elganador_prizes_updated"));
-        }
-      } catch (e) {
-        console.error("Error guardando premio ganado:", e);
+    // 2. REGISTRO DE PREMIOS GANADOS ACUMULADOS EN localStorage (elganador_won_prizes)
+    try {
+      const wonPrize = {
+        id: `prize-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        drawId: activeDrawId || "RIF-2026-000184",
+        title: activeDrawTitle || (mode === "balotas" ? "El Círculo Dorado" : "La ruleta de tu comunidad"),
+        winnerNumber: String(winner),
+        merchant: sponsorBumper.brand || "TechStore Colombia",
+        date: new Date().toLocaleDateString("es-CO", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        sha256Hash: auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        status: "Pendiente de entrega" as const,
+        createdAt: Date.now(),
+      };
+      const raw = localStorage.getItem("elganador_won_prizes");
+      const list = raw ? JSON.parse(raw) : [];
+      if (!list.some((p: any) => p.drawId === wonPrize.drawId && p.winnerNumber === wonPrize.winnerNumber)) {
+        list.unshift(wonPrize);
+        localStorage.setItem("elganador_won_prizes", JSON.stringify(list));
+        window.dispatchEvent(new Event("elganador_prizes_updated"));
       }
-    } else {
-      // NO ES EL GANADOR (Espectador o participante):
-      // Cuenta regresiva de 8 segundos que cierra la sala y redirige al inicio
-      setAutoCloseCountdown(8);
-      let sec = 8;
-      if (autoCloseIntervalRef.current) window.clearInterval(autoCloseIntervalRef.current);
-      if (autoCloseTimerRef.current) window.clearTimeout(autoCloseTimerRef.current);
-
-      autoCloseIntervalRef.current = window.setInterval(() => {
-        sec -= 1;
-        setAutoCloseCountdown(sec);
-        if (sec <= 0) {
-          if (autoCloseIntervalRef.current) window.clearInterval(autoCloseIntervalRef.current);
-          router.push("/");
-        }
-      }, 1000);
-
-      autoCloseTimerRef.current = window.setTimeout(() => {
-        router.push("/");
-      }, 8000);
+    } catch (e) {
+      console.error("Error guardando premio ganado:", e);
     }
 
     return () => {
@@ -2255,17 +2233,17 @@ export default function LiveDrawDemoPage() {
         />
       </div>
 
-      {/* LLUVIA DE CONFETI Y DESTELLOS CUANDO HAY GANADOR */}
+      {/* LLUVIA DE CONFETI Y DESTELLOS CONTINUA DURANTE LA CELEBRACIÓN DEL GANADOR */}
       {showCelebration && (
         <div className="celebrationOverlay" aria-hidden="true">
-          {Array.from({ length: 40 }, (_, i) => (
+          {Array.from({ length: 70 }, (_, i) => (
             <div
               key={i}
               className={`confettiParticle confetti_${i % 5}`}
               style={{
-                left: `${(i / 40) * 100}%`,
-                animationDelay: `${(i % 8) * 0.15}s`,
-                animationDuration: `${2.2 + (i % 4) * 0.4}s`,
+                left: `${(i / 70) * 100}%`,
+                animationDelay: `${(i % 14) * 0.22}s`,
+                animationDuration: `${2.4 + (i % 5) * 0.45}s`,
               }}
             />
           ))}
@@ -2326,9 +2304,9 @@ export default function LiveDrawDemoPage() {
                   gap: '6px',
                   padding: '8px 14px',
                   borderRadius: '12px',
-                  background: 'rgba(255, 255, 255, 0.12)',
-                  border: '1px solid rgba(255, 255, 255, 0.25)',
-                  color: '#ffffff',
+                  background: '#f1f5f9',
+                  border: '1px solid #cbd5e1',
+                  color: '#0f172a',
                   fontWeight: 800,
                   fontSize: '0.84rem',
                   textDecoration: 'none',
@@ -2355,10 +2333,10 @@ export default function LiveDrawDemoPage() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  background: 'rgba(0, 0, 0, 0.4)',
+                  background: '#f1f5f9',
                   borderRadius: '999px',
                   padding: '3px',
-                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  border: '1px solid #cbd5e1',
                   gap: '2px',
                 }}
               >
@@ -2376,8 +2354,8 @@ export default function LiveDrawDemoPage() {
                     border: 'none',
                     cursor: 'pointer',
                     background: theme === 'light' ? '#ffffff' : 'transparent',
-                    color: theme === 'light' ? '#0f172a' : '#d1d5db',
-                    boxShadow: theme === 'light' ? '0 2px 6px rgba(0, 0, 0, 0.3)' : 'none',
+                    color: '#0f172a',
+                    boxShadow: theme === 'light' ? '0 2px 6px rgba(0, 0, 0, 0.12)' : 'none',
                     transition: 'all 0.2s ease',
                   }}
                   title="Activar Modo Claro"
@@ -2398,8 +2376,8 @@ export default function LiveDrawDemoPage() {
                     border: 'none',
                     cursor: 'pointer',
                     background: theme === 'dark' ? '#0f172a' : 'transparent',
-                    color: theme === 'dark' ? '#f8fafc' : '#d1d5db',
-                    boxShadow: theme === 'dark' ? '0 2px 6px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.2)' : 'none',
+                    color: theme === 'dark' ? '#ffffff' : '#64748b',
+                    boxShadow: theme === 'dark' ? '0 2px 6px rgba(0, 0, 0, 0.4)' : 'none',
                     transition: 'all 0.2s ease',
                   }}
                   title="Activar Modo Oscuro"
@@ -2419,9 +2397,9 @@ export default function LiveDrawDemoPage() {
                   style={{
                     padding: '7px 12px',
                     borderRadius: '10px',
-                    background: 'rgba(245, 184, 46, 0.16)',
-                    border: '1.5px solid #f5b82e',
-                    color: '#ffe082',
+                    background: '#f8fafc',
+                    border: '1.5px solid #cbd5e1',
+                    color: '#0f172a',
                     fontSize: '0.78rem',
                     fontWeight: 800,
                     cursor: 'pointer'
@@ -4161,21 +4139,35 @@ export default function LiveDrawDemoPage() {
                       </code>
                     </div>
 
-                    {/* BANNER DE CUENTA REGRESIVA DE 8 SEGUNDOS */}
-                    <div className="spectatorAutoCloseCountdownBar">
-                      <div className="autoCloseInfo">
-                        <span className="autoClosePulse" />
-                        <span>
-                          Sala cerrando en <strong>{autoCloseCountdown ?? 8}s</strong>... Volviendo al inicio
-                        </span>
-                      </div>
+                    {/* BOTÓN OFICIAL: QUITAR / CERRAR GANADOR (SOLO CUANDO EL USUARIO LO ACCIONA MANUALMENTE) */}
+                    <div style={{ marginTop: '14px', marginBottom: '14px' }}>
                       <button
                         type="button"
-                        className="btnSkipAutoClose"
-                        onClick={() => router.push("/")}
-                        title="Ir al inicio de inmediato"
+                        onClick={() => {
+                          resetDemo();
+                          setShowTicketModal(false);
+                          setShowCelebration(false);
+                        }}
+                        style={{
+                          width: '100%',
+                          padding: '12px 18px',
+                          borderRadius: '12px',
+                          background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(185, 28, 28, 0.35) 100%)',
+                          border: '1.5px solid #ef4444',
+                          color: '#ffffff',
+                          fontWeight: 800,
+                          fontSize: '14px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px',
+                          boxShadow: '0 4px 14px rgba(239, 68, 68, 0.3)',
+                          transition: 'all 0.2s ease',
+                        }}
+                        title="Quitar tiquete y resultado del ganador"
                       >
-                        Ir al Inicio ahora →
+                        ✕ Quitar Ganador / Continuar Sorteos
                       </button>
                     </div>
 
@@ -4291,100 +4283,104 @@ export default function LiveDrawDemoPage() {
           </div>
 
           {showAuditSection && (
-            <section className="liveDemoAudit" aria-labelledby="liveDemoAuditTitle">
+            <section className="liveDemoAudit" aria-labelledby="liveDemoAuditTitle" style={{ background: '#ffffff', borderRadius: '24px', border: '1px solid rgba(0, 0, 0, 0.08)', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', padding: '28px' }}>
         <div className="liveDemoAuditIntro">
           <span className="auditShield">✓</span>
           <div>
-            <p className="liveDemoEyebrow">TRANSPARENCIA Y SEGURIDAD</p>
-            <h2 id="liveDemoAuditTitle">Cada sorteo es matemáticamente verificable.</h2>
-            <p>La selección no se deja al azar de una animación: el servidor deriva el ganador mediante algoritmos criptográficos antes de que la balotera comience a girar.</p>
+            <p className="liveDemoEyebrow" style={{ color: '#b48008', fontWeight: 900, textShadow: 'none' }}>TRANSPARENCIA Y SEGURIDAD</p>
+            <h2 id="liveDemoAuditTitle" style={{ color: '#000000', textShadow: 'none', fontWeight: 900 }}>Cada sorteo es matemáticamente verificable.</h2>
+            <p style={{ color: '#000000', textShadow: 'none', fontWeight: 600 }}>La selección no se deja al azar de una animación: el servidor deriva el ganador mediante algoritmos criptográficos antes de que la balotera comience a girar.</p>
           </div>
         </div>
 
         <div className="liveDemoAuditItems">
-          <div>
-            <span>01</span>
-            <b>Rango de cartón estricto</b>
-            <small>Los números del cartón van del {eligibleNumbers[0]} al {eligibleNumbers[eligibleNumbers.length - 1]} sin saltos ni cifras inconsistentes.</small>
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 22px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '100%' }}>
+            <span style={{ color: '#b48008', fontWeight: 900, fontSize: '15px' }}>01</span>
+            <b style={{ color: '#000000', fontWeight: 900, fontSize: '15px', textShadow: 'none' }}>Rango de cartón estricto</b>
+            <small style={{ color: '#000000', fontWeight: 600, fontSize: '13px', lineHeight: 1.5, textShadow: 'none' }}>Los números del cartón van del {eligibleNumbers[0]} al {eligibleNumbers[eligibleNumbers.length - 1]} sin saltos ni cifras inconsistentes.</small>
           </div>
-          <div>
-            <span>02</span>
-            <b>Muestreo sin sesgo</b>
-            <small>Muestreo con rechazo de 64 bits para equiprobabilidad perfecta entre las {cartonSize} opciones.</small>
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 22px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '100%' }}>
+            <span style={{ color: '#b48008', fontWeight: 900, fontSize: '15px' }}>02</span>
+            <b style={{ color: '#000000', fontWeight: 900, fontSize: '15px', textShadow: 'none' }}>Muestreo sin sesgo</b>
+            <small style={{ color: '#000000', fontWeight: 600, fontSize: '13px', lineHeight: 1.5, textShadow: 'none' }}>Muestreo con rechazo de 64 bits para equiprobabilidad perfecta entre las {cartonSize} opciones.</small>
           </div>
-          <div>
-            <span>03</span>
-            <b>Constancia auditable</b>
-            <small>Firma digital Ed25519 para reproducir y certificar el resultado.</small>
+          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 22px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '100%' }}>
+            <span style={{ color: '#b48008', fontWeight: 900, fontSize: '15px' }}>03</span>
+            <b style={{ color: '#000000', fontWeight: 900, fontSize: '15px', textShadow: 'none' }}>Constancia auditable</b>
+            <small style={{ color: '#000000', fontWeight: 600, fontSize: '13px', lineHeight: 1.5, textShadow: 'none' }}>Firma digital Ed25519 para reproducir y certificar el resultado.</small>
           </div>
         </div>
 
         {/* 1. CUADRO DE PRECISIÓN MATEMÁTICA Y GEOMÉTRICA (UBICADO EN TRANSPARENCIA) */}
-        <div className="scientificPanel">
-          <div className="sciHeader">
+        <div className="scientificPanel" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '22px 24px', marginTop: '22px', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
+          <div className="sciHeader" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '12px', marginBottom: '14px' }}>
             <span className="sciIcon">📐</span>
             <div>
-              <strong>PRECISIÓN MATEMÁTICA Y GEOMÉTRICA</strong>
-              <small>Cálculo, Estadística y Cinemática en Tiempo Real</small>
+              <strong style={{ color: '#000000', fontWeight: 900, fontSize: '15px', textShadow: 'none' }}>PRECISIÓN MATEMÁTICA Y GEOMÉTRICA</strong>
+              <small style={{ color: '#000000', fontWeight: 700, fontSize: '12px', textShadow: 'none' }}>Cálculo, Estadística y Cinemática en Tiempo Real</small>
             </div>
           </div>
 
           <div className="sciGrid">
             {/* 1. ESTADÍSTICA: EQUIPROBABILIDAD Y ENTROPÍA */}
-            <div className="sciCard">
-              <span className="sciTag">ESTADÍSTICA UNIFORME</span>
-              <div className="sciFormula">P(X = k) = 1 / N</div>
+            <div className="sciCard" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <span className="sciTag" style={{ color: '#000000', fontWeight: 900 }}>ESTADÍSTICA UNIFORME</span>
+              <div className="sciFormula" style={{ background: '#0f172a', color: '#ffd700', fontWeight: 800, padding: '6px 10px', borderRadius: '8px', textAlign: 'center' }}>P(X = k) = 1 / N</div>
               <div className="sciValue">
-                <b>{((1 / (mode === "balotas" ? cartonSize : wheelSize)) * 100).toFixed(4)}%</b>
-                <span>por número</span>
+                <b style={{ color: '#000000', fontWeight: 900 }}>{((1 / (mode === "balotas" ? cartonSize : wheelSize)) * 100).toFixed(4)}%</b>
+                <span style={{ color: '#000000', fontWeight: 700 }}>por número</span>
               </div>
               <div className="sciMeta">
-                <span>Entropía Shannon:</span>
-                <code>{Math.log2(mode === "balotas" ? cartonSize : wheelSize).toFixed(4)} bits</code>
+                <span style={{ color: '#000000', fontWeight: 700 }}>Entropía Shannon:</span>
+                <code style={{ background: '#f1f5f9', color: '#000000', border: '1px solid #cbd5e1', fontWeight: 800, padding: '2px 6px', borderRadius: '6px' }}>{Math.log2(mode === "balotas" ? cartonSize : wheelSize).toFixed(4)} bits</code>
               </div>
             </div>
 
             {/* 2. CÁLCULO: MUESTREO SIN SESGO (REJECTION SAMPLING) */}
-            <div className="sciCard">
-              <span className="sciTag">CÁLCULO DISCRETO</span>
-              <div className="sciFormula">L = 2⁶⁴ − (2⁶⁴ mod N)</div>
+            <div className="sciCard" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <span className="sciTag" style={{ color: '#000000', fontWeight: 900 }}>CÁLCULO DISCRETO</span>
+              <div className="sciFormula" style={{ background: '#0f172a', color: '#ffd700', fontWeight: 800, padding: '6px 10px', borderRadius: '8px', textAlign: 'center' }}>L = 2⁶⁴ − (2⁶⁴ mod N)</div>
               <div className="sciValue">
-                <b className="textGreen">0.000000%</b>
-                <span>sesgo de módulo</span>
+                <b className="textGreen" style={{ color: '#15803d', fontWeight: 900 }}>0.000000%</b>
+                <span style={{ color: '#000000', fontWeight: 700 }}>sesgo de módulo</span>
               </div>
               <div className="sciMeta">
-                <span>Espacio 64-bit:</span>
-                <code>1.8446 × 10¹⁹</code>
+                <span style={{ color: '#000000', fontWeight: 700 }}>Espacio 64-bit:</span>
+                <code style={{ background: '#f1f5f9', color: '#000000', border: '1px solid #cbd5e1', fontWeight: 800, padding: '2px 6px', borderRadius: '6px' }}>1.8446 × 10¹⁹</code>
               </div>
             </div>
 
             {/* 3. GEOMETRÍA: CINEMÁTICA CIRCULAR Y REFLEXIÓN */}
-            <div className="sciCard">
-              <span className="sciTag">GEOMETRÍA Y CINEMÁTICA</span>
-              <div className="sciFormula">Δθ = 360° / N · v′ = v − 2(v·n)n</div>
+            <div className="sciCard" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <span className="sciTag" style={{ color: '#000000', fontWeight: 900 }}>GEOMETRÍA Y CINEMÁTICA</span>
+              <div className="sciFormula" style={{ background: '#0f172a', color: '#ffd700', fontWeight: 800, padding: '6px 10px', borderRadius: '8px', textAlign: 'center' }}>
+                {mode === "balotas" ? "V = (4/3)·π·R³ · N_balotas" : "Δθ = 360° / N · v′ = v − 2(v·n)n"}
+              </div>
               <div className="sciValue">
-                <b>{(360 / (mode === "balotas" ? cartonSize : wheelSize)).toFixed(3)}°</b>
-                <span>arco por sector</span>
+                <b style={{ color: '#000000', fontWeight: 900 }}>
+                  {mode === "balotas" ? `${((cartonSize / 1000) * 100).toFixed(1)}%` : `${(360 / wheelSize).toFixed(3)}°`}
+                </b>
+                <span style={{ color: '#000000', fontWeight: 700 }}>{mode === "balotas" ? "ocupación cámara" : "arco por sector"}</span>
               </div>
               <div className="sciMeta">
-                <span>Error angular:</span>
-                <code>&lt; 0.001° (sub-pixel)</code>
+                <span style={{ color: '#000000', fontWeight: 700 }}>{mode === "balotas" ? "Colisiones / seg:" : "Error angular:"}</span>
+                <code style={{ background: '#f1f5f9', color: '#000000', border: '1px solid #cbd5e1', fontWeight: 800, padding: '2px 6px', borderRadius: '6px' }}>{mode === "balotas" ? "~1,240 / s" : "< 0.001° (sub-pixel)"}</code>
               </div>
             </div>
           </div>
 
           {/* AUDITORÍA CHI-CUADRADO EN TIEMPO REAL */}
-          <div className="chiSquareLive">
-            <div className="chiTitle">
-              <span>Prueba de Bondad de Ajuste Chi-Cuadrado (χ²):</span>
-              <span className="chiBadge">Aprobada · NIST SP 800-22</span>
+          <div className="chiSquareLive" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px 20px', marginTop: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+            <div className="chiTitle" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ color: '#000000', fontWeight: 800, fontSize: '13.5px' }}>Prueba de Bondad de Ajuste Chi-Cuadrado (χ²):</span>
+              <span className="chiBadge" style={{ background: '#dcfce7', color: '#15803d', border: '1px solid #86efac', fontWeight: 800, fontSize: '11px', padding: '3px 8px', borderRadius: '6px' }}>Aprobada · NIST SP 800-22</span>
             </div>
-            <div className="chiBarTrack">
-              <div className="chiBarFill" style={{ width: "98.4%" }} />
+            <div className="chiBarTrack" style={{ background: '#cbd5e1', height: '6px', borderRadius: '99px', overflow: 'hidden' }}>
+              <div className="chiBarFill" style={{ width: "98.4%", height: '100%', background: '#16a34a' }} />
             </div>
-            <div className="chiLabels">
-              <small>Frecuencia observada vs teórica (p-valor &gt; 0.95)</small>
-              <small>Equiprobabilidad certificable</small>
+            <div className="chiLabels" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px', color: '#000000', fontSize: '11.5px', fontWeight: 700 }}>
+              <small style={{ color: '#000000', fontWeight: 700 }}>Frecuencia observada vs teórica (p-valor &gt; 0.95)</small>
+              <small style={{ color: '#000000', fontWeight: 700 }}>Equiprobabilidad certificable</small>
             </div>
           </div>
         </div>
@@ -4392,19 +4388,19 @@ export default function LiveDrawDemoPage() {
         {/* 2. ACTA OFICIAL EMITIDA (DOCUMENTO NOTARIAL Y VERIFICACIÓN) */}
         <div className="officialActDownloadSection">
           {latestAct ? (
-            <div className="officialActCard ready">
+            <div className="officialActCard ready" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 24px', marginTop: '20px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)' }}>
               <div className="actCardHeader">
                 <span className="actBadge">✓ ACTA DIGITAL EMITIDA</span>
-                <span className="actId">ID: {latestAct.certificate?.drawId || latestAct.drawId}</span>
+                <span className="actId" style={{ color: '#000000', fontWeight: 700 }}>ID: {latestAct.certificate?.drawId || latestAct.drawId}</span>
               </div>
               <div className="actCardBody">
                 <div className="actCardInfo">
-                  <p className="actCardTitle">Acta Oficial de Sorteo y Adjudicación</p>
-                  <p className="actCardDesc">
-                    Boleta ganadora: <strong>{winner || latestAct.certificate?.result?.value}</strong> · 
-                    Huella SHA-256: <code>{(latestAct.certificate?.entries?.listHash || auditHash).slice(0, 16)}…</code>
+                  <p className="actCardTitle" style={{ color: '#000000', fontWeight: 900 }}>Acta Oficial de Sorteo y Adjudicación</p>
+                  <p className="actCardDesc" style={{ color: '#000000', fontWeight: 600 }}>
+                    Boleta ganadora: <strong style={{ color: '#000000' }}>{winner || latestAct.certificate?.result?.value}</strong> · 
+                    Huella SHA-256: <code style={{ color: '#000000', fontWeight: 700 }}>{(latestAct.certificate?.entries?.listHash || auditHash).slice(0, 16)}…</code>
                   </p>
-                  <small className="actCardMeta">
+                  <small className="actCardMeta" style={{ color: '#000000', fontWeight: 600 }}>
                     Emitida con firma digital y descarte de módulo L = 2⁶⁴ − (2⁶⁴ mod N).
                   </small>
                 </div>
@@ -4425,15 +4421,15 @@ export default function LiveDrawDemoPage() {
               </div>
             </div>
           ) : (
-            <div className="officialActCard pending">
+            <div className="officialActCard pending" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 24px', marginTop: '20px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)' }}>
               <div className="actCardHeader">
                 <span className="actBadgePending">⏳ ACTA PENDIENTE</span>
-                <span className="actId">Estándar GLI-19 / NIST SP 800-22</span>
+                <span className="actId" style={{ color: '#000000', fontWeight: 700 }}>Estándar GLI-19 / NIST SP 800-22</span>
               </div>
               <div className="actCardBody">
                 <div className="actCardInfo">
-                  <p className="actCardTitle">Acta Oficial de Sorteo y Adjudicación</p>
-                  <p className="actCardDesc">
+                  <p className="actCardTitle" style={{ color: '#000000', fontWeight: 900 }}>Acta Oficial de Sorteo y Adjudicación</p>
+                  <p className="actCardDesc" style={{ color: '#000000', fontWeight: 600 }}>
                     El documento digital firmado (.JSON) se emitirá automáticamente en cuanto la balotera revele el número ganador.
                   </p>
                 </div>
@@ -4441,7 +4437,7 @@ export default function LiveDrawDemoPage() {
                   <button className="btnDownloadActOfficial disabled" disabled type="button">
                     📥 Descargar Acta (Disponible al sortear)
                   </button>
-                  <a className="btnVerifyActLink" href="/verificar">
+                  <a className="btnVerifyActLink" href="/verificar" style={{ background: '#0f172a', color: '#ffffff' }}>
                     🛡️ Verificador Público →
                   </a>
                 </div>
@@ -4451,9 +4447,9 @@ export default function LiveDrawDemoPage() {
         </div>
 
         {auditHash && (
-          <div className="auditSnippet">
-            <small>Huella canónica SHA-256 ({mode === "balotas" ? cartonSize : wheelSize} opciones):</small>
-            <code>{auditHash}</code>
+          <div className="auditSnippet" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 16px', marginTop: '16px' }}>
+            <small style={{ color: '#000000', fontWeight: 700 }}>Huella canónica SHA-256 ({mode === "balotas" ? cartonSize : wheelSize} opciones):</small>
+            <code style={{ color: '#000000', fontWeight: 800, background: '#ffffff', border: '1px solid #cbd5e1' }}>{auditHash}</code>
           </div>
         )}
 

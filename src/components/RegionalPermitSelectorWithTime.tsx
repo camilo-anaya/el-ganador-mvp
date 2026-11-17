@@ -671,11 +671,11 @@ export default function RegionalPermitSelectorWithTime({
       {/* =========================================================================
           DIRECTORIO VISUAL DE ENLACES DIRECTOS: DEPARTAMENTAL Y MUNICIPAL
           ========================================================================= */}
-      <div style={{ marginTop: '16px', background: 'var(--surface-subtle, #f8fafc)', border: '1px solid rgba(148, 163, 184, 0.25)', borderRadius: '12px', padding: '14px' }}>
+      <div className="directory-links-container" style={{ marginTop: '16px', borderRadius: '12px', padding: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', cursor: 'pointer' }} onClick={() => setShowFullDirectory(!showFullDirectory)}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '1.2rem' }}>📂</span>
-            <strong style={{ fontSize: '0.92rem' }}>
+            <strong className="directory-header-title" style={{ fontSize: '0.92rem' }}>
               Directorio de Enlaces Directos Oficiales (Departamentales y Municipales)
             </strong>
           </div>
@@ -683,7 +683,7 @@ export default function RegionalPermitSelectorWithTime({
             {showFullDirectory ? '▲ Ocultar Directorio' : '▼ Ver Todos los Enlaces Directos'}
           </span>
         </div>
-        <p style={{ margin: '0 0 12px', fontSize: '0.78rem', color: 'var(--text-secondary, #64748b)' }}>
+        <p className="directory-header-desc" style={{ margin: '0 0 12px', fontSize: '0.78rem' }}>
           Accede directamente a la página exacta de tu departamento o ciudad haciendo clic en cualquiera de los enlaces a continuación:
         </p>
 
@@ -694,30 +694,35 @@ export default function RegionalPermitSelectorWithTime({
               return (
                 <div
                   key={key}
+                  className={`directory-link-card ${isSelected ? 'selected' : ''}`}
                   style={{
                     padding: '10px 12px',
                     borderRadius: '8px',
-                    border: isSelected ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.2)',
-                    background: isSelected ? 'rgba(0, 122, 255, 0.08)' : 'var(--surface-primary, #ffffff)',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '6px',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontWeight: 700, fontSize: '0.84rem' }}>📍 {item.name}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                    <span className="directory-card-name" style={{ fontWeight: 700, fontSize: '0.84rem' }}>📍 {item.name}</span>
                     <button
                       type="button"
+                      className={`btn-directory-select ${isSelected ? 'selected' : ''}`}
                       onClick={() => handleQuickRegionPick(key)}
                       style={{
-                        padding: '2px 8px',
-                        fontSize: '0.7rem',
-                        fontWeight: 600,
-                        borderRadius: '4px',
-                        border: '1px solid #007AFF',
-                        background: isSelected ? '#007AFF' : 'transparent',
-                        color: isSelected ? '#ffffff' : '#007AFF',
+                        padding: '4px 12px',
+                        fontSize: '0.74rem',
+                        fontWeight: 700,
+                        borderRadius: '6px',
                         cursor: 'pointer',
+                        border: isSelected ? '1.5px solid #007AFF' : '1.5px solid #0f172a',
+                        background: isSelected ? '#007AFF' : '#0f172a',
+                        color: '#ffffff',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        opacity: 1,
+                        whiteSpace: 'nowrap',
                       }}
                     >
                       {isSelected ? '✓ Seleccionado' : 'Seleccionar'}
@@ -728,6 +733,7 @@ export default function RegionalPermitSelectorWithTime({
                       href={item.primaryUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="directory-link-primary"
                       style={{
                         fontSize: '0.76rem',
                         color: '#007AFF',
@@ -745,9 +751,9 @@ export default function RegionalPermitSelectorWithTime({
                         href={item.secondaryUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="directory-link-secondary"
                         style={{
                           fontSize: '0.74rem',
-                          color: 'var(--text-secondary, #64748b)',
                           textDecoration: 'none',
                           display: 'flex',
                           alignItems: 'center',
