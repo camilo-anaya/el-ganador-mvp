@@ -3713,34 +3713,55 @@
 }
 
 .liveDemoHero {
-  max-width: 1460px;
+  max-width: 1460px !important;
+  margin: 28px auto 24px auto !important;
+  padding: 32px 28px !important;
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
 }
 
+.liveDemoHero .liveDemoEyebrow,
 .liveDemoEyebrow {
-  color: #c9a44c !important;
-  font-weight: 800 !important;
+  color: #b45309 !important;
+  font-size: 11.5px !important;
+  font-weight: 900 !important;
   letter-spacing: 2px !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
+  text-shadow: none !important;
+  margin-bottom: 8px !important;
 }
 
 .liveDemoHero h1 {
-  color: #ffffff !important;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8) !important;
+  color: #0f172a !important;
+  font-size: clamp(28px, 4.5vw, 54px) !important;
+  font-weight: 900 !important;
+  line-height: 1.08 !important;
+  letter-spacing: -1.5px !important;
+  text-shadow: none !important;
+  margin: 0 !important;
 }
 
 .liveDemoHero h1 span {
-  /* Oro satinado metálico de alta gama (Rolex Gold) - CERO efecto neón ni amarillo plano */
-  background: linear-gradient(180deg, #fff3cb 0%, #e1bb52 42%, #c4962c 78%, #8e6515 100%) !important;
+  /* Oro cálido elegante con alto contraste */
+  background: linear-gradient(135deg, #d4af37 0%, #b48008 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  color: #c4962c !important;
+  color: #b48008 !important;
   text-shadow: none !important;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.75)) !important;
+  filter: none !important;
 }
 
 .liveDemoHero > p:last-child {
-  color: #c6d9cb !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+  max-width: 680px !important;
+  margin: 12px auto 0 !important;
+  color: #475569 !important;
+  font-size: 14.5px !important;
+  font-weight: 500 !important;
+  line-height: 1.6 !important;
+  text-shadow: none !important;
 }
 
 /* ETAPA PRINCIPAL DEL SORTEO EN VERDE ESMERALDA DE LUJO */
