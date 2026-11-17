@@ -1,4 +1,4 @@
-// Sala de Sorteo en Vivo - Balotera & Ruleta con protección de rol empresarial y certificación SHA-256
+// Sala de Sorteo en Vivo - Restauración completa de la balotera y ruleta original con certificación SHA-256
 'use client';
 
 import React, { useState, useEffect } from 'react';
