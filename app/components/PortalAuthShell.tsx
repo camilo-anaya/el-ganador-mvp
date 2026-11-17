@@ -128,23 +128,30 @@ export default function PortalAuthShell({ audience, children, wideAuthPanel = fa
   return (
     <main className={`premiumEntry ${business ? "businessEntry" : "customerEntry"} ${wideAuthPanel ? "businessRegisterEntry" : ""}`}>
       <header className="premiumEntryHeader">
-        <a className="premiumBrand" href="/" aria-label="El Ganador, inicio">EL GANADOR</a>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <a className="premiumBrand" href="/" aria-label="El Ganador, inicio">EL GANADOR</a>
+          <span style={{ fontSize: "8.5px", padding: "2px 6px", background: "rgba(16, 185, 129, 0.2)", border: "1px solid rgba(16, 185, 129, 0.4)", borderRadius: "6px", color: "#6ee7b7", fontWeight: "900", letterSpacing: "0.5px" }}>OFICIAL</span>
+        </div>
         <nav className="premiumMainNav" aria-label="Navegación principal">
-          <a href="/">Explorar rifas</a>
-          <a href="/sorteo-en-vivo">Sorteos en vivo</a>
+          <a href="/">← Explorar sorteos</a>
+          <a href="/sorteo-en-vivo">🔴 Sorteos en vivo</a>
+          <a href="/verificar">🛡️ Verificador</a>
           <a href="#como-funciona">Cómo participar</a>
           <a href={hasPlans ? "#planes" : "/admin?mode=register#planes"}>Para negocios</a>
         </nav>
+        <a href="/" className="premiumMobileBackLink">
+          ← Volver al Feed
+        </a>
         {authInline
           ? <nav className="premiumEntryAuthLinks" aria-label="Registro e ingreso">
-              <a href={business ? "/admin?mode=register#planes" : "/cuenta?mode=register"}>Regístrate</a>
+              <a href={business ? "/ingreso?mode=register&role=business#planes" : "/ingreso?mode=register"}>Regístrate</a>
               <span aria-hidden="true">/</span>
-              <a href={business ? "/admin?mode=login" : "/cuenta?mode=login"}>Inicia sesión</a>
+              <a href={business ? "/ingreso?mode=login&role=business" : "/ingreso?mode=login"}>Inicia sesión</a>
             </nav>
           : <nav className="premiumEntryAuthLinks" aria-label="Registro e ingreso">
-              <a href={business ? (authMode === "register" ? "#planes" : "/admin?mode=register#planes") : "/cuenta?mode=register&auth=1"}>Regístrate</a>
+              <a href={business ? (authMode === "register" ? "#planes" : "/ingreso?mode=register&role=business#planes") : "/ingreso?mode=register"}>Regístrate</a>
               <span aria-hidden="true">/</span>
-              <a href={business ? "/admin?mode=login&auth=1" : "/cuenta?mode=login&auth=1"}>Inicia sesión</a>
+              <a href={business ? "/ingreso?mode=login&role=business" : "/ingreso?mode=login"}>Inicia sesión</a>
             </nav>}
       </header>
 
@@ -166,6 +173,8 @@ export default function PortalAuthShell({ audience, children, wideAuthPanel = fa
               </div>
             </div>
 
+            {!authInline && (
+              <>
             <div className="premiumGalleryDivider" aria-hidden="true" />
             <section className="premiumPrizeGallery" aria-labelledby="premiumPrizeGalleryHeading">
               <header className="premiumPrizeGalleryHeader">
@@ -189,6 +198,8 @@ export default function PortalAuthShell({ audience, children, wideAuthPanel = fa
               </div>
               <p className="premiumPrizeGalleryNote">Imágenes ilustrativas. Consulta los premios disponibles en cada rifa.</p>
             </section>
+              </>
+            )}
 
             <div className="premiumPerks" id="como-funciona">
               <div><span>01</span><b>{business ? "Publica" : "Regístrate"}</b><small>{business ? "Tu primera rifa" : "Crea tu cuenta"}</small></div>

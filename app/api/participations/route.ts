@@ -48,7 +48,19 @@ export async function POST(request: Request) {
 
   try {
     const selectedNumbers = numbers as number[];
-    const customer = account?.role === "customer" ? account : null;
+    let buyerAccountId = account?.id ?? null;
+    let finalBuyerName = account?.display_name || buyerName;
+    let finalBuyerEmail = account?.email || buyerEmail;
+
+    if (!buyerAccountId && buyerEmail) {
+      const match = await query("SELECT id, display_name FROM business_accounts WHERE lower(email) = lower($1) LIMIT 1", [buyerEmail]);
+      if (match.rows[0]) {
+        const u = match.rows[0] as { id: string; display_name: string };
+        buyerAccountId = u.id;
+        if (!finalBuyerName) finalBuyerName = u.display_name;
+      }
+    }
+
     const reservation = await withTransaction(async (tx) => {
       await releaseExpiredReservations(createdAt, tx);
       const drawResult = await tx.query("SELECT unit_price, total_tickets FROM draws WHERE id = $1 AND published = 1", [drawId]);
@@ -60,8 +72,8 @@ export async function POST(request: Request) {
       await tx.query(`INSERT INTO participations
         (id, draw_id, buyer_name, buyer_email, ticket_count, ticket_numbers, total_amount, status, created_at, expires_at, buyer_account_id)
         VALUES ($1, $2, $3, $4, $5, $6, $7, 'reserved', $8, $9, $10)`,
-      [participationId, drawId, customer?.display_name ?? buyerName, customer?.email ?? buyerEmail,
-        selectedNumbers.length, JSON.stringify(selectedNumbers), totalAmount, createdAt, expiresAt, customer?.id ?? null]);
+      [participationId, drawId, finalBuyerName, finalBuyerEmail,
+        selectedNumbers.length, JSON.stringify(selectedNumbers), totalAmount, createdAt, expiresAt, buyerAccountId]);
 
       for (const number of selectedNumbers) {
         const reserved = await tx.query(`UPDATE tickets SET status = 'reserved', participation_id = $1, hold_until = $2

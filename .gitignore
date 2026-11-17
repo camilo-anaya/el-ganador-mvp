@@ -18,3 +18,11 @@ public/uploads/
 .next-preview/
 .next-preview-*/
 *.log
+
+.vercel
+
+.backups/
+_backups/
+*.bak
+local.db
+scratch/

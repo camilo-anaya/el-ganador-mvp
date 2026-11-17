@@ -1,0 +1,1653 @@
+/* ========================================================
+   PORTAL DEL CLIENTE - PERFIL, EXTREMA SEGURIDAD & COBROS
+   ======================================================== */
+
+.customerPortalWrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+  font-family: inherit;
+}
+
+/* --- HEADER HUD DEL CLIENTE --- */
+.customerHeroCard {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #0f766e 100%);
+  border-radius: 20px;
+  padding: 28px;
+  color: #ffffff;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.customerHeroCard::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.customerAvatarSection {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatarImageWrapper {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid #fbbf24;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  background: #022c22;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatarImageWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarInitials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 900;
+  color: #fbbf24;
+  background: #064e3b;
+}
+
+.avatarCameraBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  background: #f59e0b;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+}
+
+.avatarCameraBtn:hover {
+  transform: scale(1.1);
+}
+
+.customerHeroDetails h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.customerHeroDetails p {
+  margin: 0 0 10px;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+.customerBadgesRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.securityBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.securityBadge.activeGreen {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid #10b981;
+  color: #a7f3d0;
+}
+
+.securityBadge.activeGold {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid #f59e0b;
+  color: #fde68a;
+}
+
+.securityBadge.activeBlue {
+  background: rgba(56, 189, 248, 0.2);
+  border: 1px solid #38bdf8;
+  color: #bae6fd;
+}
+
+.heroActionGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.btnHeroOutline {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnHeroOutline:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* --- TABS BAR --- */
+.customerTabsNav {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  -webkit-overflow-scrolling: touch !important;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 4px;
+  overflow-x: auto;
+}
+
+.customerTabBtn {
+  background: none;
+  border: none;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 10px 10px 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.customerTabBtn:hover {
+  color: #065f46;
+  background: #f1f5f9;
+}
+
+.customerTabBtn.active {
+  color: #065f46;
+  background: #ecfdf5;
+}
+
+.customerTabBtn.active::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #059669;
+  border-radius: 3px;
+}
+
+/* --- CARDS & PANELS --- */
+.customerTabPanel {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.customerCardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.securityCardFull {
+  grid-column: 1 / -1;
+}
+
+.customerBox {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.customerBoxHeading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 12px;
+}
+
+.customerBoxIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.customerBoxIcon.green { background: #dcfce7; color: #166534; }
+.customerBoxIcon.gold { background: #fef3c7; color: #92400e; }
+.customerBoxIcon.blue { background: #e0f2fe; color: #075985; }
+.customerBoxIcon.purple { background: #f3e8ff; color: #6b21a8; }
+
+.customerBoxHeading h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.customerBoxHeading p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* --- FOTOGRAFÍAS & AVATARES --- */
+.photoUploadArea {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+}
+
+.currentAvatarLarge {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #059669;
+}
+
+.photoActions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.uploadFileLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #059669;
+  color: #ffffff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.uploadFileLabel:hover {
+  background: #047857;
+}
+
+.uploadFileInputHidden {
+  display: none;
+}
+
+.presetAvatarsList {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.presetAvatarBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #e2e8f0;
+  background: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.presetAvatarBtn:hover {
+  transform: scale(1.15);
+  border-color: #059669;
+}
+
+/* --- KYC DOCUMENTO --- */
+.kycDocBanner {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.kycStatusIcon {
+  font-size: 32px;
+}
+
+.kycInfo h4 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #166534;
+}
+
+.kycInfo p {
+  margin: 0;
+  font-size: 12px;
+  color: #15803d;
+}
+
+/* --- FORMS & INPUTS --- */
+.customerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formRowDouble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .formRowDouble {
+    grid-template-columns: 1fr;
+  }
+}
+
+.customerForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+
+.customerForm input,
+.customerForm select {
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customerForm input:focus,
+.customerForm select:focus {
+  outline: none;
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
+}
+
+.customerForm input:disabled {
+  background: #f1f5f9;
+  cursor: not-allowed;
+  color: #64748b;
+}
+
+.btnCustomerPrimary {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btnCustomerPrimary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+}
+
+.btnCustomerPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- EXTREMA SEGURIDAD & FACE ID CARDS --- */
+.biometricPromoCard {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border: 1px solid #334155;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  margin-bottom: 24px;
+}
+
+.biometricLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 600px;
+}
+
+.faceIdGlowingIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.biometricLeft h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.biometricLeft p {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.btnFaceIdTrigger {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  border: 1px solid #38bdf8;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btnFaceIdTrigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+.btnFaceIdTrigger.isActiveState {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  border-color: #34d399;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+/* --- BÓVEDA CRIPTOGRÁFICA MILITAR --- */
+.encryptionVaultCard {
+  background: #022c22;
+  border: 1px solid #059669;
+  border-radius: 16px;
+  padding: 24px;
+  color: #ecfdf5;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.encryptionVaultCard::after {
+  content: "AES-256-GCM";
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  font-size: 44px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+  letter-spacing: -2px;
+}
+
+.vaultHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.vaultBadge {
+  background: #064e3b;
+  border: 1px solid #10b981;
+  color: #6ee7b7;
+  padding: 4px 12px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+}
+
+.vaultKeyRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 13px;
+  color: #fbbf24;
+  margin-bottom: 14px;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  word-break: break-all;
+}
+
+.vaultSpecsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.vaultSpecItem {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 10px 14px;
+  border-left: 3px solid #10b981;
+}
+
+.vaultSpecItem span {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 2px;
+}
+
+.vaultSpecItem strong {
+  font-size: 13px;
+  color: #ffffff;
+}
+
+/* --- BANCO & BILLETERA PARA COBROS --- */
+.bankAccountPreview {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  border-radius: 16px;
+  padding: 22px;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  margin-bottom: 20px;
+}
+
+.bankAccountPreview::after {
+  content: "💳";
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  font-size: 32px;
+  opacity: 0.8;
+}
+
+.cardBankType {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #93c5fd;
+  margin-bottom: 12px;
+}
+
+.cardNumberMasked {
+  font-family: monospace;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  color: #ffffff;
+}
+
+.cardHolderRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #bfdbfe;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cardHolderRow strong {
+  color: #ffffff;
+  font-size: 13px;
+}
+
+/* --- MENSAJES DE ESTADO --- */
+.customerFeedbackAlert {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.customerFeedbackAlert.success {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.customerFeedbackAlert.error {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
+/* ========================================================
+   SECCIÓN DE FACTURACIÓN & TIQUETES TIPO DIAN
+   ======================================================== */
+.invoiceSectionCard {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  padding: 24px;
+}
+
+.billingSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.billingStatCard {
+  padding: 16px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.billingStatCard.greenCard {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+.billingStatCard.blueCard {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+.billingStatCard.amberCard {
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+}
+
+.statEyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.greenCard .statEyebrow { color: #166534; }
+.blueCard .statEyebrow { color: #1e40af; }
+.amberCard .statEyebrow { color: #92400e; }
+
+.statNumber {
+  font-size: 26px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.historySubFilterBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.subFilterBtn {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.subFilterBtn:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.subFilterBtn.active {
+  background: #059669;
+  border-color: #047857;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.historySectionGroup {
+  margin-bottom: 24px;
+}
+
+.historyGroupHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  margin-bottom: 14px;
+  border-left: 4px solid #059669;
+}
+
+.historyGroupHeader.expiredGroup {
+  border-left-color: #64748b;
+  background: #f8fafc;
+}
+
+.historyGroupHeader h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.livePillDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+  animation: pulseDot 1.4s infinite ease-in-out;
+}
+
+.historyHeaderBadge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 99px;
+  text-transform: uppercase;
+}
+
+.historyHeaderBadge.activeBadge {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+.historyHeaderBadge.expiredBadge {
+  background: #e2e8f0;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.invoiceList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.invoiceCard {
+  background: #0f172a;
+  color: #f8fafc;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.invoiceCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+}
+
+.invoiceCard.activeInvoice {
+  border-left: 4px solid #10b981;
+}
+
+.invoiceCard.expiredInvoice {
+  border-left: 4px solid #64748b;
+  opacity: 0.96;
+}
+
+.invoiceCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.invoiceIdGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.invoiceIcon {
+  font-size: 22px;
+}
+
+.invoiceNumber {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.invoiceDate {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.invoiceStatusTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+.invoiceStatusTag.inGame {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid #10b981;
+  color: #6ee7b7;
+}
+
+.invoiceStatusTag.finished {
+  background: rgba(148, 163, 184, 0.2);
+  border: 1px solid #94a3b8;
+  color: #cbd5e1;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  display: inline-block;
+}
+
+.invoiceCardBody {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.invoicePrizeCol {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1 1 300px;
+}
+
+.invoicePrizeEmoji {
+  font-size: 38px;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 8px;
+  border-radius: 12px;
+}
+
+.invoicePrizeTitle {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.invoiceMerchant {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.invoiceTicketNumbersWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ticketsLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.ticketPillsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ticketNumberBadge {
+  background: #022c22;
+  border: 1.5px solid #10b981;
+  color: #a7f3d0;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  font-family: monospace;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.ticketNumberBadge.expiredNum {
+  background: #1e293b;
+  border-color: #64748b;
+  color: #cbd5e1;
+}
+
+.invoiceFinancialCol {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.invoiceFinLine {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.invoiceFinLine b {
+  color: #ffffff;
+}
+
+.winningBallBadge {
+  background: #f59e0b;
+  color: #000000;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 900;
+}
+
+.winnerBadge {
+  color: #10b981;
+  font-weight: 900;
+}
+
+.noPrizeBadge {
+  color: #94a3b8;
+}
+
+.invoiceFinTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-top: 6px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #ffffff;
+}
+
+.invoiceFinTotal strong {
+  font-size: 16px;
+  color: #34d399;
+}
+
+.invoiceCardActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 14px;
+}
+
+.btnInvoiceLive {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.btnInvoiceLive:hover {
+  transform: scale(1.03);
+}
+
+.btnInvoiceVerify {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease;
+}
+
+.btnInvoiceVerify:hover {
+  transform: scale(1.03);
+}
+
+.btnInvoicePdf {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e2e8f0;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btnInvoicePdf:hover {
+  background: #334155;
+  color: #ffffff;
+}
+
+/* --- MODAL FACTURA ELECTRÓNICA DIAN --- */
+.invoiceModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.invoiceModalCard {
+  background: #ffffff;
+  color: #0f172a;
+  max-width: 620px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  padding: 28px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.invoiceModalClose {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #f1f5f9;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invoiceDianHeader {
+  text-align: center;
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.dianEyebrow {
+  font-size: 11px;
+  font-weight: 900;
+  color: #64748b;
+  letter-spacing: 1.5px;
+}
+
+.invoiceDianHeader h3 {
+  margin: 4px 0;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.dianDocNumber {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #059669;
+  font-family: monospace;
+}
+
+.invoiceDianEntities {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+  background: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.dianEntity p {
+  margin: 2px 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.dianEntity small {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.invoiceDianTable {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.invoiceDianRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.2fr 1.2fr;
+  padding: 10px 12px;
+  font-size: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.invoiceDianRow.head {
+  background: #0f172a;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.invoiceDianTotals {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+  margin-bottom: 18px;
+}
+
+.dianTotLine {
+  display: flex;
+  justify-content: space-between;
+  width: 260px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.dianTotLine.total {
+  border-top: 2px solid #0f172a;
+  padding-top: 6px;
+  margin-top: 4px;
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 900;
+}
+
+.dianTotLine.total strong {
+  color: #059669;
+  font-size: 16px;
+}
+
+.invoiceDianFooter {
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dianCufeBox {
+  background: #f1f5f9;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.dianCufeBox small {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  color: #64748b;
+}
+
+.dianCufeBox code {
+  font-size: 10px;
+  word-break: break-all;
+  color: #0f172a;
+}
+
+.btnDianPrint {
+  background: #059669;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.emptySubSection {
+  padding: 30px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+}
+
+@media (max-width: 680px) {
+  .invoiceDianEntities {
+    grid-template-columns: 1fr;
+  }
+  .invoiceCardBody {
+    flex-direction: column;
+  }
+  .invoiceFinancialCol {
+    width: 100%;
+  }
+}
+
+
+/* =============================================================================
+   OPTIMIZACIÓN MÓVIL TOTAL DEL PERFIL DEL CLIENTE & CABECERA
+   ============================================================================= */
+
+/* 1. CABECERA LIMPIA Y COMPACTA (MÓVIL Y WEB) */
+.customerPortalHeader {
+  height: 60px !important;
+  padding: 0 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+.portalHeaderLeft {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.portalHeaderLeft .portalBrand {
+  font-size: 17px !important;
+  font-weight: 900 !important;
+  color: #047857 !important;
+  letter-spacing: -0.5px !important;
+  text-decoration: none !important;
+}
+
+.btnBackMarketplace {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.btnBackMarketplace:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.portalHeaderActions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.portalDesktopPill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  text-decoration: none !important;
+  padding: 6px 10px !important;
+  border-radius: 8px !important;
+  transition: background 0.2s ease !important;
+}
+
+.portalDesktopPill.livePill {
+  color: #dc2626 !important;
+  background: rgba(220, 38, 38, 0.08) !important;
+}
+
+.portalDesktopPill.notaryPill {
+  color: #0284c7 !important;
+  background: rgba(2, 132, 199, 0.08) !important;
+}
+
+.btnCustomerLogout {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  border: 1px solid #fecaca !important;
+  padding: 6px 12px !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.btnCustomerLogout:hover {
+  background: #fca5a5 !important;
+}
+
+/* 2. AVISO DE IDENTIDAD PROTEGIDA (CLIENTES NO SUBEN FOTOS) */
+.clientAvatarHeroArea {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 16px !important;
+  background: #f8fafc !important;
+  border-radius: 16px !important;
+  border: 1px solid #e2e8f0 !important;
+  margin-bottom: 16px !important;
+}
+
+.badgeClientIdentity {
+  display: inline-block !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  color: #047857 !important;
+  background: #dcfce7 !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+}
+
+.clientNoPhotoNotice {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  background: #eff6ff !important;
+  border: 1px solid #bfdbfe !important;
+  border-radius: 14px !important;
+  padding: 14px 16px !important;
+  margin-bottom: 20px !important;
+}
+
+.clientNoPhotoIcon {
+  font-size: 20px !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+
+.clientNoPhotoText strong {
+  display: block !important;
+  font-size: 13px !important;
+  color: #1e40af !important;
+  margin-bottom: 4px !important;
+}
+
+.clientNoPhotoText p {
+  margin: 0 !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+  color: #3b82f6 !important;
+}
+
+/* 3. GRILLA DE AVATARES RÁPIDOS */
+.presetAvatarSection {
+  margin-top: 8px !important;
+}
+
+.presetAvatarsLabel {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  color: #475569 !important;
+  margin-bottom: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important;
+}
+
+.presetAvatarsGridClean {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.presetAvatarBtnCard {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 10px 12px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  text-align: left !important;
+}
+
+.presetAvatarBtnCard:hover {
+  border-color: #059669 !important;
+  background: #f0fdf4 !important;
+  transform: translateY(-1px) !important;
+}
+
+.presetCardEmoji {
+  font-size: 24px !important;
+  line-height: 1 !important;
+}
+
+.presetCardLabel {
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  color: #1e293b !important;
+}
+
+/* 4. ADAPTACIONES MÓVILES EXCLUSIVAS (PANTALLA CELULAR < 680px) */
+@media (max-width: 680px) {
+  .customerPortalHeader {
+    height: 52px !important;
+    padding: 0 12px !important;
+  }
+  
+  .portalDesktopPill {
+    display: none !important;
+  }
+  
+  .customerPortalWrap {
+    padding: 12px 10px 80px !important;
+  }
+  
+  .customerHeroCard {
+    padding: 16px !important;
+    border-radius: 16px !important;
+    gap: 14px !important;
+    margin-bottom: 16px !important;
+  }
+  
+  .customerAvatarSection {
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 14px !important;
+    width: 100% !important;
+  }
+  
+  .avatarImageWrapper {
+    width: 68px !important;
+    height: 68px !important;
+  }
+  
+  .avatarInitials {
+    font-size: 26px !important;
+  }
+  
+  .customerHeroDetails h1 {
+    font-size: 17px !important;
+    line-height: 1.25 !important;
+    margin-bottom: 4px !important;
+  }
+  
+  .customerHeroDetails p {
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 8px !important;
+    word-break: break-word !important;
+  }
+  
+  .customerBadgesRow {
+    gap: 5px !important;
+  }
+  
+  .securityBadge {
+    font-size: 9px !important;
+    padding: 3px 6px !important;
+  }
+  
+  .heroActionGroup {
+    width: 100% !important;
+  }
+  
+  .btnHeroOutline {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+  
+  .customerTabsNav {
+    gap: 6px !important;
+    margin-bottom: 16px !important;
+    padding-bottom: 2px !important;
+  }
+  
+  .customerTabsNav::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  .customerTabBtn {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    border-radius: 8px !important;
+    background: #f1f5f9 !important;
+  }
+  
+  .customerTabBtn.active {
+    background: #065f46 !important;
+    color: #ffffff !important;
+  }
+  
+  .presetAvatarsGridClean {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}

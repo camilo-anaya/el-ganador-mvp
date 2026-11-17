@@ -1,0 +1,1296 @@
+/* =====================================================================
+   EL GANADOR · PORTADA DE INGRESO MULTIDISPOSITIVO
+   - Computador & Tablets (>= 768px): Versión Original de Gala (PortalAuthShell)
+   - Celulares (< 768px): Versión Oficial 1:1 de la Maqueta de 3 Pantallas
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* Fallback sRGB */
+  --bg-emerald-deep: #022b19;
+  --bg-emerald-light: #065533;
+  --gold-metallic: #f5b82e;
+  --gold-border: rgba(245, 184, 46, 0.4);
+
+  /* Display P3 para pantallas OLED / Retina */
+  @supports (color: color(display-p3 1 1 1)) {
+    --bg-emerald-deep: color(display-p3 0.01 0.20 0.11);
+    --bg-emerald-light: color(display-p3 0.03 0.38 0.22);
+    --gold-metallic: color(display-p3 0.98 0.73 0.18);
+    --gold-border: color(display-p3 0.98 0.73 0.18 / 0.45);
+  }
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.confettiCanvasOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+/* =====================================================================
+   1. REGLAS RESPONSIVAS DE VISIBILIDAD (PC / TABLETS vs CELULARES)
+   ===================================================================== */
+@media (min-width: 768px) {
+  .mobileVersion {
+    display: none !important;
+  }
+  .pcTabletVersion {
+    display: block !important;
+    width: 100%;
+    min-height: 100vh;
+  }
+}
+
+@media (max-width: 767px) {
+  .pcTabletVersion {
+    display: none !important;
+  }
+  .mobileVersion {
+    display: flex !important;
+    flex-direction: column;
+    width: 100vw;
+    height: 100svh;
+    max-height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
+    position: relative;
+    background: radial-gradient(circle at 45% 25%, #0f6c4b 0%, #06442e 50%, #022016 100%);
+    color: #ffffff;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    box-sizing: border-box;
+  }
+}
+
+/* =====================================================================
+   2. ESTILOS DE LA EXPERIENCIA MÓVIL (PANTALLAS CELULAR)
+   ===================================================================== */
+
+/* Texturas de fondo verde esmeralda y oro (Confetti & Aros) */
+.mobileDecorConfetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(circle, #fce8a6 2px, transparent 2.5px),
+    radial-gradient(circle, #d4af37 2.4px, transparent 3px),
+    radial-gradient(circle, rgba(16, 185, 129, 0.95) 1.6px, transparent 2.2px),
+    radial-gradient(circle, #ffffff 1.4px, transparent 1.9px);
+  background-size: 65px 65px, 110px 110px, 85px 85px, 50px 50px;
+  background-position: 0 0, 35px 55px, 15px 25px, 10px 10px;
+  opacity: 0.45;
+  z-index: 0;
+}
+
+.mobileDecorRingGreen {
+  position: absolute;
+  top: -40px;
+  left: -40px;
+  width: 190px;
+  height: 190px;
+  border: 22px solid rgba(16, 185, 129, 0.24);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mobileDecorGoldWave {
+  position: absolute;
+  top: 110px;
+  right: -55px;
+  width: 200px;
+  height: 200px;
+  border: 16px solid rgba(212, 175, 55, 0.32);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mobileDecorBottomWave {
+  position: absolute;
+  bottom: 25px;
+  right: -30px;
+  width: 170px;
+  height: 120px;
+  border: 11px solid rgba(212, 175, 55, 0.38);
+  border-radius: 50%;
+  transform: rotate(-25deg);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* =====================================================================
+   PANTALLA MÓVIL 2 (CENTRAL): TE DAMOS LA BIENVENIDA (SPLASH)
+   ===================================================================== */
+/* =====================================================================
+   PANTALLA MÓVIL 2 (CENTRAL): TE DAMOS LA BIENVENIDA (SPLASH RESPONSIVO)
+   Adaptable a cualquier relación de aspecto (16:9, 19.5:9, 20:9, 21:9)
+   Cero deformación · Círculos 100% redondos · Tipografía nativa nítida
+   ===================================================================== */
+.mobileWelcomeResponsiveContainer {
+  width: 100%;
+  height: 100svh;
+  min-height: 100svh;
+  max-height: 100svh;
+  max-width: 440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: max(16px, env(safe-area-inset-top, 16px));
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
+  padding-left: max(22px, env(safe-area-inset-left, 22px));
+  padding-right: max(22px, env(safe-area-inset-right, 22px));
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: radial-gradient(circle at 50% 20%, #0d6945 0%, #043c27 50%, #011d13 100%);
+  z-index: 1;
+  overscroll-behavior-y: none;
+}
+
+/* ---- Nueva bienvenida con render de fondo (ingreso-el-ganador-bg.jpg) ---- */
+.mobileWelcomeBgScreen {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, var(--bg-emerald-light) 0%, var(--bg-emerald-deep) 85%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(var(--safe-top) + 2rem) 1.5rem calc(var(--safe-bottom) + 1.5rem);
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  z-index: 1;
+}
+
+.welcomeCleanBackdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.welcomePatternOverlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+  background-image: radial-gradient(#ffffff 0.75px, transparent 0.75px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.welcomeHeaderZone {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  padding-top: 10px;
+}
+
+.welcomeLogoBox {
+  position: relative;
+  width: 300px;
+  max-width: 90vw;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65));
+}
+
+.welcomeLogoBox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.welcomeBadgePill {
+  margin-top: 14px;
+  padding: 8px 24px;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(245, 184, 46, 0.6);
+  background: rgba(0, 20, 10, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 15px rgba(245, 184, 46, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.25;
+}
+
+.welcomeBadgeLine1 {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #f5b82e;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.welcomeBadgeLine2 {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.welcomeBadgeText {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.mobileWelcomeBgShade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 25%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.45) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.mobileWelcomeBgActions {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 0 24px max(24px, calc(16px + env(safe-area-inset-bottom, 0px)));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobileWelcomeBgActions .mobileBtnLoginContour {
+  background: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: #f5e6b3;
+  border: 2px solid #d4af37;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.mobileWelcomeBgActions .mobileBtnRegisterSolid {
+  background: #ffffff;
+  color: #002716;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.mobileWelcomeBgActions .mobileSocialSectionBox {
+  margin-top: 6px;
+}
+
+.mobileWelcomeBgActions .mobileSocialLabel {
+  color: rgba(245, 230, 179, 0.92);
+  font-weight: 600;
+}
+
+.mobileWelcomeBgActions .mobileGgCircle {
+  background: #ffffff;
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  min-height: 46px;
+}
+
+@media (max-height: 700px) {
+  .mobileWelcomeBgActions { gap: 9px; }
+  .mobileWelcomeBgImg { object-position: center 0; }
+}
+
+.mobileHeroBrandingBox {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  margin-top: 4px;
+}
+
+.mobileHeroBrandingImg {
+  width: 100%;
+  max-width: 336px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.45));
+}
+
+.mobileWelcomeTitleBox {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin: 10px 0 14px;
+}
+
+.mobileWelcomeTitleText {
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.mobileWelcomeActionsBox {
+  width: 100%;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.mobileBtnLoginContour {
+  width: 100%;
+  height: 50px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #023821 0%, #012214 100%);
+  border: 2px solid #d4af37;
+  color: #ffd875;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(254, 240, 138, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+
+.mobileBtnLoginContour:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(212, 175, 55, 0.4);
+}
+
+.mobileBtnRegisterSolid {
+  width: 100%;
+  height: 50px;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: none;
+  color: #02341f;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+
+.mobileBtnRegisterSolid:active {
+  transform: scale(0.98);
+  background: #f1f5f9;
+}
+
+.mobileSocialSectionBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+  margin-top: 4px;
+}
+
+.mobileSocialLabel {
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.mobileSocialCirclesRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.mobileSocialCircleBtn {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.15s ease;
+  outline: none;
+}
+
+.mobileSocialCircleBtn:active {
+  transform: scale(0.92);
+}
+
+.mobileWaCircle {
+  background-color: #25D366;
+}
+
+.mobileGgCircle {
+  background-color: #ffffff;
+}
+
+.mobileFbCircle {
+  background-color: #ffffff;
+}
+
+@media (max-height: 700px) {
+  .mobileWelcomeResponsiveContainer {
+    padding: 12px 18px 18px;
+  }
+  .mobileHeroBrandingImg {
+    max-width: 275px;
+  }
+  .mobileWelcomeTitleText {
+    font-size: 26px;
+  }
+  .mobileBtnLoginContour,
+  .mobileBtnRegisterSolid {
+    height: 44px;
+    font-size: 14px;
+  }
+  .mobileSocialCircleBtn {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    min-height: 42px;
+  }
+}
+
+.mobileWelcomeTopGroup,
+.mobileWelcomeTopSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  z-index: 1;
+}
+
+.mobileLogoContainer,
+.mobileLogoWrapper {
+  position: relative;
+  margin-top: 6px;
+}
+
+.mobileWelcomeLogo,
+.mobileLogoPure {
+  width: 220px;
+  max-height: 140px;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 28px rgba(212, 175, 55, 0.45));
+}
+
+.mobileWelcomePillOfficial,
+.mobilePillOfficial {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 16px;
+  border-radius: 9999px;
+  background: rgba(2, 34, 22, 0.9);
+  border: 1.5px solid #d4af37;
+  color: #fde68a;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin: 10px 0 12px;
+}
+
+.mobilePlusIcon,
+.mobilePlusSign {
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.mobileWelcomeRibbon,
+.mobileBadgeSlanted {
+  background: linear-gradient(90deg, #022015 0%, #07472e 50%, #022015 100%);
+  border: 1.5px solid #d4af37;
+  border-radius: 6px;
+  transform: skewX(-10deg);
+  padding: 6px 20px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 12px rgba(212, 175, 55, 0.35);
+  width: 90%;
+  max-width: 320px;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+  outline: 1.5px solid rgba(212, 175, 55, 0.4);
+  outline-offset: 2.5px;
+}
+
+.mobileWelcomeRibbonText,
+.mobileBadgeSlantedInner {
+  display: block;
+  transform: skewX(10deg);
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+  letter-spacing: 0.2px;
+}
+
+.mobileWelcomeHeading,
+.mobileWelcomeTitle {
+  font-size: 32px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 4px 0 0;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.mobileWelcomeBottomGroup,
+.mobileWelcomeBottomSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  margin-bottom: 4px;
+}
+
+.mobileWelcomeBtnStack,
+.mobileActionButtonsStack {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobileBtnLoginGold,
+.mobileBtnPrimaryGold {
+  width: 100%;
+  border-radius: 9999px;
+  padding: 14.5px 20px;
+  background: linear-gradient(180deg, #07472e 0%, #022619 100%);
+  border: 1.8px solid #d4af37;
+  color: #fde68a;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 14px rgba(212, 175, 55, 0.35);
+  transition: all 0.2s ease;
+}
+
+.mobileBtnLoginGold:active,
+.mobileBtnPrimaryGold:active {
+  transform: scale(0.98);
+}
+
+.mobileBtnRegisterWhite,
+.mobileBtnSecondaryWhite {
+  width: 100%;
+  border-radius: 9999px;
+  padding: 14.5px 20px;
+  background: #ffffff;
+  border: 2px solid #ffffff;
+  color: #032b1d;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.mobileBtnRegisterWhite:active,
+.mobileBtnSecondaryWhite:active {
+  transform: scale(0.98);
+}
+
+.mobileSocialRow,
+.mobileSocialLoginBlock {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobileSocialText,
+.mobileSocialSubtitle {
+  font-size: 12px;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.mobileSocialIcons,
+.mobileSocialRowCircles {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mobileSocialCircle,
+.mobileSocialCircleBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.mobileSocialCircle.wa,
+.mobileSocialCircleBtn.wa {
+  background: #25d366 !important;
+}
+
+.mobileSocialCircle.gg,
+.mobileSocialCircleBtn.gg {
+  background: #ffffff !important;
+}
+
+.mobileSocialCircle.fb,
+.mobileSocialCircleBtn.fb {
+  background: #ffffff !important;
+}
+
+.mobileSocialCircle:active,
+.mobileSocialCircleBtn:active {
+  transform: scale(0.92);
+}
+
+/* Animaciones */
+.animateFadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animateSlideUp {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =====================================================================
+   PANTALLAS MÓVILES DE FORMULARIO (LOGIN & REGISTRO)
+   ===================================================================== */
+.mobileFormView,
+.mobileSheetViewScreen {
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at 50% -10%, #0d5f3d 0%, #064027 40%, #022013 100%);
+  position: relative;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Barra superior de navegación */
+.mobileSheetTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: max(16px, env(safe-area-inset-top, 16px)) 20px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 20;
+}
+
+.mobileHeaderBackBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.mobileHeaderBackBtn:active {
+  transform: scale(0.94);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.mobileTopBrandBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.mobileTopCrownSvg {
+  width: 20px;
+  height: 14px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.mobileTopBrandText {
+  font-family: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #fce8a6;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* Cabecera Hero */
+.mobileSheetHeaderHero {
+  padding: 6px 22px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+.mobileSheetHeaderHero .mobileScriptGreeting {
+  font-family: 'Caveat', 'Dancing Script', 'Brush Script MT', cursive;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fce8a6;
+  line-height: 1;
+  margin: 0 0 2px;
+  transform: rotate(-2deg);
+  display: inline-block;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.mobileSheetHeaderHero .mobileSansTitle {
+  font-size: 27px;
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.15;
+  margin: 0 0 4px;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.mobileSheetHeaderHero .mobileSubNotice {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.35;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Tarjeta Blanca Inferior */
+.mobileWhiteCard,
+.mobileWhiteBottomSheet {
+  flex: 1;
+  background: #ffffff !important;
+  border-radius: 30px 30px 0 0;
+  padding: 14px 20px max(20px, env(safe-area-inset-bottom, 20px));
+  box-shadow: 0 -12px 35px rgba(0, 0, 0, 0.35);
+  border-top: 1.5px solid rgba(224, 180, 75, 0.45);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobileSheetDragHandle {
+  width: 40px;
+  height: 4px;
+  background: #cbd5e1;
+  border-radius: 9999px;
+  margin: 0 auto 12px;
+  flex-shrink: 0;
+}
+
+.mobileFormBody,
+.mobileAuthForm {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 6px;
+}
+
+/* Grupos y Tarjetas de Campo */
+.mobileFieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.mobileFieldLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  letter-spacing: 0.1px;
+}
+
+.mobileInputCard {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 0 12px;
+  height: 46px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.mobileInputCard:focus-within {
+  border-color: #059669;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.14), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mobileInputCard .mobileInputLeadIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  color: #64748b;
+  margin-right: 8px;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.mobileInputCard:focus-within .mobileInputLeadIcon {
+  color: #059669;
+}
+
+.mobileInputClean {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+  outline: none;
+  padding: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.mobileInputClean::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.mobileInputEyeBtn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: color 0.2s ease;
+}
+
+.mobileInputEyeBtn:hover {
+  color: #0f172a;
+}
+
+.mobileForgotLinkRight {
+  text-align: right;
+  margin-top: -3px;
+  margin-bottom: 14px;
+}
+
+.mobileForgotLinkRight button {
+  background: none;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  padding: 2px 0;
+  transition: color 0.2s ease;
+}
+
+.mobileForgotLinkRight button:hover {
+  color: #047857;
+  text-decoration: underline;
+}
+
+/* Botón Oval Lujo Esmeralda y Oro 3D */
+.mobileBtnEmeraldGoldLuxury,
+.mobilePrimaryActionBtn,
+.mobileBtnEmeraldGold {
+  width: 100%;
+  height: 48px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #0e6f44 0%, #074e2f 50%, #032a18 100%);
+  border: 2px solid #e0b44b;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35), 0 0 12px rgba(224, 180, 75, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.mobileBtnEmeraldGoldLuxury:hover,
+.mobilePrimaryActionBtn:hover,
+.mobileBtnEmeraldGold:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4), 0 0 16px rgba(224, 180, 75, 0.55);
+}
+
+.mobileBtnEmeraldGoldLuxury:active,
+.mobilePrimaryActionBtn:active,
+.mobileBtnEmeraldGold:active {
+  transform: scale(0.98);
+  filter: brightness(0.95);
+}
+
+/* Acceso Rápido Demo */
+.mobileQuickAccessSection {
+  margin-top: 12px;
+  width: 100%;
+}
+
+.mobileBtnQuickDemo {
+  width: 100%;
+  height: 40px;
+  border-radius: 12px;
+  background: #f0fdf4;
+  border: 1.5px dashed #86efac;
+  color: #15803d;
+  font-size: 12.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobileBtnQuickDemo:hover {
+  background: #dcfce7;
+  border-color: #4ade80;
+}
+
+.mobileBtnQuickDemo:active {
+  transform: scale(0.98);
+}
+
+/* Aviso de Términos */
+.mobileTermsNotice {
+  font-size: 11px;
+  color: #64748b;
+  line-height: 1.35;
+  text-align: center;
+  margin: 4px 0 10px;
+}
+
+/* Switch Footer */
+.mobileBottomSwitchText,
+.mobileSwitchFooter {
+  text-align: center;
+  font-size: 12.5px;
+  color: #64748b;
+  margin-top: 14px;
+}
+
+.mobileBottomSwitchBtn,
+.mobileSwitchFooterLink {
+  background: none;
+  border: none;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #047857;
+  cursor: pointer;
+  padding: 2px 4px;
+  text-decoration: underline;
+}
+
+/* Garantía de Seguridad */
+.mobileTrustBadgeBottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #64748b;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Enlace de Exploración Invitado (Cumplimiento App Store 5.1.1) */
+.explore-guest-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: rgba(252, 232, 166, 0.14);
+  border: 1px solid rgba(252, 232, 166, 0.35);
+  border-radius: 9999px;
+  color: #fce8a6;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.explore-guest-link:hover {
+  background: rgba(252, 232, 166, 0.24);
+}
+
+/* Selector de Rol Comprador / Comercio Aliado (Web no nativo) */
+.role-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+
+.role-selector button {
+  border: none;
+  background: transparent;
+  padding: 8px 10px;
+  border-radius: 9px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.role-selector button.role-active {
+  background: #ffffff;
+  color: #064e3b;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Casilla Legal +18 y Jurisdicción Colombia (Ley 643 de 2001 / Decreto 1486 de 2024) */
+.legal-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 11px;
+  margin: 4px 0 12px;
+  cursor: pointer;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+  color: #334155 !important;
+  font-weight: 500 !important;
+}
+
+.legal-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  accent-color: #047857;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.legal-checkbox strong {
+  color: #064e3b;
+  font-weight: 800;
+}
+
+/* Footer de Cumplimiento Legal y Descargo Oficial Apple / Google */
+.store-compliance-footer {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 10.5px;
+  line-height: 1.38;
+  color: #64748b;
+  text-align: left;
+}
+
+.store-compliance-footer p {
+  margin: 0 0 6px;
+}
+
+.store-compliance-footer p:last-child {
+  margin-bottom: 0;
+}
+
+.apple-google-disclaimer {
+  padding-top: 6px;
+  border-top: 1px dashed #cbd5e1;
+  color: #475569;
+}
+
+.apple-google-disclaimer strong {
+  color: #0f172a;
+}
+
+/* Mensajes de feedback */
+.mobileAlertNotice,
+.mobileNoticeBox {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobileAlertNotice.error,
+.mobileNoticeBox.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+.mobileAlertNotice.success,
+.mobileNoticeBox.success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+}
+
+/* ---- Portada de ingreso (imagen completa con zonas táctiles) ---- */
+.portadaScreen {
+  padding: 0 !important;
+  background: #f7f6f1 !important;
+  display: block !important;
+}
+.portadaStage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100vw, calc(100dvh * 768 / 1376));
+  height: max(100dvh, calc(100vw * 1376 / 768));
+  transform: translate(-50%, -50%);
+}
+.portadaScreen { max-width: none !important; }
+.portadaImg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+.portadaHotspot {
+  position: absolute;
+  left: 15.3%;
+  width: 70.2%;
+  background: transparent;
+  border: 0;
+  border-radius: 9999px;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.portadaHotspot:active { background: rgba(0, 80, 40, 0.12); }
+.portadaLogin { top: 62%; height: 6.9%; }
+.portadaRegister { top: 70.5%; height: 6.3%; }
+
+@supports (color: color(display-p3 1 1 1)) {
+  .mobileSheetViewScreen {
+    background: radial-gradient(
+      circle at 50% -10%,
+      color(display-p3 0.051 0.373 0.239) 0%,
+      color(display-p3 0.024 0.251 0.153) 40%,
+      color(display-p3 0.008 0.125 0.075) 100%
+    );
+  }
+  .mobileBtnEmeraldGoldLuxury,
+  .mobilePrimaryActionBtn,
+  .mobileBtnEmeraldGold {
+    background: linear-gradient(
+      180deg,
+      color(display-p3 0.055 0.435 0.267) 0%,
+      color(display-p3 0.027 0.306 0.184) 50%,
+      color(display-p3 0.012 0.165 0.094) 100%
+    );
+    border-color: color(display-p3 0.878 0.706 0.294);
+  }
+}

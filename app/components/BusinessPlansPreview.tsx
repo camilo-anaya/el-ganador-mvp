@@ -96,7 +96,7 @@ export default function BusinessPlansPreview() {
                   <li><span aria-hidden="true">✓</span><div>CRM y base de datos de clientes</div></li>
                   <li><span aria-hidden="true">✓</span><div>Ofertas por WhatsApp, correo y notificaciones desde El Ganador</div></li>
                 </>}
-                {plan.liveDrawTools && <li><span aria-hidden="true">✓</span><div>Balotas y ruleta personalizable para 10, 20, 30 o 50 participantes · <b>{plan.liveDrawTools.annualQuota} usos al año</b></div></li>}
+                {plan.liveDrawTools && <li><span aria-hidden="true">✓</span><div>Balotas y ruleta personalizable para 10, 20, 30, 40 o 50 participantes · <b>{plan.liveDrawTools.annualQuota} usos al año</b></div></li>}
                 {plan.features.map((feature) => <li key={feature}><span aria-hidden="true">✓</span><div>{feature}</div></li>)}
               </ul>
               <a className="businessPlanSelectButton" href={`/admin?mode=register&plan=${planId}#planes`}>
@@ -116,7 +116,7 @@ export default function BusinessPlansPreview() {
         <div className="businessTechCopy">
           <p className="portalEyebrow">TECNOLOGÍA PROPIA · EL PLUS DE EL GANADOR</p>
           <h3 id="publicDrawToolsHeading">Balotas digitales y ruleta giratoria estilo carrusel.</h3>
-          <p>Dos maneras de vivir el sorteo: balotas para rifas numeradas y una ruleta visual, personalizable para grupos de 10, 20, 30 o 50 participantes.</p>
+          <p>Dos maneras de vivir el sorteo: balotas para rifas numeradas y una ruleta visual, personalizable para grupos de 10, 20, 30, 40 o 50 participantes.</p>
           <div className="businessTechModes"><span><LotteryBallIcon gradientId="business-ball-mode" /> Sorteo con balotas</span><span><PrizeWheelIcon /> Ruleta personalizable</span></div>
           <small>Incluido en Premium con {plans.premium.liveDrawTools?.annualQuota} usos al año y Empresarial con {plans.empresarial.liveDrawTools?.annualQuota} usos al año.</small>
         </div>

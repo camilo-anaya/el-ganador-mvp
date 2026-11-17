@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">El Ganador</string>
+    <string name="title_activity_main">El Ganador</string>
+    <string name="package_name">com.solvio.elganador</string>
+    <string name="custom_url_scheme">com.solvio.elganador</string>
+</resources>

@@ -1,0 +1,12 @@
+.next
+.next-*
+.backups
+_backups
+android
+ios
+data
+node_modules
+.npm-cache
+scratch
+*.zip
+*.log

@@ -70,6 +70,9 @@ export async function POST(request: Request) {
     }
     return NextResponse.json({ error: "Esta cuenta todavía no puede ingresar. Revisa el estado de tu plan o comunícate con soporte." }, { status: 403 });
   }
+  // Vincular compras y participaciones previas realizadas con este correo
+  await query("UPDATE participations SET buyer_account_id = $1 WHERE lower(buyer_email) = lower($2) AND buyer_account_id IS NULL", [account.id, email]);
+
   const { password_salt: _salt, password_hash: _hash, account_status: _status, ...safeAccount } = account;
-  return await createSession(NextResponse.json({ account: safeAccount }), account.id);
+  return await createSession(NextResponse.json({ account: safeAccount }), account.id, String(account.role));
 }

@@ -47,6 +47,9 @@
     ".next-prod-build/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "_backups",
+    "_backups/**/*",
+    "scratch"
   ]
 }

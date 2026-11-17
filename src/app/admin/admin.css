@@ -1,0 +1,1932 @@
+/* ==========================================================================
+   PANEL DE TRABAJO EMPRESARIAL (ADMIN WORKBENCH) - EL GANADOR
+   Diseño SaaS Executive Dashboard de Alto Rendimiento (Desktop & Mobile)
+   ========================================================================== */
+
+.adminWorkspaceShell {
+  min-height: 100vh;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. HEADER SUPERIOR DE OPERACIONES (COMMAND BAR) */
+.adminWorkspaceHeader {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: 68px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.adminHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.adminHeaderBrand {
+  font-size: 19px;
+  font-weight: 900;
+  color: #065f46;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adminHeaderBadge {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.adminSystemStatusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.adminStatusPulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: adminPulse 2s infinite;
+}
+
+@keyframes adminPulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.adminHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.adminHeaderLink {
+  color: #475569;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.adminHeaderLink:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.adminHeaderLiveBtn {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 7px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adminStoreChip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 6px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 30px;
+}
+
+.adminStoreChipAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #047857;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.adminStoreChipInfo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.adminStoreChipName {
+  font-size: 12px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.adminStoreChipPlan {
+  font-size: 9px;
+  font-weight: 700;
+  color: #059669;
+}
+
+.adminBtnLogout {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.adminBtnLogout:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+/* 2. LAYOUT PRINCIPAL (SIDEBAR + MAIN) */
+.adminWorkspaceLayout {
+  display: grid;
+  grid-template-columns: 285px minmax(0, 1fr);
+  min-height: calc(100vh - 68px);
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* SIDEBAR LATERAL PROFESIONAL - PEGADO AL LATERAL IZQUIERDO */
+.adminSidebar {
+  position: sticky;
+  top: 68px;
+  height: calc(100vh - 68px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  padding: 18px 14px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.adminSidebar::-webkit-scrollbar {
+  width: 5px;
+}
+.adminSidebar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+
+.adminSidebarStoreHeader {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+  color: #ffffff;
+  padding: 14px 16px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(6, 78, 59, 0.15);
+  flex-shrink: 0;
+}
+
+.adminSidebarStoreLogo {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #065f46;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: 900;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.adminSidebarStoreMeta {
+  overflow: hidden;
+}
+
+.adminSidebarStoreMeta h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adminSidebarStoreMeta p {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: #a7f3d0;
+}
+
+.adminSidebarNavGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.adminNavGroupTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px 4px;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin: 6px 0 2px;
+}
+
+.adminNavGroupTitle::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #f1f5f9;
+}
+
+.adminNavItem {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #1e293b;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.adminNavItem:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.adminNavItem.isActive {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #a7f3d0;
+  font-weight: 800;
+}
+
+.adminNavIcon {
+  width: 20px;
+  text-align: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.adminNavLabel {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+}
+
+.adminNavBadge {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 850;
+  background: #f1f5f9;
+  color: #475569;
+  flex-shrink: 0;
+}
+
+.adminNavItem.isActive .adminNavBadge {
+  background: #047857;
+  color: #ffffff;
+}
+
+.adminNavBadgeLive {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 850;
+  background: #fee2e2;
+  color: #b91c1c;
+  flex-shrink: 0;
+  animation: adminPulse 2s infinite;
+}
+
+.adminNavBadgeLock {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 800;
+  background: #f1f5f9;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.adminSidebarHintBox {
+  margin-top: auto;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.adminSidebarHintBox b {
+  font-size: 12px;
+  color: #065f46;
+}
+
+.adminSidebarHintBox p {
+  margin: 0;
+  font-size: 11px;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.adminSidebarHintBox button {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #047857;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.adminSidebarHintBox button:hover {
+  text-decoration: underline;
+}
+
+/* 3. CONTENEDOR PRINCIPAL DEL WORKSPACE */
+.adminWorkspaceMain {
+  padding: 24px 32px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 1380px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* HERO COMMAND CENTER BANNER */
+.adminHeroWorkbench {
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 45%, #0f172a 100%);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 28px 32px;
+  box-shadow: 0 10px 25px rgba(6, 78, 59, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.adminHeroWorkbench::after {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.25) 0%, rgba(52, 211, 153, 0) 70%);
+  pointer-events: none;
+}
+
+.adminHeroTopRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.adminHeroTitles h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+.adminHeroTitles p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #a7f3d0;
+  max-width: 620px;
+  line-height: 1.5;
+}
+
+.adminHeroBadgesRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.adminHeroPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.adminHeroActionsToolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.adminBtnPrimaryGold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 11px 20px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+  transition: all 0.15s ease;
+}
+
+.adminBtnPrimaryGold:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(217, 119, 6, 0.45);
+}
+
+.adminBtnHeroOutline {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 10px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.adminBtnHeroOutline:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* 4. EXECUTIVE KPI CARDS (FINANZAS Y OPERACIÓN) */
+.adminKpisGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.adminKpiCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transition: all 0.2s ease;
+}
+
+.adminKpiCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+  border-color: #cbd5e1;
+}
+
+.adminKpiTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.adminKpiIconBox {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+}
+
+.adminKpiIconBox.green { background: #dcfce7; color: #15803d; }
+.adminKpiIconBox.blue { background: #e0f2fe; color: #0369a1; }
+.adminKpiIconBox.purple { background: #f3e8ff; color: #7e22ce; }
+.adminKpiIconBox.red { background: #fee2e2; color: #b91c1c; }
+
+.adminKpiTag {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.adminKpiTag.positive {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.adminKpiTag.live {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.adminKpiBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.adminKpiLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.adminKpiValue {
+  font-size: 24px;
+  font-weight: 900;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+
+.adminKpiSub {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.adminKpiProgressTrack {
+  height: 6px;
+  background: #f1f5f9;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.adminKpiProgressBar {
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+/* 5. WORKBENCH TWO COLUMN GRID */
+.adminWorkspaceTwoCol {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.adminColLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.adminColRight {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* TARJETA DE CONTENIDO DEL PANEL */
+.adminCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.02);
+}
+
+.adminCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.adminCardHeaderTitles h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.adminCardHeaderTitles p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.adminBtnSmallAction {
+  background: #047857;
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.adminBtnSmallAction:hover {
+  background: #065f46;
+}
+
+/* LISTA DE RIFAS ACTIVAS (ESTILO SAAS TABLE) */
+.adminRafflesList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.adminRaffleItemCard {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr) auto;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  align-items: center;
+  transition: all 0.15s ease;
+}
+
+.adminRaffleItemCard:hover {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.adminRaffleThumbWrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.adminRaffleThumbWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adminRaffleEmojiLarge {
+  font-size: 38px;
+}
+
+.adminRaffleInfo {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.adminRaffleTopMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adminRaffleTitle {
+  font-size: 15px;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adminStatusPillActive {
+  background: #dcfce7;
+  color: #166534;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.adminStatusPillLive {
+  background: #fee2e2;
+  color: #991b1b;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 6px;
+  animation: adminPulse 2s infinite;
+}
+
+.adminRaffleStatsRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #475569;
+}
+
+.adminRaffleStatsRow strong {
+  color: #0f172a;
+}
+
+.adminRaffleProgressTrack {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 320px;
+}
+
+.adminRaffleActionsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.adminBtnTableEdit {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.adminBtnTableLive {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* HISTORIAS 24H DEL COMERCIO EN EL DASHBOARD */
+.adminStoriesMiniBar {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.adminStoryCreateCard {
+  width: 120px;
+  height: 150px;
+  border-radius: 14px;
+  border: 2px dashed #a7f3d0;
+  background: #f0fdf4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #047857;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.adminStoryCreateCard:hover {
+  background: #dcfce7;
+  border-color: #34d399;
+}
+
+.adminStoryActiveCard {
+  width: 120px;
+  height: 150px;
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.adminStoryActiveCard img,
+.adminStoryActiveCard video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adminStoryTimeBadge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.adminStoryViewsBadge {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* TELEMETRÍA Y CRM EXPRESS (COLUMNA DERECHA) */
+.adminTelemetryCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.adminTelemetryMetricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.adminTelemetryItem {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.adminTelemetryItem small {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.adminTelemetryItem strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 900;
+  color: #0f172a;
+  margin-top: 2px;
+}
+
+/* BANCO Y DESEMBOLSOS */
+.adminBankMiniCard {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  color: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.adminBankMiniTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #93c5fd;
+}
+
+.adminBankNumber {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  font-family: monospace;
+}
+
+.adminBankHolder {
+  font-size: 12px;
+  color: #e0e7ff;
+}
+
+/* BARRA DE NAVEGACIÓN MÓVIL POR PESTAÑAS */
+.adminMobileTabBar {
+  display: none;
+}
+
+/* RESPONSIVE DESIGN (TABLET & MÓVIL) */
+@media (max-width: 1080px) {
+  .adminWorkspaceLayout {
+    grid-template-columns: 1fr;
+  }
+  .adminSidebar {
+    display: none;
+  }
+  .adminMobileTabBar {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 8px 14px 12px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 60px;
+    z-index: 30;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .adminMobileTabBar::-webkit-scrollbar {
+    display: none;
+  }
+  .adminMobileTabBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .adminMobileTabBtn.isActive {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+    color: #065f46;
+    font-weight: 800;
+  }
+  .adminKpisGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .adminWorkspaceTwoCol {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .adminWorkspaceHeader {
+    padding: 0 10px;
+    height: 56px;
+    overflow: hidden;
+  }
+  .adminHeaderBrand {
+    font-size: 16px;
+  }
+  .adminHeaderBadge,
+  .adminSystemStatusPill,
+  .adminStoreChipPlan,
+  .adminStoreChipName {
+    display: none;
+  }
+  .adminHeaderRight {
+    gap: 6px;
+  }
+  .adminHeaderRight a:nth-child(3) {
+    display: none;
+  }
+  .adminHeaderLink {
+    padding: 5px 8px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .adminHeaderLiveBtn {
+    padding: 5px 8px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .adminBtnLogout {
+    padding: 5px 8px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .adminWorkspaceMain {
+    padding: 14px 10px 36px;
+    gap: 16px;
+  }
+  .adminHeroWorkbench {
+    padding: 18px 14px;
+    border-radius: 16px;
+  }
+  .adminHeroTitles h1 {
+    font-size: 20px;
+  }
+  .adminHeroActionsToolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .adminBtnPrimaryGold,
+  .adminBtnHeroOutline {
+    justify-content: center;
+    width: 100%;
+  }
+  .adminKpisGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .adminCard {
+    padding: 16px 12px;
+    border-radius: 14px;
+  }
+  .adminRaffleItemCard {
+    grid-template-columns: 60px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px;
+  }
+  .adminRaffleStatsRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  .adminRaffleActionsRow {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-start;
+    gap: 6px;
+    width: 100%;
+  }
+  .adminBtnTableEdit, .adminBtnTableLive {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+}
+
+/* ==========================================================================
+   FEED & PUBLICACIONES DE COMERCIOS EN EL PANEL EMPRESARIAL
+   ========================================================================== */
+.adminFeedView {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 860px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.adminFeedComposer {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.adminFeedComposerHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.adminFeedAuthorAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #047857;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.adminFeedComposerTextarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 90px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.adminFeedComposerTextarea:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.adminFeedComposerBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.adminFeedFilterBar {
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 12px;
+  overflow-x: auto;
+}
+
+.adminFeedFilterBtn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.adminFeedFilterBtn.isActive {
+  background: #047857;
+  color: #ffffff;
+  border-color: #047857;
+}
+
+.adminFeedCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: all 0.15s ease;
+}
+
+.adminFeedCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.adminFeedCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.adminFeedCardAuthor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.adminFeedCardMeta h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adminFeedCardMeta small {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.adminFeedCardText {
+  font-size: 14px;
+  color: #1e293b;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.adminFeedCardImageWrap {
+  border-radius: 12px;
+  overflow: hidden;
+  max-height: 480px;
+  background: #f1f5f9;
+}
+
+.adminFeedCardImageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.adminFeedCardActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* ==========================================================================
+   VISTA: MIS COMPRAS & BOLETAS ADQUIRIDAS (PANEL ADMIN)
+   ========================================================================== */
+
+.purchasesKpisGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.purchasesKpiCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.purchasesKpiCard.highlight {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-color: #86efac;
+}
+
+.purchasesKpiLabel {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.5px;
+}
+
+.purchasesKpiValue {
+  font-size: 24px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.purchasesKpiSub {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.purchasesListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.purchaseItemCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  transition: all 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.purchaseItemCard:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.purchaseItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 280px;
+  flex: 1;
+}
+
+.purchaseItemEmoji {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.purchaseItemDetails h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 850;
+  color: #0f172a;
+}
+
+.purchaseItemDetails p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.purchaseTicketBadgesRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.ticketNumberPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.5px;
+}
+
+.purchaseItemMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.purchaseItemAmount {
+  font-size: 16px;
+  font-weight: 900;
+  color: #065f46;
+}
+
+.purchaseItemStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.purchaseItemActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnPurchaseAction {
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #1e293b;
+  transition: all 0.15s ease;
+}
+
+.btnPurchaseAction:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btnPurchaseAction.primary {
+  background: #047857;
+  color: #ffffff;
+  border-color: #047857;
+}
+
+.btnPurchaseAction.primary:hover {
+  background: #065f46;
+}
+
+/* ==========================================================================
+   BANNER DESTACADO: FOTO DE PERFIL EMPRESARIAL & LOGO DEL COMERCIO
+   ========================================================================== */
+
+.adminProfilePhotoBanner {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.adminProfileAvatarWrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+}
+
+.adminProfileAvatarImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 3px solid #059669;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
+}
+
+.adminProfileAvatarInitials {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 38px;
+  font-weight: 900;
+  box-shadow: 0 4px 14px rgba(6, 78, 59, 0.2);
+}
+
+.adminAvatarCameraBtn {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0f172a;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease;
+}
+
+.adminAvatarCameraBtn:hover {
+  transform: scale(1.1);
+  background: #047857;
+}
+
+.adminProfilePhotoMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+/* 4. MODAL HISTORIAS INSTAGRAM MÓVIL (FOTO, VIDEO, CÁMARA) */
+.storyCaptureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 12px 0 16px;
+}
+
+.storyCaptureBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  border: 1.5px dashed #cbd5e1;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+.storyCaptureBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.storyCaptureBtn.photo {
+  border-color: #10b981;
+  background: #ecfdf5;
+  color: #065f46;
+}
+
+.storyCaptureBtn.video {
+  border-color: #f43f5e;
+  background: #fff1f2;
+  color: #9f1239;
+}
+
+.storyCaptureBtn.gallery {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.storyCaptureIcon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.storyPhoneFrame {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 16px;
+  background: #0f172a;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  border: 3px solid #1e293b;
+}
+
+.storyPhoneHeader {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.storyPhoneUser {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.storyPhoneAvatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #10b981;
+  background: #065f46;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+}
+
+.storyPhoneName {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.storyPhoneTime {
+  font-size: 10px;
+  color: #cbd5e1;
+}
+
+.storyMediaElement {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+}
+
+.storyStickerOverlay {
+  position: absolute;
+  bottom: 18px;
+  left: 14px;
+  right: 14px;
+  z-index: 5;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.storyRetakeBar {
+  display: flex;
+  justify-content: center;
+  margin-top: -6px;
+  margin-bottom: 14px;
+}
+
+.storyRetakeBtn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.storyRetakeBtn:hover {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #b91c1c;
+}
+
+/* PERFIL ESTILO BIOGRAFÍA DE FACEBOOK (PORTADA GRANDE + LOGO PEQUEÑO + BIO) */
+.fbAdminProfileWrapper {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 24px;
+}
+
+.fbAdminCover {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background: #0f172a;
+  overflow: hidden;
+}
+
+.fbAdminCoverImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fbAdminCoverPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.fbAdminCoverGradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 70% 30%, rgba(16, 185, 129, 0.3) 0%, transparent 70%);
+}
+
+.fbAdminCoverWatermark {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+
+.fbAdminCoverActions {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  z-index: 5;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.fbAdminCoverBtn {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.fbAdminCoverBtn:hover {
+  background: #0f172a;
+  transform: translateY(-1px);
+}
+
+.fbAdminRemoveBtn {
+  background: rgba(220, 38, 38, 0.85);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.fbAdminSavingTag {
+  background: rgba(5, 150, 105, 0.9);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.fbAdminBar {
+  padding: 0 24px 20px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.fbAdminAvatarOverlap {
+  position: relative;
+  margin-top: -55px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  background: #ffffff;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.fbAdminAvatarImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.fbAdminAvatarInitials {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 40px;
+  font-weight: 900;
+}
+
+.fbAdminAvatarCameraBtn {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #0f172a;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.fbAdminAvatarCameraBtn:hover {
+  transform: scale(1.1);
+  background: #047857;
+}
+
+.fbAdminMeta {
+  flex: 1;
+  padding-top: 10px;
+}
+
+.fbAdminBioPreview {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.45;
+  max-width: 800px;
+}
+
+
+

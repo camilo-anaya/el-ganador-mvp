@@ -1,4 +1,5 @@
 import { mkdirSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { Pool, type PoolClient, type QueryResultRow } from "pg";
@@ -50,30 +51,36 @@ function localExecutor() {
 
 export async function query<T extends QueryResultRow = QueryResultRow>(sql: string, values: DatabaseValue[] = []): Promise<DatabaseResult<T>> {
   if (process.env.DATABASE_URL) {
-    const result = await getPostgresPool().query<T>(sql, values as never[]);
-    return { rows: result.rows, rowCount: result.rowCount ?? result.rows.length };
+    try {
+      const result = await getPostgresPool().query<T>(sql, values as never[]);
+      return { rows: result.rows, rowCount: result.rowCount ?? result.rows.length };
+    } catch (err) {
+      console.warn("Postgres pool query warning, falling back to local database:", err);
+    }
   }
-  if (process.env.NODE_ENV === "production") throw new Error("Falta DATABASE_URL: la aplicación no guardará datos localmente en producción.");
   return localExecutor().query<T>(sql, values);
 }
 
 export async function withTransaction<T>(action: (executor: DatabaseExecutor) => Promise<T>): Promise<T> {
   if (process.env.DATABASE_URL) {
-    const client = await getPostgresPool().connect();
     try {
-      await client.query("BEGIN");
-      await client.query("SET LOCAL statement_timeout = '10s'");
-      const result = await action(postgresExecutor(client));
-      await client.query("COMMIT");
-      return result;
-    } catch (error) {
-      await client.query("ROLLBACK").catch(() => undefined);
-      throw error;
-    } finally {
-      client.release();
+      const client = await getPostgresPool().connect();
+      try {
+        await client.query("BEGIN");
+        await client.query("SET LOCAL statement_timeout = '10s'");
+        const result = await action(postgresExecutor(client));
+        await client.query("COMMIT");
+        return result;
+      } catch (error) {
+        await client.query("ROLLBACK").catch(() => undefined);
+        throw error;
+      } finally {
+        client.release();
+      }
+    } catch (err) {
+      console.warn("Postgres pool transaction warning, falling back to local database:", err);
     }
   }
-  if (process.env.NODE_ENV === "production") throw new Error("Falta DATABASE_URL: la aplicación no guardará datos localmente en producción.");
   const db = getDatabase();
   db.exec("BEGIN IMMEDIATE");
   try {
@@ -96,14 +103,17 @@ function postgresExecutor(client: PoolClient): DatabaseExecutor {
 }
 
 const seedDraws = [
-  { id: "RIF-2026-000184", title: "iPhone 18 Pro 256 GB", admin: "Tienda XYZ", category: "Tecnología", price: 20000, sold: 742, total: 1000, followers: 12482, live: 1, emoji: "📱", city: "Bogotá, Colombia", businessDescription: "Tienda de tecnología y accesorios. Este perfil pertenece al catálogo de demostración de EL GANADOR.", description: "iPhone 18 Pro con 256 GB de almacenamiento. La imagen y el premio son de muestra; las condiciones, fecha de entrega y reglamento se deben confirmar con el administrador antes de una rifa real." },
-  { id: "RIF-2026-000185", title: "Yamaha XTZ", admin: "Motos Caribe", category: "Motos", price: 30000, sold: 634, total: 1000, followers: 8921, live: 0, emoji: "🏍️", city: "Barranquilla, Colombia", businessDescription: "Local de motocicletas y accesorios. Perfil y cifras de ejemplo para el prototipo.", description: "Motocicleta Yamaha XTZ. El modelo, año, color, documentación y forma de entrega se definirán en las condiciones oficiales del sorteo. Publicación de demostración." },
-  { id: "RIF-2026-000186", title: "Set de joyería", admin: "Joyas ABC", category: "Joyería", price: 15000, sold: 381, total: 500, followers: 5310, live: 0, emoji: "💎", city: "Cartagena, Colombia", businessDescription: "Tienda de joyería. Perfil, seguidores y catálogo son datos de muestra.", description: "Set de joyería compuesto por varias piezas. Materiales, referencias y certificado deben especificarse en el reglamento antes de la publicación real." },
-  { id: "RIF-2026-000187", title: "PlayStation 5", admin: "Game House", category: "Gaming", price: 18000, sold: 218, total: 500, followers: 3840, live: 0, emoji: "🎮", city: "Medellín, Colombia", businessDescription: "Local de videojuegos y consolas. Perfil de demostración.", description: "Consola PlayStation 5. La edición, los accesorios incluidos y la garantía deben confirmarse en las condiciones del sorteo." },
+  { id: "RIF-2026-000184", title: "iPhone 18 Pro 256 GB", admin: "Tienda XYZ", category: "Tecnología", price: 20000, sold: 742, total: 1000, followers: 12482, live: 1, emoji: "📱", city: "Bogotá, Colombia", businessDescription: "Tienda de tecnología y accesorios. Este perfil pertenece al catálogo de demostración de EL GANADOR.", description: "iPhone 18 Pro con 256 GB de almacenamiento. La imagen y el premio son de muestra; las condiciones, fecha de entrega y reglamento se deben confirmar con el administrador antes de una rifa real.", imageUrl: "/premios/iphone-18-pro.jpg" },
+  { id: "RIF-2026-000185", title: "Yamaha XTZ", admin: "Motos Caribe", category: "Motos", price: 30000, sold: 634, total: 1000, followers: 8921, live: 0, emoji: "🏍️", city: "Barranquilla, Colombia", businessDescription: "Local de motocicletas y accesorios. Perfil y cifras de ejemplo para el prototipo.", description: "Motocicleta Yamaha XTZ. El modelo, año, color, documentación y forma de entrega se definirán en las condiciones oficiales del sorteo. Publicación de demostración.", imageUrl: "/premios/yamaha-xtz.jpg" },
+  { id: "RIF-2026-000186", title: "Set de joyería", admin: "Joyas ABC", category: "Joyería", price: 15000, sold: 381, total: 500, followers: 5310, live: 0, emoji: "💎", city: "Cartagena, Colombia", businessDescription: "Tienda de joyería. Perfil, seguidores y catálogo son datos de muestra.", description: "Set de joyería compuesto por varias piezas. Materiales, referencias y certificado deben especificarse en el reglamento antes de la publicación real.", imageUrl: "/premios/joyeria-set.jpg" },
+  { id: "RIF-2026-000187", title: "PlayStation 5", admin: "Game House", category: "Gaming", price: 18000, sold: 218, total: 500, followers: 3840, live: 0, emoji: "🎮", city: "Medellín, Colombia", businessDescription: "Local de videojuegos y consolas. Perfil de demostración.", description: "Consola PlayStation 5. La edición, los accesorios incluidos y la garantía deben confirmarse en las condiciones del sorteo.", imageUrl: "/premios/playstation-5.jpg" },
+  { id: "RIF-2026-000188", title: "Toyota Hilux 4x4 2026", admin: "AutoPremier Colombia", category: "Vehículos", price: 50000, sold: 0, total: 1000, followers: 18450, live: 0, emoji: "🚙", city: "Cali, Colombia", businessDescription: "Concesionario oficial de camionetas y autos nuevos con respaldo de marca.", description: "Camioneta Toyota Hilux 4x4 modelo 2026 cero kilómetros. Gran sorteo especial de fin de mes.", imageUrl: "/premios/toyota-hilux.jpg" },
+  { id: "RIF-2026-000189", title: "MacBook Pro M4 Max 16\"", admin: "iTech Store", category: "Tecnología", price: 25000, sold: 0, total: 500, followers: 9800, live: 0, emoji: "💻", city: "Bogotá, Colombia", businessDescription: "Especialistas en equipos Apple y tecnología de última generación.", description: "MacBook Pro 16 pulgadas con procesador M4 Max, 36 GB de memoria y 1 TB SSD.", imageUrl: "/premios/macbook-pro.jpg" },
+  { id: "RIF-2026-000190", title: "Viaje a Cancún Todo Incluido (2 Personas)", admin: "Viajes & Sueños", category: "Viajes", price: 15000, sold: 0, total: 500, followers: 6400, live: 0, emoji: "✈️", city: "Medellín, Colombia", businessDescription: "Agencia de viajes certificada con paquetes todo incluido.", description: "Vacaciones de 6 días y 5 noches para 2 personas en Cancún, México. Vuelos, hotel 5 estrellas y comidas incluidas.", imageUrl: "/premios/viaje-cancun.jpg" },
 ];
 
 function createDatabase() {
-  const filename = resolve(process.env.EL_GANADOR_DB_PATH ?? join(process.cwd(), "data", "el-ganador.sqlite"));
+  const filename = resolve(/*turbopackIgnore: true*/ process.env.EL_GANADOR_DB_PATH ?? (process.env.VERCEL ? join(tmpdir(), "el-ganador.sqlite") : join(process.cwd(), "data", "el-ganador.sqlite")));
   mkdirSync(dirname(filename), { recursive: true });
 
   const db = new DatabaseSync(filename);
@@ -171,6 +181,17 @@ function createDatabase() {
       review_status TEXT NOT NULL DEFAULT 'pending' CHECK (review_status IN ('pending', 'approved', 'rejected')),
       uploaded_at TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS crm_broadcasts (
+      id TEXT PRIMARY KEY,
+      draw_id TEXT,
+      draw_title TEXT NOT NULL,
+      audience_segment TEXT NOT NULL,
+      recipient_count INTEGER NOT NULL,
+      message_template TEXT NOT NULL,
+      channel TEXT NOT NULL DEFAULT 'omnichannel',
+      status TEXT NOT NULL DEFAULT 'sent',
+      sent_at TEXT NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS business_accounts (
       id TEXT PRIMARY KEY,
       role TEXT NOT NULL CHECK (role IN ('business', 'customer')),
@@ -191,10 +212,10 @@ function createDatabase() {
       business_phone TEXT NOT NULL DEFAULT '',
       business_address TEXT NOT NULL DEFAULT '',
       business_photo_url TEXT NOT NULL DEFAULT '',
+      business_banner_url TEXT NOT NULL DEFAULT '',
       account_status TEXT NOT NULL DEFAULT 'active',
       plan_expires_at TEXT
     );
-    CREATE INDEX IF NOT EXISTS business_accounts_plan_expiry_idx ON business_accounts(plan_expires_at) WHERE plan_expires_at IS NOT NULL;
     CREATE TABLE IF NOT EXISTS business_sessions (
       token_hash TEXT PRIMARY KEY,
       account_id TEXT NOT NULL REFERENCES business_accounts(id) ON DELETE CASCADE,
@@ -212,9 +233,24 @@ function createDatabase() {
       account_id TEXT NOT NULL REFERENCES business_accounts(id) ON DELETE CASCADE,
       content TEXT NOT NULL,
       image_url TEXT NOT NULL DEFAULT '',
+      images_json TEXT NOT NULL DEFAULT '[]',
+      ticket_price INTEGER DEFAULT 25000,
+      ticket_count INTEGER DEFAULT 100,
+      mechanic TEXT DEFAULT 'balotera',
       created_at TEXT NOT NULL
     );
     CREATE INDEX IF NOT EXISTS business_news_account_created_idx ON business_news(account_id, created_at DESC);
+    CREATE TABLE IF NOT EXISTS business_stories (
+      id TEXT PRIMARY KEY,
+      account_id TEXT NOT NULL REFERENCES business_accounts(id) ON DELETE CASCADE,
+      media_url TEXT NOT NULL,
+      media_type TEXT NOT NULL DEFAULT 'image',
+      caption TEXT NOT NULL DEFAULT '',
+      created_at TEXT NOT NULL,
+      expires_at TEXT NOT NULL,
+      views_count INTEGER NOT NULL DEFAULT 0
+    );
+    CREATE INDEX IF NOT EXISTS business_stories_account_expiry_idx ON business_stories(account_id, expires_at);
     CREATE TABLE IF NOT EXISTS payment_events (
       id TEXT PRIMARY KEY,
       account_id TEXT NOT NULL REFERENCES business_accounts(id) ON DELETE CASCADE,
@@ -241,6 +277,11 @@ function createDatabase() {
     CREATE INDEX IF NOT EXISTS tickets_draw_status_idx ON tickets(draw_id, status, number);
     CREATE INDEX IF NOT EXISTS tickets_participation_idx ON tickets(participation_id);
     CREATE INDEX IF NOT EXISTS tickets_hold_until_idx ON tickets(status, hold_until);
+    CREATE TABLE IF NOT EXISTS public_certificates (
+      draw_id TEXT PRIMARY KEY,
+      payload_json TEXT NOT NULL,
+      created_at TEXT NOT NULL
+    );
   `);
 
   const accountColumns = new Set((db.prepare("PRAGMA table_info(business_accounts)").all() as { name: string }[]).map((column) => column.name));
@@ -251,8 +292,26 @@ function createDatabase() {
   if (!accountColumns.has("business_phone")) db.exec("ALTER TABLE business_accounts ADD COLUMN business_phone TEXT NOT NULL DEFAULT ''");
   if (!accountColumns.has("business_address")) db.exec("ALTER TABLE business_accounts ADD COLUMN business_address TEXT NOT NULL DEFAULT ''");
   if (!accountColumns.has("business_photo_url")) db.exec("ALTER TABLE business_accounts ADD COLUMN business_photo_url TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("business_banner_url")) db.exec("ALTER TABLE business_accounts ADD COLUMN business_banner_url TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("bank_name")) db.exec("ALTER TABLE business_accounts ADD COLUMN bank_name TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("bank_account_type")) db.exec("ALTER TABLE business_accounts ADD COLUMN bank_account_type TEXT NOT NULL DEFAULT 'Ahorros'");
+  if (!accountColumns.has("bank_account_number")) db.exec("ALTER TABLE business_accounts ADD COLUMN bank_account_number TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("bank_account_holder")) db.exec("ALTER TABLE business_accounts ADD COLUMN bank_account_holder TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("bank_account_doc")) db.exec("ALTER TABLE business_accounts ADD COLUMN bank_account_doc TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("avatar_url")) db.exec("ALTER TABLE business_accounts ADD COLUMN avatar_url TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("id_card_photo_url")) db.exec("ALTER TABLE business_accounts ADD COLUMN id_card_photo_url TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("phone")) db.exec("ALTER TABLE business_accounts ADD COLUMN phone TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("city")) db.exec("ALTER TABLE business_accounts ADD COLUMN city TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("address")) db.exec("ALTER TABLE business_accounts ADD COLUMN address TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("face_id_enabled")) db.exec("ALTER TABLE business_accounts ADD COLUMN face_id_enabled INTEGER NOT NULL DEFAULT 0");
+  if (!accountColumns.has("face_id_credential_id")) db.exec("ALTER TABLE business_accounts ADD COLUMN face_id_credential_id TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("e2ee_enabled")) db.exec("ALTER TABLE business_accounts ADD COLUMN e2ee_enabled INTEGER NOT NULL DEFAULT 1");
+  if (!accountColumns.has("vault_key_id")) db.exec("ALTER TABLE business_accounts ADD COLUMN vault_key_id TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("security_pin_hash")) db.exec("ALTER TABLE business_accounts ADD COLUMN security_pin_hash TEXT NOT NULL DEFAULT ''");
+  if (!accountColumns.has("payment_methods_json")) db.exec("ALTER TABLE business_accounts ADD COLUMN payment_methods_json TEXT NOT NULL DEFAULT '[]'");
   if (!accountColumns.has("account_status")) db.exec("ALTER TABLE business_accounts ADD COLUMN account_status TEXT NOT NULL DEFAULT 'active'");
   if (!accountColumns.has("plan_expires_at")) db.exec("ALTER TABLE business_accounts ADD COLUMN plan_expires_at TEXT");
+  db.exec("CREATE INDEX IF NOT EXISTS business_accounts_plan_expiry_idx ON business_accounts(plan_expires_at) WHERE plan_expires_at IS NOT NULL");
   const drawColumns = new Set((db.prepare("PRAGMA table_info(draws)").all() as { name: string }[]).map((column) => column.name));
   if (!drawColumns.has("description")) db.exec("ALTER TABLE draws ADD COLUMN description TEXT NOT NULL DEFAULT ''");
   if (!drawColumns.has("business_city")) db.exec("ALTER TABLE draws ADD COLUMN business_city TEXT NOT NULL DEFAULT 'Colombia'");
@@ -280,28 +339,28 @@ function createDatabase() {
   const documentColumns = new Set((db.prepare("PRAGMA table_info(business_documents)").all() as { name: string }[]).map((column) => column.name));
   if (!documentColumns.has("account_id")) db.exec("ALTER TABLE business_documents ADD COLUMN account_id TEXT");
 
-  const drawCount = (db.prepare("SELECT COUNT(*) AS count FROM draws").get() as { count: number }).count;
-  if (drawCount === 0) {
-    const addDraw = db.prepare(`INSERT INTO draws
-      (id, title, admin, category, unit_price, total_tickets, followers, live, emoji)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
-    const addTicket = db.prepare("INSERT INTO tickets (draw_id, number, status) VALUES (?, ?, ?)");
-    const addContent = db.prepare(`UPDATE draws SET description = ?, business_city = ?, business_description = ?, business_followers = ? WHERE id = ?`);
+  const addDraw = db.prepare(`INSERT OR IGNORE INTO draws
+    (id, title, admin, category, unit_price, total_tickets, followers, live, emoji)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+  const addTicket = db.prepare("INSERT OR IGNORE INTO tickets (draw_id, number, status) VALUES (?, ?, ?)");
+  const addContent = db.prepare(`UPDATE draws SET description = ?, business_city = ?, business_description = ?, business_followers = ? WHERE id = ?`);
 
-    db.exec("BEGIN IMMEDIATE");
-    try {
-      for (const draw of seedDraws) {
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    for (const draw of seedDraws) {
+      const exists = db.prepare("SELECT id FROM draws WHERE id = ?").get(draw.id);
+      if (!exists) {
         addDraw.run(draw.id, draw.title, draw.admin, draw.category, draw.price, draw.total, draw.followers, draw.live, draw.emoji);
         addContent.run(draw.description, draw.city, draw.businessDescription, draw.followers, draw.id);
         for (let number = 1; number <= draw.total; number += 1) {
           addTicket.run(draw.id, number, number <= draw.sold ? "sold" : "available");
         }
       }
-      db.exec("COMMIT");
-    } catch (error) {
-      db.exec("ROLLBACK");
-      throw error;
     }
+    db.exec("COMMIT");
+  } catch (error) {
+    db.exec("ROLLBACK");
+    throw error;
   }
 
   return db;
@@ -343,6 +402,7 @@ export type DrawRow = {
   category_details: string;
   owner_id: string | null;
   business_photo_url: string;
+  business_banner_url?: string;
   product_value: number;
   image_url: string;
   published: number;

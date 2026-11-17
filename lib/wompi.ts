@@ -26,7 +26,7 @@ type CheckoutInput = {
 
 /** Builds the official Web Checkout URL using server-only Wompi secrets. */
 export function createWompiCheckoutUrl({ requestUrl, reference, amountInCents }: CheckoutInput) {
-  const publicKey = process.env.WOMPI_PUBLIC_KEY ?? "";
+  const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || process.env.WOMPI_PUBLIC_KEY || "";
   const integritySecret = process.env.WOMPI_INTEGRITY_SECRET ?? "";
   const eventsSecret = process.env.WOMPI_EVENTS_SECRET ?? "";
   const environment = publicKey.startsWith("pub_test_") ? "test" : publicKey.startsWith("pub_prod_") ? "prod" : "";

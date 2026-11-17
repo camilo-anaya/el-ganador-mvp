@@ -1,617 +1,2037 @@
-"use client";
+// src/app/page.tsx
+'use client';
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { FormEvent } from "react";
-import { RaffleTerritoryFields } from "./components/RaffleTerritoryFields";
-import { describeRaffleTerritory, type StoredRaffleTerritoryScope } from "../lib/raffle-territory";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+import DesktopScrollStrip from '@/components/DesktopScrollStrip';
+import DesktopSidebar from '@/components/DesktopSidebar';
+import NativeBottomTabBar from '@/components/NativeBottomTabBar';
+import PublicityBanner from '@/components/PublicityBanner';
+import RaffleCard from '@/components/RaffleCard';
+import { useRealtimeFeed } from '@/hooks/useRealtimeFeed';
+import { shareRaffleLink } from '@/lib/nativeActions';
+import { useTheme } from '@/context/ThemeContext';
+import StoryViewer from '@/components/StoryViewer';
 
-type Draw = {
+interface MerchantStory {
+  id: string;
+  merchant: string;
+  shortName: string;
+  icon: string;
+  avatar: string;
+  storyImage: string;
+  mediaType?: 'image' | 'video';
+  headline: string;
+  caption: string;
+  timeAgo: string;
+  ctaText: string;
+  createdAt?: number;
+  expiresAt?: number;
+}
+
+interface CompactRaffleItem {
   id: string;
   title: string;
-  admin: string;
+  merchant: string;
+  city: string;
+  priceCop: string;
+  soldPercent: number;
+  timeLabel: string;
   category: string;
-  unit_price: number;
-  total_tickets: number;
-  followers: number;
-  live: boolean;
-  emoji: string;
-  sold: number;
-  reserved: number;
-  available: number;
-  description: string;
-  business_city: string;
-  business_description: string;
-  business_followers: number;
-  category_details: string;
-  product_value: number;
-  image_url: string;
-  business_photo_url: string;
-  territory_scope: StoredRaffleTerritoryScope;
-  territory_department: string;
-  territory_municipality: string;
-  territory_municipalities: string;
-  territory_departments: string;
-};
-type Ticket = { number: number; status: "available" | "reserved" | "sold" };
-type BusinessDocument = { id: string; admin: string; document_type: string; file_name: string; mime_type: string; review_status: "pending" | "approved" | "rejected"; uploaded_at: string };
-type RaffleForm = { title: string; category: string; description: string; emoji: string; unitPrice: string; totalTickets: string; live: boolean; details: Record<string, string>; territoryScope: "municipal" | "departmental" | "national"; territoryDepartment: string; territoryMunicipality: string; territoryMunicipalities: string; territoryDepartments: string };
-type Reservation = {
-  id: string;
-  drawId: string;
-  numbers: number[];
-  totalAmount: number;
-  status: "reserved";
-  expiresAt: string;
-};
-type Screen = "home" | "raffles" | "live" | "favorites" | "profile" | "business" | "admin";
+  image: string;
+  stage: string;
+  description?: string;
+  ballotGrid?: number;
+  photos?: string[];
+}
 
-const money = (value: number) => new Intl.NumberFormat("es-CO", {
-  style: "currency", currency: "COP", maximumFractionDigits: 0,
-}).format(value);
-const count = (value: number) => new Intl.NumberFormat("es-CO").format(value);
-
-const categoryFields: Record<string, { key: string; label: string; placeholder: string }[]> = {
-  Tecnología: [{ key: "brandModel", label: "Marca y modelo", placeholder: "Ej. Samsung Galaxy S25" }, { key: "warranty", label: "Garantía", placeholder: "Cobertura y tiempo de garantía" }, { key: "included", label: "Qué incluye", placeholder: "Accesorios, caja, factura…" }],
-  Motos: [{ key: "modelYear", label: "Modelo y año", placeholder: "Ej. XTZ 250 · 2026" }, { key: "engine", label: "Cilindraje y especificaciones", placeholder: "Datos técnicos del vehículo" }, { key: "deliveryDocs", label: "Documentos y entrega", placeholder: "Documentos que acompañan el premio" }],
-  Joyería: [{ key: "materials", label: "Materiales y quilates", placeholder: "Describe metales, piedras y pureza" }, { key: "certificate", label: "Certificado", placeholder: "Entidad o certificado incluido" }, { key: "pieces", label: "Piezas incluidas", placeholder: "Detalle del set o joya" }],
-  Gaming: [{ key: "edition", label: "Edición y capacidad", placeholder: "Ej. Edición digital · 1 TB" }, { key: "included", label: "Accesorios incluidos", placeholder: "Controles, juegos y accesorios" }, { key: "warranty", label: "Garantía", placeholder: "Cobertura y tiempo de garantía" }],
-};
-const documentTypesByCategory: Record<string, string[]> = {
-  Tecnología: ["Registro del negocio", "Identificación del representante", "Soporte de propiedad del premio", "Garantía o certificado del producto"],
-  Motos: ["Registro del negocio", "Identificación del representante", "Soporte de propiedad o disponibilidad", "Documentación relacionada con el vehículo"],
-  Joyería: ["Registro del negocio", "Identificación del representante", "Soporte de propiedad o disponibilidad", "Certificado de autenticidad o materiales"],
-  Gaming: ["Registro del negocio", "Identificación del representante", "Soporte de propiedad del premio", "Garantía o factura del producto"],
-};
-const categoryDetailLabels: Record<string, string> = {
-  brandModel: "Marca y modelo", warranty: "Garantía", included: "Incluye", modelYear: "Modelo y año",
-  engine: "Cilindraje y especificaciones", deliveryDocs: "Documentos y entrega", materials: "Materiales y quilates",
-  certificate: "Certificado", pieces: "Piezas incluidas", edition: "Edición y capacidad",
-  specification: "Ficha del premio", delivery: "Entrega y garantía",
-};
-const readCategoryDetails = (value: string) => {
-  try {
-    const parsed: unknown = JSON.parse(value || "{}");
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
-      ? Object.fromEntries(Object.entries(parsed).filter((entry): entry is [string, string] => typeof entry[1] === "string"))
-      : {};
-  } catch { return {}; }
-};
-const nav = [
-  { id: "home" as const, icon: "⌂", label: "Inicio" },
-  { id: "raffles" as const, icon: "🎁", label: "Sorteos" },
-  { id: "live" as const, icon: "🔴", label: "En vivo" },
-  { id: "favorites" as const, icon: "♡", label: "Mis favoritos" },
-  { id: "profile" as const, icon: "♙", label: "Mi perfil" },
+const MERCHANT_STORIES: MerchantStory[] = [
+  {
+    id: 'story-motos',
+    merchant: 'Motos Caribe Oficial',
+    shortName: 'Motos Caribe',
+    icon: '🏍️',
+    avatar: '/galeria-premios-el-ganador-realista.jpg',
+    storyImage: '/galeria-premios-el-ganador-realista.jpg',
+    headline: '¡Llegó la Yamaha MT-09 0 km a vitrina!',
+    caption: 'Ya estamos entregando boletas con matrícula incluida en Barranquilla y envíos a toda Colombia.',
+    timeAgo: 'Hace 18 min',
+    ctaText: 'Apartar boleta de esta moto →',
+  },
+  {
+    id: 'story-joyas',
+    merchant: 'Joyas & Diamantes ABC',
+    shortName: 'Joyas ABC',
+    icon: '💎',
+    avatar: '/reloj-alta-gama.jpg',
+    storyImage: '/reloj-alta-gama.jpg',
+    headline: 'Certificado notarial listo para el sábado',
+    caption: 'Cronógrafo suizo y cadena de oro 18K verificados. ¡Quedan pocos números disponibles!',
+    timeAgo: 'Hace 1 h',
+    ctaText: 'Ver números disponibles →',
+  },
+  {
+    id: 'story-tech',
+    merchant: 'TechStore Colombia',
+    shortName: 'TechStore',
+    icon: '⚡',
+    avatar: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    storyImage: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    headline: '¡92% vendido! Hoy juega en Sala 3D',
+    caption: 'No te quedes por fuera del combo Smartphone 5G Pro Max + Smartwatch Ultra.',
+    timeAgo: 'Hace 2 h',
+    ctaText: 'Últimas boletas aquí →',
+  },
+  {
+    id: 'story-autos',
+    merchant: 'AutoPremier Colombia 4x4',
+    shortName: 'AutoPremier',
+    icon: '🚙',
+    avatar: '/galeria-premios-el-ganador-realista.jpg',
+    storyImage: '/galeria-premios-el-ganador-realista.jpg',
+    headline: 'Próximo gran lanzamiento 4x4 en Cali',
+    caption: 'Prepárate para nuestro próximo sorteo certificado con transmisión en vivo.',
+    timeAgo: 'Hace 3 h',
+    ctaText: 'Explorar vitrina →',
+  },
+  {
+    id: 'story-moda',
+    merchant: 'Boutique & Calzado Elegance',
+    shortName: 'Elegance',
+    icon: '👠',
+    avatar: '/zapatos-sandalias-dama.jpg',
+    storyImage: '/zapatos-sandalias-dama.jpg',
+    headline: 'Nueva colección VIP con envío nacional',
+    caption: 'Participa por este bono exclusivo de diseñador desde $ 15.000 COP.',
+    timeAgo: 'Hace 4 h',
+    ctaText: 'Participar ahora →',
+  },
+  {
+    id: 'story-optica',
+    merchant: 'Óptica Visión VIP',
+    shortName: 'Visión VIP',
+    icon: '🕶️',
+    avatar: '/gafas-dama-hombre.jpg',
+    storyImage: '/gafas-dama-hombre.jpg',
+    headline: 'Gafas polarizadas de alta gama',
+    caption: 'Envíos asegurados a todo el país para nuestros ganadores.',
+    timeAgo: 'Hace 5 h',
+    ctaText: 'Ver sorteos activos →',
+  },
 ];
 
-export default function Home() {
-  const [draws, setDraws] = useState<Draw[]>([]);
-  const [view, setView] = useState<Screen>("home");
-  const [search, setSearch] = useState("");
-  const [following, setFollowing] = useState<string[]>([]);
-  const [businessName, setBusinessName] = useState("");
-  const [adminBusiness, setAdminBusiness] = useState("");
-  const [profileForm, setProfileForm] = useState({ name: "", city: "", description: "" });
-  const [profileSaving, setProfileSaving] = useState(false);
-  const [profileMessage, setProfileMessage] = useState("");
-  const [profileError, setProfileError] = useState("");
-  const [raffleEditor, setRaffleEditor] = useState<"new" | Draw | null>(null);
-  const [raffleForm, setRaffleForm] = useState<RaffleForm>({ title: "", category: "Tecnología", description: "", emoji: "🎁", unitPrice: "20000", totalTickets: "500", live: false, details: {}, territoryScope: "municipal", territoryDepartment: "", territoryMunicipality: "", territoryMunicipalities: "", territoryDepartments: "" });
-  const [raffleSaving, setRaffleSaving] = useState(false);
-  const [raffleError, setRaffleError] = useState("");
-  const [raffleMessage, setRaffleMessage] = useState("");
-  const [businessDocuments, setBusinessDocuments] = useState<BusinessDocument[]>([]);
-  const [documentType, setDocumentType] = useState("");
-  const [documentFile, setDocumentFile] = useState<File | null>(null);
-  const [documentUploading, setDocumentUploading] = useState(false);
-  const [documentMessage, setDocumentMessage] = useState("");
-  const [documentError, setDocumentError] = useState("");
-  const [selectedDraw, setSelectedDraw] = useState<Draw | null>(null);
-  const [showTicketMap, setShowTicketMap] = useState(false);
-  const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [ticketLoading, setTicketLoading] = useState(false);
-  const [ticketError, setTicketError] = useState("");
-  const [ticketReload, setTicketReload] = useState(0);
-  const firstAvailableRef = useRef<HTMLButtonElement | null>(null);
-  const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
-  const [reservation, setReservation] = useState<Reservation | null>(null);
-  const [buyerName, setBuyerName] = useState("");
-  const [buyerEmail, setBuyerEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState("");
-  const [loadError, setLoadError] = useState("");
-  const [loading, setLoading] = useState(true);
+const LIVE_MINI_ROOMS = [
+  {
+    id: 'live-motos',
+    title: 'Yamaha MT-09 0 km',
+    merchant: 'Motos Caribe Oficial',
+    viewers: '1.240 viendo',
+    mode: 'Balotera 3D',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+  },
+  {
+    id: 'live-joyas',
+    title: 'Cronógrafo & Oro 18K',
+    merchant: 'Joyas & Diamantes ABC',
+    viewers: '890 viendo',
+    mode: 'Ruleta 50',
+    image: '/reloj-alta-gama.jpg',
+  },
+  {
+    id: 'live-tech',
+    title: 'Combo Smartphone 5G',
+    merchant: 'TechStore Colombia',
+    viewers: '645 viendo',
+    mode: 'Balotera 3D',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+  },
+  {
+    id: 'live-hilux',
+    title: 'Toyota Hilux 4x4 Diésel',
+    merchant: 'AutoPremier Colombia 4x4',
+    viewers: '2.180 viendo',
+    mode: 'Balotera 3D',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+  },
+];
+
+const RAFFLES_CATALOG: CompactRaffleItem[] = [
+  {
+    id: 'combo-flagship-5g',
+    title: 'Smartphone 5G Pro Max + Smartwatch',
+    description: 'Smartphone 5G Pro Max de 256 GB liberado con pantalla OLED 120Hz, triple cámara 48 MP y Smartwatch AMOLED con monitor cardíaco. Garantía 1 año.',
+    ballotGrid: 100,
+    merchant: 'TechStore Colombia',
+    city: 'Bogotá',
+    priceCop: '$ 25.000',
+    soldPercent: 92,
+    timeLabel: '⏳ En 2h 15m',
+    category: 'tech',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'yamaha-mt09-caribe',
+    title: 'Yamaha MT-09 0 km + Matrícula',
+    description: 'Motocicleta Yamaha MT-09 modelo 2026 0 km de concesionario oficial, incluye SOAT, matrícula a nombre del ganador e impuestos 2026 pagos.',
+    ballotGrid: 100,
+    merchant: 'Motos Caribe Oficial',
+    city: 'Barranquilla',
+    priceCop: '$ 35.000',
+    soldPercent: 88,
+    timeLabel: '⏳ En 4h 40m',
+    category: 'motos',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'rolex-oro-18k',
+    title: 'Cronógrafo & Cadena Oro 18K',
+    description: 'Cronógrafo suizo en acero y bisel de oro, acompañado de cadena eslabonada en oro italiano 18K con certificado notarial de autenticidad.',
+    ballotGrid: 100,
+    merchant: 'Joyas & Diamantes ABC',
+    city: 'Cartagena',
+    priceCop: '$ 50.000',
+    soldPercent: 64,
+    timeLabel: '🗓️ Sáb 9:00 PM',
+    category: 'joyas',
+    image: '/reloj-alta-gama.jpg',
+    stage: 'upcoming',
+  },
+  {
+    id: 'bono-vip-moda',
+    title: 'Calzado Diseñador + Gafas VIP',
+    description: 'Colección de calzado artesanal de alta costura más gafas de sol polarizadas de diseñador con estuche rígido y garantía.',
+    ballotGrid: 100,
+    merchant: 'Boutique Elegance & Óptica VIP',
+    city: 'Medellín',
+    priceCop: '$ 15.000',
+    soldPercent: 52,
+    timeLabel: '🗓️ Dom 7:00 PM',
+    category: 'moda',
+    image: '/zapatos-sandalias-dama.jpg',
+    stage: 'upcoming',
+  },
+  {
+    id: 'toyota-hilux-caribe',
+    title: 'Toyota Hilux 4x4 Diésel 2026',
+    description: 'Camioneta Toyota Hilux 4x4 Diésel 2.8 Turbo 0 km, transmisión automática, cojinería en cuero, platón con duraliner y flete asegurado a toda Colombia.',
+    ballotGrid: 200,
+    merchant: 'AutoPremier Colombia 4x4',
+    city: 'Cali',
+    priceCop: '$ 50.000',
+    soldPercent: 78,
+    timeLabel: '⏳ En 6h 30m',
+    category: 'vehiculos',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'ps5-pro-bundle',
+    title: 'PlayStation 5 Pro + 2 Mandos DualSense',
+    description: 'Consola PlayStation 5 Pro con disco de 2TB SSD, resolución 4K a 120 FPS, audio 3D Tempest y 2 mandos inalámbricos DualSense.',
+    ballotGrid: 100,
+    merchant: 'TechStore Colombia',
+    city: 'Bogotá',
+    priceCop: '$ 20.000',
+    soldPercent: 86,
+    timeLabel: '⏳ En 3h 15m',
+    category: 'gaming',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'viaje-cancun-vip',
+    title: 'Viaje a Cancún All-Inclusive (2 Personas)',
+    description: 'Paquete vacacional 6 días y 5 noches en hotel 5 estrellas All-Inclusive en Riviera Maya, tiquetes aéreos ida y vuelta para dos personas.',
+    ballotGrid: 100,
+    merchant: 'Viajes & Sueños VIP',
+    city: 'Medellín',
+    priceCop: '$ 25.000',
+    soldPercent: 58,
+    timeLabel: '🗓️ Sáb 8:00 PM',
+    category: 'viajes',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'upcoming',
+  },
+  {
+    id: 'combo-smart-hogar',
+    title: 'Smart TV 65" 4K + Barra de Sonido',
+    description: 'Televisor inteligente 65 pulgadas Crystal UHD 4K con tecnología HDR10+ y barra de sonido envolvente inalámbrica Dolby Atmos.',
+    ballotGrid: 100,
+    merchant: 'Hogar & Confort VIP',
+    city: 'Barranquilla',
+    priceCop: '$ 18.000',
+    soldPercent: 62,
+    timeLabel: '🗓️ Dom 6:00 PM',
+    category: 'hogar',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'upcoming',
+  },
+  {
+    id: 'gafas-polarizadas-vip',
+    title: 'Gafas de Sol Polarizadas + Montura VIP',
+    description: 'Gafas de sol polarizadas con filtro UV400 categoría 3 y montura ergonómica en titanio liviano de alta resistencia.',
+    ballotGrid: 100,
+    merchant: 'Óptica Visión VIP',
+    city: 'Bucaramanga',
+    priceCop: '$ 12.000',
+    soldPercent: 44,
+    timeLabel: '🗓️ Lun 7:00 PM',
+    category: 'optica',
+    image: '/gafas-dama-hombre.jpg',
+    stage: 'upcoming',
+  },
+];
+
+const ALLIED_MERCHANTS = [
+  {
+    name: 'Motos Caribe Oficial',
+    badge: '🏪 LOCAL OFICIAL EL GANADOR',
+    badgeType: 'official',
+    type: 'Concesionario Motos',
+    description: 'Concesionario oficial Yamaha con entrega inmediata. Sorteos activos de motos 0 km y matrícula gratis.',
+    city: 'Barranquilla, Colombia',
+    meta: '⭐ 4.9 · 8.920 seguidores',
+    icon: '🏍️',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+  },
+  {
+    name: 'Joyas & Diamantes ABC',
+    badge: '🏪 LOCAL OFICIAL EL GANADOR',
+    badgeType: 'official',
+    type: 'Alta Joyería & Relojes',
+    description: 'Joyas de oro 18K y cronógrafos de alta gama garantizados ante notario. Participa en sus rifas exclusivas.',
+    city: 'Cartagena, Colombia',
+    meta: '⭐ 5.0 · 5.310 seguidores',
+    icon: '💎',
+    image: '/reloj-alta-gama.jpg',
+  },
+  {
+    name: 'AutoPremier Colombia 4x4',
+    badge: '🏢 MARCA ALIADA VERIFICADA',
+    badgeType: 'verified',
+    type: 'Concesionario Automotriz',
+    description: 'Líderes en importación y venta de camionetas Toyota Hilux 2026. Financiación inmediata y peritaje certificado.',
+    city: 'Cali, Colombia · Envíos Nacionales',
+    meta: '⚡ Concesionario Aliado',
+    icon: '🚙',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+  },
+  {
+    name: 'TechStore Colombia',
+    badge: '🏢 MARCA ALIADA VERIFICADA',
+    badgeType: 'verified',
+    type: 'Tecnología & Gadgets',
+    description: 'Distribuidor tecnológico verificado. Patrocinador de la Sala 3D en vivo: 15% OFF en tienda con el cupón ELGANADOR.',
+    city: 'Bogotá, Colombia',
+    meta: '⚡ Patrocinador Oficial Sala 3D',
+    icon: '⚡',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+  },
+  {
+    name: 'Boutique & Calzado Elegance',
+    badge: '✨ COMERCIO ALIADO',
+    badgeType: 'partner',
+    type: 'Moda & Calzado Fino',
+    description: 'Colección exclusiva en calzado de diseñador y vestidos de gala. Pauta comercial dirigida a clientes VIP.',
+    city: 'Medellín, Colombia',
+    meta: '✨ Marca Invitada',
+    icon: '👠',
+    image: '/zapatos-sandalias-dama.jpg',
+  },
+  {
+    name: 'Óptica Visión VIP',
+    badge: '✨ COMERCIO ALIADO',
+    badgeType: 'partner',
+    type: 'Salud Visual & Moda',
+    description: 'Gafas de sol polarizadas y monturas de alta gama. Envíos gratis a toda Colombia para la comunidad.',
+    city: 'Bucaramanga, Colombia',
+    meta: '✨ Comercio Aliado',
+    icon: '🕶️',
+    image: '/gafas-dama-hombre.jpg',
+  },
+];
+
+interface WonPrize {
+  id: string;
+  drawId: string;
+  title: string;
+  winnerNumber: string;
+  merchant: string;
+  date: string;
+  sha256Hash: string;
+  status: 'Pendiente de entrega' | 'Reclamado';
+  createdAt: number;
+}
+
+const VIBRANT_AD_THEMES = [
+  {
+    bg: 'linear-gradient(135deg, #581c87 0%, #7e22ce 40%, #c026d3 100%)', // Púrpura y Magenta Eléctrico
+    border: 'rgba(217, 70, 239, 0.7)',
+    shadow: '0 12px 36px rgba(126, 34, 206, 0.45)',
+    tagBg: 'rgba(0, 0, 0, 0.35)',
+    tagBorder: '#f0abfc',
+    btnBg: '#ffffff',
+    btnText: '#701a75',
+    couponBg: 'rgba(255, 255, 255, 0.22)',
+    couponColor: '#ffffff',
+  },
+  {
+    bg: 'linear-gradient(135deg, #9a3412 0%, #ea580c 40%, #f59e0b 100%)', // Fuego Solar y Ámbar Alegre
+    border: 'rgba(245, 158, 11, 0.75)',
+    shadow: '0 12px 36px rgba(234, 88, 12, 0.45)',
+    tagBg: 'rgba(0, 0, 0, 0.35)',
+    tagBorder: '#fde68a',
+    btnBg: '#ffffff',
+    btnText: '#9a3412',
+    couponBg: 'rgba(255, 255, 255, 0.22)',
+    couponColor: '#ffffff',
+  },
+  {
+    bg: 'linear-gradient(135deg, #0369a1 0%, #0284c7 40%, #06b6d4 100%)', // Azul Caribeño y Cian Eléctrico
+    border: 'rgba(56, 189, 248, 0.75)',
+    shadow: '0 12px 36px rgba(2, 132, 199, 0.45)',
+    tagBg: 'rgba(0, 0, 0, 0.35)',
+    tagBorder: '#a5f3fc',
+    btnBg: '#ffffff',
+    btnText: '#075985',
+    couponBg: 'rgba(255, 255, 255, 0.22)',
+    couponColor: '#ffffff',
+  },
+  {
+    bg: 'linear-gradient(135deg, #9f1239 0%, #e11d48 40%, #fb7185 100%)', // Rubí Frambuesa y Coral Radiante
+    border: 'rgba(251, 113, 133, 0.75)',
+    shadow: '0 12px 36px rgba(225, 29, 72, 0.45)',
+    tagBg: 'rgba(0, 0, 0, 0.35)',
+    tagBorder: '#fecdd3',
+    btnBg: '#ffffff',
+    btnText: '#881337',
+    couponBg: 'rgba(255, 255, 255, 0.22)',
+    couponColor: '#ffffff',
+  },
+  {
+    bg: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 40%, #8b5cf6 100%)', // Azul Índigo y Violeta Neón
+    border: 'rgba(139, 92, 246, 0.75)',
+    shadow: '0 12px 36px rgba(59, 130, 246, 0.45)',
+    tagBg: 'rgba(0, 0, 0, 0.35)',
+    tagBorder: '#c4b5fd',
+    btnBg: '#ffffff',
+    btnText: '#1e3a8a',
+    couponBg: 'rgba(255, 255, 255, 0.22)',
+    couponColor: '#ffffff',
+  },
+  {
+    bg: 'linear-gradient(135deg, #065f46 0%, #059669 40%, #10b981 100%)', // Esmeralda Radiante
+    border: 'rgba(52, 211, 153, 0.75)',
+    shadow: '0 12px 36px rgba(5, 150, 105, 0.45)',
+    tagBg: 'rgba(0, 0, 0, 0.35)',
+    tagBorder: '#a7f3d0',
+    btnBg: '#ffffff',
+    btnText: '#064e3b',
+    couponBg: 'rgba(255, 255, 255, 0.22)',
+    couponColor: '#ffffff',
+  },
+];
+
+const SPONSOR_CAROUSEL_ADS = [
+  {
+    id: 'ad-tech',
+    tag: '⚡ PATROCINADOR OFICIAL DESTACADO',
+    brand: 'TechStore Colombia',
+    category: 'Tecnología Flagship & Gadgets 5G · Bogotá',
+    title: 'Smartphones 5G Flagship & Tecnología Premium',
+    description: 'Distribuidor tecnológico verificado. Patrocinador oficial de la sala de sorteos en vivo con 20% de descuento en accesorios para compradores de boletas.',
+    coupon: 'Cupón: ELGANADOR',
+    ctaText: 'Ver Sorteos del Patrocinador →',
+    ctaLink: '/sorteo-en-vivo',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    badge: '🎁 20% OFF en Tienda',
+  },
+  {
+    id: 'ad-motos',
+    tag: '🏍️ MARCA PATROCINADORA DESTACADA',
+    brand: 'Motos Caribe & 4x4',
+    category: 'Motos Deportivas & Cuatrimotos · Barranquilla / Medellín',
+    title: 'Yamaha MT-09 & Cuatrimotos 4x4 0 km',
+    description: 'Concesionario oficial avalado. Matrícula y SOAT gratis incluidos para todos los ganadores de boletas en El Ganador.',
+    coupon: 'Bono Matrícula Gratis',
+    ctaText: 'Ver Sorteos de Motos →',
+    ctaLink: '/#estacion-proximos',
+    image: '/premios/yamaha-xtz.jpg',
+    badge: '⚡ Entrega Inmediata',
+  },
+  {
+    id: 'ad-autos',
+    tag: '🚗 PATROCINADOR PLATINO VIP',
+    brand: 'AutoNorte Camionetas',
+    category: 'Vehículos 4x4 & Camionetas Diésel · Cali / Bogotá',
+    title: 'Toyota Hilux 4x4 Diésel & SUVs Blindadas',
+    description: 'Líderes en importación automotriz. Póliza todo riesgo gratuita el primer año para el número ganador verificado.',
+    coupon: 'Póliza 1er Año Gratis',
+    ctaText: 'Ver Rifas de Camionetas →',
+    ctaLink: '/#estacion-proximos',
+    image: '/premios/toyota-hilux.jpg',
+    badge: '🏆 Concesionario Oficial',
+  },
+  {
+    id: 'ad-joyas',
+    tag: '💎 PATROCINADOR EXCLUSIVO',
+    brand: 'Joyería & Diamantes Imperial',
+    category: 'Joyas de Oro 18K & Relojes Suizos · Cartagena',
+    title: 'Relojes Suizos de Lujo & Cadenas Oro 18K',
+    description: 'Autenticidad notarial y certificado gemológico. Estuche de lujo y grabado personalizado gratis con tu boleta.',
+    coupon: 'Grabado Notarial Gratis',
+    ctaText: 'Ver Joyería Exclusiva →',
+    ctaLink: '/#estacion-proximos',
+    image: '/premios/joyeria-set.jpg',
+    badge: '✨ Garantía de por Vida',
+  },
+  {
+    id: 'ad-b2b',
+    tag: '🚀 ESPACIO PUBLICITARIO DISPONIBLE',
+    brand: 'Tu Empresa Aquí',
+    category: 'Pauta Comercial para Empresas · Colombia',
+    title: '¿Quieres que +50.000 clientes vean tu empresa aquí?',
+    description: 'No necesitas organizar rifas para pautar. Posiciona tu negocio, tienda o marca con suscripción mensual en El Ganador.',
+    coupon: 'Suscripción desde $49.000/mes',
+    ctaText: 'Pautar mi Empresa Ahora →',
+    ctaLink: '/publicidad',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+    badge: '📢 +50.000 Compradores/mes',
+  },
+];
+
+const INITIAL_FEED_DATA = {
+  liveRooms: LIVE_MINI_ROOMS,
+  raffles: RAFFLES_CATALOG,
+};
+
+const getProgressStatusClass = (pct: number) => {
+  if (pct < 50) return 'status-red';
+  if (pct < 85) return 'status-yellow';
+  return 'status-green';
+};
+
+export default function CompactWhiteMarketplacePage() {
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
+  const [isAdPaused, setIsAdPaused] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const searchTerm = params.get("buscar");
-    const storeName = params.get("local");
-    if (searchTerm) setSearch(searchTerm);
-    if (storeName) { setBusinessName(storeName); setView("business"); }
-  }, []);
+    if (isAdPaused) return;
+    const interval = setInterval(() => {
+      setCurrentAdIndex((prev) => (prev + 1) % SPONSOR_CAROUSEL_ADS.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isAdPaused]);
 
+      const currentAdTheme = VIBRANT_AD_THEMES[currentAdIndex % VIBRANT_AD_THEMES.length];
+  const { theme, toggleTheme } = useTheme();
+  const [activeStoriesList, setActiveStoriesList] = useState<MerchantStory[]>(MERCHANT_STORIES);
+  const [customRaffles, setCustomRaffles] = useState<CompactRaffleItem[]>([]);
+
+  // Sincronización continua de Rifas creadas en localStorage
   useEffect(() => {
-    let mounted = true;
-    const loadDraws = async () => {
+    const syncRaffles = () => {
       try {
-        const response = await fetch("/api/draws", { cache: "no-store" });
-        if (!response.ok) throw new Error("No fue posible cargar los sorteos.");
-        const data = (await response.json()) as { draws: Draw[] };
-        if (mounted) {
-          setDraws(data.draws);
-          setAdminBusiness((current) => current || data.draws[0]?.admin || "");
-          setSelectedDraw((current) => current ? data.draws.find((draw) => draw.id === current.id) ?? current : null);
-          setLoadError("");
-          setLoading(false);
+        const raw = localStorage.getItem('elganador_custom_raffles');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) setCustomRaffles(parsed);
         }
-      } catch {
-        if (mounted) {
-          setLoadError("No pudimos conectar con el servidor. Recarga la página para intentarlo de nuevo.");
-          setLoading(false);
-        }
-      }
+      } catch {}
     };
-    void loadDraws();
-    const timer = window.setInterval(loadDraws, 5000);
+    syncRaffles();
+    window.addEventListener('storage', syncRaffles);
+    window.addEventListener('elganador_raffles_updated', syncRaffles);
     return () => {
-      mounted = false;
-      window.clearInterval(timer);
+      window.removeEventListener('storage', syncRaffles);
+      window.removeEventListener('elganador_raffles_updated', syncRaffles);
     };
   }, []);
 
+  // Expiración Automática de 24 Horas en Historias de Empresas
   useEffect(() => {
-    const drawId = selectedDraw?.id;
-    if (!drawId || !showTicketMap || reservation) return;
-    let mounted = true;
-    const loadTickets = async () => {
+    const filterAndSyncStories = () => {
       try {
-        const response = await fetch(`/api/draws/${encodeURIComponent(drawId)}/tickets`, { cache: "no-store" });
-        const data = await response.json() as { tickets?: Ticket[]; error?: string };
-        if (!response.ok || !data.tickets) throw new Error(data.error ?? "No pudimos cargar el cartón.");
-        if (mounted) {
-          setTickets(data.tickets);
-          const available = new Set(data.tickets.filter((ticket) => ticket.status === "available").map((ticket) => ticket.number));
-          setSelectedNumbers((current) => current.filter((number) => available.has(number)));
-          setTicketError("");
-          setTicketLoading(false);
+        const raw = localStorage.getItem('elganador_custom_stories');
+        const customStories: MerchantStory[] = raw ? JSON.parse(raw) : [];
+        const now = Date.now();
+
+        // Filtrar únicamente historias vigentes (menor a 24 horas = 86.400.000 ms)
+        const validCustomStories = customStories.filter((s) => {
+          const expiresAt = s.expiresAt || ((s.createdAt || 0) + 86400000);
+          return now < expiresAt;
+        });
+
+        // Purgar de forma automática las que superen las 24 horas
+        if (validCustomStories.length !== customStories.length) {
+          localStorage.setItem('elganador_custom_stories', JSON.stringify(validCustomStories));
         }
-      } catch (error) {
-        if (mounted) {
-          setTicketError(error instanceof Error ? error.message : "No pudimos cargar el cartón.");
-          setTicketLoading(false);
-        }
+
+        setActiveStoriesList([...validCustomStories, ...MERCHANT_STORIES]);
+      } catch {
+        setActiveStoriesList(MERCHANT_STORIES);
       }
     };
-    setTicketLoading(true);
-    void loadTickets();
-    const timer = window.setInterval(loadTickets, 5000);
-    return () => { mounted = false; window.clearInterval(timer); };
-  }, [selectedDraw?.id, showTicketMap, Boolean(reservation), ticketReload]);
 
-  useEffect(() => {
-    const business = draws.find((draw) => draw.admin === adminBusiness);
-    if (business) setProfileForm({ name: business.admin, city: business.business_city === "Colombia" ? "" : business.business_city, description: business.business_description });
-  }, [adminBusiness]);
-
-  useEffect(() => {
-    if (view !== "admin" || !adminBusiness) return;
-    let mounted = true;
-    fetch(`/api/admin/documents?admin=${encodeURIComponent(adminBusiness)}`, { cache: "no-store" })
-      .then(async (response) => {
-        const data = await response.json() as { documents?: BusinessDocument[]; error?: string };
-        if (!response.ok) throw new Error(data.error ?? "No pudimos consultar los documentos.");
-        if (mounted) setBusinessDocuments(data.documents ?? []);
-      })
-      .catch(() => { if (mounted) setBusinessDocuments([]); });
-    return () => { mounted = false; };
-  }, [adminBusiness, view]);
-
-  const matchingDraws = useMemo(() => {
-    const query = search.toLocaleLowerCase("es-CO").trim();
-    return draws.filter((draw) => !query || `${draw.title} ${draw.admin} ${draw.category}`.toLocaleLowerCase("es-CO").includes(query));
-  }, [draws, search]);
-  const visibleDraws = useMemo(() => {
-    if (view === "live") return matchingDraws.filter((draw) => draw.live);
-    if (view === "favorites") return matchingDraws.filter((draw) => following.includes(draw.admin));
-    return matchingDraws;
-  }, [following, matchingDraws, view]);
-
-  const refreshDraws = async () => {
-    try {
-      const response = await fetch("/api/draws", { cache: "no-store" });
-      if (!response.ok) return;
-      const data = (await response.json()) as { draws: Draw[] };
-      setDraws(data.draws);
-      setSelectedDraw((current) => current ? data.draws.find((draw) => draw.id === current.id) ?? current : null);
-      if (!data.draws.some((draw) => draw.admin === adminBusiness) && data.draws[0]) setAdminBusiness(data.draws[0].admin);
-    } catch {
-      // The regular five-second refresh will try again.
-    }
-  };
-  const saveBusinessProfile = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setProfileSaving(true);
-    setProfileError("");
-    setProfileMessage("");
-    try {
-      const response = await fetch("/api/admin/profile", {
-        method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ oldName: adminBusiness, ...profileForm }),
-      });
-      const data = await response.json() as { name?: string; error?: string };
-      if (!response.ok || !data.name) throw new Error(data.error ?? "No pudimos guardar el perfil.");
-      setAdminBusiness(data.name);
-      if (businessName === adminBusiness) setBusinessName(data.name);
-      setProfileMessage("Perfil del local actualizado.");
-      await refreshDraws();
-    } catch (error) {
-      setProfileError(error instanceof Error ? error.message : "No pudimos guardar el perfil.");
-    } finally { setProfileSaving(false); }
-  };
-  const openRaffleEditor = (draw?: Draw) => {
-    setRaffleError("");
-    setRaffleMessage("");
-    setRaffleEditor(draw ?? "new");
-    setRaffleForm(draw ? {
-      title: draw.title,
-      category: draw.category,
-      description: draw.description,
-      emoji: draw.emoji,
-      unitPrice: String(draw.unit_price),
-      totalTickets: String(draw.total_tickets),
-      live: draw.live,
-      details: readCategoryDetails(draw.category_details),
-      territoryScope: draw.territory_scope === "departmental" || draw.territory_scope === "national" ? draw.territory_scope : "municipal",
-      territoryDepartment: draw.territory_department ?? "",
-      territoryMunicipality: draw.territory_municipality ?? "",
-      territoryMunicipalities: draw.territory_municipalities ?? "",
-      territoryDepartments: draw.territory_departments ?? "",
-    } : {
-      title: "", category: businessDraws[0]?.category ?? "Tecnología", description: "", emoji: "🎁",
-      unitPrice: "20000", totalTickets: "500", live: false, details: {}, territoryScope: "municipal", territoryDepartment: "", territoryMunicipality: "", territoryMunicipalities: "", territoryDepartments: "",
-    });
-  };
-  const saveRaffle = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setRaffleSaving(true);
-    setRaffleError("");
-    const editing = raffleEditor !== "new" && raffleEditor !== null ? raffleEditor : null;
-    try {
-      const response = await fetch("/api/admin/draws", {
-        method: editing ? "PATCH" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          drawId: editing?.id, admin: adminBusiness, ...raffleForm,
-          unitPrice: Number(raffleForm.unitPrice), totalTickets: Number(raffleForm.totalTickets),
-          categoryDetails: raffleForm.details, businessCity: profileForm.city,
-          businessDescription: profileForm.description,
-        }),
-      });
-      const data = await response.json() as { message?: string; error?: string };
-      if (!response.ok) throw new Error(data.error ?? "No pudimos guardar el sorteo.");
-      setRaffleEditor(null);
-      setRaffleMessage(data.message ?? "Cambios guardados.");
-      await refreshDraws();
-    } catch (error) {
-      setRaffleError(error instanceof Error ? error.message : "No pudimos guardar el sorteo.");
-    } finally { setRaffleSaving(false); }
-  };
-  const uploadBusinessDocument = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!documentFile) { setDocumentError("Elige un PDF, JPG o PNG para subir."); return; }
-    setDocumentUploading(true);
-    setDocumentError("");
-    setDocumentMessage("");
-    try {
-      const form = new FormData();
-      form.set("admin", adminBusiness);
-      form.set("documentType", documentType);
-      form.set("file", documentFile);
-      const response = await fetch("/api/admin/documents", { method: "POST", body: form });
-      const data = await response.json() as { message?: string; error?: string };
-      if (!response.ok) throw new Error(data.error ?? "No pudimos recibir el archivo.");
-      setDocumentMessage(data.message ?? "Documento recibido.");
-      setDocumentFile(null);
-      const listing = await fetch(`/api/admin/documents?admin=${encodeURIComponent(adminBusiness)}`, { cache: "no-store" });
-      const listingData = await listing.json() as { documents?: BusinessDocument[] };
-      setBusinessDocuments(listingData.documents ?? []);
-    } catch (error) {
-      setDocumentError(error instanceof Error ? error.message : "No pudimos recibir el archivo.");
-    } finally { setDocumentUploading(false); }
-  };
-  const openDraw = (draw: Draw) => {
-    setSelectedDraw(draw);
-    setReservation(null);
-    setFormError("");
-    setSelectedNumbers([]);
-    setTickets([]);
-    setTicketError("");
-    setShowTicketMap(false);
-  };
-  const closeDraw = () => {
-    setSelectedDraw(null);
-    setReservation(null);
-    setShowTicketMap(false);
-    setSelectedNumbers([]);
-  };
-  const openBusiness = (name: string) => {
-    setBusinessName(name);
-    setScreen("business");
-  };
-  const toggleTicket = (ticket: Ticket) => {
-    if (ticket.status !== "available") return;
-    setFormError("");
-    setSelectedNumbers((current) => current.includes(ticket.number)
-      ? current.filter((number) => number !== ticket.number)
-      : current.length < 10 ? [...current, ticket.number] : current);
-  };
-  const reserveTickets = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!selectedDraw) return;
-    setSubmitting(true);
-    setFormError("");
-    try {
-      const response = await fetch("/api/participations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ drawId: selectedDraw.id, buyerName, buyerEmail, ticketNumbers: selectedNumbers }),
-      });
-      const data = await response.json() as { reservation?: Reservation; error?: string };
-      if (!response.ok || !data.reservation) throw new Error(data.error ?? "No se pudo guardar la reserva.");
-      setReservation(data.reservation);
-      await refreshDraws();
-    } catch (error) {
-      setFormError(error instanceof Error ? error.message : "No se pudo guardar la reserva.");
-      await refreshDraws();
-    } finally {
-      setSubmitting(false);
-    }
-  };
-  const follow = (admin: string) => setFollowing((current) => current.includes(admin)
-    ? current.filter((name) => name !== admin)
-    : [...current, admin]);
-
-  const liveDraw = draws.find((draw) => draw.live) ?? draws[0];
-  const focusDraw = draws[0];
-  const activeBusinessName = businessName || focusDraw?.admin || "";
-  const businessDraws = draws.filter((draw) => draw.admin === activeBusinessName);
-  const businessLead = businessDraws[0];
-  const adminDraws = draws.filter((draw) => draw.admin === adminBusiness);
-  const adminBusinessOptions = [...new Set(draws.map((draw) => draw.admin))];
-  const adminCategory = adminDraws[0]?.category ?? "Tecnología";
-  const categoryDocumentOptions = documentTypesByCategory[adminCategory] ?? ["Registro del negocio", "Identificación del representante", "Soporte de propiedad o disponibilidad del premio"];
-  const raffleCategoryOptions = [...new Set([...Object.keys(categoryFields), "Otros", ...draws.map((draw) => draw.category)])];
-  const editingRaffle = raffleEditor && raffleEditor !== "new" ? raffleEditor : null;
-  const adminSold = adminDraws.reduce((sum, draw) => sum + draw.sold, 0);
-  const adminReserved = adminDraws.reduce((sum, draw) => sum + draw.reserved, 0);
-  const adminAvailable = adminDraws.reduce((sum, draw) => sum + draw.available, 0);
-  const formCategoryFields = categoryFields[raffleForm.category] ?? [
-    { key: "specification", label: "Ficha del premio", placeholder: "Incluye las especificaciones relevantes" },
-    { key: "delivery", label: "Entrega y garantía", placeholder: "Condiciones de entrega y garantía" },
-  ];
-  const availableTicketCount = tickets.filter((ticket) => ticket.status === "available").length;
-  const firstAvailableNumber = tickets.find((ticket) => ticket.status === "available")?.number;
-  const soldTotal = draws.reduce((sum, draw) => sum + draw.sold, 0);
-  const reservedTotal = draws.reduce((sum, draw) => sum + draw.reserved, 0);
-  const availableTotal = draws.reduce((sum, draw) => sum + draw.available, 0);
-  const occupied = (draw: Draw) => draw.sold + draw.reserved;
-  const progress = (draw: Draw) => Math.round((occupied(draw) / draw.total_tickets) * 100);
-  const setScreen = (screen: Screen) => {
-    if (screen === "profile") { window.location.href = "/cuenta"; return; }
-    if (screen === "admin") { window.location.href = "/admin"; return; }
-    if (screen === "business" && !businessName && focusDraw) setBusinessName(focusDraw.admin);
-    setView(screen);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  const title = view === "home" ? "Sorteos que están rifando ahora"
-    : view === "raffles" ? "Todos los sorteos"
-      : view === "live" ? "Sorteos en vivo"
-        : view === "favorites" ? "Mis locales favoritos"
-          : view === "profile" ? "Mi perfil de prueba"
-            : view === "business" ? "Perfil del local"
-              : "Panel del negocio";
-
-  return <div className="appShell">
-    <header className="siteHeader">
-      <button className="brand" onClick={() => setScreen("home")} aria-label="Ir al inicio"><span className="brandWordmark">EL GANADOR</span></button>
-      <label className="searchBox"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Busca sorteos, números o locales…" aria-label="Buscar sorteos" /></label>
-      <button className="buyTop" disabled={!draws.length} onClick={() => draws[0] && openDraw(draws[0])}>＋ Comprar números</button>
-      <button className="profileButton" onClick={() => setScreen("profile")}><span className="userAvatar">👤</span><span>Mi cuenta</span><span>⌄</span></button>
-    </header>
-
-    <div className="dashboardLayout">
-      <aside className="sidebar">
-        <nav className="sideNav" aria-label="Navegación principal">
-          {nav.map((item) => <button key={item.id} className={view === item.id ? "navItem active" : "navItem"} onClick={() => setScreen(item.id)}><span className="navIcon">{item.icon}</span>{item.label}</button>)}
-          <a className="navItem navAnchor" href="/novedades"><span className="navIcon">◉</span>Novedades</a>
-          <div className="navDivider" />
-          <button className={view === "business" ? "navItem active" : "navItem"} onClick={() => setScreen("business")}><span className="navIcon">🏪</span>Perfil del local</button>
-          <button className="navItem" onClick={() => setScreen("admin")}><span className="navIcon">▦</span>Panel del negocio</button>
-        </nav>
-        <div className="sidebarPromo"><span className="promoCup">🏆</span><p className="eyebrow">EL GANADOR</p><h3>Descubre.<br />Participa.<br />Celebra.</h3><button onClick={() => setScreen("raffles")}>Explorar sorteos →</button></div>
-        <div className="sidebarNote">Prototipo · datos de muestra</div>
-      </aside>
-
-      <main className="mainColumn">
-        {view === "home" && <div className="stories" aria-label="Locales destacados">
-          <button className="story" onClick={() => setScreen("profile")}><span className="storyRing ownStory"><span>＋</span></span><small>Tu perfil</small></button>
-          {draws.slice(0, 5).map((draw) => <button className="story" key={draw.id} onClick={() => openBusiness(draw.admin)}><span className="storyRing"><span>{draw.emoji}</span></span><small>{draw.admin}</small></button>)}
-          <button className="story" onClick={() => setScreen("raffles")}><span className="storyRing"><span>🎟️</span></span><small>Sorteos</small></button>
-        </div>}
-
-        {view === "profile" ? <section className="profilePanel cardSurface"><div className="profileHero"><div className="profileAvatar">👤</div><div><p className="eyebrow">MODO DE PRUEBA</p><h1>Mi perfil</h1><p>Las cuentas personales se conectarán en la siguiente etapa.</p></div></div><div className="profileActions"><button className="buyTop" onClick={() => setScreen("favorites")}>Ver mis favoritos ({following.length})</button><button className="softButton" onClick={() => setScreen("raffles")}>Buscar sorteos</button></div><div className="profileCallout">Las reservas de prueba duran 10 minutos. No hay cuentas, pagos ni sorteos reales conectados todavía.</div></section>
-          : view === "business" ? <section className="businessProfile cardSurface">
-            {businessLead ? <><div className="businessCover">{businessLead.business_photo_url ? <img src={businessLead.business_photo_url} alt={`Foto de ${activeBusinessName}`} /> : <span>🏪</span>}</div><div className="businessInfo"><div><p className="eyebrow">PERFIL DEL LOCAL · DEMOSTRACIÓN</p><h1>{activeBusinessName}</h1><p>{businessLead.business_city} · {businessLead.business_description}</p></div><button className={following.includes(activeBusinessName) ? "softButton following" : "softButton"} onClick={() => follow(activeBusinessName)}>{following.includes(activeBusinessName) ? "✓ Siguiendo" : "♡ Seguir local"}</button></div>
-            <div className="businessStats"><div><b>{count(businessLead.business_followers)}</b><span>seguidores de muestra</span></div><div><b>{count(businessDraws.length)}</b><span>sorteos publicados</span></div><div><b>{count(businessDraws.reduce((sum, draw) => sum + draw.available, 0))}</b><span>números disponibles</span></div></div>
-            <h2>Premios que está rifando</h2><div className="productRail">{businessDraws.map((draw) => <DrawCard key={draw.id} draw={draw} isFollowing={following.includes(draw.admin)} onFollow={follow} onOpen={openDraw} onBusiness={openBusiness} occupied={occupied} progress={progress} />)}</div></>
-              : <div className="emptyCard">No encontramos locales en el catálogo.</div>}
-          </section>
-            : view === "admin" ? <section className="adminPage">
-              <div className="pageHeading"><div><p className="eyebrow">CENTRO DEL NEGOCIO · MODO DE PRUEBA</p><h1>Panel del negocio</h1><p>Administra el perfil, los premios y los documentos del local.</p></div><div className="adminHeadingActions"><label className="businessPicker">Local<select value={adminBusiness} onChange={(event) => { setAdminBusiness(event.target.value); setProfileMessage(""); setDocumentMessage(""); }} aria-label="Local que estás administrando">{adminBusinessOptions.map((name) => <option key={name} value={name}>{name}</option>)}</select></label><button className="buyTop" onClick={() => openRaffleEditor()}>＋ Crear y publicar rifa</button></div></div>
-              <div className="adminKpis"><Metric label="Premios publicados" value={count(adminDraws.length)} icon="🎁" /><Metric label="Números vendidos" value={count(adminSold)} icon="🎟️" /><Metric label="Apartados" value={count(adminReserved)} icon="◷" /><Metric label="Disponibles" value={count(adminAvailable)} icon="✓" /></div>
-              {raffleMessage && <p className="adminSuccess" role="status">{raffleMessage}</p>}
-              <div className="adminWorkspace">
-                <section className="cardSurface adminFormCard"><div className="sectionTitle"><div><p className="eyebrow">PRESENCIA DEL NEGOCIO</p><h2>Perfil público</h2><p>Estos datos aparecen junto a los premios de {adminBusiness || "tu local"}.</p></div><span className="adminSectionIcon">🏪</span></div>
-                  <form className="adminProfileForm" onSubmit={saveBusinessProfile}>
-                    <label>Nombre del local<input required minLength={2} maxLength={100} value={profileForm.name} onChange={(event) => setProfileForm((form) => ({ ...form, name: event.target.value }))} /></label>
-                    <label>Ciudad<input maxLength={100} placeholder="Ej. Bogotá, Colombia" value={profileForm.city} onChange={(event) => setProfileForm((form) => ({ ...form, city: event.target.value }))} /></label>
-                    <label className="fullField">Descripción del negocio<textarea maxLength={500} rows={3} placeholder="Qué ofrece tu negocio y qué lo hace confiable" value={profileForm.description} onChange={(event) => setProfileForm((form) => ({ ...form, description: event.target.value }))} /></label>
-                    {profileError && <p className="formError fullField" role="alert">{profileError}</p>}{profileMessage && <p className="adminSuccess fullField" role="status">{profileMessage}</p>}
-                    <button className="buyTop" disabled={profileSaving || !adminBusiness}>{profileSaving ? "Guardando…" : "Guardar perfil"}</button>
-                  </form>
-                </section>
-                <section className="cardSurface adminFormCard documentPanel"><div className="sectionTitle"><div><p className="eyebrow">CONFIANZA DEL COMPRADOR</p><h2>Documentos del negocio</h2><p>Archivos sugeridos para el rubro: <strong>{adminCategory}</strong>.</p></div><span className="adminSectionIcon">📄</span></div>
-                  <form className="documentUploadForm" onSubmit={uploadBusinessDocument}>
-                    <label>Tipo de documento<select required value={documentType} onChange={(event) => setDocumentType(event.target.value)}><option value="">Selecciona un documento</option>{categoryDocumentOptions.map((option) => <option key={option} value={option}>{option}</option>)}</select></label>
-                    <label>Archivo PDF, JPG o PNG · máximo 5 MB<input required type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" onChange={(event) => setDocumentFile(event.target.files?.[0] ?? null)} /></label>
-                    {documentError && <p className="formError" role="alert">{documentError}</p>}{documentMessage && <p className="adminSuccess" role="status">{documentMessage}</p>}
-                    <button className="softButton" disabled={documentUploading || !adminBusiness}>{documentUploading ? "Subiendo archivo…" : "Subir para revisión"}</button>
-                  </form>
-                  <div className="documentPrivacyNote"><strong>Revisión pendiente:</strong> cargar un archivo no certifica ni verifica el negocio. En esta demo local, usa documentos ficticios; la autenticación y el acceso privado por cuenta se conectarán antes de recibir archivos reales.</div>
-                  <div className="documentList">{businessDocuments.length ? businessDocuments.map((document) => <div className="documentRow" key={document.id}><span>📎</span><div><strong>{document.document_type}</strong><small>{document.file_name} · {new Date(document.uploaded_at).toLocaleDateString("es-CO")}</small></div><span className={`documentStatus ${document.review_status}`}>{document.review_status === "pending" ? "Pendiente" : document.review_status === "approved" ? "Revisado" : "Requiere ajuste"}</span></div>) : <p className="emptyDocuments">Todavía no hay documentos para este local.</p>}</div>
-                </section>
-              </div>
-              <section className="cardSurface inventoryCard"><div className="sectionTitle"><div><p className="eyebrow">CATÁLOGO DE PREMIOS</p><h2>Rifas de {adminBusiness || "tu negocio"}</h2><p>La ficha del premio tiene campos propios para su categoría.</p></div><span className="syncPill"><i /> Actualiza cada 5 s</span></div>
-                {adminDraws.map((draw) => <div className="inventoryRow" key={draw.id}><span className="inventoryEmoji">{draw.emoji}</span><div className="inventoryName"><strong>{draw.title}</strong><small>{draw.category} · {draw.id} · {draw.live ? "En vivo" : "Publicado"}</small><div className="progressTrack"><span style={{ width: `${progress(draw)}%` }} /></div></div><div className="inventoryNumbers"><b>{count(occupied(draw))} / {count(draw.total_tickets)}</b><small>{count(draw.available)} disponibles</small></div><button className="softButton compact" onClick={() => openDraw(draw)}>Ver</button><button className="softButton compact" onClick={() => openRaffleEditor(draw)}>Editar</button></div>)}
-                {!adminDraws.length && <div className="emptyCard">Este local todavía no tiene premios. Crea y publica su primera rifa.</div>}
-              </section>
-              <p className="prototypeNote">Panel de demostración sin inicio de sesión. La revisión legal se registra como pendiente; el sistema no otorga insignias de verificación automáticamente.</p>
-            </section>
-              : <>
-                {view === "home" && <section className="marketSection">
-                  <div className="sectionTitle"><div><p className="eyebrow">MARKETPLACE</p><h1>{title}</h1><p>Descubre premios, conoce los locales y reserva números.</p></div><button className="textButton" onClick={() => setScreen("raffles")}>Ver todos →</button></div>
-                  <div className="productRail">{matchingDraws.slice(0, 4).map((draw) => <DrawCard key={draw.id} draw={draw} isFollowing={following.includes(draw.admin)} onFollow={follow} onOpen={openDraw} onBusiness={openBusiness} occupied={occupied} progress={progress} />)}</div>
-                </section>}
-                {view === "home" && <section className="enginePromo" aria-label="Herramientas de sorteo de El Ganador">
-                  <div className="enginePromoIcon" aria-hidden="true">🎱</div>
-                  <div className="enginePromoCopy"><p className="eyebrow">EL PLUS DE EL GANADOR</p><h2>El sorteo también se vive.</h2><p>Conoce nuestras balotas digitales y la ruleta personalizable para compartir la emoción en vivo.</p><small>Herramientas incluidas en Premium y Empresarial · demo interactiva, sin sorteos reales</small></div>
-                  <a className="enginePromoLink" href="/sorteo-en-vivo">Ver cómo funciona <span>↗</span></a>
-                </section>}
-                {view === "home" && <NewsFeed onBusiness={openBusiness} />}
-                {(view === "raffles" || view === "live" || view === "favorites") && <section className="marketSection fullMarket">
-                  <div className="sectionTitle"><div><p className="eyebrow">EL GANADOR</p><h1>{title}</h1><p>{view === "favorites" ? "Locales que sigues durante esta sesión de prueba." : "El inventario se consulta desde la base de datos."}</p></div><span className="syncPill"><i /> Actualiza cada 5 s</span></div>
-                  {visibleDraws.length ? <div className="productRail">{visibleDraws.map((draw) => <DrawCard key={draw.id} draw={draw} isFollowing={following.includes(draw.admin)} onFollow={follow} onOpen={openDraw} onBusiness={openBusiness} occupied={occupied} progress={progress} />)}</div>
-                    : <div className="emptyCard">{loading ? "Cargando sorteos…" : loadError || (view === "favorites" ? "Aún no sigues ningún local. Usa “Seguir local” en un sorteo para guardarlo aquí." : "No encontramos sorteos con este filtro.")}</div>}
-                </section>}
-
-                {(view === "home" || view === "live") && <section className="liveLayout">
-                  <div className="liveColumn">
-                    {liveDraw ? <article className="liveFeature cardSurface">
-                      <div className="liveFeatureTop"><span className="liveBadge"><i />{liveDraw.live ? "EN VIVO · DEMOSTRACIÓN" : "SORTEO DESTACADO"}</span><span className="viewers">● Datos de muestra</span></div>
-                      <div className="liveFocus"><div className="livePrizeArt">{liveDraw.emoji}</div><div className="liveCopy"><p className="eyebrow">{liveDraw.id}</p><h2>{liveDraw.title}</h2><p>Administrado por {liveDraw.admin}</p><div className="liveCount"><strong>{count(occupied(liveDraw))}</strong><span>números ocupados<br />de {count(liveDraw.total_tickets)}</span></div><div className="progressTrack"><span style={{ width: `${progress(liveDraw)}%` }} /></div><button className="buyTop" onClick={() => openDraw(liveDraw)}>Ver sorteo y reservar →</button></div></div>
-                      <div className="liveFoot"><span>✓ Contador compartido</span><span>◷ Reserva de 10 minutos</span><span>Sin cobros de prueba</span></div>
-                    </article> : <div className="emptyCard">{loading ? "Cargando sorteo en vivo…" : "No hay sorteos en vivo ahora."}</div>}
-                    <section className="communityCard cardSurface"><div className="sectionTitle"><div><p className="eyebrow">COMUNIDAD</p><h2>Participa con tranquilidad</h2><p>Los datos del prototipo son de demostración. Las reservas no procesan pagos.</p></div><span className="communityMark">✓</span></div><div className="communitySteps"><div><b>1</b><span>Elige un sorteo</span></div><div><b>2</b><span>Reserva números</span></div><div><b>3</b><span>Revisa el contador actualizado</span></div></div></section>
-                  </div>
-                  <aside className="rightRail">
-                    <section className="sideCard"><div className="sectionTitle compactTitle"><div><h2>Sorteos activos</h2><p>Inventario de muestra</p></div><button className="textButton" onClick={() => setScreen("raffles")}>Ver →</button></div>
-                      {draws.slice(0, 3).map((draw) => <button className="miniDraw" key={draw.id} onClick={() => openDraw(draw)}><span>{draw.emoji}</span><span><strong>{draw.title}</strong><small>{draw.admin}</small><small>{count(draw.available)} disponibles</small></span></button>)}
-                    </section>
-                    <section className="sideCard liveStatsCard"><p className="eyebrow">ESTADO DE LA PLATAFORMA</p><h2>Actualización en vivo</h2><p>Los cambios de inventario aparecen en tus pestañas abiertas.</p><div className="statLine"><span>Vendidos de muestra</span><b>{count(soldTotal)}</b></div><div className="statLine"><span>En reserva ahora</span><b>{count(reservedTotal)}</b></div><div className="statLine"><span>Disponibles</span><b>{count(availableTotal)}</b></div><span className="syncPill"><i /> Conectado a SQLite</span></section>
-                  </aside>
-                </section>}
-              </>}
-        {loadError && <p className="pageError" role="status">{loadError}</p>}
-        <footer className="siteFooter"><strong>EL GANADOR</strong><span>Prototipo de pruebas · sin pagos ni sorteos reales</span></footer>
-      </main>
-    </div>
-
-    <nav className="bottomNav" aria-label="Navegación móvil">{nav.map((item) => <button key={item.id} className={view === item.id ? "active" : ""} onClick={() => setScreen(item.id)}><span>{item.icon}</span><small>{item.label === "Mis favoritos" ? "Favoritos" : item.label.replace("Mi ", "")}</small></button>)}<a href="/novedades"><span>◉</span><small>Noticias</small></a></nav>
-
-    {raffleEditor && <div className="modalBackdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !raffleSaving) setRaffleEditor(null); }}>
-      <section className="reservationModal adminEditorModal" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
-        <button className="modalClose" aria-label="Cerrar" disabled={raffleSaving} onClick={() => setRaffleEditor(null)}>×</button>
-        <p className="eyebrow">{adminBusiness} · {editingRaffle ? "EDITAR PREMIO" : "NUEVA PUBLICACIÓN"}</p>
-        <h2 id="editorTitle">{editingRaffle ? "Editar rifa" : "Crear y publicar una rifa"}</h2>
-        <p className="modalDescription">Completa los datos del premio. La ficha cambia según la categoría y aparecerá en el marketplace al guardar.</p>
-        <aside className="raffleTerritoryCallout" aria-label="Advertencia sobre cobertura y autorización de la rifa">
-          <strong>La cobertura es una declaración del negocio</strong>
-          <p>Debe coincidir con las autorizaciones reales. Guardar un alcance aquí no concede permisos ni comprueba dónde se encuentran los compradores.</p>
-        </aside>
-        <form className="raffleEditorForm" onSubmit={saveRaffle}>
-          <label>Nombre del premio<input required minLength={3} maxLength={100} value={raffleForm.title} onChange={(event) => setRaffleForm((form) => ({ ...form, title: event.target.value }))} placeholder="Ej. Computador portátil" /></label>
-          <div className="editorFieldGrid">
-            <label>Categoría<select value={raffleForm.category} onChange={(event) => setRaffleForm((form) => ({ ...form, category: event.target.value, details: {} }))}>{raffleCategoryOptions.map((category) => <option key={category} value={category}>{category}</option>)}</select></label>
-            <label>Emoji del premio<input required maxLength={16} value={raffleForm.emoji} onChange={(event) => setRaffleForm((form) => ({ ...form, emoji: event.target.value }))} placeholder="🎁" /></label>
-          </div>
-          <div className="categoryFields"><strong>Ficha para {raffleForm.category}</strong><div className="editorFieldGrid">{formCategoryFields.map((field) => <label key={field.key}>{field.label}<input maxLength={200} value={raffleForm.details[field.key] ?? ""} onChange={(event) => setRaffleForm((form) => ({ ...form, details: { ...form.details, [field.key]: event.target.value } }))} placeholder={field.placeholder} /></label>)}</div></div>
-          <RaffleTerritoryFields value={{ territoryScope: raffleForm.territoryScope, territoryDepartment: raffleForm.territoryDepartment, territoryMunicipality: raffleForm.territoryMunicipality, territoryMunicipalities: raffleForm.territoryMunicipalities, territoryDepartments: raffleForm.territoryDepartments }} onChange={(patch) => setRaffleForm((form) => ({ ...form, ...patch }))} />
-          <label>Descripción y condiciones del premio<textarea required minLength={8} maxLength={2500} rows={4} value={raffleForm.description} onChange={(event) => setRaffleForm((form) => ({ ...form, description: event.target.value }))} placeholder="Describe qué gana la persona, qué incluye y las condiciones de entrega." /></label>
-          <div className="editorFieldGrid"><label>Precio por número (COP)<input required type="number" min={1000} max={1000000000} step={1000} value={raffleForm.unitPrice} onChange={(event) => setRaffleForm((form) => ({ ...form, unitPrice: event.target.value }))} /></label><label>Cantidad de números<input required type="number" min={10} max={10000} step={1} value={raffleForm.totalTickets} onChange={(event) => setRaffleForm((form) => ({ ...form, totalTickets: event.target.value }))} /></label></div>
-          <label className="liveToggle"><input type="checkbox" checked={raffleForm.live} onChange={(event) => setRaffleForm((form) => ({ ...form, live: event.target.checked }))} /><span><strong>Marcar como transmisión en vivo</strong><small>El indicador se muestra en el marketplace.</small></span></label>
-          {raffleError && <p className="formError" role="alert">{raffleError}</p>}
-          <button className="buyTop reserveButton" disabled={raffleSaving}>{raffleSaving ? "Guardando…" : editingRaffle ? "Guardar cambios" : "Crear y publicar rifa"}</button>
-        </form>
-      </section>
-    </div>}
-
-    {selectedDraw && <div className="modalBackdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) closeDraw(); }}>
-      <section className="reservationModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-        <button className="modalClose" aria-label="Cerrar" onClick={closeDraw}>×</button>
-        <p className="eyebrow">{selectedDraw.id} · {selectedDraw.category}</p><h2 id="modalTitle">{selectedDraw.title}</h2>
-        {!reservation ? <>
-          <button className="modalBusinessLink" onClick={() => { const admin = selectedDraw.admin; closeDraw(); openBusiness(admin); }}>🏪 {selectedDraw.admin} · {selectedDraw.business_city} <span>Ver perfil →</span></button>
-          <div className="raffleCoverageDisplay"><span>Cobertura declarada por el negocio</span><strong>{describeRaffleTerritory(selectedDraw).label}</strong><small>Autoridad de referencia: {describeRaffleTerritory(selectedDraw).authority}.</small></div>
-          <p className="modalDescription">{selectedDraw.description}</p>
-          {Object.entries(readCategoryDetails(selectedDraw.category_details)).filter(([, value]) => value.trim()).length > 0 && <dl className="prizeCategoryDetails">{Object.entries(readCategoryDetails(selectedDraw.category_details)).filter(([, value]) => value.trim()).map(([key, value]) => <div key={key}><dt>{categoryDetailLabels[key] ?? key}</dt><dd>{value}</dd></div>)}</dl>}
-          <div className="modalAvailability"><span>Números disponibles</span><strong>{count(selectedDraw.available)} / {count(selectedDraw.total_tickets)}</strong><span>Precio por número</span><strong>{money(selectedDraw.unit_price)}</strong><span>Ocupados</span><strong>{count(selectedDraw.sold + selectedDraw.reserved)}</strong></div>
-          <p className="modalDescription">Premio y condiciones de demostración. Elige tus números en el cartón digital; la reserva dura 10 minutos y esta prueba no procesa pagos.</p>
-          {!showTicketMap ? <button className="buyTop reserveButton" onClick={() => { setShowTicketMap(true); setTicketLoading(true); }}>Ver cartón digital y elegir números →</button> : <>
-            <div className="ticketMapHeading"><div><h3>Cartón digital</h3><p>Selecciona de 1 a 10 números · se actualiza cada 5 s</p></div><div className="mapHeadingActions"><button className="mapJumpButton" disabled={!availableTicketCount} onClick={() => firstAvailableRef.current?.scrollIntoView({ block: "center", behavior: "smooth" })}>↓ Ver disponibles ({count(availableTicketCount)})</button><button className="mapBackButton" onClick={() => { setShowTicketMap(false); setSelectedNumbers([]); }}>← Detalles</button></div></div>
-            <div className="ticketLegend"><span><i className="legendAvailable" />Disponible</span><span><i className="legendSelected" />Tu selección</span><span><i className="legendReserved" />Reservado</span><span><i className="legendSold" />Vendido</span></div>
-            {ticketLoading && !tickets.length ? <div className="emptyCard">Cargando el cartón…</div> : ticketError ? <div className="emptyCard">{ticketError}<button className="mapBackButton" onClick={() => { setTicketLoading(true); setTicketReload((value) => value + 1); }}>Intentar de nuevo</button></div> : <div className="ticketMap" aria-label="Mapa de números del sorteo">{tickets.map((ticket) => {
-              const selected = selectedNumbers.includes(ticket.number);
-              const stateClass = selected ? "selected" : ticket.status;
-              return <button key={ticket.number} ref={ticket.number === firstAvailableNumber ? firstAvailableRef : undefined} type="button" className={`ticketButton ${stateClass}`} disabled={ticket.status !== "available" || submitting} aria-pressed={selected} aria-label={`Número ${ticket.number}, ${selected ? "seleccionado" : ticket.status === "available" ? "disponible" : ticket.status === "reserved" ? "reservado" : "vendido"}`} onClick={() => toggleTicket(ticket)}>{String(ticket.number).padStart(4, "0")}</button>;
-            })}</div>}
-            <div className="ticketSelectionSummary"><span>{selectedNumbers.length} {selectedNumbers.length === 1 ? "número seleccionado" : "números seleccionados"}</span><strong>{money(selectedDraw.unit_price * selectedNumbers.length)}</strong></div>
-            {selectedNumbers.length > 0 && <form className="reserveForm" onSubmit={reserveTickets}>
-              <aside className="raffleTerritoryCallout customerTerritoryCallout" aria-label="Información de cobertura para clientes">
-                <strong>Revisa la cobertura de esta rifa</strong>
-                <p>Puedes explorar El Ganador desde cualquier lugar. Mostramos el alcance declarado por el negocio, pero esta demo no solicita tu municipio, no verifica permisos y no restringe reservas por ubicación. Reservar números no es una compra ni genera un cobro.</p>
-              </aside>
-              <label>Tu nombre<input required minLength={2} maxLength={100} autoComplete="name" value={buyerName} onChange={(event) => setBuyerName(event.target.value)} /></label>
-              <label>Correo electrónico<input required type="email" maxLength={254} autoComplete="email" value={buyerEmail} onChange={(event) => setBuyerEmail(event.target.value)} /></label>
-              {formError && <p className="formError" role="alert">{formError}</p>}
-              <button className="buyTop reserveButton" disabled={submitting || ticketLoading}>{submitting ? "Reservando…" : `Reservar ${selectedNumbers.length} ${selectedNumbers.length === 1 ? "número" : "números"}`}</button>
-            </form>}
-          </>}
-        </> : <div className="reservationSuccess" role="status"><span className="successMark">✓</span><h3>Reserva creada</h3><p>Estos son tus números:</p><div className="numberChips">{reservation.numbers.map((number) => <span key={number}>{String(number).padStart(4, "0")}</span>)}</div><p className="modalDescription">Vence a las {new Date(reservation.expiresAt).toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" })}. No se realizó ningún cobro.</p><button className="buyTop reserveButton" onClick={closeDraw}>Listo</button></div>}
-      </section>
-    </div>}
-  </div>;
-}
-
-function DrawCard({ draw, isFollowing, onFollow, onOpen, onBusiness, occupied, progress }: {
-  draw: Draw;
-  isFollowing: boolean;
-  onFollow: (admin: string) => void;
-  onOpen: (draw: Draw) => void;
-  onBusiness: (admin: string) => void;
-  occupied: (draw: Draw) => number;
-  progress: (draw: Draw) => number;
-}) {
-  return <article className="productCard">
-    <div className="productVisual"><span className="productTag">{draw.live ? "EN VIVO · DEMO" : draw.category}</span>{draw.image_url ? <img src={draw.image_url} alt={draw.title} /> : <span>{draw.emoji}</span>}</div>
-    <div className="productInfo"><h3>{draw.title}</h3><div className="productAdmin">Administrado por <button className="inlineLink" onClick={() => onBusiness(draw.admin)}>{draw.admin}</button></div><div className="raffleCardCoverage"><span>Cobertura declarada</span><strong>{describeRaffleTerritory(draw).label}</strong></div><div className="productMeter"><span><b>{count(occupied(draw))}</b> / {count(draw.total_tickets)} ocupados</span><strong>{progress(draw)}%</strong></div><div className="progressTrack"><span style={{ width: `${progress(draw)}%` }} /></div>
-      <div className="productBottom"><span className="price">{money(draw.unit_price)} <small>por número</small></span><div><button className="followSmall" aria-pressed={isFollowing} onClick={() => onFollow(draw.admin)}>{isFollowing ? "✓" : "♡"}</button><button className="goAdmin" onClick={() => onOpen(draw)}>Ver sorteo →</button></div></div>
-    </div>
-  </article>;
-}
-
-type PublicPost = { id: string; content: string; image_url: string; created_at: string; account_id: string; business_name: string; business_city: string; category: string };
-function NewsFeed({ onBusiness }: { onBusiness: (name: string) => void }) {
-  const [posts, setPosts] = useState<PublicPost[]>([]);
-  useEffect(() => {
-    let active = true;
-    const load = () => fetch("/api/news", { cache: "no-store" }).then((r) => r.json()).then((data: { posts?: PublicPost[] }) => { if (active) setPosts(data.posts ?? []); }).catch(() => undefined);
-    void load(); const timer = window.setInterval(load, 15000);
-    return () => { active = false; window.clearInterval(timer); };
+    filterAndSyncStories();
+    window.addEventListener('storage', filterAndSyncStories);
+    window.addEventListener('elganador_stories_updated', filterAndSyncStories);
+    const purgeInterval = setInterval(filterAndSyncStories, 60000);
+    return () => {
+      window.removeEventListener('storage', filterAndSyncStories);
+      window.removeEventListener('elganador_stories_updated', filterAndSyncStories);
+      clearInterval(purgeInterval);
+    };
   }, []);
-  return <section className="marketSection newsSection"><div className="sectionTitle"><div><p className="eyebrow">NOTICIAS DE LA COMUNIDAD</p><h2>Lo nuevo de los locales</h2><p>Actualizaciones de tiendas, premios y rifas para clientes y administradores.</p></div><a className="textButton" href="/novedades">Ver novedades →</a></div>{posts.length ? <div className="newsGrid">{posts.slice(0, 4).map((post) => <article className="newsCard" key={post.id}><div className="newsByline"><span className="newsAvatar">{post.business_name.slice(0, 1)}</span><div><button onClick={() => onBusiness(post.business_name)}>{post.business_name}</button><small>{post.business_city || "Colombia"} · {post.category} · {new Date(post.created_at).toLocaleDateString("es-CO")}</small></div></div><p>{post.content}</p>{post.image_url && <img src={post.image_url} alt={`Novedad de ${post.business_name}`} />}<button className="newsStoreLink" onClick={() => { window.location.href = `/?local=${encodeURIComponent(post.business_name)}`; }}>Ver tienda →</button></article>)}</div> : <div className="emptyCard">Cuando una tienda publique una novedad, aparecerá aquí para todos.</div>}</section>;
-}
 
-function Metric({ label, value, icon }: { label: string; value: string; icon: string }) {
-  return <div className="metricCard"><span>{icon}</span><small>{label}</small><strong>{value}</strong></div>;
+  const [activeStory, setActiveStory] = useState<MerchantStory | null>(null);
+  const [activeStoryIndex, setActiveStoryIndex] = useState<number | null>(null);
+
+  // Estados de Compra de Boletas y Pasarela Wompi Colombia
+  const [ticketModalRaffle, setTicketModalRaffle] = useState<CompactRaffleItem | null>(null);
+  const [ticketCount, setTicketCount] = useState<number>(1);
+  const [buyerName, setBuyerName] = useState<string>('Carlos Martínez');
+  const [buyerEmail, setBuyerEmail] = useState<string>('carlos@elganador.co');
+  const [buyerPhone, setBuyerPhone] = useState<string>('+57 300 123 4567');
+  const [isProcessingWompi, setIsProcessingWompi] = useState<boolean>(false);
+  const [purchaseSuccessData, setPurchaseSuccessData] = useState<{ ticketId: string; totalCop: string; numbers: string[]; hash: string } | null>(null);
+  const [assignedNumbers, setAssignedNumbers] = useState<string[]>([]);
+  const [modalSoldNumbers, setModalSoldNumbers] = useState<number[]>([3, 7, 14, 28, 45, 62, 88, 91]);
+
+  const handleOpenTicketModal = (raffle: CompactRaffleItem) => {
+    setTicketModalRaffle(raffle);
+    const grid = raffle.ballotGrid || 100;
+    const pad = grid <= 100 ? 2 : grid <= 999 ? 3 : 4;
+    setTicketCount(1);
+    setAssignedNumbers([String(1).padStart(pad, '0')]);
+    setPurchaseSuccessData(null);
+
+    // Cargar datos de la sesión del usuario si existen
+    try {
+      const stored = localStorage.getItem('elganador_session');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.name && !buyerName) setBuyerName(parsed.name);
+        if (parsed?.email && !buyerEmail) setBuyerEmail(parsed.email);
+        if (parsed?.phone && !buyerPhone) setBuyerPhone(parsed.phone);
+      }
+    } catch {}
+  };
+
+  const handleToggleBallotNumber = (numStr: string) => {
+    const numInt = parseInt(numStr, 10);
+    if (modalSoldNumbers.includes(numInt)) return;
+
+    if (assignedNumbers.includes(numStr)) {
+      if (assignedNumbers.length === 1) return; // Mantener al menos 1
+      const updated = assignedNumbers.filter((n) => n !== numStr);
+      setAssignedNumbers(updated);
+      setTicketCount(updated.length);
+    } else {
+      if (assignedNumbers.length >= 20) {
+        alert('Puedes seleccionar hasta un máximo de 20 números por compra.');
+        return;
+      }
+      const updated = [...assignedNumbers, numStr].sort((a, b) => parseInt(a, 10) - parseInt(b, 10));
+      setAssignedNumbers(updated);
+      setTicketCount(updated.length);
+    }
+  };
+
+  const handleTicketCountChange = (count: number) => {
+    const safeCount = Math.max(1, Math.min(20, count));
+    setTicketCount(safeCount);
+    const grid = ticketModalRaffle?.ballotGrid || 100;
+    const pad = grid <= 100 ? 2 : grid <= 999 ? 3 : 4;
+
+    const chosen = new Set<string>();
+    while (chosen.size < safeCount) {
+      const randInt = Math.floor(1 + Math.random() * grid);
+      if (!modalSoldNumbers.includes(randInt)) {
+        chosen.add(String(randInt).padStart(pad, '0'));
+      }
+    }
+    setAssignedNumbers(Array.from(chosen).sort((a, b) => parseInt(a, 10) - parseInt(b, 10)));
+  };
+
+  const handlePayWithWompi = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ticketModalRaffle) return;
+    setIsProcessingWompi(true);
+
+    const numericPrice = parseInt(ticketModalRaffle.priceCop.replace(/[^0-9]/g, ''), 10) || 35000;
+    const totalAmount = numericPrice * assignedNumbers.length;
+    const totalAmountInCents = totalAmount * 100;
+    const ref = `TKT-${ticketModalRaffle.id}-${assignedNumbers.join('-')}-${Date.now()}`;
+    const buyerMail = buyerEmail.trim() || 'carlos@elganador.co';
+    const buyerNam = buyerName.trim() || 'Carlos Martínez';
+    const buyerPh = buyerPhone.trim() || '+573001234567';
+
+    // 1. Guardar ticket en billetera local
+    try {
+      const rawStored = localStorage.getItem('elganador_my_tickets');
+      const myTickets = rawStored ? JSON.parse(rawStored) : [];
+      const newTicket = {
+        id: ref,
+        raffleTitle: ticketModalRaffle.title,
+        merchant: ticketModalRaffle.merchant,
+        numbers: assignedNumbers,
+        drawDate: ticketModalRaffle.timeLabel,
+        status: 'pendiente_pago',
+        hashSha256: Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+        priceCop: `$ ${totalAmount.toLocaleString('es-CO')}`,
+      };
+      myTickets.unshift(newTicket);
+      localStorage.setItem('elganador_my_tickets', JSON.stringify(myTickets));
+    } catch {}
+
+    // 2. Integración Oficial Wompi (Modal Widget o Redirección Automática)
+    const configuredKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || '';
+    const publicKey = configuredKey && !configuredKey.includes('tu_llave') && !configuredKey.includes('xxxxxx')
+      ? configuredKey
+      : 'pub_test_Q5yDA9xoKdePiumALrhQV9RLG2ECZldD';
+
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://elganador.co';
+    const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    const redirectUrl = isLocal ? undefined : `${origin}/mis-boletas?status=aprobado&ref=${ref}`;
+    const cleanPhone = buyerPh.replace(/\D/g, '').slice(-10) || '3001234567';
+
+    // Si window.WidgetCheckout está disponible
+    if (typeof window !== 'undefined' && (window as unknown as { WidgetCheckout?: new (opts: Record<string, unknown>) => { open: (cb: (res: { transaction?: { status: string } }) => void) => void } }).WidgetCheckout) {
+      const WidgetCheckout = (window as unknown as { WidgetCheckout: new (opts: Record<string, unknown>) => { open: (cb: (res: { transaction?: { status: string } }) => void) => void } }).WidgetCheckout;
+      const checkoutConfig: Record<string, unknown> = {
+        currency: 'COP',
+        amountInCents: totalAmountInCents,
+        amount_in_cents: totalAmountInCents,
+        reference: ref,
+        publicKey,
+        public_key: publicKey,
+        customerData: {
+          email: buyerMail,
+          fullName: buyerNam,
+          phoneNumber: cleanPhone,
+          phoneNumberPrefix: '+57',
+          legalId: '123456789',
+          legalIdType: 'CC'
+        },
+        customer_data: {
+          email: buyerMail,
+          fullName: buyerNam,
+          phoneNumber: cleanPhone,
+          phoneNumberPrefix: '+57',
+          legalId: '123456789',
+          legalIdType: 'CC'
+        }
+      };
+
+      if (redirectUrl) {
+        checkoutConfig.redirectUrl = redirectUrl;
+      }
+
+      const checkout = new WidgetCheckout(checkoutConfig);
+
+      checkout.open((result) => {
+        setIsProcessingWompi(false);
+        const transaction = result?.transaction;
+        if (transaction?.status === 'APPROVED') {
+          alert('🎉 ¡Pago aprobado con éxito! Tu boleta ha sido sellada y registrada.');
+          window.location.href = redirectUrl || '/mis-boletas';
+        } else if (transaction?.status === 'DECLINED' || transaction?.status === 'ERROR') {
+          alert('⚠️ El pago no se completó. Puedes volver a intentarlo cuando gustes.');
+        }
+      });
+      return;
+    }
+
+    // Fallback: Redirección inmediata al Checkout oficial de Wompi
+    const wompiCheckoutUrl = `https://checkout.wompi.co/p/?public-key=${publicKey}&currency=COP&amount-in-cents=${totalAmountInCents}&reference=${ref}&redirect-url=${encodeURIComponent(redirectUrl || '')}&customer-data:email=${encodeURIComponent(buyerMail)}&customer-data:full-name=${encodeURIComponent(buyerNam)}&customer-data:phone-number=${encodeURIComponent(buyerPh)}`;
+
+    window.location.href = wompiCheckoutUrl;
+  };
+  const [pullDistance, setPullDistance] = useState<number>(0);
+  const [sharedToast, setSharedToast] = useState<string | null>(null);
+  const [shareModalItem, setShareModalItem] = useState<{ id: string; title: string; merchant: string; priceCop: string } | null>(null);
+  const [copiedLink, setCopiedLink] = useState<boolean>(false);
+  const [wonPrizes, setWonPrizes] = useState<WonPrize[]>([]);
+  const [showNotifDropdown, setShowNotifDropdown] = useState<boolean>(false);
+  const touchStartYRef = useRef<number | null>(null);
+
+  const { data: feed, isRefreshing, lastSync, refreshNow } = useRealtimeFeed(
+    INITIAL_FEED_DATA,
+    30000
+  );
+
+  const handleShareRaffle = (item: { id: string; title: string; merchant: string; priceCop: string }) => {
+    setShareModalItem(item);
+    setCopiedLink(false);
+  };
+
+  useEffect(() => {
+    const loadWonPrizes = () => {
+      try {
+        const raw = localStorage.getItem('elganador_won_prizes');
+        if (raw) {
+          setWonPrizes(JSON.parse(raw));
+        } else {
+          setWonPrizes([]);
+        }
+      } catch {}
+    };
+    loadWonPrizes();
+    window.addEventListener('storage', loadWonPrizes);
+    window.addEventListener('elganador_prizes_updated', loadWonPrizes);
+    return () => {
+      window.removeEventListener('storage', loadWonPrizes);
+      window.removeEventListener('elganador_prizes_updated', loadWonPrizes);
+    };
+  }, []);
+
+  const manualRefresh = useCallback(() => {
+    setSelectedCategory('all');
+    setActiveStory(null);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    refreshNow(true);
+  }, [refreshNow]);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (typeof window !== 'undefined' && window.scrollY === 0) {
+      touchStartYRef.current = e.touches[0].clientY;
+    } else {
+      touchStartYRef.current = null;
+    }
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (touchStartYRef.current === null) return;
+    if (typeof window !== 'undefined' && window.scrollY > 0) {
+      touchStartYRef.current = null;
+      setPullDistance(0);
+      return;
+    }
+    const deltaY = e.touches[0].clientY - touchStartYRef.current;
+    if (deltaY > 0) {
+      setPullDistance(Math.min(92, deltaY * 0.45));
+    } else {
+      setPullDistance(0);
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (touchStartYRef.current !== null && typeof window !== 'undefined' && window.scrollY === 0) {
+        const endY = e.changedTouches?.[0]?.clientY ?? touchStartYRef.current;
+        if (endY - touchStartYRef.current > 65 || pullDistance >= 50) {
+          manualRefresh();
+        }
+      }
+      touchStartYRef.current = null;
+      setPullDistance(0);
+    },
+    [pullDistance, manualRefresh]
+  );
+
+  const liveRoomsList = feed?.liveRooms ?? LIVE_MINI_ROOMS;
+  const rafflesList = [...customRaffles, ...(feed?.raffles ?? RAFFLES_CATALOG)];
+
+  const filterByCat = (list: typeof RAFFLES_CATALOG) =>
+    selectedCategory === 'all'
+      ? list
+      : list.filter((r) => r.category === selectedCategory);
+
+  const closingSoonRaffles = filterByCat(
+    rafflesList.filter((r) => r.stage === 'closing_soon')
+  );
+  const upcomingRaffles = filterByCat(
+    rafflesList.filter((r) => r.stage === 'upcoming')
+  );
+
+  return (
+    <div
+      className="app-shell"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* BARRA SUPERIOR NEGRA DE LUJO */}
+      <header className="app-topbar">
+        <div
+          className="brand-cluster"
+          onClick={manualRefresh}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') manualRefresh();
+          }}
+          style={{ cursor: 'pointer' }}
+          title="Volver al inicio y actualizar"
+        >
+          <div>
+            <span className="brand-title">EL GANADOR</span>
+            <small className="brand-subtitle">Marketplace de Sorteos</small>
+          </div>
+        </div>
+
+        <div className="topbar-actions">
+          <button
+            type="button"
+            className="sync-status-pill desktop-only-sync"
+            onClick={manualRefresh}
+            title="Actualizar sorteos y volver al inicio"
+          >
+            <span className="sync-dot-live" />
+            <span className={isRefreshing ? 'sync-spinner' : ''}>🔄</span>
+            <span>Actualizado {lastSync || 'ahora'}</span>
+          </button>
+          <Link className="live-pill-light" href="/sorteo-en-vivo">
+            <span className="pulse-dot" /> En Vivo
+          </Link>
+
+          {/* BOTÓN RÁPIDO DE CAMBIO DE TEMA NATIVO 🌙 / ☀️ */}
+          <button
+            type="button"
+            className="notif-bell-btn theme-toggle-btn"
+            onClick={toggleTheme}
+            title={`Cambiar a modo ${theme === 'dark' ? 'claro' : 'oscuro'}`}
+            aria-label="Cambiar tema de la app"
+          >
+            <span>{theme === 'dark' ? '☀️' : '🌙'}</span>
+          </button>
+
+          {/* CAMPANA DE NOTIFICACIONES ESTILO FACEBOOK CON BADGE ROJO 🔔 */}
+          <div className="notif-bell-container" style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="notif-bell-btn"
+              onClick={() => setShowNotifDropdown((prev) => !prev)}
+              title="Premios Ganados y Notificaciones"
+              aria-label="Campana de notificaciones"
+            >
+              <span>🔔</span>
+              {wonPrizes.length > 0 && (
+                <span className="notif-badge-count">{wonPrizes.length}</span>
+              )}
+            </button>
+
+            {/* BANDEJA FLOTANTE ESTILO FACEBOOK */}
+            {showNotifDropdown && (
+              <div className="notif-fb-dropdown" role="dialog" aria-label="Bandeja de Premios Ganados">
+                <div className="notif-fb-header">
+                  <h3>🔔 Premios Ganados</h3>
+                  <button
+                    type="button"
+                    className="notif-fb-close-btn"
+                    onClick={() => setShowNotifDropdown(false)}
+                    aria-label="Cerrar notificaciones"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {wonPrizes.length === 0 ? (
+                  <div className="notif-empty-state">
+                    <span style={{ fontSize: '2rem', display: 'block', marginBottom: '6px' }}>🎟️</span>
+                    <p style={{ margin: '0 0 4px', fontWeight: 700 }}>No tienes notificaciones pendientes</p>
+                    <small style={{ color: 'var(--text-secondary)' }}>
+                      ¡Tus boletas premiadas aparecerán aquí automáticamente en tiempo real!
+                    </small>
+                  </div>
+                ) : (
+                  <div className="notif-fb-list">
+                    {wonPrizes.map((prize) => (
+                      <div key={prize.id} className="notif-fb-item">
+                        <div className="notif-fb-icon">🏆</div>
+                        <div className="notif-fb-body">
+                          <strong className="notif-fb-title">{prize.title}</strong>
+                          <span className="notif-fb-meta">
+                            Boleta premiada: <strong>#{prize.winnerNumber}</strong> · {prize.merchant}
+                          </span>
+                          <span className="notif-fb-meta" style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
+                            {prize.date}
+                          </span>
+                          <span
+                            className={`notif-fb-status-pill ${
+                              prize.status === 'Reclamado' ? 'claimed' : ''
+                            }`}
+                          >
+                            {prize.status}
+                          </span>
+                          <Link
+                            href="/mis-boletas"
+                            className="notif-claim-btn"
+                            onClick={() => setShowNotifDropdown(false)}
+                          >
+                            Ver Certificado y Reclamar →
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+        </div>
+      </header>
+
+      {/* INDICADOR TÁCTIL PULL-TO-REFRESH DORADO / ESMERALDA */}
+      <div
+        className={`ptr-indicator-bar ${isRefreshing || pullDistance > 8 ? 'is-visible' : ''}`}
+        style={{
+          height: isRefreshing ? '46px' : `${Math.round(pullDistance)}px`,
+        }}
+        aria-live="polite"
+      >
+        <div className="ptr-pill-badge">
+          <span className={`ptr-spinner-icon ${isRefreshing || pullDistance >= 50 ? 'is-spinning' : ''}`}>
+            ↻
+          </span>
+          <span>
+            {isRefreshing
+              ? 'Actualizando sorteos en tiempo real...'
+              : pullDistance >= 50
+              ? 'Suelta para actualizar el feed'
+              : 'Desliza hacia abajo para actualizar'}
+          </span>
+        </div>
+      </div>
+
+      <div className="desktop-workspace-grid">
+        <DesktopSidebar />
+        <main className="app-scroll-canvas">
+          {/* HISTORIAS INTERACTIVAS DE COMERCIOS ALIADOS */}
+          <section id="estacion-historias" className="stories-section-white" aria-label="Historias de comercios">
+          <DesktopScrollStrip ariaLabel="Historias de tiendas">
+            {activeStoriesList.map((story, idx) => (
+              <button
+                key={story.id}
+                type="button"
+                onClick={() => {
+                  setActiveStory(story);
+                  setActiveStoryIndex(idx);
+                }}
+                className="story-bubble-btn"
+              >
+                <div className="story-gradient-ring">
+                  <img src={story.avatar} alt={story.merchant} />
+                  <span className="story-badge-icon">{story.icon}</span>
+                </div>
+                <span className="story-name-dark">{story.shortName}</span>
+              </button>
+            ))}
+          </DesktopScrollStrip>
+        </section>
+
+        {/* ESTACIÓN 2 (NUEVA UBICACIÓN): 📢 CARRUSEL PUBLICITARIO CONSTANTE DE PATROCINADORES (ROTATIVO CADA 4S) */}
+        <section
+          id="estacion-patrocinadores"
+          className="official-ad-showcase vibrant-sponsor-banner"
+          aria-label="Carrusel Publicitario de Patrocinadores"
+          style={{
+            ['--ad-vibrant-bg' as string]: currentAdTheme.bg,
+            ['--ad-vibrant-border' as string]: currentAdTheme.border,
+            ['--ad-vibrant-shadow' as string]: currentAdTheme.shadow,
+            background: currentAdTheme.bg,
+            borderColor: currentAdTheme.border,
+            boxShadow: currentAdTheme.shadow,
+            transition: 'background 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease',
+          } as React.CSSProperties}
+          onMouseEnter={() => setIsAdPaused(true)}
+          onMouseLeave={() => setIsAdPaused(false)}
+          onTouchStart={() => setIsAdPaused(true)}
+          onTouchEnd={() => setIsAdPaused(false)}
+        >
+          <div className="carousel-ad-wrapper">
+            <div className="official-ad-content">
+              <div className="official-ad-text">
+                <div className="ad-pill-and-counter">
+                  <span
+                    className="official-ad-pill"
+                    style={{
+                      background: currentAdTheme.tagBg,
+                      border: `1px solid ${currentAdTheme.tagBorder}`,
+                      color: '#ffffff',
+                    }}
+                  >
+                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].tag}
+                  </span>
+                </div>
+                <h3>{SPONSOR_CAROUSEL_ADS[currentAdIndex].title}</h3>
+                <p>{SPONSOR_CAROUSEL_ADS[currentAdIndex].description}</p>
+                <div className="official-ad-actions">
+                  <Link
+                    className="btn-ad-emerald"
+                    href={SPONSOR_CAROUSEL_ADS[currentAdIndex].ctaLink}
+                    style={{
+                      background: currentAdTheme.btnBg,
+                      color: currentAdTheme.btnText,
+                      fontWeight: 800,
+                    }}
+                  >
+                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].ctaText}
+                  </Link>
+                  <span
+                    className="ad-coupon-tag"
+                    style={{
+                      background: currentAdTheme.couponBg,
+                      color: currentAdTheme.couponColor,
+                      border: '1px dashed rgba(255, 255, 255, 0.6)',
+                    }}
+                  >
+                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].coupon}
+                  </span>
+                  <span className="ad-badge-highlight" style={{ fontSize: '0.76rem', fontWeight: 700, color: '#f5b82e' }}>
+                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].badge}
+                  </span>
+                </div>
+              </div>
+              <div className="official-ad-media">
+                <img
+                  key={SPONSOR_CAROUSEL_ADS[currentAdIndex].id}
+                  src={SPONSOR_CAROUSEL_ADS[currentAdIndex].image}
+                  alt={SPONSOR_CAROUSEL_ADS[currentAdIndex].brand}
+                />
+              </div>
+            </div>
+
+            {/* BARRA DE CONTROLES E INDICADORES DE PAGINACIÓN */}
+            <div className="ad-carousel-controls">
+              <button
+                type="button"
+                onClick={() => setCurrentAdIndex((prev) => (prev - 1 + SPONSOR_CAROUSEL_ADS.length) % SPONSOR_CAROUSEL_ADS.length)}
+                className="ad-nav-arrow"
+                aria-label="Patrocinador anterior"
+                title="Patrocinador anterior"
+              >
+                ‹
+              </button>
+
+              <div className="ad-dots-row">
+                {SPONSOR_CAROUSEL_ADS.map((ad, idx) => (
+                  <button
+                    key={ad.id}
+                    type="button"
+                    onClick={() => setCurrentAdIndex(idx)}
+                    className="ad-dot-btn"
+                    style={{
+                      width: currentAdIndex === idx ? '24px' : '8px',
+                      background: currentAdIndex === idx ? '#f5b82e' : 'rgba(255, 255, 255, 0.28)',
+                    }}
+                    aria-label={`Ver patrocinador ${idx + 1}: ${ad.brand}`}
+                    title={ad.brand}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setCurrentAdIndex((prev) => (prev + 1) % SPONSOR_CAROUSEL_ADS.length)}
+                className="ad-nav-arrow"
+                aria-label="Siguiente patrocinador"
+                title="Siguiente patrocinador"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </section>
+
+
+
+        {/* FILTRO COMPACTO DE CATEGORÍAS */}
+        <div className="categories-bar-surface">
+          <DesktopScrollStrip ariaLabel="Categorías">
+            {[
+              { id: 'all', label: '✨ Todos' },
+              { id: 'motos', label: '🏍️ Motos & 4x4' },
+              { id: 'vehiculos', label: '🚙 Vehículos & Camionetas' },
+              { id: 'joyas', label: '💎 Joyas & Relojería' },
+              { id: 'tech', label: '⚡ Tecnología & Celulares' },
+              { id: 'gaming', label: '🎮 Gaming & Consolas' },
+              { id: 'moda', label: '👠 Moda & Calzado VIP' },
+              { id: 'viajes', label: '✈️ Viajes & Turismo' },
+              { id: 'hogar', label: '🏠 Hogar & Electrodomésticos' },
+              { id: 'optica', label: '🕶️ Salud Visual & Moda' },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`chip-btn ${selectedCategory === cat.id ? 'chip-active' : ''}`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </DesktopScrollStrip>
+        </div>
+
+        {/* SECCIÓN 1: MINI RECUADROS COMPACTOS DE 🔴 SORTEOS EN VIVO */}
+        <section id="estacion-en-vivo" className="station-block-premium station-live" aria-label="Sorteos en vivo">
+          <div className="compact-section-title">
+            <h2>🔴 Sorteos en Vivo</h2>
+            <Link className="see-all-link" href="/sorteo-en-vivo">Ver todos →</Link>
+          </div>
+
+                    <DesktopScrollStrip ariaLabel="Salas en vivo">
+            {liveRoomsList.map((room) => (
+              <Link className="mini-live-card live-dark-luxury" href="/sorteo-en-vivo" key={room.id}>
+                <div className="mini-live-visual">
+                  <img src={room.image || '/galeria-premios-el-ganador-realista.jpg'} alt={room.title} loading="lazy" />
+                  <div className="mini-live-overlay-badges">
+                    <span className="mini-live-dot">● EN VIVO</span>
+                    <span className="mini-live-viewers-tag">{room.viewers}</span>
+                  </div>
+                </div>
+                <div className="mini-live-body">
+                  <strong className="mini-live-title">{room.title}</strong>
+                  <span className="mini-live-merchant">🏪 {room.merchant}</span>
+                  <span className="mini-live-mode">🎱 {room.mode} · <span className="enter-live-link">Entrar →</span></span>
+                </div>
+              </Link>
+            ))}
+          </DesktopScrollStrip>
+        </section>
+
+        {/* SECCIÓN 2: RECUADROS COMPACTOS ⏳ A POCAS HORAS DE JUGAR */}
+        <section id="estacion-urgentes" className="station-block-premium station-urgent" aria-label="Sorteos a pocas horas de jugar">
+          <div className="compact-section-title">
+            <h2>⏳ Sorteos a pocas horas de jugar</h2>
+          </div>
+
+          <DesktopScrollStrip ariaLabel="Cierre próximo">
+            {closingSoonRaffles.map((item) => (
+              <article key={item.id} className="compact-raffle-card card-type-urgent">
+                <div
+                  className="compact-raffle-media"
+                  onClick={() => handleOpenTicketModal(item)}
+                  style={{ cursor: 'pointer' }}
+                  title="Apartar boleta y elegir número"
+                >
+                  <img src={item.image} alt={item.title} loading="lazy" />
+                  <span className="urgent-time-badge">{item.timeLabel}</span>
+                  <span className="compact-price-tag">{item.priceCop}</span>
+                </div>
+
+                <div className="compact-raffle-body">
+                  <small className="compact-merchant">🏪 {item.merchant}</small>
+                  <h3
+                    onClick={() => handleOpenTicketModal(item)}
+                    style={{ cursor: 'pointer' }}
+                    title="Apartar boleta y elegir número"
+                  >
+                    {item.title}
+                  </h3>
+
+                  {(() => {
+                    const grid = item.ballotGrid || 100;
+                    const soldCount = Math.round((grid * item.soldPercent) / 100);
+                    const remainingCount = Math.max(0, grid - soldCount);
+                    return (
+                      <div className="progress-container">
+                        <div className="progress-labels">
+                          <span>🎟️ <strong>{soldCount}</strong> de {grid} balotas</span>
+                          <strong>{item.soldPercent}% ({remainingCount} disp.)</strong>
+                        </div>
+                        <div className="progress-track">
+                          <div className={`progress-fill ${getProgressStatusClass(item.soldPercent)}`} style={{ width: `${item.soldPercent}%` }} />
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  <div className="compact-card-actions-row">
+                    <button
+                      type="button"
+                      className="btn-compact-action"
+                      onClick={() => handleOpenTicketModal(item)}
+                    >
+                      Apartar Boleta →
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-share-card-compact"
+                      onClick={() => handleShareRaffle(item)}
+                      title="Compartir enlace de este sorteo"
+                    >
+                      📤 Compartir
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </DesktopScrollStrip>
+        </section>
+
+        {/* SECCIÓN 3: RECUADROS COMPACTOS 🎟️ PRÓXIMOS SORTEOS */}
+        <section id="estacion-proximos" className="station-block-premium station-upcoming" aria-label="Próximos sorteos">
+          <div className="compact-section-title">
+            <h2>🎟️ Próximos Sorteos</h2>
+          </div>
+
+          <DesktopScrollStrip ariaLabel="Próximos sorteos">
+            {upcomingRaffles.map((item) => (
+              <article key={item.id} className={`compact-raffle-card card-type-upcoming card-cat-${item.category}`}>
+                <div
+                  className="compact-raffle-media"
+                  onClick={() => handleOpenTicketModal(item)}
+                  style={{ cursor: 'pointer' }}
+                  title="Elegir número y comprar boleta"
+                >
+                  <img src={item.image} alt={item.title} loading="lazy" />
+                  <span className="compact-date-badge">{item.timeLabel}</span>
+                  <span className="compact-price-tag">{item.priceCop}</span>
+                </div>
+
+                <div className="compact-raffle-body">
+                  <small className="compact-merchant">🏪 {item.merchant}</small>
+                  <h3
+                    onClick={() => handleOpenTicketModal(item)}
+                    style={{ cursor: 'pointer' }}
+                    title="Elegir número y comprar boleta"
+                  >
+                    {item.title}
+                  </h3>
+
+                  {(() => {
+                    const grid = item.ballotGrid || 100;
+                    const soldCount = Math.round((grid * item.soldPercent) / 100);
+                    const remainingCount = Math.max(0, grid - soldCount);
+                    return (
+                      <div className="progress-container">
+                        <div className="progress-labels">
+                          <span>🎟️ <strong>{soldCount}</strong> de {grid} balotas</span>
+                          <strong>{item.soldPercent}% ({remainingCount} disp.)</strong>
+                        </div>
+                        <div className="progress-track">
+                          <div className={`progress-fill ${getProgressStatusClass(item.soldPercent)}`} style={{ width: `${item.soldPercent}%` }} />
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  <div className="compact-card-actions-row">
+                    <button
+                      type="button"
+                      className="btn-compact-action"
+                      onClick={() => handleOpenTicketModal(item)}
+                    >
+                      Elegir Número →
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-share-card-compact"
+                      onClick={() => handleShareRaffle(item)}
+                      title="Compartir enlace de este sorteo"
+                    >
+                      📤 Compartir
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </DesktopScrollStrip>
+        </section>
+
+        
+
+        {/* ESTACIÓN: 📢 VITRINA COMERCIAL, PAUTA PUBLICITARIA Y MARCAS ALIADAS */}
+        <section id="estacion-comercial" className="station-block-premium station-showcase-commercial" aria-label="Vitrina Comercial y Marcas Aliadas">
+          {/* Cabecera Vendedora con CTA visible sin hacer scroll */}
+          <div className="commercial-showcase-header">
+            <div>
+              <div className="commercial-eyebrow-row">
+                <span className="commercial-live-pill">📢 VITRINA COMERCIAL ABIERTA</span>
+                <span className="commercial-audience-stat">👁️ +50.000 compradores/mes</span>
+              </div>
+              <h2>Marcas Aliadas & Pauta Comercial</h2>
+              <p className="station-subtitle">
+                Empresas, concesionarios y marcas que pautan sus productos y beneficios exclusivos en El Ganador
+              </p>
+            </div>
+
+            <Link className="btn-pautar-header" href="/publicidad">
+              📢 Publicidad y Marketing →
+            </Link>
+          </div>
+
+          <DesktopScrollStrip ariaLabel="Vitrina Comercial y Marcas">
+            {/* 1. PRIMERA TARJETA: MARCA PAUTANTE DESTACADA */}
+            <article className="promo-brand-card tier-sponsor">
+              <div className="promo-brand-media">
+                <img src="/galeria-premios-hogar-moda-viajes-portrait.jpg" alt="TechStore Colombia" loading="lazy" />
+                <div className="promo-media-gradient" />
+                <span className="promo-top-badge gold">⚡ PATROCINADOR SALA 3D</span>
+                <span className="promo-offer-ribbon">🎁 15% OFF Cupón: ELGANADOR</span>
+              </div>
+
+              <div className="promo-brand-body">
+                <div className="promo-brand-identity">
+                  <span className="promo-avatar-icon">⚡</span>
+                  <div>
+                    <strong>TechStore Colombia</strong>
+                    <small>Tecnología & Gadgets · Bogotá</small>
+                  </div>
+                </div>
+
+                <p className="promo-brand-copy">
+                  Distribuidor tecnológico verificado. Beneficios y descuentos exclusivos en tienda para toda la comunidad de El Ganador.
+                </p>
+
+                <div className="promo-brand-footer">
+                  <span className="promo-metric">⭐ 4.9 · Marca Verificada</span>
+                  <Link className="promo-visit-btn" href="/novedades">
+                    Ver Vitrina ↗
+                  </Link>
+                </div>
+              </div>
+            </article>
+
+            {/* 2. SEGUNDA TARJETA (VISIBLE DE INMEDIATO): INVITACIÓN A PAUTAR */}
+            <article className="promo-brand-card tier-advertise-cta">
+              <div className="promo-cta-visual-top">
+                <span className="promo-top-badge dark-gold">🚀 ESPACIO PUBLICITARIO DISPONIBLE</span>
+                <h3>¿Quieres que miles de clientes vean tu empresa aquí?</h3>
+                <p>
+                  <strong>No necesitas organizar rifas para pautar.</strong> Promociona tu tienda, concesionario, restaurante o marca en toda Colombia.
+                </p>
+              </div>
+
+              <div className="promo-brand-body">
+                <ul className="promo-benefits-list">
+                  <li>✓ Vitrina destacada con enlace directo a tus ofertas</li>
+                  <li>✓ Alcance segmentado +50.000 usuarios activos</li>
+                  <li>✓ Disponible para cualquier empresa o emprendimiento</li>
+                </ul>
+
+                <Link className="btn-cta-advertise-full" href="/publicidad">
+                  ✨ Publicitar mi Empresa Ahora →
+                </Link>
+              </div>
+            </article>
+
+            {/* 3. RESTO DE EMPRESAS PAUTANTES Y COMERCIOS ALIADOS */}
+            {[
+              {
+                name: 'AutoPremier Colombia 4x4',
+                badge: '🏢 PAUTA AUTOMOTRIZ',
+                badgeClass: 'emerald',
+                offer: '🚙 Financiación Inmediata & Peritaje',
+                type: 'Concesionario Automotriz · Cali',
+                description: 'Líderes en importación y venta de camionetas 4x4 2026 con envíos asegurados a nivel nacional.',
+                metric: '⚡ Pauta Oficial · Envíos Nacionales',
+                icon: '🚙',
+                image: '/galeria-premios-el-ganador-realista.jpg',
+              },
+              {
+                name: 'Motos Caribe Oficial',
+                badge: '🏆 LOCAL OFICIAL',
+                badgeClass: 'emerald',
+                offer: '🏍️ Motos 0 km + Matrícula Gratis',
+                type: 'Concesionario Motos · Barranquilla',
+                description: 'Concesionario oficial con entrega inmediata. Sorteos activos y vitrina comercial de modelos 2026.',
+                metric: '⭐ 4.9 · 8.920 seguidores',
+                icon: '🏍️',
+                image: '/galeria-premios-el-ganador-realista.jpg',
+              },
+              {
+                name: 'Joyas & Diamantes ABC',
+                badge: '🏆 LOCAL OFICIAL',
+                badgeClass: 'gold',
+                offer: '💎 Oro 18K Certificado ante Notario',
+                type: 'Alta Joyería & Relojes · Cartagena',
+                description: 'Joyas de oro 18K y cronógrafos suizos garantizados. Vitrina exclusiva y sorteos certificados.',
+                metric: '⭐ 5.0 · 5.310 seguidores',
+                icon: '💎',
+                image: '/reloj-alta-gama.jpg',
+              },
+              {
+                name: 'Boutique & Calzado Elegance',
+                badge: '✨ PAUTA MODA VIP',
+                badgeClass: 'purple',
+                offer: '👠 Colección Gala & Diseñador',
+                type: 'Moda & Calzado Fino · Medellín',
+                description: 'Pauta comercial dirigida a clientes VIP. Calzado de diseñador y vestidos exclusivos con envío nacional.',
+                metric: '✨ Marca Invitada en Vitrina',
+                icon: '👠',
+                image: '/zapatos-sandalias-dama.jpg',
+              },
+              {
+                name: 'Óptica Visión VIP',
+                badge: '✨ PAUTA SALUD VISUAL',
+                badgeClass: 'emerald',
+                offer: '🕶️ Envío Gratis a toda Colombia',
+                type: 'Salud Visual & Moda · Bucaramanga',
+                description: 'Gafas de sol polarizadas y monturas de alta gama con despacho directo para la comunidad.',
+                metric: '✨ Comercio Pautante',
+                icon: '🕶️',
+                image: '/gafas-dama-hombre.jpg',
+              },
+            ].map((brand) => (
+              <article key={brand.name} className="promo-brand-card">
+                <div className="promo-brand-media">
+                  <img src={brand.image} alt={brand.name} loading="lazy" />
+                  <div className="promo-media-gradient" />
+                  <span className={`promo-top-badge ${brand.badgeClass}`}>{brand.badge}</span>
+                  <span className="promo-offer-ribbon">{brand.offer}</span>
+                </div>
+
+                <div className="promo-brand-body">
+                  <div className="promo-brand-identity">
+                    <span className="promo-avatar-icon">{brand.icon}</span>
+                    <div>
+                      <strong>{brand.name}</strong>
+                      <small>{brand.type}</small>
+                    </div>
+                  </div>
+
+                  <p className="promo-brand-copy">{brand.description}</p>
+
+                  <div className="promo-brand-footer">
+                    <span className="promo-metric">{brand.metric}</span>
+                    <Link className="promo-visit-btn" href="/novedades">
+                      Explorar ↗
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </DesktopScrollStrip>
+        </section>
+
+        {/* PIE DE PÁGINA LEGAL BLANCO IMPECABLE */}
+        <footer className="marketplace-legal-footer">
+          <strong>EL GANADOR · Colombia (+18)</strong>
+          <p>
+            Sorteos promocionales operados conforme a la Ley 643 de 2001 y Decreto 1486 de 2024.
+            Apple Inc. y Google LLC no son patrocinadores ni tienen relación alguna con los sorteos o premios publicados en esta aplicación.
+          </p>
+        </footer>
+      </main>
+      </div>
+
+      {/* TAB BAR INFERIOR NATIVA ESTILO IPHONE CON ICONOS VECTORIALES APPLE */}
+      <NativeBottomTabBar currentTab="explorar" onExploreClick={manualRefresh} />
+
+      {/* NOTIFICACIÓN FLOTANTE DE ENLACE COPIADO / COMPARTIDO */}
+      {sharedToast && (
+        <div className="shared-toast-notice" role="status" aria-live="polite">
+          <span>✅ {sharedToast}</span>
+        </div>
+      )}
+
+
+      {/* MODAL DE COMPRA DE BOLETAS Y PASARELA WOMPI COLOMBIA */}
+      {ticketModalRaffle && (() => {
+        const grid = ticketModalRaffle.ballotGrid || 100;
+        const pad = grid <= 100 ? 2 : grid <= 999 ? 3 : 4;
+        const formatNum = (n: number) => String(n).padStart(pad, '0');
+        const unitPrice = parseInt(ticketModalRaffle.priceCop.replace(/[^0-9]/g, ''), 10) || 35000;
+        const totalAmount = unitPrice * assignedNumbers.length;
+        const soldList = modalSoldNumbers.filter((n) => n <= grid);
+        const soldCount = soldList.length;
+        const availableCount = Math.max(0, grid - soldCount);
+
+        return (
+          <div
+            className="checkout-modal-backdrop"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Comprar Boletas con Wompi Colombia"
+            onClick={() => {
+              if (!isProcessingWompi) setTicketModalRaffle(null);
+            }}
+          >
+            <div
+              className="checkout-modal-card"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Encabezado */}
+              <div className="checkout-modal-header">
+                <div>
+                  <span className="checkout-legal-pill">
+                    🎟️ COMPRA OFICIAL NOTARIADA · LEY 643 DE 2001
+                  </span>
+                  <h2 className="checkout-raffle-title">{ticketModalRaffle.title}</h2>
+                  <div className="checkout-merchant-row">
+                    <span>🏪 {ticketModalRaffle.merchant}</span>
+                    <span>📍 {ticketModalRaffle.city}</span>
+                    <span className="checkout-live-pill">🔴 Sorteo en Vivo 3D</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="checkout-close-btn"
+                  onClick={() => setTicketModalRaffle(null)}
+                  title="Cerrar modal"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {purchaseSuccessData ? (
+                <div style={{ textAlign: 'center', padding: '24px 16px' }}>
+                  <div style={{ fontSize: '3.5rem', marginBottom: '8px' }}>🎉</div>
+                  <h3 style={{ color: '#007AFF', margin: '0 0 6px', fontSize: '1.4rem', fontWeight: 800 }}>¡Pago Exitoso con Wompi!</h3>
+                  <p style={{ fontSize: '0.95rem', color: '#cbd5e1', margin: '0 0 18px' }}>
+                    Tus boletas han sido emitidas y selladas con certificado notarial SHA-256.
+                  </p>
+
+                  <div style={{ background: 'rgba(0, 122, 255, 0.08)', padding: '16px', borderRadius: '14px', border: '1px solid rgba(0, 122, 255, 0.25)', marginBottom: '18px' }}>
+                    <div style={{ color: '#007AFF', fontWeight: 800, fontSize: '1.1rem', marginBottom: '8px' }}>
+                      Boleta {purchaseSuccessData.ticketId}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', margin: '10px 0' }}>
+                      {purchaseSuccessData.numbers.map((n) => (
+                        <span key={n} className="checkout-number-badge blue" style={{ fontSize: '1rem', padding: '6px 14px' }}>
+                          #{n}
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ fontSize: '0.78rem', color: '#94a3b8', wordBreak: 'break-all', marginTop: '8px' }}>
+                      Sello Notarial SHA-256: <code>{purchaseSuccessData.hash.slice(0, 32)}...</code>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <Link
+                      href={`/sorteo-en-vivo?viewer=true&ticket=${purchaseSuccessData.numbers[0] || ''}`}
+                      className="checkout-pay-btn"
+                      style={{ textDecoration: 'none', display: 'inline-block', width: 'auto', padding: '12px 22px' }}
+                      onClick={() => setTicketModalRaffle(null)}
+                    >
+                      🔴 Entrar a la Sala 3D en Vivo
+                    </Link>
+                    <Link
+                      href="/mis-boletas"
+                      className="media-native-btn"
+                      style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', padding: '12px 18px' }}
+                      onClick={() => setTicketModalRaffle(null)}
+                    >
+                      🎫 Ver en Mis Boletas
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handlePayWithWompi}>
+                  {/* Resumen del Artículo / Premio */}
+                  <div className="checkout-prize-summary">
+                    {ticketModalRaffle.image && (
+                      <img
+                        src={ticketModalRaffle.image}
+                        alt={ticketModalRaffle.title}
+                        className="checkout-prize-img"
+                      />
+                    )}
+                    <div className="checkout-prize-info">
+                      <p className="checkout-prize-desc">
+                        {ticketModalRaffle.description ||
+                          'Sorteo oficial respaldado ante notario público con entrega inmediata y transmisión 3D en vivo con balotera física.'}
+                      </p>
+                      <div className="checkout-metrics-grid">
+                        <div className="checkout-metric-box">
+                          <small>Precio por boleta</small>
+                          <strong style={{ color: '#38bdf8' }}>{ticketModalRaffle.priceCop} COP</strong>
+                        </div>
+                        <div className="checkout-metric-box">
+                          <small>Total de Balotas</small>
+                          <strong>{grid} Balotas ({formatNum(1)} al {formatNum(grid)})</strong>
+                        </div>
+                        <div className="checkout-metric-box" style={{ borderLeft: '3px solid #22c55e' }}>
+                          <small style={{ color: '#4ade80' }}>Balotas Disponibles</small>
+                          <strong style={{ color: '#4ade80' }}>🟢 {availableCount} Disponibles</strong>
+                        </div>
+                        <div className="checkout-metric-box" style={{ borderLeft: '3px solid #ef4444' }}>
+                          <small style={{ color: '#f87171' }}>Balotas ya Vendidas</small>
+                          <strong style={{ color: '#f87171' }}>🔴 {soldCount} Vendidas</strong>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Selector Rápido y Cartón de Balotas */}
+                  <div className="checkout-carton-section">
+                    <div className="checkout-carton-topbar">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#e2e8f0' }}>
+                          Cantidad de Boletas:
+                        </span>
+                        <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#38bdf8' }}>
+                          $ {totalAmount.toLocaleString('es-CO')} COP
+                        </strong>
+                      </div>
+                      <div className="checkout-qty-pills">
+                        {[1, 2, 5, 10].map((qty) => (
+                          <button
+                            key={qty}
+                            type="button"
+                            className={`checkout-qty-pill ${assignedNumbers.length === qty ? 'active' : ''}`}
+                            onClick={() => handleTicketCountChange(qty)}
+                          >
+                            {qty} {qty === 1 ? 'boleta' : 'boletas'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div style={{ margin: '8px 0 10px' }}>
+                      <span style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block', marginBottom: '5px' }}>
+                        Números asignados ({assignedNumbers.length}):
+                      </span>
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {assignedNumbers.map((num) => (
+                          <span key={num} className="checkout-number-badge" style={{ borderColor: '#d4af37', color: '#ffd700', background: 'rgba(212, 175, 55, 0.12)' }}>
+                            #{num}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Desglose visual de balotas ya vendidas y disponibles */}
+                    <div className="checkout-sold-breakdown">
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ color: '#f87171', fontWeight: 800 }}>
+                          🔴 Balotas ya vendidas ({soldCount}):
+                        </span>
+                        <span style={{ color: '#4ade80', fontWeight: 800 }}>
+                          🟢 {availableCount} Disponibles
+                        </span>
+                      </div>
+                      <div className="checkout-sold-chips">
+                        {soldList.map((num) => (
+                          <span key={num} className="checkout-sold-chip" title="Balota ya vendida e inhabilitada">
+                            #{formatNum(num)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Leyenda y Cartón de Balotas Disponibles (01 al Total) */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', marginBottom: '6px' }}>
+                      <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1' }}>
+                        Cartón Digital ({formatNum(1)} al {formatNum(grid)}):
+                      </span>
+                      <div style={{ display: 'flex', gap: '10px', fontSize: '0.74rem', color: '#94a3b8' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <span style={{ width: '8px', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px' }}></span> Disp.
+                        </span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <span style={{ width: '8px', height: '8px', background: '#007AFF', borderRadius: '2px' }}></span> Elegido
+                        </span>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <span style={{ width: '8px', height: '8px', background: '#ef4444', borderRadius: '2px' }}></span> Vendido
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Cuadrícula interactiva del Cartón Digital */}
+                    <div className="checkout-carton-grid">
+                      {Array.from({ length: grid }, (_, i) => {
+                        const numInt = i + 1;
+                        const numStr = formatNum(numInt);
+                        const isSold = modalSoldNumbers.includes(numInt);
+                        const isSelected = assignedNumbers.includes(numStr);
+
+                        return (
+                          <button
+                            key={numStr}
+                            type="button"
+                            disabled={isSold}
+                            onClick={() => handleToggleBallotNumber(numStr)}
+                            className={`checkout-carton-cell ${isSelected ? 'selected' : ''}`}
+                            style={isSold ? {
+                              background: 'rgba(255, 61, 0, 0.12)',
+                              borderColor: 'rgba(255, 61, 0, 0.35)',
+                              color: '#ff6e40',
+                              textDecoration: 'line-through',
+                              cursor: 'not-allowed'
+                            } : undefined}
+                            title={isSold ? `Número #${numStr} ya vendido` : `Seleccionar número #${numStr}`}
+                          >
+                            {numStr}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Vista previa de números seleccionados */}
+                    <div className="checkout-ballots-preview">
+                      <span style={{ fontSize: '0.84rem', fontWeight: 700 }}>
+                        Tus números seleccionados ({assignedNumbers.length}):
+                      </span>
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {assignedNumbers.map((num) => (
+                          <span key={num} className="checkout-number-badge blue">
+                            #{num}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Cuenta Activa de Cliente (Sin repetir datos del comprador) */}
+                  <div className="checkout-active-client-box">
+                    <div className="checkout-active-client-header">
+                      <div className="checkout-client-badge">
+                        <span className="checkout-status-dot"></span>
+                        <span>Cuenta de Cliente Activa</span>
+                      </div>
+                      <span className="checkout-badge-verified">✓ Sesión Iniciada</span>
+                    </div>
+
+                    <div className="checkout-active-client-row">
+                      <div className="checkout-client-avatar">
+                        👤
+                      </div>
+                      <div className="checkout-client-meta">
+                        <strong>{buyerName || 'Carlos Martínez'}</strong>
+                        <p>{buyerEmail || 'carlos@elganador.co'} · {buyerPhone || '+57 300 123 4567'}</p>
+                        <span className="checkout-auto-attach-text">
+                          🔒 Compra vinculada a tu cuenta · La boleta y el certificado notarial SHA-256 se guardarán automáticamente en tu sección <strong>Mis Boletas</strong>.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pasarela PSE Activa (Pagos Seguros en Línea) */}
+                  <div className="checkout-pse-container">
+                    <div className="checkout-pse-header">
+                      <div className="checkout-pse-badge">
+                        <span className="checkout-pse-icon">⚡</span>
+                        <div>
+                          <strong>Pasarela PSE Activa (Pagos Seguros en Línea)</strong>
+                          <p>Bancolombia, Nequi, Daviplata, BBVA, Banco de Bogotá y todos los bancos</p>
+                        </div>
+                      </div>
+                      <span className="checkout-pse-instant">Débito Inmediato</span>
+                    </div>
+                  </div>
+
+                  {/* Botón de Pago Principal con PSE */}
+                  <button
+                    type="submit"
+                    disabled={isProcessingWompi || assignedNumbers.length === 0}
+                    className="checkout-pay-btn pse"
+                  >
+                    {isProcessingWompi
+                      ? '⏳ Conectando con PSE Colombia...'
+                      : `⚡ Pagar $ ${totalAmount.toLocaleString('es-CO')} COP con PSE`}
+                  </button>
+
+                  <div style={{ textAlign: 'center', marginTop: '12px' }}>
+                    <Link
+                      href={`/comprar?raffleId=${ticketModalRaffle.id}`}
+                      style={{
+                        color: '#007AFF',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}
+                      onClick={() => setTicketModalRaffle(null)}
+                    >
+                      ↗ Ver cartón completo en pantalla grande
+                    </Link>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* VISOR MODAL DE HISTORIAS MULTI-SEGMENTO ESTILO INSTAGRAM */}
+      {activeStoryIndex !== null && (
+        <StoryViewer
+          stories={activeStoriesList}
+          initialIndex={activeStoryIndex}
+          onClose={() => {
+            setActiveStoryIndex(null);
+            setActiveStory(null);
+          }}
+        />
+      )}
+
+      {/* =========================================================
+          MODAL DE COMPARTIR EN REDES SOCIALES Y ENLACE DIRECTO
+          ========================================================= */}
+      {shareModalItem && (
+        <div className="ticket-modal-backdrop" onClick={() => setShareModalItem(null)}>
+          <div
+            className="checkout-modal-card"
+            style={{ maxWidth: '480px' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="checkout-modal-header">
+              <div>
+                <span className="checkout-legal-pill">📢 COMPARTIR EN REDES SOCIALES</span>
+                <h2 style={{ fontSize: '1.25rem', marginTop: '6px' }}>{shareModalItem.title}</h2>
+                <p style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+                  🏪 {shareModalItem.merchant} · {shareModalItem.priceCop}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShareModalItem(null)}
+                className="checkout-modal-close-btn"
+                title="Cerrar modal"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ marginTop: '16px' }}>
+              <p style={{ fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '12px', lineHeight: '1.5' }}>
+                Comparte este sorteo directamente en tus redes o copia el enlace oficial:
+              </p>
+
+              {/* Botones de Redes Sociales */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px', marginBottom: '16px' }}>
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                    `¡Participa en este sorteo oficial de El Ganador! 🎟️ ${shareModalItem.title} (${shareModalItem.priceCop}) de ${shareModalItem.merchant}: ${typeof window !== 'undefined' ? window.location.origin : 'https://elganador.co'}/?sorteo=${shareModalItem.id}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    background: '#25D366',
+                    color: '#000',
+                    fontWeight: 800,
+                    fontSize: '0.88rem',
+                    textDecoration: 'none'
+                  }}
+                >
+                  <span>💬</span> WhatsApp
+                </a>
+
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                    `${typeof window !== 'undefined' ? window.location.origin : 'https://elganador.co'}/?sorteo=${shareModalItem.id}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    background: '#1877F2',
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: '0.88rem',
+                    textDecoration: 'none'
+                  }}
+                >
+                  <span>📘</span> Facebook
+                </a>
+
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                    `¡Sorteo activo en El Ganador! 🎟️ ${shareModalItem.title} (${shareModalItem.priceCop}): ${typeof window !== 'undefined' ? window.location.origin : 'https://elganador.co'}/?sorteo=${shareModalItem.id}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    background: '#000000',
+                    border: '1px solid #333',
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: '0.88rem',
+                    textDecoration: 'none'
+                  }}
+                >
+                  <span>𝕏</span> X (Twitter)
+                </a>
+
+                <a
+                  href={`https://t.me/share/url?url=${encodeURIComponent(
+                    `${typeof window !== 'undefined' ? window.location.origin : 'https://elganador.co'}/?sorteo=${shareModalItem.id}`
+                  )}&text=${encodeURIComponent(shareModalItem.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    background: '#0088cc',
+                    color: '#fff',
+                    fontWeight: 800,
+                    fontSize: '0.88rem',
+                    textDecoration: 'none'
+                  }}
+                >
+                  <span>✈️</span> Telegram
+                </a>
+              </div>
+
+              {/* Input con enlace directo y botón de copiar */}
+              <label style={{ fontSize: '0.8rem', fontWeight: 700, color: '#94a3b8', display: 'block', marginBottom: '6px' }}>
+                Enlace directo para publicar:
+              </label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input
+                  type="text"
+                  readOnly
+                  value={`${typeof window !== 'undefined' ? window.location.origin : 'https://elganador.co'}/?sorteo=${shareModalItem.id}`}
+                  style={{
+                    flex: 1,
+                    background: '#18181b',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    borderRadius: '8px',
+                    padding: '10px 12px',
+                    fontSize: '0.82rem',
+                    color: '#fff'
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const url = `${typeof window !== 'undefined' ? window.location.origin : 'https://elganador.co'}/?sorteo=${shareModalItem.id}`;
+                    navigator.clipboard?.writeText(url);
+                    setCopiedLink(true);
+                    setTimeout(() => setCopiedLink(false), 2000);
+                  }}
+                  style={{
+                    background: copiedLink ? '#007AFF' : 'linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%)',
+                    color: copiedLink ? '#fff' : '#000',
+                    fontWeight: 800,
+                    fontSize: '0.85rem',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0 18px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {copiedLink ? '¡Copiado! ✓' : 'Copiar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
