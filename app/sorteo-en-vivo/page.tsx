@@ -4458,15 +4458,15 @@ export default function LiveDrawDemoPage() {
         </button>
 
         {showHow && (
-          <div className="liveDemoHow">
-            <p>
-              1. <b>Compromiso:</b> Antes del sorteo, el sistema congela la lista de boletas del cartón seleccionado ({cartonSize} opciones) y publica su hash SHA-256 junto con el compromiso de la semilla secreta.
+          <div className="liveDemoHow" style={{ color: '#000000', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 24px' }}>
+            <p style={{ color: '#000000', margin: '0 0 10px 0', fontSize: '13.5px', lineHeight: 1.6 }}>
+              1. <b style={{ color: '#000000', fontWeight: 900 }}>Compromiso:</b> Antes del sorteo, el sistema congela la lista de boletas del cartón seleccionado ({cartonSize} opciones) y publica su hash SHA-256 junto con el compromiso de la semilla secreta.
             </p>
-            <p>
-              2. <b>Derivación:</b> Se ejecuta <code>HMAC-SHA256(semilla, listaHash ‖ sorteoId)</code>, extrayendo enteros de 64 bits con descarte de módulo para garantizar que ningún número tenga más probabilidad que otro.
+            <p style={{ color: '#000000', margin: '0 0 10px 0', fontSize: '13.5px', lineHeight: 1.6 }}>
+              2. <b style={{ color: '#000000', fontWeight: 900 }}>Derivación:</b> Se ejecuta <code style={{ color: '#000000', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', padding: '2px 6px', borderRadius: '6px', fontWeight: 700, fontFamily: 'monospace' }}>HMAC-SHA256(semilla, listaHash ‖ sorteoId)</code>, extrayendo enteros de 64 bits con descarte de módulo para garantizar que ningún número tenga más probabilidad que otro.
             </p>
-            <p>
-              3. <b>Revelación:</b> La animación de El Círculo Dorado o ruleta revela el ganador resultante. La constancia puede ser descargada y auditada externamente por cualquier persona o laboratorio.
+            <p style={{ color: '#000000', margin: 0, fontSize: '13.5px', lineHeight: 1.6 }}>
+              3. <b style={{ color: '#000000', fontWeight: 900 }}>Revelación:</b> La animación de El Círculo Dorado o ruleta revela el ganador resultante. La constancia puede ser descargada y auditada externamente por cualquier persona o laboratorio.
             </p>
           </div>
         )}

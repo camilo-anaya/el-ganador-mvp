@@ -1447,7 +1447,7 @@ export default function CompactWhiteMarketplacePage() {
                     );
                   })()}
 
-                  <div className="compact-card-actions-row">
+                  <div className="compact-card-actions-row" style={{ background: 'transparent', border: 'none', outline: 'none', boxShadow: 'none', padding: 0 }}>
                     <button
                       type="button"
                       className="btn-compact-action"
@@ -1554,7 +1554,7 @@ export default function CompactWhiteMarketplacePage() {
                     );
                   })()}
 
-                  <div className="compact-card-actions-row">
+                  <div className="compact-card-actions-row" style={{ background: 'transparent', border: 'none', outline: 'none', boxShadow: 'none', padding: 0 }}>
                     <button
                       type="button"
                       className="btn-compact-action"

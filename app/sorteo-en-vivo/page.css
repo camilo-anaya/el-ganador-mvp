@@ -1457,8 +1457,8 @@
 .liveDemoAuditItems b { color: #e8ecdf; font-size: 10.5px; }
 .liveDemoAuditItems small { color: #a9baad; font-size: 9.5px; line-height: 1.4; }
 .auditHowButton { display: flex; align-items: center; gap: 8px; margin: 14px auto 0; padding: 7px; border: 0; color: #e3cb7d; background: transparent; font-size: 10.5px; font-weight: 800; cursor: pointer; }
-.liveDemoHow { max-width: 840px; margin: 10px auto 0; padding: 14px 16px; border: 1px solid #ddbd5942; border-radius: 10px; color: #c0cfbf; background: #d5aa2610; font-size: 10.5px; line-height: 1.6; }
-.liveDemoHow p + p { margin-top: 8px; color: #e8d89c; }
+.liveDemoHow { max-width: 920px; margin: 16px auto 0; padding: 20px 24px; border: 1px solid #e2e8f0; border-radius: 18px; color: #000000; background: #f8fafc; font-size: 13.5px; line-height: 1.7; }
+.liveDemoHow p + p { margin-top: 10px; color: #000000; }
 .liveDemoFooter { max-width: 1180px; display: flex; justify-content: space-between; gap: 12px; margin: 24px auto 0; color: #879b8c; font-size: 9.5px; }
 .liveDemoFooter a { color: #e2cf87; font-weight: 900; letter-spacing: 1px; text-decoration: none; }
 
@@ -4601,21 +4601,45 @@
   transform: translateY(-1px) !important;
 }
 
+.liveDemoHow,
+.liveDemoHow p,
+.liveDemoHow p + p,
+.liveDemoHow b,
+.liveDemoHow strong,
+.liveDemoHow span {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
 .liveDemoHow {
   max-width: 920px !important;
   margin: 16px auto 0 !important;
   padding: 20px 24px !important;
   border: 1px solid #e2e8f0 !important;
   border-radius: 18px !important;
-  color: #000000 !important;
   background: #f8fafc !important;
   font-size: 13.5px !important;
   line-height: 1.7 !important;
 }
 
-.liveDemoHow b {
+.liveDemoHow b,
+.liveDemoHow strong {
   color: #000000 !important;
   font-weight: 900 !important;
+}
+
+.liveDemoHow code {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  padding: 2px 6px !important;
+  border-radius: 6px !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  font-size: 0.9em !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  font-weight: 700 !important;
 }
 
 .scientificPanel {

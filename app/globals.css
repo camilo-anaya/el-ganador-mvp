@@ -15020,11 +15020,20 @@ html[data-theme='dark'] .promo-visit-btn {
 }
 
 /* BOTONES DE ACCIÓN Y COMPARTIR EN TARJETAS DE SORTEOS */
-.compact-card-actions-row {
+.compact-card-actions-row,
+.compact-raffle-card .compact-card-actions-row,
+div.compact-card-actions-row {
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
   margin-top: 8px !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-width: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }
 
 .compact-card-actions-row .btn-compact-action {
@@ -20214,7 +20223,7 @@ body {
 
 /* Corrección de tarjetas en Modo Claro para el Marketplace general */
 .card, 
-div[class*="card"]:not([class*="live"]):not([class*="compact-raffle"]):not([class*="sci"]):not([class*="official"]):not(#estacion-urgentes):not(#estacion-proximos) {
+div[class*="card"]:not([class*="live"]):not([class*="compact-raffle"]):not([class*="sci"]):not([class*="official"]):not(#estacion-urgentes):not(#estacion-proximos):not([class*="actions"]):not([class*="compact-card-actions-row"]) {
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-color);
