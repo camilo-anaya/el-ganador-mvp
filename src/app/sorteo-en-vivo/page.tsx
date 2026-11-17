@@ -1,3 +1,4 @@
+// Sala de Sorteo en Vivo - Protección de rol empresarial y control de balotera SHA-256
 'use client';
 
 import React, { useState, useEffect } from 'react';
