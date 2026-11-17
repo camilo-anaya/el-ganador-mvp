@@ -369,7 +369,7 @@ export default function LiveDrawDemoPage() {
   const spectatorSessionIdRef = useRef<string>(`spec-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`);
 
   // Patrocinador oficial en la transmisión con posición y estado colapsable
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setThemePreference } = useTheme();
   const [sponsorPos, setSponsorPos] = useState<"bottom" | "top">("bottom");
   const [sponsorBumper, setSponsorBumper] = useState<{
     visible: boolean;
@@ -2347,28 +2347,66 @@ export default function LiveDrawDemoPage() {
             </div>
 
             <div className="liveDemoHeaderActions" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-              {/* BOTÓN MODO OSCURO / MODO CLARO A VOLUNTAD */}
-              <button
-                type="button"
-                onClick={toggleTheme}
+              {/* SELECTOR SEGMENTADO DE TEMA (CLARO / OSCURO) EN SALA EN VIVO */}
+              <div
+                className="theme-segmented-switch"
+                role="group"
+                aria-label="Selector de tema Claro y Oscuro"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '6px',
-                  padding: '7px 14px',
-                  borderRadius: '10px',
-                  background: 'rgba(255, 255, 255, 0.15)',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  color: '#ffffff',
-                  fontSize: '0.78rem',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
+                  background: 'rgba(0, 0, 0, 0.4)',
+                  borderRadius: '999px',
+                  padding: '3px',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  gap: '2px',
                 }}
-                title={`Cambiar a modo ${theme === 'dark' ? 'claro' : 'oscuro'}`}
               >
-                <span>{theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setThemePreference('light')}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '999px',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    border: 'none',
+                    cursor: 'pointer',
+                    background: theme === 'light' ? '#ffffff' : 'transparent',
+                    color: theme === 'light' ? '#0f172a' : '#d1d5db',
+                    boxShadow: theme === 'light' ? '0 2px 6px rgba(0, 0, 0, 0.3)' : 'none',
+                    transition: 'all 0.2s ease',
+                  }}
+                  title="Activar Modo Claro"
+                >
+                  ☀️ Claro
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setThemePreference('dark')}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '5px 10px',
+                    borderRadius: '999px',
+                    fontSize: '11px',
+                    fontWeight: 800,
+                    border: 'none',
+                    cursor: 'pointer',
+                    background: theme === 'dark' ? '#0f172a' : 'transparent',
+                    color: theme === 'dark' ? '#f8fafc' : '#d1d5db',
+                    boxShadow: theme === 'dark' ? '0 2px 6px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.2)' : 'none',
+                    transition: 'all 0.2s ease',
+                  }}
+                  title="Activar Modo Oscuro"
+                >
+                  🌙 Oscuro
+                </button>
+              </div>
               {availableDraws.length > 1 && (
                 <button
                   type="button"

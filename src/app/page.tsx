@@ -527,7 +527,7 @@ export default function CompactWhiteMarketplacePage() {
   }, [isAdPaused]);
 
       const currentAdTheme = VIBRANT_AD_THEMES[currentAdIndex % VIBRANT_AD_THEMES.length];
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setThemePreference } = useTheme();
 
   // Estados para Vitrina Comercial B2B y Seguir Negocios Patrocinadores
   const [selectedVitrinaAd, setSelectedVitrinaAd] = useState<(typeof SPONSOR_CAROUSEL_ADS)[0] | null>(null);
@@ -942,26 +942,66 @@ export default function CompactWhiteMarketplacePage() {
             <span className="pulse-dot" /> En Vivo
           </Link>
 
-          {/* BOTÓN RÁPIDO DE CAMBIO DE TEMA NATIVO 🌙 / ☀️ */}
-          <button
-            type="button"
-            className="theme-toggle-btn"
-            onClick={toggleTheme}
-            title={`Cambiar a modo ${theme === 'dark' ? 'claro' : 'oscuro'}`}
-            aria-label="Cambiar tema de la app"
+          {/* SELECTOR SEGMENTADO DE TEMA (CLARO / OSCURO) SIN AMBIGÜEDAD */}
+          <div
+            className="theme-segmented-switch"
+            role="group"
+            aria-label="Selector de tema Claro y Oscuro"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
+              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
               borderRadius: '999px',
-              fontWeight: 800,
-              fontSize: '12px',
-              cursor: 'pointer',
+              padding: '3px',
+              border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.18)' : '1px solid rgba(0, 0, 0, 0.12)',
+              gap: '2px',
             }}
           >
-            <span>{theme === 'dark' ? '☀️ Claro' : '🌙 Oscuro'}</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setThemePreference('light')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '4px 10px',
+                borderRadius: '999px',
+                fontSize: '11px',
+                fontWeight: 800,
+                border: 'none',
+                cursor: 'pointer',
+                background: theme === 'light' ? '#ffffff' : 'transparent',
+                color: theme === 'light' ? '#0f172a' : (theme === 'dark' ? '#94a3b8' : '#64748b'),
+                boxShadow: theme === 'light' ? '0 2px 6px rgba(0, 0, 0, 0.15)' : 'none',
+                transition: 'all 0.2s ease',
+              }}
+              title="Activar Modo Claro"
+            >
+              ☀️ Claro
+            </button>
+            <button
+              type="button"
+              onClick={() => setThemePreference('dark')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '4px 10px',
+                borderRadius: '999px',
+                fontSize: '11px',
+                fontWeight: 800,
+                border: 'none',
+                cursor: 'pointer',
+                background: theme === 'dark' ? '#0f172a' : 'transparent',
+                color: theme === 'dark' ? '#f8fafc' : '#64748b',
+                boxShadow: theme === 'dark' ? '0 2px 6px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.15)' : 'none',
+                transition: 'all 0.2s ease',
+              }}
+              title="Activar Modo Oscuro"
+            >
+              🌙 Oscuro
+            </button>
+          </div>
 
           {/* CAMPANA DE NOTIFICACIONES ESTILO FACEBOOK CON BADGE ROJO 🔔 */}
           <div className="notif-bell-container" style={{ position: 'relative' }}>

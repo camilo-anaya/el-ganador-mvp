@@ -16698,7 +16698,7 @@ html[data-theme='dark'] #estacion-proximos .compact-raffle-card .progress-labels
   color: #38bdf8 !important;
 }
 
-/* MODO CLARO (FONDO BLANCO IMPECABLE Y TEXTOS DE ALTO CONTRASTE) */
+/* MODO CLARO: LAS ESTACIONES URGENTES Y PRÓXIMOS SORTEOS MANTIENEN SU AZUL VIBRANTE CARACTERÍSTICO */
 [data-theme='light'] #estacion-urgentes,
 [data-theme='light'] #estacion-urgentes.station-urgent,
 [data-theme='light'] #estacion-proximos,
@@ -16707,10 +16707,11 @@ html[data-theme='light'] #estacion-urgentes,
 html[data-theme='light'] #estacion-proximos,
 html:not([data-theme='dark']) #estacion-urgentes,
 html:not([data-theme='dark']) #estacion-proximos {
-  background: #ffffff !important;
-  background-color: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04) !important;
+  background: linear-gradient(135deg, #0284c7 0%, #1e40af 45%, #0c2340 100%) !important;
+  background-color: #0c2340 !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.65) !important;
+  border-top: 2px solid rgba(125, 211, 252, 0.85) !important;
+  box-shadow: 0 14px 38px rgba(2, 132, 199, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
   border-radius: 20px !important;
 }
 
@@ -16720,8 +16721,8 @@ html[data-theme='light'] #estacion-urgentes .compact-section-title h2,
 html[data-theme='light'] #estacion-proximos .compact-section-title h2,
 html:not([data-theme='dark']) #estacion-urgentes .compact-section-title h2,
 html:not([data-theme='dark']) #estacion-proximos .compact-section-title h2 {
-  color: #0f172a !important;
-  text-shadow: none !important;
+  color: #ffffff !important;
+  text-shadow: 0 2px 14px rgba(2, 132, 199, 0.65), 0 0 24px rgba(56, 189, 248, 0.45) !important;
   font-weight: 800 !important;
 }
 
@@ -16731,7 +16732,7 @@ html[data-theme='light'] #estacion-urgentes .station-subtitle,
 html[data-theme='light'] #estacion-proximos .station-subtitle,
 html:not([data-theme='dark']) #estacion-urgentes .station-subtitle,
 html:not([data-theme='dark']) #estacion-proximos .station-subtitle {
-  color: #475569 !important;
+  color: #e0f2fe !important;
 }
 
 [data-theme='light'] #estacion-urgentes .compact-raffle-card,
@@ -20136,11 +20137,12 @@ body {
   box-sizing: border-box !important;
 }
 
-/* Corrección de tarjetas en Modo Claro para que no tengan fallos visuales */
-.card, div[class*="card"] {
-  background-color: var(--card-bg) !important;
-  border: 1px solid var(--border-color) !important;
-  color: var(--text-color) !important;
+/* Corrección de tarjetas en Modo Claro para el Marketplace general */
+.card, 
+div[class*="card"]:not([class*="live"]):not([class*="compact-raffle"]):not([class*="sci"]):not([class*="official"]):not(#estacion-urgentes):not(#estacion-proximos) {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
 }
 
 /* Preservar contraste y legibilidad en botones interactivos dentro de tarjetas */
@@ -20157,15 +20159,19 @@ div[class*="card"] button[style*="background: #007AFF"] {
 /* =========================================================
    TIPOGRAFÍA LIMPIA ADAPTATIVA (MODO CLARO / OSCURO)
    ========================================================= */
-h1, h2, h3, h4, h5, h6 {
-  color: var(--text-color) !important;
+body:not(.liveDemoPage) h1:not(.liveDemoHero h1),
+body:not(.liveDemoPage) h2:not(.liveDemoHero h1):not(#liveDemoDrawTitle):not(#liveDemoAuditTitle):not(#estacion-urgentes *):not(#estacion-proximos *),
+body:not(.liveDemoPage) h3:not(.liveDemoHero *):not(#liveDemoDrawTitle):not(#liveDemoAuditTitle):not(#estacion-urgentes *):not(#estacion-proximos *),
+body:not(.liveDemoPage) h4, 
+body:not(.liveDemoPage) h5, 
+body:not(.liveDemoPage) h6 {
+  color: var(--text-color);
 }
 
 .station-title, 
-.compact-section-title h2, 
 .section-heading,
 .dashboard-title {
-  color: var(--text-color) !important;
+  color: var(--text-color);
   font-weight: bold;
 }
 
@@ -20174,6 +20180,116 @@ p.station-subtitle,
 .card-subtext {
   color: var(--text-color);
   opacity: 0.75;
+}
+
+/* =========================================================
+   PROTECCIÓN DE ALTO CONTRASTE INMUTABLE:
+   1) SALA OFICIAL DE SORTEO EN VIVO (CASINO ESMERALDA / ORO)
+   2) ESTACIONES AZULES URGENTES Y PRÓXIMOS SORTEOS
+   ========================================================= */
+.liveDemoPage,
+.liveDemoContentContainer,
+.liveDemoHero,
+.liveDemoStage,
+.liveDemoAudit {
+  color-scheme: dark !important;
+}
+
+.liveDemoHero h1,
+.liveDemoHero h1 *,
+[data-theme='light'] .liveDemoHero h1,
+[data-theme='dark'] .liveDemoHero h1 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75) !important;
+}
+
+.liveDemoHero h1 span,
+[data-theme='light'] .liveDemoHero h1 span,
+[data-theme='dark'] .liveDemoHero h1 span {
+  color: #f0cd6c !important;
+  text-shadow: 0 2px 14px rgba(240, 205, 108, 0.45) !important;
+}
+
+.liveDemoEyebrow,
+[data-theme='light'] .liveDemoEyebrow,
+[data-theme='dark'] .liveDemoEyebrow {
+  color: #d7b24b !important;
+  font-weight: 900 !important;
+}
+
+#liveDemoDrawTitle,
+[data-theme='light'] #liveDemoDrawTitle,
+[data-theme='dark'] #liveDemoDrawTitle,
+.liveDemoDetails h2,
+[data-theme='light'] .liveDemoDetails h2,
+[data-theme='dark'] .liveDemoDetails h2 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65) !important;
+  font-weight: 900 !important;
+}
+
+#liveDemoAuditTitle,
+[data-theme='light'] #liveDemoAuditTitle,
+[data-theme='dark'] #liveDemoAuditTitle,
+.liveDemoAuditIntro h2,
+[data-theme='light'] .liveDemoAuditIntro h2,
+[data-theme='dark'] .liveDemoAuditIntro h2 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.65) !important;
+  font-weight: 900 !important;
+}
+
+.sciHeader strong,
+[data-theme='light'] .sciHeader strong,
+[data-theme='dark'] .sciHeader strong {
+  color: #f0cd6c !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7) !important;
+}
+
+.sciHeader small,
+[data-theme='light'] .sciHeader small,
+[data-theme='dark'] .sciHeader small {
+  color: #cbd5e1 !important;
+}
+
+.sciCard .sciFormula,
+[data-theme='light'] .sciCard .sciFormula,
+[data-theme='dark'] .sciCard .sciFormula {
+  color: #fde047 !important;
+  text-shadow: 0 0 10px rgba(253, 224, 71, 0.3) !important;
+}
+
+.liveDemoAuditItems b,
+[data-theme='light'] .liveDemoAuditItems b,
+[data-theme='dark'] .liveDemoAuditItems b {
+  color: #ffffff !important;
+}
+
+.liveDemoAuditItems small,
+[data-theme='light'] .liveDemoAuditItems small,
+[data-theme='dark'] .liveDemoAuditItems small {
+  color: #cbd5e1 !important;
+}
+
+/* Encabezados iluminados inmutables en Estaciones Azules */
+#estacion-urgentes .compact-section-title h2,
+#estacion-proximos .compact-section-title h2,
+[data-theme='light'] #estacion-urgentes .compact-section-title h2,
+[data-theme='light'] #estacion-proximos .compact-section-title h2,
+[data-theme='dark'] #estacion-urgentes .compact-section-title h2,
+[data-theme='dark'] #estacion-proximos .compact-section-title h2 {
+  color: #ffffff !important;
+  text-shadow: 0 2px 14px rgba(2, 132, 199, 0.65), 0 0 24px rgba(56, 189, 248, 0.45) !important;
+  font-weight: 800 !important;
+}
+
+#estacion-urgentes .station-subtitle,
+#estacion-proximos .station-subtitle,
+[data-theme='light'] #estacion-urgentes .station-subtitle,
+[data-theme='light'] #estacion-proximos .station-subtitle,
+[data-theme='dark'] #estacion-urgentes .station-subtitle,
+[data-theme='dark'] #estacion-proximos .station-subtitle {
+  color: #e0f2fe !important;
 }
 
 
