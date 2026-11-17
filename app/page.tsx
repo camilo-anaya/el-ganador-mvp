@@ -1452,6 +1452,15 @@ export default function CompactWhiteMarketplacePage() {
                       type="button"
                       className="btn-compact-action"
                       onClick={() => handleOpenTicketModal(item)}
+                      style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
+                        letterSpacing: '-0.25px',
+                        padding: '0 8px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
                     >
                       Apartar Boleta →
                     </button>
@@ -1550,6 +1559,15 @@ export default function CompactWhiteMarketplacePage() {
                       type="button"
                       className="btn-compact-action"
                       onClick={() => handleOpenTicketModal(item)}
+                      style={{
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
+                        letterSpacing: '-0.25px',
+                        padding: '0 8px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
                     >
                       Elegir Número →
                     </button>

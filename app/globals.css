@@ -13277,16 +13277,24 @@ body {
 }
 
 .btn-compact-action {
-  margin-top: 4px;
+  margin-top: 0;
   text-align: center;
-  padding: 7px 10px;
+  padding: 0 8px !important;
   border-radius: 10px;
   background: #007AFF !important;
   color: #ffffff !important;
-  font-size: 0.76rem;
+  font-size: 0.72rem !important;
   font-weight: 800;
+  letter-spacing: -0.25px !important;
   text-decoration: none;
   box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
 }
 
 .btn-compact-action:hover {
@@ -15026,9 +15034,14 @@ html[data-theme='dark'] .promo-visit-btn {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 0 12px !important;
-  font-size: 0.82rem !important;
+  padding: 0 8px !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.25px !important;
   white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  box-sizing: border-box !important;
   margin-top: 0 !important;
 }
 
@@ -16818,6 +16831,13 @@ html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card .progress-
   border: none !important;
   box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4) !important;
   font-weight: 800 !important;
+  font-size: 0.72rem !important;
+  letter-spacing: -0.25px !important;
+  padding: 0 8px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  box-sizing: border-box !important;
 }
 
 /* Botón Compartir en Tarjetas: Alta Visibilidad en Modo Blanco y Modo Oscuro (Texto Negro Nítido sobre Blanco) */
