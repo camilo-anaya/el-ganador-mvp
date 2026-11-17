@@ -3997,24 +3997,24 @@ export default function LiveDrawDemoPage() {
               style={{
                 width: "100%",
                 padding: "14px 18px",
-                background: "linear-gradient(135deg, rgba(8, 30, 20, 0.95), rgba(4, 16, 10, 0.95))",
-                border: "1.2px solid rgba(229, 196, 104, 0.4)",
+                background: "#ffffff",
+                border: "1.5px solid #d4af37",
                 borderRadius: "14px",
-                color: "#ffd778",
-                fontWeight: "700",
+                color: "#0f172a",
+                fontWeight: "800",
                 fontSize: "14px",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 gap: "10px",
-                boxShadow: "0 6px 18px rgba(0, 0, 0, 0.45)",
+                boxShadow: "0 6px 20px rgba(0, 0, 0, 0.12)",
                 transition: "all 0.2s ease",
               }}
             >
               <span style={{ display: "flex", alignItems: "center", gap: "10px", textAlign: "left" }}>
                 <span style={{ fontSize: "18px" }}>🛡️</span>
-                <span>
+                <span style={{ color: "#0f172a" }}>
                   {showAuditSection
                     ? "Ocultar Transparencia y Auditoría Técnica"
                     : "Ver Transparencia y Certificación Criptográfica"}
@@ -4022,9 +4022,9 @@ export default function LiveDrawDemoPage() {
               </span>
               <span style={{
                 fontSize: "12px",
-                background: "rgba(212, 175, 55, 0.18)",
-                border: "1px solid rgba(212, 175, 55, 0.3)",
-                color: "#ffe082",
+                background: "#fef3c7",
+                border: "1px solid #fde68a",
+                color: "#b45309",
                 padding: "5px 12px",
                 borderRadius: "8px",
                 fontWeight: "800",

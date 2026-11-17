@@ -4413,21 +4413,21 @@
 }
 
 /* ============================================================================
-   SECCIÓN DE TRANSPARENCIA Y AUDITORÍA: VERDE ROLEX ESMERALDA CON MÁXIMO CONTRASTE
+   SECCIÓN DE TRANSPARENCIA Y AUDITORÍA: RECUADRO EN BLANCO PURO CON ALTA LEGIBILIDAD
    ============================================================================ */
 .liveDemoAudit {
   max-width: 1460px !important;
-  margin: 32px auto 0 !important;
+  margin: 28px auto 0 !important;
   padding: 32px 34px !important;
   border-radius: 24px !important;
-  background: radial-gradient(ellipse at 50% 12%, #144e30 0%, #0b3621 45%, #051d12 100%) !important;
-  border: 1.5px solid rgba(229, 196, 104, 0.45) !important;
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
   box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.75),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 0 44px rgba(16, 72, 44, 0.35) !important;
+    0 20px 45px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.04) !important;
   position: relative !important;
   overflow: hidden !important;
+  color: #1e293b !important;
 }
 
 .liveDemoAuditIntro {
@@ -4442,42 +4442,42 @@
   flex: 0 0 52px !important;
   display: grid !important;
   place-items: center !important;
-  border: 2px solid #ecd07a !important;
+  border: 2px solid #d4af37 !important;
   border-radius: 16px !important;
-  color: #ffd778 !important;
-  background: rgba(229, 196, 104, 0.16) !important;
+  color: #b45309 !important;
+  background: #fef3c7 !important;
   font-size: 24px !important;
   font-weight: 900 !important;
-  box-shadow: 0 0 20px rgba(236, 208, 122, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25) !important;
 }
 
 .liveDemoEyebrow {
-  color: #f0ce71 !important;
+  color: #b45309 !important;
   font-size: 12px !important;
   font-weight: 900 !important;
   letter-spacing: 2px !important;
   text-transform: uppercase !important;
   margin-bottom: 4px !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+  text-shadow: none !important;
 }
 
 .liveDemoAuditIntro h2 {
   margin: 0 !important;
-  color: #ffffff !important;
+  color: #0f172a !important;
   font-size: clamp(20px, 2.5vw, 27px) !important;
   font-weight: 900 !important;
   letter-spacing: -0.3px !important;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8) !important;
+  text-shadow: none !important;
   line-height: 1.25 !important;
 }
 
 .liveDemoAuditIntro p:last-child {
   margin: 8px 0 0 !important;
-  color: #e5f2eb !important;
+  color: #334155 !important;
   font-size: 14.5px !important;
   font-weight: 500 !important;
   line-height: 1.6 !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
+  text-shadow: none !important;
 }
 
 .liveDemoAuditItems {
@@ -4492,34 +4492,35 @@
   grid-template-columns: 32px 1fr !important;
   gap: 6px 12px !important;
   padding: 18px 20px !important;
-  border: 1.2px solid rgba(229, 196, 104, 0.32) !important;
+  border: 1.2px solid #e2e8f0 !important;
   border-radius: 16px !important;
-  background: rgba(4, 24, 15, 0.85) !important;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4) !important;
+  background: #f8fafc !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
 }
 
 .liveDemoAuditItems > div > span {
   grid-row: span 2 !important;
-  color: #ffd778 !important;
+  color: #b45309 !important;
   font-size: 16px !important;
   font-weight: 900 !important;
   font-family: 'JetBrains Mono', monospace !important;
-  text-shadow: 0 0 10px rgba(255, 215, 120, 0.4) !important;
+  text-shadow: none !important;
 }
 
 .liveDemoAuditItems b {
-  color: #ffffff !important;
+  color: #0f172a !important;
   font-size: 14px !important;
   font-weight: 800 !important;
   letter-spacing: 0.2px !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) !important;
+  text-shadow: none !important;
 }
 
 .liveDemoAuditItems small {
-  color: #d1e8dc !important;
+  color: #475569 !important;
   font-size: 12.5px !important;
   font-weight: 500 !important;
   line-height: 1.5 !important;
+  text-shadow: none !important;
 }
 
 .auditHowButton {
@@ -4528,10 +4529,10 @@
   gap: 10px !important;
   margin: 22px auto 0 !important;
   padding: 9px 24px !important;
-  border: 1px solid rgba(229, 196, 104, 0.45) !important;
+  border: 1px solid #cbd5e1 !important;
   border-radius: 999px !important;
-  color: #ffe89e !important;
-  background: rgba(229, 196, 104, 0.14) !important;
+  color: #0f172a !important;
+  background: #f1f5f9 !important;
   font-size: 13px !important;
   font-weight: 800 !important;
   cursor: pointer !important;
@@ -4539,9 +4540,9 @@
 }
 
 .auditHowButton:hover {
-  background: rgba(229, 196, 104, 0.25) !important;
-  border-color: #ffe89e !important;
-  color: #ffffff !important;
+  background: #e2e8f0 !important;
+  border-color: #94a3b8 !important;
+  color: #000000 !important;
   transform: translateY(-1px) !important;
 }
 
@@ -4549,115 +4550,155 @@
   max-width: 920px !important;
   margin: 16px auto 0 !important;
   padding: 20px 24px !important;
-  border: 1px solid rgba(229, 196, 104, 0.35) !important;
+  border: 1px solid #e2e8f0 !important;
   border-radius: 16px !important;
-  color: #e5f2eb !important;
-  background: rgba(4, 24, 15, 0.95) !important;
+  color: #334155 !important;
+  background: #f8fafc !important;
   font-size: 13.5px !important;
   line-height: 1.7 !important;
 }
 
 .liveDemoHow b {
-  color: #ffd778 !important;
+  color: #0f172a !important;
 }
 
 .scientificPanel {
-  background: linear-gradient(145deg, rgba(12, 44, 28, 0.92), rgba(6, 24, 15, 0.98)) !important;
-  border: 1.2px solid rgba(229, 196, 104, 0.35) !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+  background: #f8fafc !important;
+  border: 1.2px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
 }
 
 .sciHeader strong {
-  color: #ffffff !important;
+  color: #0f172a !important;
 }
 
 .sciHeader small {
-  color: #d1e8dc !important;
+  color: #475569 !important;
 }
 
 .sciCard {
-  background: rgba(4, 22, 14, 0.85) !important;
-  border: 1px solid rgba(229, 196, 104, 0.25) !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+}
+
+.sciCard .sciTag {
+  color: #b45309 !important;
+  font-weight: 800 !important;
+}
+
+.sciCard .sciFormula {
+  color: #0f172a !important;
 }
 
 .sciCard b {
-  color: #ffffff !important;
+  color: #047857 !important;
 }
 
 .sciCard span {
-  color: #d1e8dc !important;
+  color: #475569 !important;
+}
+
+.sciMeta span {
+  color: #64748b !important;
 }
 
 .sciMeta code {
-  color: #ffd778 !important;
+  color: #0284c7 !important;
+  background: #f0f9ff !important;
+  border: 1px solid #bae6fd !important;
+}
+
+.chiSquareLive {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.chiTitle span {
+  color: #0f172a !important;
+}
+
+.chiBadge {
+  background: #dcfce7 !important;
+  color: #15803d !important;
+  border: 1px solid #86efac !important;
+}
+
+.chiBarTrack {
+  background: #e2e8f0 !important;
+}
+
+.chiLabels small {
+  color: #64748b !important;
 }
 
 .officialActCard.pending {
-  background: rgba(255, 255, 255, 0.03) !important;
-  border: 1.5px dashed rgba(255, 255, 255, 0.18) !important;
+  background: #f8fafc !important;
+  border: 1.5px dashed #cbd5e1 !important;
   box-shadow: none !important;
 }
 
 .officialActCard.pending .actCardHeader {
-  border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+  border-bottom-color: #e2e8f0 !important;
 }
 
 .officialActCard.pending .actBadgePending {
-  color: #f0ce71 !important;
-  background: rgba(240, 206, 113, 0.12) !important;
-  border-color: rgba(240, 206, 113, 0.35) !important;
+  color: #b45309 !important;
+  background: #fef3c7 !important;
+  border-color: #fde68a !important;
 }
 
 .officialActCard.pending .actId {
-  color: #8da494 !important;
+  color: #64748b !important;
 }
 
 .officialActCard.pending .actCardTitle {
-  color: #e8ecdf !important;
+  color: #0f172a !important;
 }
 
 .officialActCard.pending .actCardDesc {
-  color: #a4b7a9 !important;
+  color: #475569 !important;
 }
 
 .officialActCard.pending .btnDownloadActOfficial.disabled,
 .officialActCard.pending .btnDownloadActOfficial:disabled {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: #71887a !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: #e2e8f0 !important;
+  color: #94a3b8 !important;
+  border-color: #cbd5e1 !important;
 }
 
 .officialActCard.pending .btnVerifyActLink {
-  background: rgba(240, 206, 113, 0.12) !important;
-  border-color: rgba(240, 206, 113, 0.35) !important;
-  color: #f0ce71 !important;
+  background: #007AFF !important;
+  border-color: #007AFF !important;
+  color: #ffffff !important;
+}
+
+.officialActCard.ready {
+  background: #f0fdf4 !important;
+  border: 1.5px solid #86efac !important;
+}
+
+.officialActCard.ready .actCardTitle {
+  color: #0f172a !important;
+}
+
+.officialActCard.ready .actCardDesc {
+  color: #334155 !important;
 }
 
 .auditSnippet {
-  background: rgba(0, 0, 0, 0.35) !important;
-  border-color: rgba(214, 177, 78, 0.35) !important;
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
 }
 
 .auditSnippet small {
-  color: #d8b550 !important;
+  color: #475569 !important;
 }
 
 .auditSnippet code {
-  color: #8ee3b0 !important;
-}
-
-.auditHowButton {
-  color: #d4b04c !important;
-}
-
-.liveDemoHow {
-  background: rgba(255, 255, 255, 0.04) !important;
-  border-color: rgba(214, 177, 78, 0.35) !important;
-  color: #b7c8bc !important;
-}
-
-.liveDemoHow p + p {
-  color: #e8ecdf !important;
+  color: #047857 !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
 }
 
 .liveDemoFooter {
@@ -4666,7 +4707,7 @@
 }
 
 .liveDemoFooter a {
-  color: #8ee3b0 !important;
+  color: #ffd778 !important;
 }
 
 /* ============================================================================
