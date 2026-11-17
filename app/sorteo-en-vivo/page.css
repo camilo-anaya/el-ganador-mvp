@@ -4832,17 +4832,6 @@
   text-shadow: none !important;
   -webkit-text-fill-color: #000000 !important;
 }
-}
-
-.auditSnippet small {
-  color: #475569 !important;
-}
-
-.auditSnippet code {
-  color: #047857 !important;
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-}
 
 .liveDemoFooter {
   max-width: 1460px !important;
