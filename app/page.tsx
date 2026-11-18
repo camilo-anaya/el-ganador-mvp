@@ -851,6 +851,7 @@ export default function CompactWhiteMarketplacePage() {
   const [pullDistance, setPullDistance] = useState<number>(0);
   const [sharedToast, setSharedToast] = useState<string | null>(null);
   const [shareModalItem, setShareModalItem] = useState<{ id: string; title: string; merchant: string; priceCop: string } | null>(null);
+  const [selectedRaffleDetail, setSelectedRaffleDetail] = useState<any | null>(null);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
   const [wonPrizes, setWonPrizes] = useState<WonPrize[]>([]);
   const [showNotifDropdown, setShowNotifDropdown] = useState<boolean>(false);
@@ -971,13 +972,13 @@ export default function CompactWhiteMarketplacePage() {
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: 'max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) 16px 12px 16px',
-          backgroundColor: 'var(--bg-color, #000)',
-          borderBottom: '1px solid var(--border-color, rgba(255,255,255,0.1))',
+          backgroundColor: theme === 'dark' ? '#000000' : '#ffffff',
+          borderBottom: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
           width: '100%',
           boxSizing: 'border-box',
         }}
       >
-        {/* Logo y Nombre Limpio */}
+        {/* Logo y Nombre Limpio en Alta Definición */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
             type="button"
@@ -986,11 +987,12 @@ export default function CompactWhiteMarketplacePage() {
             style={{
               background: 'transparent',
               border: 'none',
-              color: 'var(--text-primary, #fff)',
-              fontSize: '20px',
+              color: theme === 'dark' ? '#ffffff' : '#000000',
+              fontSize: '22px',
               cursor: 'pointer',
               lineHeight: 1,
               padding: '2px 4px',
+              fontWeight: 900,
             }}
           >
             ≡
@@ -1007,7 +1009,19 @@ export default function CompactWhiteMarketplacePage() {
             title="Volver al inicio y actualizar"
           >
             <div>
-              <h1 style={{ fontSize: '16px', fontWeight: 'bold', margin: 0, color: 'var(--text-primary, #fff)', letterSpacing: '0.5px' }}>
+              <h1
+                style={{
+                  fontSize: '17px',
+                  fontWeight: 900,
+                  margin: 0,
+                  color: theme === 'dark' ? '#ffffff' : '#000000',
+                  letterSpacing: '-0.2px',
+                  WebkitFontSmoothing: 'antialiased',
+                  MozOsxFontSmoothing: 'grayscale',
+                  textRendering: 'optimizeLegibility',
+                  lineHeight: 1.1,
+                }}
+              >
                 EL GANADOR
               </h1>
             </div>
@@ -1242,28 +1256,52 @@ export default function CompactWhiteMarketplacePage() {
           onTouchStart={() => setIsAdPaused(true)}
           onTouchEnd={() => setIsAdPaused(false)}
         >
-          <div className="carousel-ad-wrapper">
-            <div className="official-ad-content">
-              <div className="official-ad-text">
-                <div className="ad-pill-and-counter">
+          <div className="carousel-ad-wrapper" style={{ padding: '10px 12px' }}>
+            <div className="official-ad-content" style={{ gap: '10px' }}>
+              <div className="official-ad-media" style={{ width: '100%', height: '145px', borderRadius: '10px', overflow: 'hidden', order: -1 }}>
+                <img
+                  key={SPONSOR_CAROUSEL_ADS[currentAdIndex].id}
+                  src={SPONSOR_CAROUSEL_ADS[currentAdIndex].image}
+                  alt={SPONSOR_CAROUSEL_ADS[currentAdIndex].brand}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+
+              <div className="official-ad-text" style={{ gap: '4px' }}>
+                <div className="ad-pill-and-counter" style={{ marginBottom: '2px' }}>
                   <span
                     className="official-ad-pill"
                     style={{
                       background: currentAdTheme.tagBg,
                       border: `1px solid ${currentAdTheme.tagBorder}`,
                       color: '#ffffff',
+                      fontSize: '0.68rem',
+                      padding: '2px 8px',
                     }}
                   >
                     {SPONSOR_CAROUSEL_ADS[currentAdIndex].tag}
                   </span>
                 </div>
-                <h3>{SPONSOR_CAROUSEL_ADS[currentAdIndex].title}</h3>
-                <p>{SPONSOR_CAROUSEL_ADS[currentAdIndex].description}</p>
+                <h3 style={{ fontSize: '0.98rem', fontWeight: 800, margin: '2px 0', lineHeight: 1.2 }}>
+                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].title}
+                </h3>
+                <p style={{
+                  fontSize: '0.74rem',
+                  lineHeight: 1.35,
+                  margin: 0,
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  opacity: 0.9,
+                }}>
+                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].description}
+                </p>
 
                 {/* MÉTRICA EN VIVO DE CLIENTES PENDIENTES Y BOTÓN SEGUIR NEGOCIO */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', margin: '6px 0 10px' }}>
-                  <span style={{ fontSize: '0.78rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '4px 10px', borderRadius: '8px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                    👥 {(brandFollowerCounts[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] || 1580).toLocaleString()} pendientes a sus sorteos
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', margin: '4px 0 6px' }}>
+                  <span style={{ fontSize: '0.7rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    👥 {(brandFollowerCounts[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] || 1580).toLocaleString()} pendientes
                   </span>
                   <button
                     type="button"
@@ -1272,23 +1310,23 @@ export default function CompactWhiteMarketplacePage() {
                       handleToggleFollow(SPONSOR_CAROUSEL_ADS[currentAdIndex].brand);
                     }}
                     style={{
-                      padding: '4px 12px',
-                      borderRadius: '8px',
-                      border: '1.5px solid #ffffff',
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      border: '1px solid #ffffff',
                       background: followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
                       color: '#ffffff',
-                      fontSize: '0.76rem',
+                      fontSize: '0.7rem',
                       fontWeight: 800,
                       cursor: 'pointer',
                       transition: 'all 0.2s ease',
                     }}
                     title="Seguir empresa para recibir alertas de sus rifas y descuentos"
                   >
-                    {followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '✓ Siguiendo (+1 pendiente)' : '🔔 Seguir Negocio'}
+                    {followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '✓ Siguiendo' : '🔔 Seguir'}
                   </button>
                 </div>
 
-                <div className="official-ad-actions">
+                <div className="official-ad-actions" style={{ marginTop: '2px', gap: '6px' }}>
                   <button
                     type="button"
                     className="btn-ad-emerald"
@@ -1302,6 +1340,8 @@ export default function CompactWhiteMarketplacePage() {
                       fontWeight: 800,
                       cursor: 'pointer',
                       border: 'none',
+                      fontSize: '0.74rem',
+                      padding: '6px 12px',
                     }}
                   >
                     🏪 Ver Vitrina & Sorteo →
@@ -1312,21 +1352,13 @@ export default function CompactWhiteMarketplacePage() {
                       background: currentAdTheme.couponBg,
                       color: currentAdTheme.couponColor,
                       border: '1px dashed rgba(255, 255, 255, 0.6)',
+                      fontSize: '0.68rem',
+                      padding: '4px 8px',
                     }}
                   >
                     {SPONSOR_CAROUSEL_ADS[currentAdIndex].coupon}
                   </span>
-                  <span className="ad-badge-highlight" style={{ fontSize: '0.76rem', fontWeight: 700, color: '#f5b82e' }}>
-                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].badge}
-                  </span>
                 </div>
-              </div>
-              <div className="official-ad-media">
-                <img
-                  key={SPONSOR_CAROUSEL_ADS[currentAdIndex].id}
-                  src={SPONSOR_CAROUSEL_ADS[currentAdIndex].image}
-                  alt={SPONSOR_CAROUSEL_ADS[currentAdIndex].brand}
-                />
               </div>
             </div>
 
@@ -1440,9 +1472,9 @@ export default function CompactWhiteMarketplacePage() {
               <article key={item.id} className="compact-raffle-card card-type-urgent">
                 <div
                   className="compact-raffle-media"
-                  onClick={() => handleOpenTicketModal(item)}
+                  onClick={() => setSelectedRaffleDetail(item)}
                   style={{ cursor: 'pointer' }}
-                  title="Apartar boleta y elegir número"
+                  title="Ver detalle del sorteo"
                 >
                   <img src={item.image} alt={item.title} loading="lazy" />
                   <span className="urgent-time-badge">{item.timeLabel}</span>
@@ -1465,9 +1497,9 @@ export default function CompactWhiteMarketplacePage() {
                     </button>
                   </div>
                   <h3
-                    onClick={() => handleOpenTicketModal(item)}
+                    onClick={() => setSelectedRaffleDetail(item)}
                     style={{ cursor: 'pointer' }}
-                    title="Apartar boleta y elegir número"
+                    title="Ver detalle del sorteo"
                   >
                     {item.title}
                   </h3>
@@ -1489,22 +1521,25 @@ export default function CompactWhiteMarketplacePage() {
                     );
                   })()}
 
-                  <div className="compact-card-actions-row" style={{ background: 'transparent', border: 'none', outline: 'none', boxShadow: 'none', padding: 0 }}>
+                  <div className="compact-card-actions-row" style={{ background: 'transparent', border: 'none', outline: 'none', boxShadow: 'none', padding: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <button
                       type="button"
                       className="btn-compact-action"
                       onClick={() => handleOpenTicketModal(item)}
                       style={{
-                        fontSize: '0.72rem',
+                        fontSize: '0.78rem',
                         fontWeight: 800,
-                        letterSpacing: '-0.25px',
-                        padding: '0 8px',
+                        padding: '6px 14px',
+                        borderRadius: '8px',
+                        background: '#007AFF',
+                        color: '#ffffff',
+                        border: 'none',
+                        cursor: 'pointer',
+                        flex: 1,
                         whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
                       }}
                     >
-                      Apartar Boleta →
+                      Comprar
                     </button>
                     <button
                       type="button"
@@ -1523,11 +1558,34 @@ export default function CompactWhiteMarketplacePage() {
                     <button
                       type="button"
                       className="btn-share-card-compact"
-                      onClick={() => handleShareRaffle(item)}
-                      title="Compartir enlace de este sorteo"
-                      style={{ color: '#000000', fontWeight: 800 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleShareRaffle(item);
+                      }}
+                      title="Compartir sorteo"
+                      aria-label="Compartir este sorteo"
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        padding: 0,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '8px',
+                        background: 'rgba(0, 0, 0, 0.05)',
+                        border: '1px solid rgba(0, 0, 0, 0.1)',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                        color: theme === 'dark' ? '#ffffff' : '#000000',
+                      }}
                     >
-                      📤 Compartir
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="18" cy="5" r="3" />
+                        <circle cx="6" cy="12" r="3" />
+                        <circle cx="18" cy="19" r="3" />
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -1547,9 +1605,9 @@ export default function CompactWhiteMarketplacePage() {
               <article key={item.id} className={`compact-raffle-card card-type-upcoming card-cat-${item.category}`}>
                 <div
                   className="compact-raffle-media"
-                  onClick={() => handleOpenTicketModal(item)}
+                  onClick={() => setSelectedRaffleDetail(item)}
                   style={{ cursor: 'pointer' }}
-                  title="Elegir número y comprar boleta"
+                  title="Ver detalle del sorteo"
                 >
                   <img src={item.image} alt={item.title} loading="lazy" />
                   <span className="compact-date-badge">{item.timeLabel}</span>
@@ -1572,9 +1630,9 @@ export default function CompactWhiteMarketplacePage() {
                     </button>
                   </div>
                   <h3
-                    onClick={() => handleOpenTicketModal(item)}
+                    onClick={() => setSelectedRaffleDetail(item)}
                     style={{ cursor: 'pointer' }}
-                    title="Elegir número y comprar boleta"
+                    title="Ver detalle del sorteo"
                   >
                     {item.title}
                   </h3>
@@ -1596,22 +1654,25 @@ export default function CompactWhiteMarketplacePage() {
                     );
                   })()}
 
-                  <div className="compact-card-actions-row" style={{ background: 'transparent', border: 'none', outline: 'none', boxShadow: 'none', padding: 0 }}>
+                  <div className="compact-card-actions-row" style={{ background: 'transparent', border: 'none', outline: 'none', boxShadow: 'none', padding: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <button
                       type="button"
                       className="btn-compact-action"
                       onClick={() => handleOpenTicketModal(item)}
                       style={{
-                        fontSize: '0.72rem',
+                        fontSize: '0.78rem',
                         fontWeight: 800,
-                        letterSpacing: '-0.25px',
-                        padding: '0 8px',
+                        padding: '6px 14px',
+                        borderRadius: '8px',
+                        background: '#007AFF',
+                        color: '#ffffff',
+                        border: 'none',
+                        cursor: 'pointer',
+                        flex: 1,
                         whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
                       }}
                     >
-                      Elegir Número →
+                      Comprar
                     </button>
                     <button
                       type="button"
@@ -1630,11 +1691,34 @@ export default function CompactWhiteMarketplacePage() {
                     <button
                       type="button"
                       className="btn-share-card-compact"
-                      onClick={() => handleShareRaffle(item)}
-                      title="Compartir enlace de este sorteo"
-                      style={{ color: '#000000', fontWeight: 800 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleShareRaffle(item);
+                      }}
+                      title="Compartir sorteo"
+                      aria-label="Compartir este sorteo"
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        padding: 0,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '8px',
+                        background: 'rgba(0, 0, 0, 0.05)',
+                        border: '1px solid rgba(0, 0, 0, 0.1)',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                        color: theme === 'dark' ? '#ffffff' : '#000000',
+                      }}
                     >
-                      📤 Compartir
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="18" cy="5" r="3" />
+                        <circle cx="6" cy="12" r="3" />
+                        <circle cx="18" cy="19" r="3" />
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -1646,7 +1730,16 @@ export default function CompactWhiteMarketplacePage() {
         
 
         {/* ESTACIÓN: 📢 VITRINA COMERCIAL, PAUTA PUBLICITARIA Y MARCAS ALIADAS */}
-        <section id="estacion-comercial" className="station-block-premium station-showcase-commercial" aria-label="Vitrina Comercial y Marcas Aliadas">
+        <section
+          id="estacion-comercial"
+          className="station-block-premium station-showcase-commercial"
+          aria-label="Vitrina Comercial y Marcas Aliadas"
+          style={{
+            backgroundColor: theme === 'dark' ? '#141a24' : '#f1f5f9',
+            borderTop: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid #e2e8f0',
+            borderBottom: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid #e2e8f0',
+          }}
+        >
           {/* Cabecera Vendedora con CTA visible sin hacer scroll */}
           <div className="commercial-showcase-header">
             <div>
@@ -2574,6 +2667,275 @@ export default function CompactWhiteMarketplacePage() {
                 </Link>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE DETALLE COMPLETO DEL SORTEO EN PANTALLA TOTAL */}
+      {selectedRaffleDetail && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Detalle oficial del sorteo"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 1300,
+            backgroundColor: theme === 'dark' ? '#090d16' : '#ffffff',
+            color: theme === 'dark' ? '#ffffff' : '#0f172a',
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {/* CABECERA STICKY EN PANTALLA COMPLETA */}
+          <header
+            style={{
+              position: 'sticky',
+              top: 0,
+              zIndex: 50,
+              backgroundColor: theme === 'dark' ? 'rgba(9, 13, 22, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid #e2e8f0',
+              padding: 'max(calc(env(safe-area-inset-top, 0px) + 8px), 16px) 16px 12px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => setSelectedRaffleDetail(null)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: theme === 'dark' ? '#1e293b' : '#f1f5f9',
+                color: theme === 'dark' ? '#f8fafc' : '#0f172a',
+                border: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #cbd5e1',
+                padding: '6px 14px',
+                borderRadius: '999px',
+                fontSize: '13px',
+                fontWeight: 800,
+                cursor: 'pointer',
+              }}
+              aria-label="Volver al feed principal"
+            >
+              <span>←</span> Volver
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span
+                style={{
+                  fontSize: '11px',
+                  fontWeight: 800,
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  color: '#10b981',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  padding: '4px 10px',
+                  borderRadius: '999px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+              >
+                🛡️ Sorteo Legal Verificado
+              </span>
+              <button
+                type="button"
+                onClick={() => handleShareRaffle(selectedRaffleDetail)}
+                style={{
+                  width: '34px',
+                  height: '34px',
+                  borderRadius: '50%',
+                  background: theme === 'dark' ? '#1e293b' : '#f1f5f9',
+                  border: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #cbd5e1',
+                  display: 'grid',
+                  placeItems: 'center',
+                  cursor: 'pointer',
+                  color: theme === 'dark' ? '#ffffff' : '#000000',
+                }}
+                title="Compartir este sorteo"
+                aria-label="Compartir este sorteo"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="18" cy="5" r="3" />
+                  <circle cx="6" cy="12" r="3" />
+                  <circle cx="18" cy="19" r="3" />
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                </svg>
+              </button>
+            </div>
+          </header>
+
+          {/* CUERPO DEL DETALLE DEL SORTEO EN PANTALLA COMPLETA */}
+          <div style={{ flex: 1, paddingBottom: '30px' }}>
+            {/* IMAGEN PRINCIPAL EN ALTA DEFINICIÓN */}
+            <div style={{ position: 'relative', width: '100%', height: '320px', backgroundColor: '#000000' }}>
+              <img
+                src={selectedRaffleDetail.image}
+                alt={selectedRaffleDetail.title}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 45%)' }} />
+
+              {/* BADGES SOBRE LA IMAGEN */}
+              <div style={{ position: 'absolute', top: '12px', left: '16px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0,0,0,0.7)', color: '#ffffff', padding: '4px 10px', borderRadius: '6px', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}>
+                  {selectedRaffleDetail.category === 'autos' ? '🚗 Vehículos 4x4' : selectedRaffleDetail.category === 'motos' ? '🏍️ Motocicletas' : selectedRaffleDetail.category === 'joyas' ? '⌚ Relojes & Joyería' : selectedRaffleDetail.category === 'tech' ? '⚡ Tecnología' : selectedRaffleDetail.category === 'hogar' ? '🏠 Hogar & Viajes' : '🎁 Sorteo VIP'}
+                </span>
+                <span style={{ fontSize: '11px', fontWeight: 800, background: '#ef4444', color: '#ffffff', padding: '4px 10px', borderRadius: '6px' }}>
+                  🔥 Juega {selectedRaffleDetail.timeLabel}
+                </span>
+              </div>
+
+              <div style={{ position: 'absolute', bottom: '14px', left: '16px', right: '16px' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#0284c7', color: '#ffffff', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', marginBottom: '6px' }}>
+                  <span>🏢</span> {selectedRaffleDetail.merchant}
+                </div>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', margin: 0, lineHeight: 1.25, textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
+                  {selectedRaffleDetail.title}
+                </h2>
+              </div>
+            </div>
+
+            {/* INFORMACIÓN DEL SORTEO Y COMERCIO */}
+            <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '720px', margin: '0 auto' }}>
+              {/* PRECIO POR BOLETA Y DISPONIBILIDAD */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '14px 16px',
+                  borderRadius: '14px',
+                  background: theme === 'dark' ? '#141a24' : '#f8fafc',
+                  border: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+                }}
+              >
+                <div>
+                  <span style={{ fontSize: '11px', color: theme === 'dark' ? '#94a3b8' : '#64748b', display: 'block', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    Precio por boleta
+                  </span>
+                  <strong style={{ fontSize: '1.4rem', fontWeight: 900, color: '#0284c7' }}>
+                    {selectedRaffleDetail.priceCop}
+                  </strong>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <span style={{ fontSize: '11px', color: theme === 'dark' ? '#94a3b8' : '#64748b', display: 'block', fontWeight: 700 }}>
+                    Cuadrícula / Cifras
+                  </span>
+                  <span style={{ fontSize: '13px', fontWeight: 800, background: 'rgba(2, 132, 199, 0.1)', color: '#0284c7', padding: '3px 8px', borderRadius: '6px', display: 'inline-block' }}>
+                    {selectedRaffleDetail.ballotGrid || 100} números ({selectedRaffleDetail.ballotGrid <= 100 ? '2 cifras' : selectedRaffleDetail.ballotGrid <= 1000 ? '3 cifras' : '4 cifras'})
+                  </span>
+                </div>
+              </div>
+
+              {/* BARRA DE PROGRESO DE VENTAS */}
+              <div
+                style={{
+                  padding: '14px 16px',
+                  borderRadius: '14px',
+                  background: theme === 'dark' ? '#141a24' : '#f8fafc',
+                  border: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 700, marginBottom: '8px' }}>
+                  <span>Boletas Vendidas: {selectedRaffleDetail.soldPercent || 82}%</span>
+                  <span style={{ color: '#0284c7' }}>Quedan {Math.round((selectedRaffleDetail.ballotGrid || 100) * (1 - (selectedRaffleDetail.soldPercent || 82) / 100))} disponibles</span>
+                </div>
+                <div style={{ width: '100%', height: '8px', background: theme === 'dark' ? '#1e293b' : '#e2e8f0', borderRadius: '999px', overflow: 'hidden' }}>
+                  <div style={{ width: `${selectedRaffleDetail.soldPercent || 82}%`, height: '100%', background: 'linear-gradient(90deg, #0284c7, #38bdf8)', borderRadius: '999px' }} />
+                </div>
+              </div>
+
+              {/* DESCRIPCIÓN DETALLADA DEL PREMIO */}
+              <div>
+                <h3 style={{ fontSize: '15px', fontWeight: 800, margin: '0 0 8px', color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>
+                  Descripción y Especificaciones Oficiales
+                </h3>
+                <p style={{ fontSize: '13px', lineHeight: 1.6, color: theme === 'dark' ? '#cbd5e1' : '#475569', margin: 0 }}>
+                  {selectedRaffleDetail.description || 'Participa por este premio 100% garantizado. Se entrega completamente nuevo de vitrina, con factura legal a nombre del ganador, póliza de garantía vigente y cobertura nacional de transporte.'}
+                </p>
+              </div>
+
+              {/* GARANTÍAS Y RESPALDO LEGAL */}
+              <div
+                style={{
+                  padding: '14px',
+                  borderRadius: '14px',
+                  background: theme === 'dark' ? '#0f172a' : '#f0fdf4',
+                  border: theme === 'dark' ? '1px solid rgba(16, 185, 129, 0.2)' : '1px solid #bbf7d0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#16a34a', fontWeight: 800, fontSize: '13px' }}>
+                  <span>✅</span>
+                  <span>Garantía de Transparencia y Entrega Notarial</span>
+                </div>
+                <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '12px', color: theme === 'dark' ? '#cbd5e1' : '#166534', lineHeight: 1.5 }}>
+                  <li>Transmisión en directo del sorteo por Sala 3D en tiempo real.</li>
+                  <li>Sorteo certificado bajo la Ley 643 de 2001 y Decreto 1486 de 2024.</li>
+                  <li>Entrega de premio asegurada con acta formal ante Notaría Pública.</li>
+                  <li>Pagos 100% protegidos por pasarela Wompi Bancolombia.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* BARRA INFERIOR STICKY CON EL BOTÓN COMPRAR */}
+          <div
+            style={{
+              position: 'sticky',
+              bottom: 0,
+              zIndex: 50,
+              backgroundColor: theme === 'dark' ? 'rgba(9, 13, 22, 0.96)' : 'rgba(255, 255, 255, 0.96)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              borderTop: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid #e2e8f0',
+              padding: '12px 16px max(16px, env(safe-area-inset-bottom)) 16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+            }}
+          >
+            <div style={{ flexShrink: 0 }}>
+              <small style={{ fontSize: '10px', color: theme === 'dark' ? '#94a3b8' : '#64748b', display: 'block' }}>Total por Boleta</small>
+              <strong style={{ fontSize: '16px', fontWeight: 900, color: '#0284c7' }}>{selectedRaffleDetail.priceCop}</strong>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                const raffle = selectedRaffleDetail;
+                setSelectedRaffleDetail(null);
+                handleOpenTicketModal(raffle);
+              }}
+              style={{
+                flex: 1,
+                padding: '12px 18px',
+                background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '12px',
+                fontSize: '14px',
+                fontWeight: 800,
+                cursor: 'pointer',
+                boxShadow: '0 4px 14px rgba(0, 122, 255, 0.35)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+              }}
+            >
+              <span>🎟️</span> Comprar Boleta Ahora →
+            </button>
           </div>
         </div>
       )}

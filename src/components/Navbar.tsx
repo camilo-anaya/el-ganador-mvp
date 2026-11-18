@@ -52,11 +52,15 @@ export default function Navbar({
         <div>
           <h1
             style={{
-              fontSize: '16px',
-              fontWeight: 'bold',
+              fontSize: '17px',
+              fontWeight: 900,
               margin: 0,
-              color: 'var(--text-primary, #fff)',
-              letterSpacing: '0.6px',
+              color: '#000000',
+              letterSpacing: '-0.2px',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+              textRendering: 'optimizeLegibility',
+              lineHeight: 1.1,
             }}
           >
             EL GANADOR
