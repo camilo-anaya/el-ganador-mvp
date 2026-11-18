@@ -529,6 +529,51 @@ export default function CompactWhiteMarketplacePage() {
       const currentAdTheme = VIBRANT_AD_THEMES[currentAdIndex % VIBRANT_AD_THEMES.length];
   const { theme, setThemePreference } = useTheme();
 
+  // Controladores táctiles y de avance / retroceso para el Carrusel de Patrocinadores
+  const adTouchStartX = useRef<number | null>(null);
+  const adTouchStartY = useRef<number | null>(null);
+  const adIsSwiping = useRef<boolean>(false);
+
+  const handlePrevAd = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    setCurrentAdIndex((prev) => (prev - 1 + SPONSOR_CAROUSEL_ADS.length) % SPONSOR_CAROUSEL_ADS.length);
+  };
+
+  const handleNextAd = (e?: React.MouseEvent | React.TouchEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    setCurrentAdIndex((prev) => (prev + 1) % SPONSOR_CAROUSEL_ADS.length);
+  };
+
+  const handleAdTouchStart = (e: React.TouchEvent) => {
+    setIsAdPaused(true);
+    adTouchStartX.current = e.touches[0].clientX;
+    adTouchStartY.current = e.touches[0].clientY;
+    adIsSwiping.current = false;
+  };
+
+  const handleAdTouchEnd = (e: React.TouchEvent) => {
+    setIsAdPaused(false);
+    if (adTouchStartX.current === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const deltaX = touchEndX - adTouchStartX.current;
+    if (Math.abs(deltaX) > 35) {
+      adIsSwiping.current = true;
+      if (deltaX < 0) {
+        // Deslizar hacia la izquierda -> avanzar
+        setCurrentAdIndex((prev) => (prev + 1) % SPONSOR_CAROUSEL_ADS.length);
+      } else {
+        // Deslizar hacia la derecha -> retroceder
+        setCurrentAdIndex((prev) => (prev - 1 + SPONSOR_CAROUSEL_ADS.length) % SPONSOR_CAROUSEL_ADS.length);
+      }
+    }
+    adTouchStartX.current = null;
+    adTouchStartY.current = null;
+  };
+
   // Estados para Vitrina Comercial B2B y Seguir Negocios Patrocinadores
   const [selectedVitrinaAd, setSelectedVitrinaAd] = useState<(typeof SPONSOR_CAROUSEL_ADS)[0] | null>(null);
   const [followedBrands, setFollowedBrands] = useState<Record<string, boolean>>({});
@@ -1235,177 +1280,6 @@ export default function CompactWhiteMarketplacePage() {
           </DesktopScrollStrip>
         </section>
 
-        {/* ESTACIÓN 2 (NUEVA UBICACIÓN): 📢 CARRUSEL PUBLICITARIO CONSTANTE DE PATROCINADORES (ROTATIVO CADA 4S) */}
-        <section
-          id="estacion-patrocinadores"
-          className="official-ad-showcase vibrant-sponsor-banner"
-          aria-label="Carrusel Publicitario de Patrocinadores"
-          style={{
-            ['--ad-vibrant-bg' as string]: currentAdTheme.bg,
-            ['--ad-vibrant-border' as string]: currentAdTheme.border,
-            ['--ad-vibrant-shadow' as string]: currentAdTheme.shadow,
-            background: currentAdTheme.bg,
-            borderColor: currentAdTheme.border,
-            boxShadow: currentAdTheme.shadow,
-            cursor: 'pointer',
-            transition: 'background 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease',
-          } as React.CSSProperties}
-          onClick={() => setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex])}
-          onMouseEnter={() => setIsAdPaused(true)}
-          onMouseLeave={() => setIsAdPaused(false)}
-          onTouchStart={() => setIsAdPaused(true)}
-          onTouchEnd={() => setIsAdPaused(false)}
-        >
-          <div className="carousel-ad-wrapper" style={{ padding: '10px 12px' }}>
-            <div className="official-ad-content" style={{ gap: '10px' }}>
-              <div className="official-ad-media" style={{ width: '100%', height: '145px', borderRadius: '10px', overflow: 'hidden', order: -1 }}>
-                <img
-                  key={SPONSOR_CAROUSEL_ADS[currentAdIndex].id}
-                  src={SPONSOR_CAROUSEL_ADS[currentAdIndex].image}
-                  alt={SPONSOR_CAROUSEL_ADS[currentAdIndex].brand}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-
-              <div className="official-ad-text" style={{ gap: '4px' }}>
-                <div className="ad-pill-and-counter" style={{ marginBottom: '2px' }}>
-                  <span
-                    className="official-ad-pill"
-                    style={{
-                      background: currentAdTheme.tagBg,
-                      border: `1px solid ${currentAdTheme.tagBorder}`,
-                      color: '#ffffff',
-                      fontSize: '0.68rem',
-                      padding: '2px 8px',
-                    }}
-                  >
-                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].tag}
-                  </span>
-                </div>
-                <h3 style={{ fontSize: '0.98rem', fontWeight: 800, margin: '2px 0', lineHeight: 1.2 }}>
-                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].title}
-                </h3>
-                <p style={{
-                  fontSize: '0.74rem',
-                  lineHeight: 1.35,
-                  margin: 0,
-                  display: '-webkit-box',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                  opacity: 0.9,
-                }}>
-                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].description}
-                </p>
-
-                {/* MÉTRICA EN VIVO DE CLIENTES PENDIENTES Y BOTÓN SEGUIR NEGOCIO */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', margin: '4px 0 6px' }}>
-                  <span style={{ fontSize: '0.7rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    👥 {(brandFollowerCounts[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] || 1580).toLocaleString()} pendientes
-                  </span>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleToggleFollow(SPONSOR_CAROUSEL_ADS[currentAdIndex].brand);
-                    }}
-                    style={{
-                      padding: '2px 8px',
-                      borderRadius: '6px',
-                      border: '1px solid #ffffff',
-                      background: followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
-                      color: '#ffffff',
-                      fontSize: '0.7rem',
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                    title="Seguir empresa para recibir alertas de sus rifas y descuentos"
-                  >
-                    {followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '✓ Siguiendo' : '🔔 Seguir'}
-                  </button>
-                </div>
-
-                <div className="official-ad-actions" style={{ marginTop: '2px', gap: '6px' }}>
-                  <button
-                    type="button"
-                    className="btn-ad-emerald"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
-                    }}
-                    style={{
-                      background: currentAdTheme.btnBg,
-                      color: currentAdTheme.btnText,
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                      border: 'none',
-                      fontSize: '0.74rem',
-                      padding: '6px 12px',
-                    }}
-                  >
-                    🏪 Ver Vitrina & Sorteo →
-                  </button>
-                  <span
-                    className="ad-coupon-tag"
-                    style={{
-                      background: currentAdTheme.couponBg,
-                      color: currentAdTheme.couponColor,
-                      border: '1px dashed rgba(255, 255, 255, 0.6)',
-                      fontSize: '0.68rem',
-                      padding: '4px 8px',
-                    }}
-                  >
-                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].coupon}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* BARRA DE CONTROLES E INDICADORES DE PAGINACIÓN */}
-            <div className="ad-carousel-controls">
-              <button
-                type="button"
-                onClick={() => setCurrentAdIndex((prev) => (prev - 1 + SPONSOR_CAROUSEL_ADS.length) % SPONSOR_CAROUSEL_ADS.length)}
-                className="ad-nav-arrow"
-                aria-label="Patrocinador anterior"
-                title="Patrocinador anterior"
-              >
-                ‹
-              </button>
-
-              <div className="ad-dots-row">
-                {SPONSOR_CAROUSEL_ADS.map((ad, idx) => (
-                  <button
-                    key={ad.id}
-                    type="button"
-                    onClick={() => setCurrentAdIndex(idx)}
-                    className="ad-dot-btn"
-                    style={{
-                      width: currentAdIndex === idx ? '24px' : '8px',
-                      background: currentAdIndex === idx ? '#f5b82e' : 'rgba(255, 255, 255, 0.28)',
-                    }}
-                    aria-label={`Ver patrocinador ${idx + 1}: ${ad.brand}`}
-                    title={ad.brand}
-                  />
-                ))}
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setCurrentAdIndex((prev) => (prev + 1) % SPONSOR_CAROUSEL_ADS.length)}
-                className="ad-nav-arrow"
-                aria-label="Siguiente patrocinador"
-                title="Siguiente patrocinador"
-              >
-                ›
-              </button>
-            </div>
-          </div>
-        </section>
-
-
-
         {/* FILTRO COMPACTO DE CATEGORÍAS */}
         <div className="categories-bar-surface">
           <DesktopScrollStrip ariaLabel="Categorías">
@@ -1551,7 +1425,7 @@ export default function CompactWhiteMarketplacePage() {
                       title={likedRaffles.includes(item.id) ? `Te gusta este sorteo (${(raffleLikes[item.id] || 45) + 1} me gusta)` : `Dar me gusta (${raffleLikes[item.id] || 45} me gusta)`}
                       aria-label="Me gusta este sorteo"
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill={likedRaffles.includes(item.id) ? "#ef4444" : "none"} stroke={likedRaffles.includes(item.id) ? "#ef4444" : "#94a3b8"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill={likedRaffles.includes(item.id) ? "#ef4444" : "none"} stroke={likedRaffles.includes(item.id) ? "#ef4444" : "#94a3b8"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                       </svg>
                     </button>
@@ -1564,22 +1438,8 @@ export default function CompactWhiteMarketplacePage() {
                       }}
                       title="Compartir sorteo"
                       aria-label="Compartir este sorteo"
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        padding: 0,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '8px',
-                        background: 'rgba(0, 0, 0, 0.05)',
-                        border: '1px solid rgba(0, 0, 0, 0.1)',
-                        cursor: 'pointer',
-                        flexShrink: 0,
-                        color: theme === 'dark' ? '#ffffff' : '#000000',
-                      }}
                     >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="18" cy="5" r="3" />
                         <circle cx="6" cy="12" r="3" />
                         <circle cx="18" cy="19" r="3" />
@@ -1592,6 +1452,299 @@ export default function CompactWhiteMarketplacePage() {
               </article>
             ))}
           </DesktopScrollStrip>
+        </section>
+
+        {/* =========================================================================
+            📢 CARRUSEL PUBLICITARIO DE PATROCINADORES (UBICADO AL CENTRO DEL FEED)
+            - Tamaño uniforme para todos los recuadros (min-height/max-height fijos)
+            - Foto grande destacada (165px)
+            - Contenido e información compacta y centrada
+            - Flechas interactivas adelante/atrás + swipe táctil + paginación por puntos
+            ========================================================================= */}
+        <section
+          id="estacion-patrocinadores"
+          className="official-ad-showcase vibrant-sponsor-banner"
+          aria-label="Carrusel Publicitario de Patrocinadores"
+          style={{
+            ['--ad-vibrant-bg' as string]: currentAdTheme.bg,
+            ['--ad-vibrant-border' as string]: currentAdTheme.border,
+            ['--ad-vibrant-shadow' as string]: currentAdTheme.shadow,
+            background: currentAdTheme.bg,
+            borderColor: currentAdTheme.border,
+            boxShadow: currentAdTheme.shadow,
+            cursor: 'pointer',
+            transition: 'background 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease',
+            margin: '6px 0 12px 0',
+            width: '100%',
+          } as React.CSSProperties}
+          onClick={() => {
+            if (adIsSwiping.current) {
+              adIsSwiping.current = false;
+              return;
+            }
+            setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
+          }}
+          onMouseEnter={() => setIsAdPaused(true)}
+          onMouseLeave={() => setIsAdPaused(false)}
+          onTouchStart={handleAdTouchStart}
+          onTouchEnd={handleAdTouchEnd}
+        >
+          <div className="carousel-ad-wrapper" style={{ padding: '10px 12px', minHeight: '345px', maxHeight: '345px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxSizing: 'border-box' }}>
+            {/* CONTENIDO CENTRADO Y UNIFORME */}
+            <div className="official-ad-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px', width: '100%' }}>
+              
+              {/* FOTO GRANDE Y DESTACADA CON FLECHAS FLOTANTES ADELANTE / ATRÁS */}
+              <div
+                className="official-ad-media"
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '165px',
+                  borderRadius: '10px',
+                  overflow: 'hidden',
+                  background: '#000000',
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.25)',
+                }}
+              >
+                <img
+                  key={SPONSOR_CAROUSEL_ADS[currentAdIndex].id}
+                  src={SPONSOR_CAROUSEL_ADS[currentAdIndex].image}
+                  alt={SPONSOR_CAROUSEL_ADS[currentAdIndex].brand}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+
+                {/* BOTÓN FLOTANTE: ANTERIOR ‹ */}
+                <button
+                  type="button"
+                  onClick={handlePrevAd}
+                  aria-label="Patrocinador anterior"
+                  style={{
+                    position: 'absolute',
+                    left: '8px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    background: 'rgba(0, 0, 0, 0.6)',
+                    backdropFilter: 'blur(6px)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.5)',
+                    color: '#ffffff',
+                    fontSize: '22px',
+                    fontWeight: 900,
+                    display: 'grid',
+                    placeItems: 'center',
+                    cursor: 'pointer',
+                    zIndex: 10,
+                    lineHeight: 1,
+                  }}
+                  title="Anterior patrocinador"
+                >
+                  ‹
+                </button>
+
+                {/* BOTÓN FLOTANTE: SIGUIENTE › */}
+                <button
+                  type="button"
+                  onClick={handleNextAd}
+                  aria-label="Siguiente patrocinador"
+                  style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '50%',
+                    background: 'rgba(0, 0, 0, 0.6)',
+                    backdropFilter: 'blur(6px)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.5)',
+                    color: '#ffffff',
+                    fontSize: '22px',
+                    fontWeight: 900,
+                    display: 'grid',
+                    placeItems: 'center',
+                    cursor: 'pointer',
+                    zIndex: 10,
+                    lineHeight: 1,
+                  }}
+                  title="Siguiente patrocinador"
+                >
+                  ›
+                </button>
+              </div>
+
+              {/* INFORMACIÓN COMPACTA Y CENTRADA (TAMAÑO UNIFORME) */}
+              <div className="official-ad-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '3px', width: '100%' }}>
+                <div className="ad-pill-and-counter" style={{ marginBottom: '1px' }}>
+                  <span
+                    className="official-ad-pill"
+                    style={{
+                      background: currentAdTheme.tagBg,
+                      border: `1px solid ${currentAdTheme.tagBorder}`,
+                      color: '#ffffff',
+                      fontSize: '0.68rem',
+                      padding: '2px 10px',
+                      borderRadius: '999px',
+                      fontWeight: 800,
+                    }}
+                  >
+                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].tag}
+                  </span>
+                </div>
+
+                <h3
+                  style={{
+                    fontSize: '0.96rem',
+                    fontWeight: 800,
+                    margin: '1px 0',
+                    lineHeight: 1.2,
+                    textAlign: 'center',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '100%',
+                    color: '#ffffff',
+                  }}
+                >
+                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].title}
+                </h3>
+
+                <p
+                  style={{
+                    fontSize: '0.72rem',
+                    lineHeight: 1.3,
+                    margin: 0,
+                    textAlign: 'center',
+                    height: '2.6em',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    opacity: 0.92,
+                    color: '#ffffff',
+                    maxWidth: '92%',
+                  }}
+                >
+                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].description}
+                </p>
+
+                {/* MÉTRICA EN VIVO Y BOTÓN SEGUIR CENTRADOS */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '3px 0' }}>
+                  <span style={{ fontSize: '0.7rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    👥 {(brandFollowerCounts[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] || 1580).toLocaleString()} pendientes
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleToggleFollow(SPONSOR_CAROUSEL_ADS[currentAdIndex].brand);
+                    }}
+                    style={{
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      border: '1px solid #ffffff',
+                      background: followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
+                      color: '#ffffff',
+                      fontSize: '0.7rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                    title="Seguir empresa para recibir alertas de sus rifas y descuentos"
+                  >
+                    {followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '✓ Siguiendo' : '🔔 Seguir'}
+                  </button>
+                </div>
+
+                {/* ACCIONES DEL PATROCINADOR CENTRADAS */}
+                <div className="official-ad-actions" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '2px' }}>
+                  <button
+                    type="button"
+                    className="btn-ad-emerald"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
+                    }}
+                    style={{
+                      background: currentAdTheme.btnBg,
+                      color: currentAdTheme.btnText,
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      border: 'none',
+                      fontSize: '0.74rem',
+                      padding: '5px 12px',
+                      borderRadius: '6px',
+                    }}
+                  >
+                    🏪 Ver Vitrina & Sorteo →
+                  </button>
+                  <span
+                    className="ad-coupon-tag"
+                    style={{
+                      background: currentAdTheme.couponBg,
+                      color: currentAdTheme.couponColor,
+                      border: '1px dashed rgba(255, 255, 255, 0.6)',
+                      fontSize: '0.68rem',
+                      padding: '3px 8px',
+                      borderRadius: '6px',
+                    }}
+                  >
+                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].coupon}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* CONTROLES INFERIORES: FLECHAS ‹ › Y PUNTOS DE PAGINACIÓN */}
+            <div className="ad-carousel-controls" style={{ marginTop: '6px', paddingTop: '6px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+              <button
+                type="button"
+                onClick={handlePrevAd}
+                className="ad-nav-arrow"
+                aria-label="Patrocinador anterior"
+                title="Patrocinador anterior"
+              >
+                ‹
+              </button>
+
+              <div className="ad-dots-row" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                {SPONSOR_CAROUSEL_ADS.map((ad, idx) => (
+                  <button
+                    key={ad.id}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentAdIndex(idx);
+                    }}
+                    className="ad-dot-btn"
+                    style={{
+                      width: currentAdIndex === idx ? '24px' : '8px',
+                      height: '8px',
+                      borderRadius: '4px',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'pointer',
+                      background: currentAdIndex === idx ? '#f5b82e' : 'rgba(255, 255, 255, 0.35)',
+                      transition: 'all 0.25s ease',
+                    }}
+                    aria-label={`Ver patrocinador ${idx + 1}: ${ad.brand}`}
+                    title={ad.brand}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleNextAd}
+                className="ad-nav-arrow"
+                aria-label="Siguiente patrocinador"
+                title="Siguiente patrocinador"
+              >
+                ›
+              </button>
+            </div>
+          </div>
         </section>
 
         {/* SECCIÓN 3: RECUADROS COMPACTOS 🎟️ PRÓXIMOS SORTEOS */}
@@ -1684,7 +1837,7 @@ export default function CompactWhiteMarketplacePage() {
                       title={likedRaffles.includes(item.id) ? `Te gusta este sorteo (${(raffleLikes[item.id] || 45) + 1} me gusta)` : `Dar me gusta (${raffleLikes[item.id] || 45} me gusta)`}
                       aria-label="Me gusta este sorteo"
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill={likedRaffles.includes(item.id) ? "#ef4444" : "none"} stroke={likedRaffles.includes(item.id) ? "#ef4444" : "#94a3b8"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill={likedRaffles.includes(item.id) ? "#ef4444" : "none"} stroke={likedRaffles.includes(item.id) ? "#ef4444" : "#94a3b8"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                       </svg>
                     </button>
@@ -1697,22 +1850,8 @@ export default function CompactWhiteMarketplacePage() {
                       }}
                       title="Compartir sorteo"
                       aria-label="Compartir este sorteo"
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        padding: 0,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '8px',
-                        background: 'rgba(0, 0, 0, 0.05)',
-                        border: '1px solid rgba(0, 0, 0, 0.1)',
-                        cursor: 'pointer',
-                        flexShrink: 0,
-                        color: theme === 'dark' ? '#ffffff' : '#000000',
-                      }}
                     >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="18" cy="5" r="3" />
                         <circle cx="6" cy="12" r="3" />
                         <circle cx="18" cy="19" r="3" />

@@ -20574,13 +20574,15 @@ body {
   color: #6ee7b7 !important;
 }
 
-.btn-like-card-compact {
+.btn-like-card-compact,
+.btn-share-card-compact {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   width: 38px !important;
   height: 38px !important;
   min-width: 38px !important;
+  min-height: 38px !important;
   flex-shrink: 0 !important;
   padding: 0 !important;
   border-radius: 10px !important;
@@ -20588,18 +20590,25 @@ body {
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
   border: 1.5px solid #cbd5e1 !important;
   background: #ffffff !important;
-  color: #94a3b8 !important;
+  color: #0f172a !important;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+  box-sizing: border-box !important;
 }
 
-.btn-like-card-compact svg {
+.btn-like-card-compact svg,
+.btn-share-card-compact svg {
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.2s ease, fill 0.2s ease;
 }
 
-.btn-like-card-compact:hover {
+.btn-like-card-compact:hover,
+.btn-share-card-compact:hover {
   transform: scale(1.08) !important;
   border-color: #94a3b8 !important;
   background: #f8fafc !important;
+}
+
+.btn-share-card-compact:hover svg {
+  stroke: #0284c7 !important;
 }
 
 .btn-like-card-compact:hover svg {
@@ -20618,10 +20627,15 @@ body {
   stroke: #ef4444 !important;
 }
 
-[data-theme='dark'] .btn-like-card-compact {
+[data-theme='dark'] .btn-like-card-compact,
+[data-theme='dark'] .btn-share-card-compact {
   background: rgba(255, 255, 255, 0.08) !important;
   border-color: rgba(255, 255, 255, 0.16) !important;
-  color: #94a3b8 !important;
+  color: #f8fafc !important;
+}
+
+[data-theme='dark'] .btn-share-card-compact:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
 }
 
 [data-theme='dark'] .btn-like-card-compact.is-liked {
@@ -20779,36 +20793,83 @@ header h1,
     margin-top: 2px !important;
   }
 
-  /* 4. Banner de patrocinadores: Comprimido en altura, foto grande y destacada, información compacta */
+  /* 4. Banner de patrocinadores: Tamaño uniforme para todos los recuadros, foto grande (165px) y centrado */
+  #estacion-patrocinadores {
+    margin: 4px 0 10px 0 !important;
+  }
   .carousel-ad-wrapper {
-    padding: 8px 12px !important;
+    padding: 10px 12px !important;
+    min-height: 345px !important;
+    max-height: 345px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
   }
   .official-ad-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
     gap: 8px !important;
+    width: 100% !important;
   }
   .official-ad-media {
     width: 100% !important;
-    height: 145px !important;
-    border-radius: 8px !important;
+    height: 165px !important;
+    border-radius: 10px !important;
     overflow: hidden !important;
+    position: relative !important;
   }
   .official-ad-media img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
   }
+  .official-ad-text {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 3px !important;
+    width: 100% !important;
+  }
   .official-ad-text h3 {
-    font-size: 0.92rem !important;
-    margin: 2px 0 !important;
+    font-size: 0.94rem !important;
+    margin: 1px 0 !important;
     line-height: 1.2 !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
   }
   .official-ad-text p {
     font-size: 0.72rem !important;
     line-height: 1.3 !important;
+    margin: 0 !important;
+    text-align: center !important;
+    height: 2.6em !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
+  }
+  .ad-nav-arrow {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    border-radius: 50% !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+    color: #ffffff !important;
+    font-size: 20px !important;
+    font-weight: 900 !important;
+    display: grid !important;
+    place-items: center !important;
+    cursor: pointer !important;
+    touch-action: manipulation !important;
   }
 
   /* 5. Estación Comercial / Vitrina publicitaria con fondo gris sutil */
