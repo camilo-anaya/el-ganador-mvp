@@ -21092,3 +21092,42 @@ html.dark .app-topbar {
 
 
 
+
+
+/* ==========================================================================
+   FIX DEFINITIVO: PAGINADOR CENTRADO + FOTO DEL BANNER EDGE-TO-EDGE
+   Las reglas genéricas div[class*='carousel'] { justify-content: flex-start }
+   y .vibrant-sponsor-banner { padding: 20px } pisaban estos estilos.
+   Se usan selectores con ID (mayor especificidad) para ganar siempre.
+   ========================================================================== */
+#estacion-patrocinadores .ad-carousel-paginator,
+#estacion-patrocinadores .ad-carousel-controls {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  #estacion-patrocinadores.vibrant-sponsor-banner,
+  #estacion-patrocinadores.official-ad-showcase {
+    padding: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
+  #estacion-patrocinadores .carousel-ad-wrapper {
+    padding: 0 0 14px 0 !important;
+  }
+  #estacion-patrocinadores .official-ad-media {
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+}
