@@ -277,7 +277,7 @@ export default function FavoritosPage() {
             ? 'linear-gradient(180deg, #111e33 0%, #0b1320 100%)'
             : 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%)',
           borderBottom: isDark ? '1px solid #1e293b' : '1px solid #e2e8f0',
-          padding: '18px 24px',
+          padding: 'max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) 16px 14px 16px',
           position: 'sticky',
           top: 0,
           zIndex: 40,

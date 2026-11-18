@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import DesktopSidebar from '@/components/DesktopSidebar';
 import BottomNav from '@/components/BottomNav';
+import { useTheme } from '@/context/ThemeContext';
 import { getUserSession } from '@/lib/nativeActions';
 import { supabase } from '@/lib/supabase';
 
@@ -23,6 +24,8 @@ export default function PerfilClientePage() {
   const [notifyLiveDraws, setNotifyLiveDraws] = useState(true);
   const [savedNotice, setSavedNotice] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const { theme, themePreference, setThemePreference } = useTheme();
+  const [showThemeModal, setShowThemeModal] = useState(false);
 
   // 1. Carga inicial desde localStorage (Cero pérdida de datos)
   useEffect(() => {
@@ -302,9 +305,57 @@ export default function PerfilClientePage() {
                     onChange={(e) => setNotifyLiveDraws(e.target.checked)}
                   />
                 </label>
-                <div className="toggle-setting-row">
-                  <span>🌓 Tema de pantalla (Claro / Oscuro)</span>
-                  <strong>Automático según tu celular</strong>
+                <div
+                  className="toggle-setting-row"
+                  onClick={() => setShowThemeModal(true)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') setShowThemeModal(true);
+                  }}
+                  style={{
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '12px 14px',
+                    borderRadius: '12px',
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    transition: 'background 0.2s ease',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '20px' }}>
+                      {themePreference === 'light' ? '☀️' : themePreference === 'dark' ? '🌙' : '🌓'}
+                    </span>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: '14px', color: '#ffffff' }}>Tema de Pantalla</div>
+                      <small style={{ color: '#94a3b8', fontSize: '11px', display: 'block' }}>
+                        {themePreference === 'system'
+                          ? 'Automático (según tu celular)'
+                          : themePreference === 'dark'
+                          ? 'Modo Oscuro (Dark Luxury)'
+                          : 'Modo Claro (Limpio)'}
+                      </small>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span
+                      style={{
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        background: 'rgba(212, 175, 55, 0.16)',
+                        color: '#d4af37',
+                        padding: '4px 10px',
+                        borderRadius: '999px',
+                        border: '1px solid rgba(212, 175, 55, 0.35)',
+                      }}
+                    >
+                      {themePreference === 'system' ? '📱 Automático' : themePreference === 'dark' ? '🌙 Oscuro' : '☀️ Claro'}
+                    </span>
+                    <span style={{ color: '#94a3b8', fontSize: '18px' }}>›</span>
+                  </div>
                 </div>
               </div>
 
@@ -359,6 +410,178 @@ export default function PerfilClientePage() {
           </section>
         </main>
       </div>
+
+      {/* MODAL DE CAMBIO DE TEMA DE PANTALLA */}
+      {showThemeModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Seleccionar tema de pantalla"
+          onClick={() => setShowThemeModal(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.78)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            zIndex: 10000,
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'center',
+            padding: '0 0 max(env(safe-area-inset-bottom, 0px), 16px) 0',
+            boxSizing: 'border-box',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: '92%',
+              maxWidth: '440px',
+              backgroundColor: '#121216',
+              borderRadius: '24px',
+              border: '1px solid rgba(255, 255, 255, 0.16)',
+              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85)',
+              padding: '22px 20px',
+              color: '#ffffff',
+              boxSizing: 'border-box',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '20px' }}>🌓</span>
+                <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: '#ffffff' }}>
+                  Tema de Pantalla
+                </h3>
+              </div>
+              <button
+                type="button"
+                aria-label="Cerrar modal de tema"
+                onClick={() => setShowThemeModal(false)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: 'none',
+                  color: '#ffffff',
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#94a3b8', lineHeight: 1.4 }}>
+              Personaliza el estilo visual de El Ganador en este dispositivo:
+            </p>
+
+            <div style={{ display: 'grid', gap: '10px' }}>
+              {/* Opción 1: Modo Claro */}
+              <button
+                type="button"
+                onClick={() => {
+                  setThemePreference('light');
+                  setShowThemeModal(false);
+                }}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '14px 16px',
+                  borderRadius: '14px',
+                  border: themePreference === 'light' ? '1.5px solid #d4af37' : '1px solid rgba(255, 255, 255, 0.1)',
+                  background: themePreference === 'light' ? 'rgba(212, 175, 55, 0.14)' : 'rgba(255, 255, 255, 0.04)',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ fontSize: '24px' }}>☀️</span>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '14px', color: '#ffffff' }}>Modo Claro</div>
+                    <div style={{ fontSize: '12px', color: '#94a3b8' }}>Fondo blanco para luz de día</div>
+                  </div>
+                </div>
+                {themePreference === 'light' && (
+                  <span style={{ color: '#d4af37', fontWeight: 800, fontSize: '16px' }}>✓</span>
+                )}
+              </button>
+
+              {/* Opción 2: Modo Oscuro */}
+              <button
+                type="button"
+                onClick={() => {
+                  setThemePreference('dark');
+                  setShowThemeModal(false);
+                }}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '14px 16px',
+                  borderRadius: '14px',
+                  border: themePreference === 'dark' ? '1.5px solid #d4af37' : '1px solid rgba(255, 255, 255, 0.1)',
+                  background: themePreference === 'dark' ? 'rgba(212, 175, 55, 0.14)' : 'rgba(255, 255, 255, 0.04)',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ fontSize: '24px' }}>🌙</span>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '14px', color: '#ffffff' }}>Modo Oscuro (Dark Luxury)</div>
+                    <div style={{ fontSize: '12px', color: '#94a3b8' }}>Fondo carbón y detalles dorados</div>
+                  </div>
+                </div>
+                {themePreference === 'dark' && (
+                  <span style={{ color: '#d4af37', fontWeight: 800, fontSize: '16px' }}>✓</span>
+                )}
+              </button>
+
+              {/* Opción 3: Automático */}
+              <button
+                type="button"
+                onClick={() => {
+                  setThemePreference('system');
+                  setShowThemeModal(false);
+                }}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '14px 16px',
+                  borderRadius: '14px',
+                  border: themePreference === 'system' ? '1.5px solid #d4af37' : '1px solid rgba(255, 255, 255, 0.1)',
+                  background: themePreference === 'system' ? 'rgba(212, 175, 55, 0.14)' : 'rgba(255, 255, 255, 0.04)',
+                  color: '#ffffff',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ fontSize: '24px' }}>📱</span>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '14px', color: '#ffffff' }}>Automático del Sistema</div>
+                    <div style={{ fontSize: '12px', color: '#94a3b8' }}>Sincroniza con el tema de tu teléfono</div>
+                  </div>
+                </div>
+                {themePreference === 'system' && (
+                  <span style={{ color: '#d4af37', fontWeight: 800, fontSize: '16px' }}>✓</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <BottomNav currentTab="perfil" />
     </div>

@@ -970,7 +970,7 @@ export default function CompactWhiteMarketplacePage() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: 'max(env(safe-area-inset-top), 12px) 16px 10px 16px',
+          padding: 'max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) 16px 12px 16px',
           backgroundColor: 'var(--bg-color, #000)',
           borderBottom: '1px solid var(--border-color, rgba(255,255,255,0.1))',
           width: '100%',
@@ -1014,51 +1014,8 @@ export default function CompactWhiteMarketplacePage() {
           </div>
         </div>
 
-        {/* Controles de Tema (Claro / Oscuro) y Notificaciones */}
+        {/* Notificaciones (Selector de tema trasladado a Perfil) */}
         <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div
-            style={{
-              background: 'var(--card-bg, #1a1a1a)',
-              padding: '3px 6px',
-              borderRadius: '999px',
-              display: 'flex',
-              gap: '4px',
-              border: '1px solid rgba(255,255,255,0.1)',
-              alignItems: 'center',
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => setThemePreference('light')}
-              style={{
-                background: theme === 'light' ? '#ffffff' : 'transparent',
-                border: 'none',
-                borderRadius: '999px',
-                fontSize: '11px',
-                padding: theme === 'light' ? '2px 5px' : '0',
-                cursor: 'pointer',
-              }}
-              title="Modo Claro"
-            >
-              ☀️
-            </button>
-            <button
-              type="button"
-              onClick={() => setThemePreference('dark')}
-              style={{
-                background: theme === 'dark' ? '#d4af37' : 'transparent',
-                border: 'none',
-                borderRadius: '999px',
-                fontSize: '11px',
-                padding: '2px 5px',
-                cursor: 'pointer',
-              }}
-              title="Modo Oscuro"
-            >
-              🌙
-            </button>
-          </div>
-
           {/* CAMPANA DE NOTIFICACIONES */}
           <div className="notif-bell-container" style={{ position: 'relative' }}>
             <button

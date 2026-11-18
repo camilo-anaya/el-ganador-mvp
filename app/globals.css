@@ -20218,8 +20218,8 @@ body {
   color: var(--text-color);
   margin: 0;
   padding: 0;
-  /* Espaciado seguro superior para evitar que la barra de estado del teléfono tape el contenido */
-  padding-top: env(safe-area-inset-top, 20px);
+  /* El espaciado seguro superior lo gestiona la cabecera para integración fluida con la Dynamic Island */
+  padding-top: 0 !important;
   padding-bottom: 75px !important;
   overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -20509,13 +20509,20 @@ p.station-subtitle,
 }
 
 
-/* Protección contra Notch y SafeArea Superior */
-header, .app-topbar, .native-topbar {
-  padding-top: max(env(safe-area-inset-top), 16px) !important;
+/* Protección total contra Dynamic Island y Notch Face ID en iPhone */
+header, .app-topbar, .native-topbar, header.main-header {
+  padding-top: max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) !important;
 }
 
 body {
-  padding-top: env(safe-area-inset-top, 0px);
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+@media (min-width: 769px) {
+  header, .app-topbar, .native-topbar, header.main-header {
+    padding-top: 14px !important;
+  }
 }
 
 /* ==========================================================================
