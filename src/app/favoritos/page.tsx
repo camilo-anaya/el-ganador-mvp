@@ -295,50 +295,36 @@ export default function FavoritosPage() {
             gap: '12px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <Link
-              href="/"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '8px 14px',
-                borderRadius: '10px',
-                background: isDark ? '#1e293b' : '#ffffff',
-                border: isDark ? '1px solid #334155' : '1px solid #cbd5e1',
-                color: isDark ? '#38bdf8' : '#0284c7',
-                fontSize: '13px',
-                fontWeight: 700,
-                textDecoration: 'none',
+          <div
+            style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center', 
+              marginBottom: '20px', 
+              padding: '0 4px',
+              width: '100%',
+              boxSizing: 'border-box'
+            }}
+          >
+            <Link 
+              href="/" 
+              style={{ 
+                color: '#d4af37', 
+                textDecoration: 'none', 
+                fontSize: '13px', 
+                fontWeight: 'bold',
+                background: '#1a1a1a',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                border: '1px solid #333'
               }}
             >
               ← Volver al Inicio
             </Link>
-            <div>
-              <h1
-                style={{
-                  fontSize: 'clamp(20px, 2.5vw, 26px)',
-                  fontWeight: 900,
-                  margin: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  color: isDark ? '#ffffff' : '#0f172a',
-                }}
-              >
-                <span>⭐</span> Mis Favoritos & Seguidos
-              </h1>
-              <p
-                style={{
-                  margin: '2px 0 0',
-                  fontSize: '12.5px',
-                  color: isDark ? '#94a3b8' : '#64748b',
-                  fontWeight: 500,
-                }}
-              >
-                Conexión directa entre compradores y comercios verificados
-              </p>
-            </div>
+
+            <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: isDark ? '#fff' : '#0f172a', margin: 0, textAlign: 'right' }}>
+              Mis Favoritos & Seguidos
+            </h2>
           </div>
 
           {/* Selector de Perfil: Cliente vs Empresario */}
