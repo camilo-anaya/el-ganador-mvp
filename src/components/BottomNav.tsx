@@ -11,7 +11,7 @@ interface BottomNavProps {
 }
 
 /* =========================================================================
-   ICONOS VECTORIALES PREMIUM (ESTILO LUXURY APPLE / FINTECH)
+   ICONOS VECTORIALES PREMIUM (GAMA AZUL ELÉCTRICO / ROYAL SAPPHIRE)
    ========================================================================= */
 
 function NavHomeIcon({ active }: { active: boolean }) {
@@ -19,16 +19,16 @@ function NavHomeIcon({ active }: { active: boolean }) {
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
         d="M3 10.5L12 3.5L21 10.5V20C21 20.5523 20.5523 21 20 21H15C14.4477 21 14 20.5523 14 20V15C14 14.4477 13.5523 14 13 14H11C10.4477 14 10 14.4477 10 15V20C10 20.5523 9.55228 21 9 21H4C3.44772 21 3 20.5523 3 20V10.5Z"
-        fill={active ? 'url(#homeGoldGrad)' : 'none'}
-        stroke={active ? '#d4af37' : 'rgba(255, 255, 255, 0.65)'}
+        fill={active ? 'url(#homeBlueGrad)' : 'none'}
+        stroke={active ? '#38bdf8' : 'rgba(255, 255, 255, 0.65)'}
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <defs>
-        <linearGradient id="homeGoldGrad" x1="12" y1="3.5" x2="12" y2="21" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#fef08a" stopOpacity="0.35" />
-          <stop offset="1" stopColor="#d4af37" stopOpacity="0.85" />
+        <linearGradient id="homeBlueGrad" x1="12" y1="3.5" x2="12" y2="21" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#7dd3fc" stopOpacity="0.4" />
+          <stop offset="1" stopColor="#0284c7" stopOpacity="0.9" />
         </linearGradient>
       </defs>
     </svg>
@@ -97,8 +97,8 @@ function NavTicketIcon({ active }: { active: boolean }) {
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
         d="M2 9C3.10457 9 4 8.10457 4 7V5C4 4.44772 4.44772 4 5 4H19C19.5523 4 20 4.44772 20 5V7C20 8.10457 20.8954 9 22 9V15C20.8954 15 20 15.8954 20 17V19C20 19.5523 19.5523 20 19 20H5C4.44772 20 4 19.5523 4 19V17C4 15.8954 3.10457 15 2 15V9Z"
-        fill={active ? 'url(#ticketGoldGrad)' : 'none'}
-        stroke={active ? '#d4af37' : 'rgba(255, 255, 255, 0.65)'}
+        fill={active ? 'url(#ticketBlueGrad)' : 'none'}
+        stroke={active ? '#38bdf8' : 'rgba(255, 255, 255, 0.65)'}
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -109,9 +109,9 @@ function NavTicketIcon({ active }: { active: boolean }) {
         fill={active ? '#ffffff' : 'rgba(255, 255, 255, 0.45)'}
       />
       <defs>
-        <linearGradient id="ticketGoldGrad" x1="2" y1="4" x2="22" y2="20" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#fef08a" stopOpacity="0.35" />
-          <stop offset="1" stopColor="#d4af37" stopOpacity="0.85" />
+        <linearGradient id="ticketBlueGrad" x1="2" y1="4" x2="22" y2="20" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#7dd3fc" stopOpacity="0.4" />
+          <stop offset="1" stopColor="#0284c7" stopOpacity="0.9" />
         </linearGradient>
       </defs>
     </svg>
@@ -125,31 +125,31 @@ function NavProfileIcon({ active }: { active: boolean }) {
         cx="12"
         cy="8"
         r="4"
-        fill={active ? 'url(#profileGoldGrad)' : 'none'}
-        stroke={active ? '#d4af37' : 'rgba(255, 255, 255, 0.65)'}
+        fill={active ? 'url(#profileBlueGrad)' : 'none'}
+        stroke={active ? '#38bdf8' : 'rgba(255, 255, 255, 0.65)'}
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M4 20C4 16.6863 7.58172 14 12 14C16.4183 14 20 16.6863 20 20"
-        fill={active ? 'url(#profileGoldGrad)' : 'none'}
-        stroke={active ? '#d4af37' : 'rgba(255, 255, 255, 0.65)'}
+        fill={active ? 'url(#profileBlueGrad)' : 'none'}
+        stroke={active ? '#38bdf8' : 'rgba(255, 255, 255, 0.65)'}
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {/* Corona de lujo minimalista sobre la cabeza */}
+      {/* Corona minimalista superior en azul eléctrico */}
       {active && (
         <path
           d="M10 2L12 3.5L14 2L13.5 4.5H10.5L10 2Z"
-          fill="#d4af37"
+          fill="#38bdf8"
         />
       )}
       <defs>
-        <linearGradient id="profileGoldGrad" x1="12" y1="4" x2="12" y2="20" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#fef08a" stopOpacity="0.35" />
-          <stop offset="1" stopColor="#d4af37" stopOpacity="0.85" />
+        <linearGradient id="profileBlueGrad" x1="12" y1="4" x2="12" y2="20" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#7dd3fc" stopOpacity="0.4" />
+          <stop offset="1" stopColor="#0284c7" stopOpacity="0.9" />
         </linearGradient>
       </defs>
     </svg>
@@ -237,8 +237,8 @@ export default function BottomNav({ currentTab: propTab, onExploreClick }: Botto
               alignItems: 'center',
               textDecoration: 'none',
               borderRadius: '50%',
-              backgroundColor: isActive ? 'rgba(212, 175, 55, 0.14)' : 'transparent',
-              border: isActive ? '1px solid rgba(212, 175, 55, 0.35)' : '1px solid transparent',
+              backgroundColor: isActive ? 'rgba(2, 132, 199, 0.18)' : 'transparent',
+              border: isActive ? '1px solid rgba(56, 189, 248, 0.45)' : '1px solid transparent',
               transition: 'background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease',
               transform: isActive ? 'scale(1.06)' : 'scale(1)',
               userSelect: 'none',
@@ -247,7 +247,7 @@ export default function BottomNav({ currentTab: propTab, onExploreClick }: Botto
           >
             {item.renderIcon(isActive)}
 
-            {/* Punto de indicador activo estilo iOS */}
+            {/* Micro-LED activo en Azul Eléctrico (#38bdf8) / Rojo (#ff3b30) para En Vivo */}
             {isActive && (
               <span
                 style={{
@@ -256,8 +256,8 @@ export default function BottomNav({ currentTab: propTab, onExploreClick }: Botto
                   width: '4px',
                   height: '4px',
                   borderRadius: '50%',
-                  backgroundColor: item.id === 'envivo' ? '#ff3b30' : '#d4af37',
-                  boxShadow: item.id === 'envivo' ? '0 0 6px #ff3b30' : '0 0 6px #d4af37',
+                  backgroundColor: item.id === 'envivo' ? '#ff3b30' : '#38bdf8',
+                  boxShadow: item.id === 'envivo' ? '0 0 8px #ff3b30' : '0 0 8px #38bdf8',
                 }}
               />
             )}
