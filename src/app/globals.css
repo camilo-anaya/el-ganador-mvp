@@ -17468,7 +17468,7 @@ html[data-theme='dark'] .app-topbar {
 .category-chips,
 .horizontal-snap-carousel,
 .hybrid-strip-track,
-div[class*='carousel'],
+div[class*='carousel']:not([class*='paginator']):not([class*='controls']):not([class*='ad-wrapper']),
 div[class*='strip'],
 div[class*='grid-scroll'] {
   padding-left: 0 !important;
@@ -17890,7 +17890,7 @@ html[data-theme='dark'] .station-block-premium {
 .category-chips,
 .horizontal-snap-carousel,
 .hybrid-strip-track,
-div[class*='carousel'],
+div[class*='carousel']:not([class*='paginator']):not([class*='controls']):not([class*='ad-wrapper']),
 div[class*='strip'],
 div[class*='grid-scroll'] {
   padding-left: 0 !important;
@@ -20265,8 +20265,11 @@ div[class*="card"]:not([class*="live"]):not([class*="compact-raffle"]):not([clas
   color: var(--text-color);
 }
 
-/* Preservar contraste y legibilidad en botones interactivos dentro de tarjetas */
-div[class*="card"] button:not([class*="secondary"]),
+/* Preservar contraste y legibilidad en botones interactivos dentro de tarjetas.
+   Los botones que declaran su propio color de texto en línea (style="color:...")
+   se respetan: forzar blanco sobre fondos claros dejaba el texto invisible
+   (ej. selector de tipo de rifa en /crear-rifa). */
+div[class*="card"] button:not([class*="secondary"]):not([style*=";color:"]):not([style^="color:"]),
 div[class*="card"] a[style*="background: #007AFF"],
 div[class*="card"] a[style*="background:#007AFF"],
 div[class*="card"] a[style*="background: #00c853"],
