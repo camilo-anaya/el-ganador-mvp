@@ -1333,7 +1333,7 @@ export default function CompactWhiteMarketplacePage() {
           onTouchStart={handleAdTouchStart}
           onTouchEnd={handleAdTouchEnd}
         >
-          <div className="carousel-ad-wrapper" style={{ padding: '12px', minHeight: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxSizing: 'border-box' }}>
+          <div className="carousel-ad-wrapper" style={{ padding: '12px 14px 16px 14px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', boxSizing: 'border-box' }}>
             {/* CONTENIDO CENTRADO Y UNIFORME */}
             <div className="official-ad-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px', width: '100%' }}>
               
@@ -1563,17 +1563,19 @@ export default function CompactWhiteMarketplacePage() {
               </div>
             </div>
 
-            {/* CONTROLES INFERIORES: CENTRADOS Y SIN NINGÚN SOLAPAMIENTO */}
+            {/* PAGINADOR DE CARRUSEL 100% CENTRADO */}
             <div
-              className="ad-carousel-controls"
+              className="ad-carousel-controls ad-carousel-paginator"
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '12px',
                 width: '100%',
-                margin: '8px auto 0 auto',
-                padding: '2px 0',
+                margin: '12px auto 4px auto',
+                padding: '4px 0',
+                textAlign: 'center',
+                boxSizing: 'border-box',
               }}
             >
               <button
@@ -1582,11 +1584,44 @@ export default function CompactWhiteMarketplacePage() {
                 className="ad-nav-arrow-compact"
                 aria-label="Patrocinador anterior"
                 title="Patrocinador anterior"
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  minWidth: '28px',
+                  minHeight: '28px',
+                  borderRadius: '50%',
+                  background: 'rgba(0, 0, 0, 0.45)',
+                  border: '1px solid rgba(255, 255, 255, 0.45)',
+                  color: '#ffffff',
+                  fontSize: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  padding: 0,
+                  margin: 0,
+                  lineHeight: 1,
+                  flexShrink: 0,
+                }}
               >
                 ‹
               </button>
 
-              <div className="ad-dots-row">
+              <div
+                className="ad-dots-row"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  margin: '0',
+                  padding: '5px 12px',
+                  background: 'rgba(0, 0, 0, 0.35)',
+                  borderRadius: '999px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  flexShrink: 0,
+                }}
+              >
                 {SPONSOR_CAROUSEL_ADS.map((ad, idx) => (
                   <button
                     key={ad.id}
@@ -1597,14 +1632,15 @@ export default function CompactWhiteMarketplacePage() {
                     }}
                     className="ad-dot-btn"
                     style={{
-                      width: currentAdIndex === idx ? '22px' : '7px',
-                      height: '7px',
+                      width: currentAdIndex === idx ? '24px' : '8px',
+                      height: '8px',
                       borderRadius: '999px',
                       border: 'none',
                       padding: 0,
                       cursor: 'pointer',
-                      background: currentAdIndex === idx ? (currentAdTheme.couponColor || '#f5b82e') : 'rgba(255, 255, 255, 0.35)',
-                      transition: 'all 0.25s ease',
+                      background: currentAdIndex === idx ? '#ffd700' : 'rgba(255, 255, 255, 0.4)',
+                      boxShadow: currentAdIndex === idx ? '0 0 8px rgba(255, 215, 0, 0.6)' : 'none',
+                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
                     aria-label={`Ver patrocinador ${idx + 1}: ${ad.brand}`}
                     title={ad.brand}
@@ -1618,6 +1654,25 @@ export default function CompactWhiteMarketplacePage() {
                 className="ad-nav-arrow-compact"
                 aria-label="Siguiente patrocinador"
                 title="Siguiente patrocinador"
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  minWidth: '28px',
+                  minHeight: '28px',
+                  borderRadius: '50%',
+                  background: 'rgba(0, 0, 0, 0.45)',
+                  border: '1px solid rgba(255, 255, 255, 0.45)',
+                  color: '#ffffff',
+                  fontSize: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  padding: 0,
+                  margin: 0,
+                  lineHeight: 1,
+                  flexShrink: 0,
+                }}
               >
                 ›
               </button>
