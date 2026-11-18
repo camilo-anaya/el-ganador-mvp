@@ -1378,64 +1378,6 @@ export default function CompactWhiteMarketplacePage() {
                 >
                   🔥 PATROCINADOR VIP
                 </div>
-
-                {/* BOTÓN FLOTANTE ANTERIOR ‹ */}
-                <button
-                  type="button"
-                  onClick={handlePrevAd}
-                  aria-label="Patrocinador anterior"
-                  style={{
-                    position: 'absolute',
-                    left: '8px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    background: 'rgba(0, 0, 0, 0.55)',
-                    border: '1.5px solid rgba(255, 255, 255, 0.6)',
-                    color: '#ffffff',
-                    fontSize: '18px',
-                    fontWeight: 900,
-                    display: 'grid',
-                    placeItems: 'center',
-                    cursor: 'pointer',
-                    zIndex: 10,
-                    lineHeight: 1,
-                  }}
-                  title="Anterior patrocinador"
-                >
-                  ‹
-                </button>
-
-                {/* BOTÓN FLOTANTE SIGUIENTE › */}
-                <button
-                  type="button"
-                  onClick={handleNextAd}
-                  aria-label="Siguiente patrocinador"
-                  style={{
-                    position: 'absolute',
-                    right: '8px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    background: 'rgba(0, 0, 0, 0.55)',
-                    border: '1.5px solid rgba(255, 255, 255, 0.6)',
-                    color: '#ffffff',
-                    fontSize: '18px',
-                    fontWeight: 900,
-                    display: 'grid',
-                    placeItems: 'center',
-                    cursor: 'pointer',
-                    zIndex: 10,
-                    lineHeight: 1,
-                  }}
-                  title="Siguiente patrocinador"
-                >
-                  ›
-                </button>
               </div>
 
               {/* INFORMACIÓN COMPACTA Y COMERCIAL DE ALTO IMPACTO */}
