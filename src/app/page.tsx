@@ -581,6 +581,7 @@ export default function CompactWhiteMarketplacePage() {
 
   // Estados para Me Gusta en Sorteos y Publicaciones
   const [likedRaffles, setLikedRaffles] = useState<string[]>([]);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [raffleLikes, setRaffleLikes] = useState<Record<string, number>>({
     'rf-1': 342,
     'rf-2': 518,
@@ -960,108 +961,122 @@ export default function CompactWhiteMarketplacePage() {
       onTouchEnd={handleTouchEnd}
     >
       {/* BARRA SUPERIOR NEGRA DE LUJO */}
-      <header className="app-topbar">
-        <div
-          className="brand-cluster"
-          onClick={manualRefresh}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') manualRefresh();
-          }}
-          style={{ cursor: 'pointer' }}
-          title="Volver al inicio y actualizar"
-        >
-          <div>
-            <span className="brand-title">EL GANADOR</span>
-            <small className="brand-subtitle">Marketplace de Sorteos</small>
+      <header
+        className="app-topbar"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: 'max(env(safe-area-inset-top), 16px) 16px 12px 16px',
+          backgroundColor: 'var(--bg-color, #000)',
+          borderBottom: '1px solid var(--border-color, #222)',
+          boxSizing: 'border-box',
+          width: '100%',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button
+            type="button"
+            aria-label="Menú principal"
+            onClick={() => setShowMobileMenu((prev) => !prev)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--text-primary, #fff)',
+              fontSize: '20px',
+              cursor: 'pointer',
+              lineHeight: 1,
+              padding: '2px 4px',
+            }}
+          >
+            ≡
+          </button>
+          <div
+            className="brand-cluster"
+            onClick={manualRefresh}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') manualRefresh();
+            }}
+            style={{ cursor: 'pointer' }}
+            title="Volver al inicio y actualizar"
+          >
+            <div>
+              <h1 style={{ fontSize: '15px', fontWeight: 'bold', margin: 0, color: 'var(--text-primary, #fff)', lineHeight: '1.2' }}>
+                EL GANADOR
+              </h1>
+              <small style={{ fontSize: '10px', color: '#888', display: 'block' }}>Marketplace de Sorteos</small>
+            </div>
           </div>
         </div>
 
-        <div className="topbar-actions">
-          <button
-            type="button"
-            className="sync-status-pill desktop-only-sync"
-            onClick={manualRefresh}
-            title="Actualizar sorteos y volver al inicio"
-          >
-            <span className="sync-dot-live" />
-            <span className={isRefreshing ? 'sync-spinner' : ''}>🔄</span>
-            <span>Actualizado {lastSync || 'ahora'}</span>
-          </button>
-          <Link className="live-pill-light" href="/sorteo-en-vivo">
+        <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Link className="live-pill-light" href="/sorteo-en-vivo" style={{ marginRight: '2px' }}>
             <span className="pulse-dot" /> En Vivo
           </Link>
 
-          {/* SELECTOR SEGMENTADO DE TEMA (CLARO / OSCURO) SIN AMBIGÜEDAD */}
+          {/* SELECTOR COMPACTO DE TEMA ☀️ / 🌙 */}
           <div
-            className="theme-segmented-switch"
-            role="group"
-            aria-label="Selector de tema Claro y Oscuro"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              background: theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+              background: '#1a1a1a',
+              padding: '4px 8px',
               borderRadius: '999px',
-              padding: '3px',
-              border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.18)' : '1px solid rgba(0, 0, 0, 0.12)',
-              gap: '2px',
+              display: 'flex',
+              gap: '4px',
+              border: '1px solid #333',
+              alignItems: 'center',
             }}
           >
             <button
               type="button"
               onClick={() => setThemePreference('light')}
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '4px 10px',
-                borderRadius: '999px',
-                fontSize: '11px',
-                fontWeight: 800,
-                border: 'none',
-                cursor: 'pointer',
                 background: theme === 'light' ? '#ffffff' : 'transparent',
-                color: theme === 'light' ? '#0f172a' : (theme === 'dark' ? '#94a3b8' : '#64748b'),
-                boxShadow: theme === 'light' ? '0 2px 6px rgba(0, 0, 0, 0.15)' : 'none',
-                transition: 'all 0.2s ease',
+                border: 'none',
+                borderRadius: '999px',
+                fontSize: '12px',
+                padding: theme === 'light' ? '2px 6px' : '0',
+                cursor: 'pointer',
               }}
-              title="Activar Modo Claro"
+              title="Modo Claro"
             >
-              ☀️ Claro
+              ☀️
             </button>
             <button
               type="button"
               onClick={() => setThemePreference('dark')}
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '4px 10px',
-                borderRadius: '999px',
-                fontSize: '11px',
-                fontWeight: 800,
+                background: theme === 'dark' ? '#d4af37' : 'transparent',
                 border: 'none',
+                borderRadius: '999px',
+                fontSize: '12px',
+                padding: '2px 6px',
                 cursor: 'pointer',
-                background: theme === 'dark' ? '#0f172a' : 'transparent',
-                color: theme === 'dark' ? '#f8fafc' : '#64748b',
-                boxShadow: theme === 'dark' ? '0 2px 6px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.15)' : 'none',
-                transition: 'all 0.2s ease',
               }}
-              title="Activar Modo Oscuro"
+              title="Modo Oscuro"
             >
-              🌙 Oscuro
+              🌙
             </button>
           </div>
 
-          {/* CAMPANA DE NOTIFICACIONES ESTILO FACEBOOK CON BADGE ROJO 🔔 */}
+          {/* CAMPANA DE NOTIFICACIONES */}
           <div className="notif-bell-container" style={{ position: 'relative' }}>
             <button
               type="button"
               className="notif-bell-btn"
               onClick={() => setShowNotifDropdown((prev) => !prev)}
               title="Premios Ganados y Notificaciones"
-              aria-label="Campana de notificaciones"
+              aria-label="Notificaciones"
+              style={{
+                background: 'transparent',
+                border: 'none',
+                fontSize: '18px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '2px',
+              }}
             >
               <span>🔔</span>
               {wonPrizes.length > 0 && (
@@ -1130,6 +1145,77 @@ export default function CompactWhiteMarketplacePage() {
 
         </div>
       </header>
+
+      {/* MENÚ MÓVIL LATERAL DESLIZABLE (ACTIVADO POR ≡) */}
+      {showMobileMenu && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.65)',
+            backdropFilter: 'blur(4px)',
+            WebkitBackdropFilter: 'blur(4px)',
+            zIndex: 10000,
+            display: 'flex',
+          }}
+          onClick={() => setShowMobileMenu(false)}
+        >
+          <div
+            style={{
+              width: '280px',
+              height: '100%',
+              backgroundColor: theme === 'dark' ? '#121212' : '#ffffff',
+              color: theme === 'dark' ? '#ffffff' : '#0f172a',
+              padding: 'max(env(safe-area-inset-top), 20px) 20px 24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              boxShadow: '4px 0 24px rgba(0,0,0,0.4)',
+              borderRight: theme === 'dark' ? '1px solid #222' : '1px solid #e2e8f0',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: theme === 'dark' ? '1px solid #222' : '1px solid #e2e8f0', paddingBottom: '12px' }}>
+              <div>
+                <h2 style={{ fontSize: '16px', fontWeight: 'bold', margin: 0 }}>EL GANADOR</h2>
+                <small style={{ color: '#888' }}>Marketplace de Sorteos</small>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowMobileMenu(false)}
+                style={{ background: 'transparent', border: 'none', fontSize: '20px', color: 'inherit', cursor: 'pointer' }}
+                aria-label="Cerrar menú"
+              >
+                ✕
+              </button>
+            </div>
+
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Link href="/" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
+                <span>🏠</span> Inicio / Vitrina
+              </Link>
+              <Link href="/favoritos" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
+                <span>⭐</span> Mis Favoritos & Seguidos
+              </Link>
+              <Link href="/sorteo-en-vivo" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
+                <span>🎱</span> Sorteo en Vivo (SHA-256)
+              </Link>
+              <Link href="/todos-los-sorteos" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
+                <span>🎟️</span> Todos los Sorteos
+              </Link>
+              <Link href="/empresario" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: '#007AFF', fontWeight: 700 }}>
+                <span>💼</span> Portal Empresario
+              </Link>
+              <Link href="/perfil" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
+                <span>👤</span> Mi Perfil
+              </Link>
+            </nav>
+          </div>
+        </div>
+      )}
 
       {/* INDICADOR TÁCTIL PULL-TO-REFRESH DORADO / ESMERALDA */}
       <div
