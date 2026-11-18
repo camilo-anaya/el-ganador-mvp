@@ -964,20 +964,24 @@ export default function CompactWhiteMarketplacePage() {
       <header
         className="app-topbar"
         style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: 'max(env(safe-area-inset-top), 16px) 16px 12px 16px',
+          padding: 'max(env(safe-area-inset-top), 12px) 16px 10px 16px',
           backgroundColor: 'var(--bg-color, #000)',
-          borderBottom: '1px solid var(--border-color, #222)',
-          boxSizing: 'border-box',
+          borderBottom: '1px solid var(--border-color, rgba(255,255,255,0.1))',
           width: '100%',
+          boxSizing: 'border-box',
         }}
       >
+        {/* Logo y Nombre Limpio */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
             type="button"
-            aria-label="Menú principal"
+            aria-label="Menú"
             onClick={() => setShowMobileMenu((prev) => !prev)}
             style={{
               background: 'transparent',
@@ -1003,28 +1007,27 @@ export default function CompactWhiteMarketplacePage() {
             title="Volver al inicio y actualizar"
           >
             <div>
-              <h1 style={{ fontSize: '15px', fontWeight: 'bold', margin: 0, color: 'var(--text-primary, #fff)', lineHeight: '1.2' }}>
+              <h1 style={{ fontSize: '16px', fontWeight: 'bold', margin: 0, color: 'var(--text-primary, #fff)', letterSpacing: '0.5px' }}>
                 EL GANADOR
               </h1>
-              <small style={{ fontSize: '10px', color: '#888', display: 'block' }}>Marketplace de Sorteos</small>
             </div>
           </div>
         </div>
 
-        <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        {/* Controles de Tema (Claro / Oscuro) y Notificaciones */}
+        <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Link className="live-pill-light" href="/sorteo-en-vivo" style={{ marginRight: '2px' }}>
             <span className="pulse-dot" /> En Vivo
           </Link>
 
-          {/* SELECTOR COMPACTO DE TEMA ☀️ / 🌙 */}
           <div
             style={{
-              background: '#1a1a1a',
-              padding: '4px 8px',
+              background: 'var(--card-bg, #1a1a1a)',
+              padding: '3px 6px',
               borderRadius: '999px',
               display: 'flex',
               gap: '4px',
-              border: '1px solid #333',
+              border: '1px solid rgba(255,255,255,0.1)',
               alignItems: 'center',
             }}
           >
@@ -1035,8 +1038,8 @@ export default function CompactWhiteMarketplacePage() {
                 background: theme === 'light' ? '#ffffff' : 'transparent',
                 border: 'none',
                 borderRadius: '999px',
-                fontSize: '12px',
-                padding: theme === 'light' ? '2px 6px' : '0',
+                fontSize: '11px',
+                padding: theme === 'light' ? '2px 5px' : '0',
                 cursor: 'pointer',
               }}
               title="Modo Claro"
@@ -1050,8 +1053,8 @@ export default function CompactWhiteMarketplacePage() {
                 background: theme === 'dark' ? '#d4af37' : 'transparent',
                 border: 'none',
                 borderRadius: '999px',
-                fontSize: '12px',
-                padding: '2px 6px',
+                fontSize: '11px',
+                padding: '2px 5px',
                 cursor: 'pointer',
               }}
               title="Modo Oscuro"
