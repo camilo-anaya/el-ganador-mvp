@@ -1021,6 +1021,9 @@ export default function CompactWhiteMarketplacePage() {
           borderBottom: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
           width: '100%',
           boxSizing: 'border-box',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          filter: 'none',
         }}
       >
         {/* Logo y Nombre Limpio en Alta Definición */}
@@ -1065,6 +1068,8 @@ export default function CompactWhiteMarketplacePage() {
                   MozOsxFontSmoothing: 'grayscale',
                   textRendering: 'optimizeLegibility',
                   lineHeight: 1.1,
+                  filter: 'none',
+                  textShadow: 'none',
                 }}
               >
                 EL GANADOR
@@ -1075,7 +1080,7 @@ export default function CompactWhiteMarketplacePage() {
 
         {/* Notificaciones (Selector de tema trasladado a Perfil) */}
         <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* CAMPANA DE NOTIFICACIONES */}
+          {/* CAMPANA DE NOTIFICACIONES RECTA Y SIMÉTRICA */}
           <div className="notif-bell-container" style={{ position: 'relative' }}>
             <button
               type="button"
@@ -1086,14 +1091,28 @@ export default function CompactWhiteMarketplacePage() {
               style={{
                 background: 'transparent',
                 border: 'none',
-                fontSize: '18px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                padding: '2px',
+                justifyContent: 'center',
+                padding: '4px',
+                position: 'relative',
               }}
             >
-              <span>🔔</span>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={theme === 'dark' ? '#ffffff' : '#000000'}
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ display: 'block' }}
+              >
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
               {wonPrizes.length > 0 && (
                 <span className="notif-badge-count">{wonPrizes.length}</span>
               )}
@@ -1279,6 +1298,333 @@ export default function CompactWhiteMarketplacePage() {
             ))}
           </DesktopScrollStrip>
         </section>
+        {/* =========================================================================
+            📢 BANNER PUBLICITARIO DE PATROCINADORES VIP (UBICACIÓN SUPERIOR DESTACADA)
+            - Impacto visual y comercial máximo para acelerar conversiones y ventas
+            - Foto destacada del producto/vehículo de vitrina
+            - Controles de carrusel perfectamente centrados abajo (sin solapamiento)
+            - Flechas compactas + swipe táctil + paginación por píldora activa
+            ========================================================================= */}
+        <section
+          id="estacion-patrocinadores"
+          className="official-ad-showcase vibrant-sponsor-banner"
+          aria-label="Carrusel Publicitario de Patrocinadores"
+          style={{
+            ['--ad-vibrant-bg' as string]: currentAdTheme.bg,
+            ['--ad-vibrant-border' as string]: currentAdTheme.border,
+            ['--ad-vibrant-shadow' as string]: currentAdTheme.shadow,
+            background: currentAdTheme.bg,
+            borderColor: currentAdTheme.border,
+            boxShadow: currentAdTheme.shadow,
+            cursor: 'pointer',
+            transition: 'background 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease',
+            margin: '8px 0 14px 0',
+            width: '100%',
+          } as React.CSSProperties}
+          onClick={() => {
+            if (adIsSwiping.current) {
+              adIsSwiping.current = false;
+              return;
+            }
+            setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
+          }}
+          onMouseEnter={() => setIsAdPaused(true)}
+          onMouseLeave={() => setIsAdPaused(false)}
+          onTouchStart={handleAdTouchStart}
+          onTouchEnd={handleAdTouchEnd}
+        >
+          <div className="carousel-ad-wrapper" style={{ padding: '12px', minHeight: '340px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxSizing: 'border-box' }}>
+            {/* CONTENIDO CENTRADO Y UNIFORME */}
+            <div className="official-ad-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px', width: '100%' }}>
+              
+              {/* FOTO GRANDE Y DESTACADA */}
+              <div
+                className="official-ad-media"
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '165px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  background: '#000000',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+                }}
+              >
+                <img
+                  key={SPONSOR_CAROUSEL_ADS[currentAdIndex].id}
+                  src={SPONSOR_CAROUSEL_ADS[currentAdIndex].image}
+                  alt={SPONSOR_CAROUSEL_ADS[currentAdIndex].brand}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+
+                {/* BADGE FLOTANTE DE PATROCINADOR VIP */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '8px',
+                    left: '8px',
+                    background: 'rgba(0, 0, 0, 0.75)',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    color: '#ffd700',
+                    fontSize: '10.5px',
+                    fontWeight: 900,
+                    padding: '3px 8px',
+                    borderRadius: '6px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    letterSpacing: '0.3px',
+                  }}
+                >
+                  🔥 PATROCINADOR VIP
+                </div>
+
+                {/* BOTÓN FLOTANTE ANTERIOR ‹ */}
+                <button
+                  type="button"
+                  onClick={handlePrevAd}
+                  aria-label="Patrocinador anterior"
+                  style={{
+                    position: 'absolute',
+                    left: '8px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    background: 'rgba(0, 0, 0, 0.55)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.6)',
+                    color: '#ffffff',
+                    fontSize: '18px',
+                    fontWeight: 900,
+                    display: 'grid',
+                    placeItems: 'center',
+                    cursor: 'pointer',
+                    zIndex: 10,
+                    lineHeight: 1,
+                  }}
+                  title="Anterior patrocinador"
+                >
+                  ‹
+                </button>
+
+                {/* BOTÓN FLOTANTE SIGUIENTE › */}
+                <button
+                  type="button"
+                  onClick={handleNextAd}
+                  aria-label="Siguiente patrocinador"
+                  style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    background: 'rgba(0, 0, 0, 0.55)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.6)',
+                    color: '#ffffff',
+                    fontSize: '18px',
+                    fontWeight: 900,
+                    display: 'grid',
+                    placeItems: 'center',
+                    cursor: 'pointer',
+                    zIndex: 10,
+                    lineHeight: 1,
+                  }}
+                  title="Siguiente patrocinador"
+                >
+                  ›
+                </button>
+              </div>
+
+              {/* INFORMACIÓN COMPACTA Y COMERCIAL DE ALTO IMPACTO */}
+              <div className="official-ad-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '3px', width: '100%' }}>
+                <div className="ad-pill-and-counter" style={{ marginBottom: '1px' }}>
+                  <span
+                    className="official-ad-pill"
+                    style={{
+                      background: currentAdTheme.tagBg,
+                      border: `1px solid ${currentAdTheme.tagBorder}`,
+                      color: '#ffffff',
+                      fontSize: '0.68rem',
+                      padding: '2px 10px',
+                      borderRadius: '999px',
+                      fontWeight: 800,
+                    }}
+                  >
+                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].tag}
+                  </span>
+                </div>
+
+                <h3
+                  style={{
+                    fontSize: '1.02rem',
+                    fontWeight: 900,
+                    margin: '1px 0',
+                    lineHeight: 1.2,
+                    textAlign: 'center',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '100%',
+                    color: '#ffffff',
+                    letterSpacing: '-0.2px',
+                  }}
+                >
+                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].title}
+                </h3>
+
+                <p
+                  style={{
+                    fontSize: '0.74rem',
+                    lineHeight: 1.35,
+                    margin: 0,
+                    textAlign: 'center',
+                    height: '2.6em',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    opacity: 0.95,
+                    color: '#ffffff',
+                    maxWidth: '92%',
+                  }}
+                >
+                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].description}
+                </p>
+
+                {/* MÉTRICA EN VIVO Y BOTÓN SEGUIR CENTRADOS */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '3px 0' }}>
+                  <span style={{ fontSize: '0.7rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    👥 {(brandFollowerCounts[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] || 1580).toLocaleString()} pendientes
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleToggleFollow(SPONSOR_CAROUSEL_ADS[currentAdIndex].brand);
+                    }}
+                    style={{
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      border: '1px solid #ffffff',
+                      background: followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
+                      color: '#ffffff',
+                      fontSize: '0.7rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                    title="Seguir empresa para recibir alertas de sus rifas y descuentos"
+                  >
+                    {followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '✓ Siguiendo' : '🔔 Seguir'}
+                  </button>
+                </div>
+
+                {/* ACCIONES DEL PATROCINADOR CENTRADAS */}
+                <div className="official-ad-actions" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '3px' }}>
+                  <button
+                    type="button"
+                    className="btn-ad-emerald"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
+                    }}
+                    style={{
+                      background: currentAdTheme.btnBg,
+                      color: currentAdTheme.btnText,
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      border: 'none',
+                      fontSize: '0.78rem',
+                      padding: '6px 14px',
+                      borderRadius: '8px',
+                      boxShadow: '0 3px 10px rgba(0,0,0,0.25)',
+                    }}
+                  >
+                    ⚡ Ver Vitrina & Sorteo →
+                  </button>
+                  <span
+                    className="ad-coupon-tag"
+                    style={{
+                      background: currentAdTheme.couponBg,
+                      color: currentAdTheme.couponColor,
+                      border: '1px dashed rgba(255, 255, 255, 0.7)',
+                      fontSize: '0.7rem',
+                      padding: '4px 8px',
+                      borderRadius: '6px',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].coupon}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* CONTROLES INFERIORES: CENTRADOS Y SIN NINGÚN SOLAPAMIENTO */}
+            <div
+              className="ad-carousel-controls"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px',
+                width: '100%',
+                margin: '8px auto 0 auto',
+                padding: '2px 0',
+              }}
+            >
+              <button
+                type="button"
+                onClick={handlePrevAd}
+                className="ad-nav-arrow-compact"
+                aria-label="Patrocinador anterior"
+                title="Patrocinador anterior"
+              >
+                ‹
+              </button>
+
+              <div className="ad-dots-row">
+                {SPONSOR_CAROUSEL_ADS.map((ad, idx) => (
+                  <button
+                    key={ad.id}
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentAdIndex(idx);
+                    }}
+                    className="ad-dot-btn"
+                    style={{
+                      width: currentAdIndex === idx ? '22px' : '7px',
+                      height: '7px',
+                      borderRadius: '999px',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'pointer',
+                      background: currentAdIndex === idx ? (currentAdTheme.couponColor || '#f5b82e') : 'rgba(255, 255, 255, 0.35)',
+                      transition: 'all 0.25s ease',
+                    }}
+                    aria-label={`Ver patrocinador ${idx + 1}: ${ad.brand}`}
+                    title={ad.brand}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleNextAd}
+                className="ad-nav-arrow-compact"
+                aria-label="Siguiente patrocinador"
+                title="Siguiente patrocinador"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </section>
+
 
         {/* FILTRO COMPACTO DE CATEGORÍAS */}
         <div className="categories-bar-surface">
@@ -1454,298 +1800,7 @@ export default function CompactWhiteMarketplacePage() {
           </DesktopScrollStrip>
         </section>
 
-        {/* =========================================================================
-            📢 CARRUSEL PUBLICITARIO DE PATROCINADORES (UBICADO AL CENTRO DEL FEED)
-            - Tamaño uniforme para todos los recuadros (min-height/max-height fijos)
-            - Foto grande destacada (165px)
-            - Contenido e información compacta y centrada
-            - Flechas interactivas adelante/atrás + swipe táctil + paginación por puntos
-            ========================================================================= */}
-        <section
-          id="estacion-patrocinadores"
-          className="official-ad-showcase vibrant-sponsor-banner"
-          aria-label="Carrusel Publicitario de Patrocinadores"
-          style={{
-            ['--ad-vibrant-bg' as string]: currentAdTheme.bg,
-            ['--ad-vibrant-border' as string]: currentAdTheme.border,
-            ['--ad-vibrant-shadow' as string]: currentAdTheme.shadow,
-            background: currentAdTheme.bg,
-            borderColor: currentAdTheme.border,
-            boxShadow: currentAdTheme.shadow,
-            cursor: 'pointer',
-            transition: 'background 0.8s ease, border-color 0.8s ease, box-shadow 0.8s ease',
-            margin: '6px 0 12px 0',
-            width: '100%',
-          } as React.CSSProperties}
-          onClick={() => {
-            if (adIsSwiping.current) {
-              adIsSwiping.current = false;
-              return;
-            }
-            setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
-          }}
-          onMouseEnter={() => setIsAdPaused(true)}
-          onMouseLeave={() => setIsAdPaused(false)}
-          onTouchStart={handleAdTouchStart}
-          onTouchEnd={handleAdTouchEnd}
-        >
-          <div className="carousel-ad-wrapper" style={{ padding: '10px 12px', minHeight: '345px', maxHeight: '345px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxSizing: 'border-box' }}>
-            {/* CONTENIDO CENTRADO Y UNIFORME */}
-            <div className="official-ad-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px', width: '100%' }}>
-              
-              {/* FOTO GRANDE Y DESTACADA CON FLECHAS FLOTANTES ADELANTE / ATRÁS */}
-              <div
-                className="official-ad-media"
-                style={{
-                  position: 'relative',
-                  width: '100%',
-                  height: '165px',
-                  borderRadius: '10px',
-                  overflow: 'hidden',
-                  background: '#000000',
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.25)',
-                }}
-              >
-                <img
-                  key={SPONSOR_CAROUSEL_ADS[currentAdIndex].id}
-                  src={SPONSOR_CAROUSEL_ADS[currentAdIndex].image}
-                  alt={SPONSOR_CAROUSEL_ADS[currentAdIndex].brand}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-
-                {/* BOTÓN FLOTANTE: ANTERIOR ‹ */}
-                <button
-                  type="button"
-                  onClick={handlePrevAd}
-                  aria-label="Patrocinador anterior"
-                  style={{
-                    position: 'absolute',
-                    left: '8px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '50%',
-                    background: 'rgba(0, 0, 0, 0.6)',
-                    backdropFilter: 'blur(6px)',
-                    border: '1.5px solid rgba(255, 255, 255, 0.5)',
-                    color: '#ffffff',
-                    fontSize: '22px',
-                    fontWeight: 900,
-                    display: 'grid',
-                    placeItems: 'center',
-                    cursor: 'pointer',
-                    zIndex: 10,
-                    lineHeight: 1,
-                  }}
-                  title="Anterior patrocinador"
-                >
-                  ‹
-                </button>
-
-                {/* BOTÓN FLOTANTE: SIGUIENTE › */}
-                <button
-                  type="button"
-                  onClick={handleNextAd}
-                  aria-label="Siguiente patrocinador"
-                  style={{
-                    position: 'absolute',
-                    right: '8px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '50%',
-                    background: 'rgba(0, 0, 0, 0.6)',
-                    backdropFilter: 'blur(6px)',
-                    border: '1.5px solid rgba(255, 255, 255, 0.5)',
-                    color: '#ffffff',
-                    fontSize: '22px',
-                    fontWeight: 900,
-                    display: 'grid',
-                    placeItems: 'center',
-                    cursor: 'pointer',
-                    zIndex: 10,
-                    lineHeight: 1,
-                  }}
-                  title="Siguiente patrocinador"
-                >
-                  ›
-                </button>
-              </div>
-
-              {/* INFORMACIÓN COMPACTA Y CENTRADA (TAMAÑO UNIFORME) */}
-              <div className="official-ad-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '3px', width: '100%' }}>
-                <div className="ad-pill-and-counter" style={{ marginBottom: '1px' }}>
-                  <span
-                    className="official-ad-pill"
-                    style={{
-                      background: currentAdTheme.tagBg,
-                      border: `1px solid ${currentAdTheme.tagBorder}`,
-                      color: '#ffffff',
-                      fontSize: '0.68rem',
-                      padding: '2px 10px',
-                      borderRadius: '999px',
-                      fontWeight: 800,
-                    }}
-                  >
-                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].tag}
-                  </span>
-                </div>
-
-                <h3
-                  style={{
-                    fontSize: '0.96rem',
-                    fontWeight: 800,
-                    margin: '1px 0',
-                    lineHeight: 1.2,
-                    textAlign: 'center',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '100%',
-                    color: '#ffffff',
-                  }}
-                >
-                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].title}
-                </h3>
-
-                <p
-                  style={{
-                    fontSize: '0.72rem',
-                    lineHeight: 1.3,
-                    margin: 0,
-                    textAlign: 'center',
-                    height: '2.6em',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    opacity: 0.92,
-                    color: '#ffffff',
-                    maxWidth: '92%',
-                  }}
-                >
-                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].description}
-                </p>
-
-                {/* MÉTRICA EN VIVO Y BOTÓN SEGUIR CENTRADOS */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '3px 0' }}>
-                  <span style={{ fontSize: '0.7rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    👥 {(brandFollowerCounts[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] || 1580).toLocaleString()} pendientes
-                  </span>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleToggleFollow(SPONSOR_CAROUSEL_ADS[currentAdIndex].brand);
-                    }}
-                    style={{
-                      padding: '2px 8px',
-                      borderRadius: '6px',
-                      border: '1px solid #ffffff',
-                      background: followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
-                      color: '#ffffff',
-                      fontSize: '0.7rem',
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                    title="Seguir empresa para recibir alertas de sus rifas y descuentos"
-                  >
-                    {followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '✓ Siguiendo' : '🔔 Seguir'}
-                  </button>
-                </div>
-
-                {/* ACCIONES DEL PATROCINADOR CENTRADAS */}
-                <div className="official-ad-actions" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '2px' }}>
-                  <button
-                    type="button"
-                    className="btn-ad-emerald"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
-                    }}
-                    style={{
-                      background: currentAdTheme.btnBg,
-                      color: currentAdTheme.btnText,
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                      border: 'none',
-                      fontSize: '0.74rem',
-                      padding: '5px 12px',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    🏪 Ver Vitrina & Sorteo →
-                  </button>
-                  <span
-                    className="ad-coupon-tag"
-                    style={{
-                      background: currentAdTheme.couponBg,
-                      color: currentAdTheme.couponColor,
-                      border: '1px dashed rgba(255, 255, 255, 0.6)',
-                      fontSize: '0.68rem',
-                      padding: '3px 8px',
-                      borderRadius: '6px',
-                    }}
-                  >
-                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].coupon}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* CONTROLES INFERIORES: FLECHAS ‹ › Y PUNTOS DE PAGINACIÓN */}
-            <div className="ad-carousel-controls" style={{ marginTop: '6px', paddingTop: '6px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-              <button
-                type="button"
-                onClick={handlePrevAd}
-                className="ad-nav-arrow"
-                aria-label="Patrocinador anterior"
-                title="Patrocinador anterior"
-              >
-                ‹
-              </button>
-
-              <div className="ad-dots-row" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                {SPONSOR_CAROUSEL_ADS.map((ad, idx) => (
-                  <button
-                    key={ad.id}
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCurrentAdIndex(idx);
-                    }}
-                    className="ad-dot-btn"
-                    style={{
-                      width: currentAdIndex === idx ? '24px' : '8px',
-                      height: '8px',
-                      borderRadius: '4px',
-                      border: 'none',
-                      padding: 0,
-                      cursor: 'pointer',
-                      background: currentAdIndex === idx ? '#f5b82e' : 'rgba(255, 255, 255, 0.35)',
-                      transition: 'all 0.25s ease',
-                    }}
-                    aria-label={`Ver patrocinador ${idx + 1}: ${ad.brand}`}
-                    title={ad.brand}
-                  />
-                ))}
-              </div>
-
-              <button
-                type="button"
-                onClick={handleNextAd}
-                className="ad-nav-arrow"
-                aria-label="Siguiente patrocinador"
-                title="Siguiente patrocinador"
-              >
-                ›
-              </button>
-            </div>
-          </div>
-        </section>
+        
 
         {/* SECCIÓN 3: RECUADROS COMPACTOS 🎟️ PRÓXIMOS SORTEOS */}
         <section id="estacion-proximos" className="station-block-premium station-upcoming" aria-label="Próximos sorteos">
@@ -2064,6 +2119,7 @@ export default function CompactWhiteMarketplacePage() {
 
 
       {/* MODAL DE COMPRA DE BOLETAS Y PASARELA WOMPI COLOMBIA */}
+            {/* MODAL DE COMPRA DE BOLETAS Y PASARELA WOMPI COLOMBIA (PANTALLA COMPLETA TOTAL) */}
       {ticketModalRaffle && (() => {
         const grid = ticketModalRaffle.ballotGrid || 100;
         const pad = grid <= 100 ? 2 : grid <= 999 ? 3 : 4;
@@ -2076,198 +2132,372 @@ export default function CompactWhiteMarketplacePage() {
 
         return (
           <div
-            className="checkout-modal-backdrop"
+            className="checkout-modal-backdrop-fullscreen"
             role="dialog"
             aria-modal="true"
-            aria-label="Comprar Boletas con Wompi Colombia"
-            onClick={() => {
-              if (!isProcessingWompi) setTicketModalRaffle(null);
+            aria-label="Comprar Boleta Oficial"
+            style={{
+              position: 'fixed',
+              inset: 0,
+              width: '100vw',
+              height: '100vh',
+              maxHeight: '100vh',
+              zIndex: 100000,
+              background: theme === 'dark' ? '#0a0d14' : '#ffffff',
+              color: theme === 'dark' ? '#f8fafc' : '#0f172a',
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+              margin: 0,
+              padding: 0,
+              border: 'none',
+              borderRadius: 0,
             }}
           >
+            {/* Cabecera Fija Superior Pantalla Completa */}
             <div
-              className="checkout-modal-card"
-              onClick={(e) => e.stopPropagation()}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: 'max(calc(env(safe-area-inset-top, 0px) + 12px), 48px) 16px 12px 16px',
+                borderBottom: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+                background: theme === 'dark' ? '#000000' : '#ffffff',
+                flexShrink: 0,
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
             >
-              {/* Encabezado */}
-              <div className="checkout-modal-header">
-                <div>
-                  <span className="checkout-legal-pill">
-                    🎟️ COMPRA OFICIAL NOTARIADA · LEY 643 DE 2001
-                  </span>
-                  <h2 className="checkout-raffle-title">{ticketModalRaffle.title}</h2>
-                  <div className="checkout-merchant-row">
-                    <span>🏪 {ticketModalRaffle.merchant}</span>
-                    <span>📍 {ticketModalRaffle.city}</span>
-                    <span className="checkout-live-pill">🔴 Sorteo en Vivo 3D</span>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  className="checkout-close-btn"
-                  onClick={() => setTicketModalRaffle(null)}
-                  title="Cerrar modal"
-                >
-                  ✕
-                </button>
+              <button
+                type="button"
+                onClick={() => setTicketModalRaffle(null)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: '#007AFF',
+                  fontSize: '14px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '4px 8px 4px 0',
+                }}
+              >
+                ← Volver
+              </button>
+              <div style={{ textAlign: 'center' }}>
+                <h2 style={{ fontSize: '15px', fontWeight: 800, margin: 0, color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>
+                  Comprar Boleta Oficial
+                </h2>
+                <small style={{ fontSize: '11px', color: '#007AFF', fontWeight: 600 }}>
+                  ⚖️ Notariado Ley 643 · 100% Legal
+                </small>
               </div>
+              <button
+                type="button"
+                onClick={() => setTicketModalRaffle(null)}
+                aria-label="Cerrar modal"
+                style={{
+                  background: theme === 'dark' ? 'rgba(255,255,255,0.1)' : '#f1f5f9',
+                  border: theme === 'dark' ? '1px solid rgba(255,255,255,0.15)' : '1px solid #cbd5e1',
+                  color: theme === 'dark' ? '#ffffff' : '#0f172a',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  display: 'grid',
+                  placeItems: 'center',
+                  fontSize: '15px',
+                  cursor: 'pointer',
+                }}
+              >
+                ✕
+              </button>
+            </div>
 
-              {purchaseSuccessData ? (
-                <div style={{ textAlign: 'center', padding: '24px 16px' }}>
-                  <div style={{ fontSize: '3.5rem', marginBottom: '8px' }}>🎉</div>
-                  <h3 style={{ color: '#007AFF', margin: '0 0 6px', fontSize: '1.4rem', fontWeight: 800 }}>¡Pago Exitoso con Wompi!</h3>
-                  <p style={{ fontSize: '0.95rem', color: '#cbd5e1', margin: '0 0 18px' }}>
-                    Tus boletas han sido emitidas y selladas con certificado notarial SHA-256.
-                  </p>
+            {purchaseSuccessData ? (
+              <div
+                style={{
+                  flex: 1,
+                  overflowY: 'auto',
+                  padding: '24px 16px',
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <div style={{ fontSize: '3.5rem', marginBottom: '8px' }}>🎉</div>
+                <h3 style={{ color: '#007AFF', margin: '0 0 6px', fontSize: '1.4rem', fontWeight: 800 }}>¡Pago Exitoso con Wompi!</h3>
+                <p style={{ fontSize: '0.95rem', color: theme === 'dark' ? '#cbd5e1' : '#475569', margin: '0 0 18px' }}>
+                  Tus boletas han sido emitidas y selladas con certificado notarial SHA-256.
+                </p>
 
-                  <div style={{ background: 'rgba(0, 122, 255, 0.08)', padding: '16px', borderRadius: '14px', border: '1px solid rgba(0, 122, 255, 0.25)', marginBottom: '18px' }}>
-                    <div style={{ color: '#007AFF', fontWeight: 800, fontSize: '1.1rem', marginBottom: '8px' }}>
-                      Boleta {purchaseSuccessData.ticketId}
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', margin: '10px 0' }}>
-                      {purchaseSuccessData.numbers.map((n) => (
-                        <span key={n} className="checkout-number-badge blue" style={{ fontSize: '1rem', padding: '6px 14px' }}>
-                          #{n}
-                        </span>
-                      ))}
-                    </div>
-                    <div style={{ fontSize: '0.78rem', color: '#94a3b8', wordBreak: 'break-all', marginTop: '8px' }}>
-                      Sello Notarial SHA-256: <code>{purchaseSuccessData.hash.slice(0, 32)}...</code>
-                    </div>
+                <div style={{ background: theme === 'dark' ? 'rgba(0, 122, 255, 0.08)' : '#eff6ff', padding: '16px', borderRadius: '14px', border: '1px solid rgba(0, 122, 255, 0.25)', marginBottom: '18px', width: '100%', maxWidth: '420px', boxSizing: 'border-box' }}>
+                  <div style={{ color: '#007AFF', fontWeight: 800, fontSize: '1.1rem', marginBottom: '8px' }}>
+                    Boleta {purchaseSuccessData.ticketId}
                   </div>
-
-                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                    <Link
-                      href={`/sorteo-en-vivo?viewer=true&ticket=${purchaseSuccessData.numbers[0] || ''}`}
-                      className="checkout-pay-btn"
-                      style={{ textDecoration: 'none', display: 'inline-block', width: 'auto', padding: '12px 22px' }}
-                      onClick={() => setTicketModalRaffle(null)}
-                    >
-                      🔴 Entrar a la Sala 3D en Vivo
-                    </Link>
-                    <Link
-                      href="/mis-boletas"
-                      className="media-native-btn"
-                      style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', padding: '12px 18px' }}
-                      onClick={() => setTicketModalRaffle(null)}
-                    >
-                      🎫 Ver en Mis Boletas
-                    </Link>
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', margin: '10px 0' }}>
+                    {purchaseSuccessData.numbers.map((n) => (
+                      <span key={n} style={{ fontSize: '1rem', padding: '6px 14px', borderRadius: '8px', background: '#007AFF', color: '#ffffff', fontWeight: 800 }}>
+                        #{n}
+                      </span>
+                    ))}
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: theme === 'dark' ? '#94a3b8' : '#64748b', wordBreak: 'break-all', marginTop: '8px' }}>
+                    Sello Notarial SHA-256: <code>{purchaseSuccessData.hash.slice(0, 32)}...</code>
                   </div>
                 </div>
-              ) : (
-                <form onSubmit={handlePayWithWompi}>
-                  {/* Resumen del Artículo / Premio */}
-                  <div className="checkout-prize-summary">
+
+                <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <Link
+                    href={`/sorteo-en-vivo?viewer=true&ticket=${purchaseSuccessData.numbers[0] || ''}`}
+                    style={{ textDecoration: 'none', display: 'inline-block', width: 'auto', padding: '12px 22px', borderRadius: '12px', background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)', color: '#ffffff', fontWeight: 800 }}
+                    onClick={() => setTicketModalRaffle(null)}
+                  >
+                    🔴 Entrar a la Sala 3D en Vivo
+                  </Link>
+                  <Link
+                    href="/mis-boletas"
+                    style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', padding: '12px 18px', borderRadius: '12px', background: theme === 'dark' ? '#1e293b' : '#f1f5f9', color: theme === 'dark' ? '#ffffff' : '#0f172a', fontWeight: 800, border: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #cbd5e1' }}
+                    onClick={() => setTicketModalRaffle(null)}
+                  >
+                    🎟️ Ver en Mis Boletas
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <form
+                onSubmit={handlePayWithWompi}
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  overflow: 'hidden',
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                {/* Cuerpo desplazable con información sintetizada y limpia */}
+                <div
+                  style={{
+                    flex: 1,
+                    overflowY: 'auto',
+                    WebkitOverflowScrolling: 'touch',
+                    padding: '16px 16px 120px 16px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '12px',
+                    maxWidth: '680px',
+                    width: '100%',
+                    margin: '0 auto',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  {/* 1. Tarjeta Resumen Ultra Compacta del Sorteo */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: '12px',
+                      padding: '12px',
+                      borderRadius: '14px',
+                      background: theme === 'dark' ? '#111827' : '#f8fafc',
+                      border: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid #e2e8f0',
+                      alignItems: 'center',
+                    }}
+                  >
                     {ticketModalRaffle.image && (
                       <img
                         src={ticketModalRaffle.image}
                         alt={ticketModalRaffle.title}
-                        className="checkout-prize-img"
+                        style={{
+                          width: '68px',
+                          height: '68px',
+                          borderRadius: '10px',
+                          objectFit: 'cover',
+                          flexShrink: 0,
+                        }}
                       />
                     )}
-                    <div className="checkout-prize-info">
-                      <p className="checkout-prize-desc">
-                        {ticketModalRaffle.description ||
-                          'Sorteo oficial respaldado ante notario público con entrega inmediata y transmisión 3D en vivo con balotera física.'}
-                      </p>
-                      <div className="checkout-metrics-grid">
-                        <div className="checkout-metric-box">
-                          <small>Precio por boleta</small>
-                          <strong style={{ color: '#38bdf8' }}>{ticketModalRaffle.priceCop} COP</strong>
-                        </div>
-                        <div className="checkout-metric-box">
-                          <small>Total de Balotas</small>
-                          <strong>{grid} Balotas ({formatNum(1)} al {formatNum(grid)})</strong>
-                        </div>
-                        <div className="checkout-metric-box" style={{ borderLeft: '3px solid #22c55e' }}>
-                          <small style={{ color: '#4ade80' }}>Balotas Disponibles</small>
-                          <strong style={{ color: '#4ade80' }}>🟢 {availableCount} Disponibles</strong>
-                        </div>
-                        <div className="checkout-metric-box" style={{ borderLeft: '3px solid #ef4444' }}>
-                          <small style={{ color: '#f87171' }}>Balotas ya Vendidas</small>
-                          <strong style={{ color: '#f87171' }}>🔴 {soldCount} Vendidas</strong>
-                        </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: '11px', color: '#007AFF', fontWeight: 700, marginBottom: '2px' }}>
+                        🏪 {ticketModalRaffle.merchant} · 📍 {ticketModalRaffle.city}
+                      </div>
+                      <h3
+                        style={{
+                          fontSize: '14px',
+                          fontWeight: 800,
+                          margin: '0 0 4px',
+                          color: theme === 'dark' ? '#ffffff' : '#0f172a',
+                          lineHeight: 1.25,
+                        }}
+                      >
+                        {ticketModalRaffle.title}
+                      </h3>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '13px', fontWeight: 900, color: '#007AFF' }}>
+                          {ticketModalRaffle.priceCop} COP / boleta
+                        </span>
+                        <span
+                          style={{
+                            fontSize: '10.5px',
+                            fontWeight: 700,
+                            padding: '2px 6px',
+                            borderRadius: '6px',
+                            background: 'rgba(34, 197, 94, 0.12)',
+                            color: '#16a34a',
+                          }}
+                        >
+                          🟢 {availableCount} disp.
+                        </span>
+                        <span
+                          style={{
+                            fontSize: '10.5px',
+                            fontWeight: 700,
+                            padding: '2px 6px',
+                            borderRadius: '6px',
+                            background: 'rgba(239, 68, 68, 0.12)',
+                            color: '#ef4444',
+                          }}
+                        >
+                          🔴 {soldCount} vendidas
+                        </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Selector Rápido y Cartón de Balotas */}
-                  <div className="checkout-carton-section">
-                    <div className="checkout-carton-topbar">
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#e2e8f0' }}>
-                          Cantidad de Boletas:
-                        </span>
-                        <strong style={{ fontSize: '1.05rem', fontWeight: 800, color: '#38bdf8' }}>
-                          $ {totalAmount.toLocaleString('es-CO')} COP
-                        </strong>
-                      </div>
-                      <div className="checkout-qty-pills">
-                        {[1, 2, 5, 10].map((qty) => (
-                          <button
-                            key={qty}
-                            type="button"
-                            className={`checkout-qty-pill ${assignedNumbers.length === qty ? 'active' : ''}`}
-                            onClick={() => handleTicketCountChange(qty)}
-                          >
-                            {qty} {qty === 1 ? 'boleta' : 'boletas'}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div style={{ margin: '8px 0 10px' }}>
-                      <span style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'block', marginBottom: '5px' }}>
-                        Números asignados ({assignedNumbers.length}):
+                  {/* 2. Selector Rápido de Cantidad de Boletas */}
+                  <div
+                    style={{
+                      padding: '12px',
+                      borderRadius: '14px',
+                      background: theme === 'dark' ? '#111827' : '#f8fafc',
+                      border: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid #e2e8f0',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '12.5px', fontWeight: 700, color: theme === 'dark' ? '#cbd5e1' : '#334155' }}>
+                        Cantidad de boletas:
                       </span>
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        {assignedNumbers.map((num) => (
-                          <span key={num} className="checkout-number-badge" style={{ borderColor: '#d4af37', color: '#ffd700', background: 'rgba(212, 175, 55, 0.12)' }}>
-                            #{num}
-                          </span>
-                        ))}
-                      </div>
+                      <strong style={{ fontSize: '14px', fontWeight: 900, color: '#007AFF' }}>
+                        $ {totalAmount.toLocaleString('es-CO')} COP
+                      </strong>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px' }}>
+                      {[1, 2, 5, 10].map((qty) => (
+                        <button
+                          key={qty}
+                          type="button"
+                          onClick={() => handleTicketCountChange(qty)}
+                          style={{
+                            padding: '8px 4px',
+                            borderRadius: '8px',
+                            fontSize: '12px',
+                            fontWeight: 800,
+                            border: assignedNumbers.length === qty
+                              ? '2px solid #007AFF'
+                              : theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #cbd5e1',
+                            background: assignedNumbers.length === qty
+                              ? '#007AFF'
+                              : theme === 'dark' ? 'rgba(255,255,255,0.05)' : '#ffffff',
+                            color: assignedNumbers.length === qty
+                              ? '#ffffff'
+                              : theme === 'dark' ? '#e2e8f0' : '#1e293b',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease',
+                          }}
+                        >
+                          {qty} {qty === 1 ? 'boleta' : 'boletas'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 3. Números Asignados y Botón Aleatorio */}
+                  <div
+                    style={{
+                      padding: '12px',
+                      borderRadius: '14px',
+                      background: theme === 'dark' ? '#111827' : '#f8fafc',
+                      border: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid #e2e8f0',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '12.5px', fontWeight: 700, color: theme === 'dark' ? '#cbd5e1' : '#334155' }}>
+                        Tus números seleccionados ({assignedNumbers.length}):
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleTicketCountChange(assignedNumbers.length)}
+                        style={{
+                          background: 'rgba(0, 122, 255, 0.1)',
+                          border: '1px solid rgba(0, 122, 255, 0.3)',
+                          color: '#007AFF',
+                          borderRadius: '6px',
+                          padding: '4px 8px',
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        🎲 Cambiar al azar
+                      </button>
                     </div>
 
-                    {/* Desglose visual de balotas ya vendidas y disponibles */}
-                    <div className="checkout-sold-breakdown">
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <span style={{ color: '#f87171', fontWeight: 800 }}>
-                          🔴 Balotas ya vendidas ({soldCount}):
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                      {assignedNumbers.map((num) => (
+                        <span
+                          key={num}
+                          style={{
+                            padding: '4px 10px',
+                            borderRadius: '6px',
+                            background: '#007AFF',
+                            color: '#ffffff',
+                            fontWeight: 800,
+                            fontSize: '13px',
+                            border: '1px solid #0056b3',
+                          }}
+                        >
+                          #{num}
                         </span>
-                        <span style={{ color: '#4ade80', fontWeight: 800 }}>
-                          🟢 {availableCount} Disponibles
-                        </span>
-                      </div>
-                      <div className="checkout-sold-chips">
-                        {soldList.map((num) => (
-                          <span key={num} className="checkout-sold-chip" title="Balota ya vendida e inhabilitada">
-                            #{formatNum(num)}
-                          </span>
-                        ))}
-                      </div>
+                      ))}
                     </div>
+                  </div>
 
-                    {/* Leyenda y Cartón de Balotas Disponibles (01 al Total) */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px', marginBottom: '6px' }}>
-                      <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1' }}>
+                  {/* 4. Cartón Digital de Balotas con Contraste 100% Garantizado */}
+                  <div
+                    style={{
+                      padding: '12px',
+                      borderRadius: '14px',
+                      background: theme === 'dark' ? '#111827' : '#f8fafc',
+                      border: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid #e2e8f0',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '12.5px', fontWeight: 700, color: theme === 'dark' ? '#cbd5e1' : '#334155' }}>
                         Cartón Digital ({formatNum(1)} al {formatNum(grid)}):
                       </span>
-                      <div style={{ display: 'flex', gap: '10px', fontSize: '0.74rem', color: '#94a3b8' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <span style={{ width: '8px', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px' }}></span> Disp.
-                        </span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <span style={{ width: '8px', height: '8px', background: '#007AFF', borderRadius: '2px' }}></span> Elegido
-                        </span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                          <span style={{ width: '8px', height: '8px', background: '#ef4444', borderRadius: '2px' }}></span> Vendido
-                        </span>
+                      <div style={{ display: 'flex', gap: '8px', fontSize: '10.5px' }}>
+                        <span style={{ color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>⚪ Disp.</span>
+                        <span style={{ color: '#007AFF', fontWeight: 700 }}>🔵 Elegido</span>
+                        <span style={{ color: '#ef4444', fontWeight: 700 }}>🔴 Vendido</span>
                       </div>
                     </div>
 
-                    {/* Cuadrícula interactiva del Cartón Digital */}
-                    <div className="checkout-carton-grid">
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(42px, 1fr))',
+                        gap: '4px',
+                        maxHeight: '180px',
+                        overflowY: 'auto',
+                        padding: '6px',
+                        borderRadius: '8px',
+                        background: theme === 'dark' ? '#0b0f17' : '#ffffff',
+                        border: theme === 'dark' ? '1px solid rgba(255,255,255,0.06)' : '1px solid #e2e8f0',
+                      }}
+                    >
                       {Array.from({ length: grid }, (_, i) => {
                         const numInt = i + 1;
                         const numStr = formatNum(numInt);
@@ -2280,87 +2510,67 @@ export default function CompactWhiteMarketplacePage() {
                             type="button"
                             disabled={isSold}
                             onClick={() => handleToggleBallotNumber(numStr)}
-                            className={`checkout-carton-cell ${isSelected ? 'selected' : ''}`}
-                            style={isSold ? {
-                              background: 'rgba(255, 61, 0, 0.12)',
-                              borderColor: 'rgba(255, 61, 0, 0.35)',
-                              color: '#ff6e40',
-                              textDecoration: 'line-through',
-                              cursor: 'not-allowed'
-                            } : undefined}
-                            title={isSold ? `Número #${numStr} ya vendido` : `Seleccionar número #${numStr}`}
+                            style={{
+                              height: '34px',
+                              borderRadius: '6px',
+                              fontSize: '12px',
+                              fontWeight: 800,
+                              cursor: isSold ? 'not-allowed' : 'pointer',
+                              display: 'grid',
+                              placeItems: 'center',
+                              border: isSelected
+                                ? '2px solid #007AFF'
+                                : isSold
+                                ? '1px solid rgba(239, 68, 68, 0.3)'
+                                : theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #cbd5e1',
+                              background: isSelected
+                                ? '#007AFF'
+                                : isSold
+                                ? 'rgba(239, 68, 68, 0.1)'
+                                : theme === 'dark' ? 'rgba(255,255,255,0.06)' : '#ffffff',
+                              color: isSelected
+                                ? '#ffffff'
+                                : isSold
+                                ? '#ef4444'
+                                : theme === 'dark' ? '#ffffff' : '#0f172a',
+                              textDecoration: isSold ? 'line-through' : 'none',
+                            }}
+                            title={isSold ? `Balota #${numStr} ya vendida` : `Elegir balota #${numStr}`}
                           >
                             {numStr}
                           </button>
                         );
                       })}
                     </div>
-
-                    {/* Vista previa de números seleccionados */}
-                    <div className="checkout-ballots-preview">
-                      <span style={{ fontSize: '0.84rem', fontWeight: 700 }}>
-                        Tus números seleccionados ({assignedNumbers.length}):
-                      </span>
-                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        {assignedNumbers.map((num) => (
-                          <span key={num} className="checkout-number-badge blue">
-                            #{num}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
                   </div>
 
-                  {/* Cuenta Activa de Cliente (Sin repetir datos del comprador) */}
-                  <div className="checkout-active-client-box">
-                    <div className="checkout-active-client-header">
-                      <div className="checkout-client-badge">
-                        <span className="checkout-status-dot"></span>
-                        <span>Cuenta de Cliente Activa</span>
-                      </div>
-                      <span className="checkout-badge-verified">✓ Sesión Iniciada</span>
-                    </div>
-
-                    <div className="checkout-active-client-row">
-                      <div className="checkout-client-avatar">
-                        👤
-                      </div>
-                      <div className="checkout-client-meta">
-                        <strong>{buyerName || 'Carlos Martínez'}</strong>
-                        <p>{buyerEmail || 'carlos@elganador.co'} · {buyerPhone || '+57 300 123 4567'}</p>
-                        <span className="checkout-auto-attach-text">
-                          🔒 Compra vinculada a tu cuenta · La boleta y el certificado notarial SHA-256 se guardarán automáticamente en tu sección <strong>Mis Boletas</strong>.
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Pasarela PSE Activa (Pagos Seguros en Línea) */}
-                  <div className="checkout-pse-container">
-                    <div className="checkout-pse-header">
-                      <div className="checkout-pse-badge">
-                        <span className="checkout-pse-icon">⚡</span>
-                        <div>
-                          <strong>Pasarela PSE Activa (Pagos Seguros en Línea)</strong>
-                          <p>Bancolombia, Nequi, Daviplata, BBVA, Banco de Bogotá y todos los bancos</p>
-                        </div>
-                      </div>
-                      <span className="checkout-pse-instant">Débito Inmediato</span>
-                    </div>
-                  </div>
-
-                  {/* Botón de Pago Principal con PSE */}
-                  <button
-                    type="submit"
-                    disabled={isProcessingWompi || assignedNumbers.length === 0}
-                    className="checkout-pay-btn pse"
+                  {/* 5. Cuenta del Comprador y Garantía */}
+                  <div
+                    style={{
+                      padding: '10px 12px',
+                      borderRadius: '12px',
+                      background: theme === 'dark' ? '#0f172a' : '#f1f5f9',
+                      border: theme === 'dark' ? '1px solid rgba(255,255,255,0.06)' : '1px solid #cbd5e1',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                    }}
                   >
-                    {isProcessingWompi
-                      ? '⏳ Conectando con PSE Colombia...'
-                      : `⚡ Pagar $ ${totalAmount.toLocaleString('es-CO')} COP con PSE`}
-                  </button>
+                    <div style={{ fontSize: '18px' }}>👤</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: '12px', fontWeight: 800, color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>
+                        {buyerName || 'Carlos Martínez'}
+                      </div>
+                      <div style={{ fontSize: '11px', color: theme === 'dark' ? '#94a3b8' : '#64748b' }}>
+                        {buyerEmail || 'carlos@elganador.co'} · Vinculado a tu cuenta
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '10.5px', fontWeight: 700, color: '#16a34a', background: 'rgba(22, 163, 74, 0.1)', padding: '2px 6px', borderRadius: '4px' }}>
+                      ✓ Verificado
+                    </span>
+                  </div>
 
-                  <div style={{ textAlign: 'center', marginTop: '12px' }}>
+                  <div style={{ textAlign: 'center', marginTop: '4px' }}>
                     <Link
                       href={`/comprar?raffleId=${ticketModalRaffle.id}`}
                       style={{
@@ -2370,16 +2580,68 @@ export default function CompactWhiteMarketplacePage() {
                         textDecoration: 'none',
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '4px'
+                        gap: '4px',
                       }}
                       onClick={() => setTicketModalRaffle(null)}
                     >
                       ↗ Ver cartón completo en pantalla grande
                     </Link>
                   </div>
-                </form>
-              )}
-            </div>
+                </div>
+
+                {/* Barra Inferior Fija de Pago PSE / Wompi */}
+                <div
+                  style={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    background: theme === 'dark' ? '#000000' : '#ffffff',
+                    borderTop: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+                    padding: '10px 16px max(calc(env(safe-area-inset-bottom, 0px) + 10px), 16px) 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '12px',
+                    zIndex: 10,
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  <div style={{ flexShrink: 0 }}>
+                    <small style={{ fontSize: '10.5px', color: theme === 'dark' ? '#94a3b8' : '#64748b', display: 'block' }}>
+                      Total ({assignedNumbers.length} {assignedNumbers.length === 1 ? 'boleta' : 'boletas'}):
+                    </small>
+                    <strong style={{ fontSize: '17px', fontWeight: 900, color: '#007AFF' }}>
+                      $ {totalAmount.toLocaleString('es-CO')} COP
+                    </strong>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isProcessingWompi || assignedNumbers.length === 0}
+                    style={{
+                      flex: 1,
+                      padding: '12px 18px',
+                      borderRadius: '12px',
+                      background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                      color: '#ffffff',
+                      fontSize: '14px',
+                      fontWeight: 800,
+                      border: 'none',
+                      cursor: isProcessingWompi ? 'wait' : 'pointer',
+                      boxShadow: '0 4px 14px rgba(0, 122, 255, 0.35)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      opacity: (isProcessingWompi || assignedNumbers.length === 0) ? 0.6 : 1,
+                    }}
+                  >
+                    {isProcessingWompi ? 'Procesando PSE...' : '⚡ Pagar con PSE / Wompi →'}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         );
       })()}
