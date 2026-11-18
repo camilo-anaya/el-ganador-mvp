@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTheme } from '@/context/ThemeContext';
-import NativeBottomTabBar from '@/components/NativeBottomTabBar';
+import BottomNav from '@/components/BottomNav';
 
 interface Merchant {
   id: string;
@@ -1304,8 +1304,8 @@ export default function FavoritosPage() {
         )}
       </main>
 
-      {/* Bottom Bar para Mobile */}
-      <NativeBottomTabBar currentTab="favoritos" />
+      {/* Bottom Bar Flotante para Mobile */}
+      <BottomNav currentTab="favoritos" />
     </div>
   );
 }

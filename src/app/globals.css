@@ -20138,10 +20138,8 @@ html[data-theme='dark'] .notif-fb-header h3,
    BARRA DE NAVEGACIÓN INFERIOR MÓVIL FIJA (RESPONSIVE NATIVO)
    ========================================================= */
 @media (max-width: 768px) {
-  .mobile-bottom-nav, 
-  nav[class*="bottom"], 
-  div[class*="mobile-nav"],
-  .native-bottom-tabbar {
+  .mobile-bottom-nav-classic,
+  .native-bottom-tabbar-classic {
     position: fixed !important;
     bottom: 0 !important;
     left: 0 !important;
@@ -20158,15 +20156,31 @@ html[data-theme='dark'] .notif-fb-header h3,
     box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.5) !important;
   }
 
-  /* Modo Claro Adaptativo para Móviles */
-  html[data-theme='light'] .mobile-bottom-nav,
-  html[data-theme='light'] nav[class*="bottom"],
-  html[data-theme='light'] div[class*="mobile-nav"],
-  html[data-theme='light'] .native-bottom-tabbar,
-  [data-theme='light'] .mobile-bottom-nav,
-  [data-theme='light'] nav[class*="bottom"],
-  [data-theme='light'] div[class*="mobile-nav"],
-  [data-theme='light'] .native-bottom-tabbar {
+  /* Barra Flotante Pill de Lujo (Garantizada contra sobreescritura) */
+  .floating-island-nav {
+    position: fixed !important;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 90% !important;
+    max-width: 400px !important;
+    height: 64px !important;
+    background: rgba(18, 18, 20, 0.88) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    z-index: 999 !important;
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Modo Claro Adaptativo para Barras Clásicas */
+  html[data-theme='light'] .mobile-bottom-nav-classic,
+  [data-theme='light'] .mobile-bottom-nav-classic {
     background: rgba(255, 255, 255, 0.96) !important;
     border-top: 1px solid #e2e8f0 !important;
     box-shadow: 0 -4px 16px rgba(15, 23, 42, 0.06) !important;

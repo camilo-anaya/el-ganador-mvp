@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import BottomNav from './BottomNav';
 
 export function IosHomeIcon({ active = false, size = 24 }: { active?: boolean; size?: number }) {
   return (
@@ -15,12 +15,9 @@ export function IosHomeIcon({ active = false, size = 24 }: { active?: boolean; s
 export function IosLiveBallIcon({ active = false, size = 24 }: { active?: boolean; size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-      {/* Esfera Dorada 3D Estilo Apple iOS */}
       <circle cx="12" cy="12" r="9.5" fill="url(#iosBallGrad)" stroke={active ? '#38bdf8' : 'rgba(255,255,255,0.35)'} strokeWidth="1.2" />
       <ellipse cx="9" cy="7.5" rx="3.5" ry="1.8" fill="#ffffff" opacity="0.5" />
-      {/* Símbolo Play fotorrealista */}
       <path d="M10 8.5L16 12L10 15.5V8.5Z" fill="#ffffff" />
-      {/* Indicador LIVE rojo brillante Apple */}
       <circle cx="18" cy="6" r="2.8" fill="#ef4444" stroke="#ffffff" strokeWidth="1" />
       <defs>
         <radialGradient id="iosBallGrad" cx="30%" cy="30%" r="70%">
@@ -74,7 +71,7 @@ export function IosHeartIcon({ active = false, size = 24 }: { active?: boolean; 
 export function IosStoreIcon({ active = false, size = 24 }: { active?: boolean; size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? '0' : '1.8'} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 9l1-5h16l1 5v2a3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3 3 3 3 0 0 1-3-3V9z"/>
+      <path d="M3 9l1-5h16l1 5v2a3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1-3-3V9z"/>
       <path d="M4 14v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/>
       <path d="M9 21v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5"/>
     </svg>
@@ -82,82 +79,14 @@ export function IosStoreIcon({ active = false, size = 24 }: { active?: boolean; 
 }
 
 interface NativeBottomTabBarProps {
-  currentTab: 'explorar' | 'favoritos' | 'en-vivo' | 'boletas' | 'perfil';
+  currentTab?: 'explorar' | 'favoritos' | 'en-vivo' | 'envivo' | 'boletas' | 'perfil';
   onExploreClick?: () => void;
 }
 
 export default function NativeBottomTabBar({
-  currentTab,
+  currentTab = 'explorar',
   onExploreClick,
 }: NativeBottomTabBarProps) {
-  return (
-    <nav
-      className="native-bottom-tabbar mobile-bottom-nav"
-      aria-label="Navegación inferior"
-      style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        width: '100%',
-        zIndex: 9999,
-        paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))',
-      }}
-    >
-      <Link
-        className={`tab-item ${currentTab === 'explorar' ? 'active' : ''}`}
-        href="/"
-        onClick={(e) => {
-          if (onExploreClick) {
-            e.preventDefault();
-            onExploreClick();
-          }
-        }}
-      >
-        <span className="tab-icon">
-          <IosHomeIcon active={currentTab === 'explorar'} />
-        </span>
-        <span className="tab-text">Explorar</span>
-      </Link>
-
-      <Link
-        className={`tab-item ${currentTab === 'favoritos' ? 'active' : ''}`}
-        href="/favoritos"
-      >
-        <span className="tab-icon">
-          <IosHeartIcon active={currentTab === 'favoritos'} />
-        </span>
-        <span className="tab-text">Favoritos</span>
-      </Link>
-
-      <Link
-        className={`tab-item ${currentTab === 'en-vivo' ? 'active' : ''}`}
-        href="/sorteo-en-vivo"
-      >
-        <span className="tab-icon">
-          <IosLiveBallIcon active={currentTab === 'en-vivo'} />
-        </span>
-        <span className="tab-text">Sorteo en Vivo</span>
-      </Link>
-
-      <Link
-        className={`tab-item ${currentTab === 'boletas' ? 'active' : ''}`}
-        href="/mis-boletas"
-      >
-        <span className="tab-icon">
-          <IosTicketIcon active={currentTab === 'boletas'} />
-        </span>
-        <span className="tab-text">Mis Boletas</span>
-      </Link>
-
-      <Link
-        className={`tab-item ${currentTab === 'perfil' ? 'active' : ''}`}
-        href="/perfil"
-      >
-        <span className="tab-icon">
-          <IosProfileIcon active={currentTab === 'perfil'} />
-        </span>
-        <span className="tab-text">Perfil</span>
-      </Link>
-    </nav>
-  );
+  const mappedTab = (currentTab === 'en-vivo' ? 'envivo' : currentTab) as 'explorar' | 'favoritos' | 'envivo' | 'boletas' | 'perfil';
+  return <BottomNav currentTab={mappedTab} onExploreClick={onExploreClick} />;
 }

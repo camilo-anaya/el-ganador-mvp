@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import DesktopSidebar from '@/components/DesktopSidebar';
-import NativeBottomTabBar from '@/components/NativeBottomTabBar';
+import BottomNav from '@/components/BottomNav';
 import { getUserSession } from '@/lib/nativeActions';
 import { supabase } from '@/lib/supabase';
 
@@ -360,7 +360,7 @@ export default function PerfilClientePage() {
         </main>
       </div>
 
-      <NativeBottomTabBar currentTab="perfil" />
+      <BottomNav currentTab="perfil" />
     </div>
   );
 }

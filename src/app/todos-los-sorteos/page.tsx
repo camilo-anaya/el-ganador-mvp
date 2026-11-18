@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
-import NativeBottomTabBar from '@/components/NativeBottomTabBar';
+import BottomNav from '@/components/BottomNav';
 
 interface RaffleItem {
   id: string;
@@ -392,8 +392,8 @@ export default function TodosLosSorteosPage() {
         </div>
       )}
 
-      {/* Barra de navegación inferior móvil */}
-      <NativeBottomTabBar currentTab="explorar" />
+      {/* Barra de navegación inferior móvil flotante */}
+      <BottomNav currentTab="explorar" />
     </div>
   );
 }

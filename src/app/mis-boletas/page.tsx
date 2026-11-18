@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import DesktopSidebar from '@/components/DesktopSidebar';
-import NativeBottomTabBar from '@/components/NativeBottomTabBar';
+import BottomNav from '@/components/BottomNav';
 import { supabase } from '@/lib/supabase';
 
 interface UserTicket {
@@ -245,7 +245,7 @@ export default function MisBoletasClientePage() {
         </main>
       </div>
 
-      <NativeBottomTabBar currentTab="boletas" />
+      <BottomNav currentTab="boletas" />
     </div>
   );
 }

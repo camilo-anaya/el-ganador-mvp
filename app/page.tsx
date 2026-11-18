@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import DesktopScrollStrip from '@/components/DesktopScrollStrip';
 import DesktopSidebar from '@/components/DesktopSidebar';
-import NativeBottomTabBar from '@/components/NativeBottomTabBar';
+import BottomNav from '@/components/BottomNav';
 import PublicityBanner from '@/components/PublicityBanner';
 import RaffleCard from '@/components/RaffleCard';
 import { useRealtimeFeed } from '@/hooks/useRealtimeFeed';
@@ -1016,10 +1016,6 @@ export default function CompactWhiteMarketplacePage() {
 
         {/* Controles de Tema (Claro / Oscuro) y Notificaciones */}
         <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Link className="live-pill-light" href="/sorteo-en-vivo" style={{ marginRight: '2px' }}>
-            <span className="pulse-dot" /> En Vivo
-          </Link>
-
           <div
             style={{
               background: 'var(--card-bg, #1a1a1a)',
@@ -1867,8 +1863,8 @@ export default function CompactWhiteMarketplacePage() {
       </main>
       </div>
 
-      {/* TAB BAR INFERIOR NATIVA ESTILO IPHONE CON ICONOS VECTORIALES APPLE */}
-      <NativeBottomTabBar currentTab="explorar" onExploreClick={manualRefresh} />
+      {/* BARRA INFERIOR FLOTANTE ESTILO GLASSMORPHISM */}
+      <BottomNav currentTab="explorar" onExploreClick={manualRefresh} />
 
       {/* NOTIFICACIÓN FLOTANTE DE ENLACE COPIADO / COMPARTIDO */}
       {sharedToast && (
