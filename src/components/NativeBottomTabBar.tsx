@@ -100,6 +100,7 @@ export default function NativeBottomTabBar({
         left: 0,
         width: '100%',
         zIndex: 9999,
+        paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))',
       }}
     >
       <Link

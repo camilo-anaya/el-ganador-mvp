@@ -20151,7 +20151,7 @@ html[data-theme='dark'] .notif-fb-header h3,
     display: flex !important;
     justify-content: space-around !important;
     align-items: center !important;
-    padding: 10px 0 !important;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0px)) !important;
     z-index: 9999 !important;
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
@@ -20173,11 +20173,11 @@ html[data-theme='dark'] .notif-fb-header h3,
   }
 
   body {
-    padding-bottom: 75px !important;
+    padding-bottom: calc(75px + env(safe-area-inset-bottom, 20px)) !important;
   }
 
   .app-shell, main {
-    padding-bottom: 75px !important;
+    padding-bottom: calc(75px + env(safe-area-inset-bottom, 20px)) !important;
   }
 }
 
