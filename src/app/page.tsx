@@ -1333,28 +1333,29 @@ export default function CompactWhiteMarketplacePage() {
           onTouchStart={handleAdTouchStart}
           onTouchEnd={handleAdTouchEnd}
         >
-          <div className="carousel-ad-wrapper" style={{ padding: '12px 14px 16px 14px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', boxSizing: 'border-box' }}>
+          <div className="carousel-ad-wrapper" style={{ padding: '0 0 14px 0', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', boxSizing: 'border-box' }}>
             {/* CONTENIDO CENTRADO Y UNIFORME */}
             <div className="official-ad-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px', width: '100%' }}>
               
-              {/* FOTO GRANDE Y DESTACADA */}
+              {/* FOTO GRANDE Y DESTACADA DE BORDE A BORDE (FULL BLEED) */}
               <div
                 className="official-ad-media"
                 style={{
                   position: 'relative',
                   width: '100%',
-                  height: '165px',
-                  borderRadius: '12px',
+                  height: '195px',
+                  borderRadius: '0px',
                   overflow: 'hidden',
                   background: '#000000',
                   boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+                  margin: '0',
                 }}
               >
                 <img
                   key={SPONSOR_CAROUSEL_ADS[currentAdIndex].id}
                   src={SPONSOR_CAROUSEL_ADS[currentAdIndex].image}
                   alt={SPONSOR_CAROUSEL_ADS[currentAdIndex].brand}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px' }}
                 />
 
                 {/* BADGE FLOTANTE DE PATROCINADOR VIP */}
@@ -1381,7 +1382,7 @@ export default function CompactWhiteMarketplacePage() {
               </div>
 
               {/* INFORMACIÓN COMPACTA Y COMERCIAL DE ALTO IMPACTO */}
-              <div className="official-ad-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '3px', width: '100%' }}>
+              <div className="official-ad-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '3px', width: '100%', padding: '6px 14px 0 14px', boxSizing: 'border-box' }}>
                 <div className="ad-pill-and-counter" style={{ marginBottom: '1px' }}>
                   <span
                     className="official-ad-pill"
@@ -1438,7 +1439,7 @@ export default function CompactWhiteMarketplacePage() {
 
                 {/* MÉTRICA EN VIVO Y BOTÓN SEGUIR CENTRADOS */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '3px 0' }}>
-                  <span style={{ fontSize: '0.7rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <span suppressHydrationWarning style={{ fontSize: '0.7rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     👥 {(brandFollowerCounts[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] || 1580).toLocaleString()} pendientes
                   </span>
                   <button
@@ -1512,7 +1513,7 @@ export default function CompactWhiteMarketplacePage() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '12px',
+                gap: '16px',
                 width: '100%',
                 margin: '12px auto 4px auto',
                 padding: '4px 0',
@@ -1527,13 +1528,13 @@ export default function CompactWhiteMarketplacePage() {
                 aria-label="Patrocinador anterior"
                 title="Patrocinador anterior"
                 style={{
-                  width: '28px',
-                  height: '28px',
-                  minWidth: '28px',
-                  minHeight: '28px',
+                  width: '30px',
+                  height: '30px',
+                  minWidth: '30px',
+                  minHeight: '30px',
                   borderRadius: '50%',
                   background: 'rgba(0, 0, 0, 0.45)',
-                  border: '1px solid rgba(255, 255, 255, 0.45)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.5)',
                   color: '#ffffff',
                   fontSize: '16px',
                   display: 'flex',
@@ -1560,7 +1561,7 @@ export default function CompactWhiteMarketplacePage() {
                   padding: '5px 12px',
                   background: 'rgba(0, 0, 0, 0.35)',
                   borderRadius: '999px',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
                   flexShrink: 0,
                 }}
               >
@@ -1597,13 +1598,13 @@ export default function CompactWhiteMarketplacePage() {
                 aria-label="Siguiente patrocinador"
                 title="Siguiente patrocinador"
                 style={{
-                  width: '28px',
-                  height: '28px',
-                  minWidth: '28px',
-                  minHeight: '28px',
+                  width: '30px',
+                  height: '30px',
+                  minWidth: '30px',
+                  minHeight: '30px',
                   borderRadius: '50%',
                   background: 'rgba(0, 0, 0, 0.45)',
-                  border: '1px solid rgba(255, 255, 255, 0.45)',
+                  border: '1.5px solid rgba(255, 255, 255, 0.5)',
                   color: '#ffffff',
                   fontSize: '16px',
                   display: 'flex',
@@ -2948,7 +2949,7 @@ export default function CompactWhiteMarketplacePage() {
                   <div style={{ fontSize: '11px', color: theme === 'dark' ? '#a1a1aa' : '#64748b', fontWeight: 700 }}>
                     AUDIENCIA EN TIEMPO REAL
                   </div>
-                  <div style={{ fontSize: '16px', fontWeight: 900, color: '#f59e0b', marginTop: '2px' }}>
+                  <div suppressHydrationWarning style={{ fontSize: '16px', fontWeight: 900, color: '#f59e0b', marginTop: '2px' }}>
                     👥 {(brandFollowerCounts[selectedVitrinaAd.brand] || 1580).toLocaleString()} pendientes
                   </div>
                   <small style={{ fontSize: '11px', color: theme === 'dark' ? '#71717a' : '#94a3b8' }}>
