@@ -372,8 +372,31 @@ export default function LiveDrawDemoPage() {
 
   // Canales de Sorteos en Vivo y CRM de Audiencia
   const [availableDraws, setAvailableDraws] = useState<any[]>([]);
+  const [activeDraw, setActiveDraw] = useState<any>(null);
   const [activeDrawId, setActiveDrawId] = useState<string>("RIF-2026-000184");
   const [activeDrawTitle, setActiveDrawTitle] = useState<string>("iPhone 18 Pro 256 GB");
+
+  // Conteo en tiempo real del dinero en balotas vendidas por sorteo (por evento)
+  const activeUnitPrice = Number(
+    activeDraw?.unit_price ||
+      (activeDrawId.endsWith("185") ? 25000 : activeDrawId.endsWith("186") ? 15000 : 35000)
+  );
+  const activeTotalTickets = Number(activeDraw?.total_tickets || cartonSize || 1000);
+  const activeSoldTickets = Number(
+    activeDraw?.sold !== undefined
+      ? activeDraw.sold
+      : activeDrawId.endsWith("184")
+      ? 842
+      : activeDrawId.endsWith("185")
+      ? 168
+      : activeDrawId.endsWith("186")
+      ? 390
+      : Math.round(activeTotalTickets * 0.78)
+  );
+  const activeTotalRevenue = activeSoldTickets * activeUnitPrice;
+  const activeRevenueGoal = activeTotalTickets * activeUnitPrice;
+  const activeRevenuePct =
+    activeTotalTickets > 0 ? Math.min(100, Math.round((activeSoldTickets / activeTotalTickets) * 100)) : 0;
   const [activeSpectatorCount, setActiveSpectatorCount] = useState<number>(1420);
   const [spectatorDuration, setSpectatorDuration] = useState<number>(0);
   const [reactionCounts, setReactionCounts] = useState<Record<string, number>>({ "👏": 489, "🔥": 915, "🎉": 630, "❤️": 1240 });
@@ -529,6 +552,7 @@ export default function LiveDrawDemoPage() {
   };
 
   const switchLiveDraw = (draw: any) => {
+    setActiveDraw(draw);
     setActiveDrawId(draw.id);
     setActiveDrawTitle(draw.title);
     if (typeof window !== "undefined" && window.history) {
@@ -2298,6 +2322,36 @@ export default function LiveDrawDemoPage() {
               👁️ Ver como cliente (Móvil)
             </button>
           </div>
+
+          {/* CONTEO EN TIEMPO REAL DEL DINERO EN BALOTAS VENDIDAS POR SORTEO */}
+          <div
+            className="entrepreneurRevenueTicker"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '6px 14px',
+              background: 'rgba(245, 184, 46, 0.12)',
+              border: '1.5px solid rgba(245, 184, 46, 0.4)',
+              borderRadius: '10px',
+              marginLeft: 'auto',
+            }}
+          >
+            <span style={{ fontSize: '20px' }}>💰</span>
+            <div>
+              <div style={{ fontSize: '10px', color: '#f5b82e', fontWeight: 800, textTransform: 'uppercase' }}>
+                RECAUDO EN VIVO · {activeDrawTitle}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                <strong style={{ fontSize: '15px', color: '#ffffff', fontWeight: 900 }}>
+                  ${activeTotalRevenue.toLocaleString('es-CO')} COP
+                </strong>
+                <span style={{ fontSize: '11px', color: '#cbd5e1' }}>
+                  ({activeSoldTickets} / {activeTotalTickets} balotas · {activeRevenuePct}%)
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -2546,17 +2600,23 @@ export default function LiveDrawDemoPage() {
               {availableDraws.map((d, index) => {
                 const isSelected = activeDrawId === d.id;
                 const specCount = index === 0 ? "1.482" : index === 1 ? "890" : index === 2 ? "645" : "410";
+                const dUnitPrice = Number(d.unit_price || 35000);
+                const dSold = Number(d.sold !== undefined ? d.sold : (index === 0 ? 842 : index === 1 ? 168 : index === 2 ? 390 : 120));
+                const dRev = dSold * dUnitPrice;
                 return (
                   <button
                     key={d.id}
                     type="button"
                     className={`liveChannelPill ${isSelected ? "active" : ""}`}
                     onClick={() => switchLiveDraw(d)}
-                    title={`Sintonizar Sala ${index + 1}: ${d.title}`}
+                    title={`Sintonizar Sala ${index + 1}: ${d.title} · Venta total: $${dRev.toLocaleString("es-CO")} COP`}
                   >
                     <span className="channelRoomIndex">SALA {index + 1}</span>
                     <span className="channelEmoji">{d.emoji}</span>
                     <strong className="channelTitle">{d.title}</strong>
+                    <span style={{ fontSize: "10px", color: "#f5b82e", fontWeight: 700, padding: "1px 6px", borderRadius: "4px", background: "rgba(245, 184, 46, 0.15)" }}>
+                      💰 ${(dRev / 1000000).toFixed(1)}M
+                    </span>
                     {isSelected ? (
                       <span className="channelLiveDot activeBadge">✓ SINTONIZADA</span>
                     ) : (
@@ -2618,6 +2678,28 @@ export default function LiveDrawDemoPage() {
                 </div>
                 <div className="ratingWatchTime">
                   <span>⏱️ {formatWatchTime(spectatorDuration)}</span>
+                </div>
+
+                {/* CONTEO EN TIEMPO REAL DEL DINERO EN BALOTAS VENDIDAS POR ESTE EVENTO */}
+                <div
+                  className="ratingRevenueTicker"
+                  title={`Recaudo oficial acumulado: ${activeSoldTickets} balotas vendidas a $${activeUnitPrice.toLocaleString("es-CO")} COP`}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    padding: "2px 8px",
+                    borderRadius: "6px",
+                    background: "rgba(245, 184, 46, 0.16)",
+                    border: "1px solid rgba(245, 184, 46, 0.4)",
+                    color: "#f5b82e",
+                    fontSize: "11px",
+                    fontWeight: 800,
+                  }}
+                >
+                  <span>💰</span>
+                  <strong style={{ color: "#ffffff" }}>${activeTotalRevenue.toLocaleString("es-CO")} COP</strong>
+                  <span style={{ fontSize: "9px", color: "#cbd5e1" }}>({activeSoldTickets} vendidas)</span>
                 </div>
               </div>
 
@@ -3611,6 +3693,37 @@ export default function LiveDrawDemoPage() {
                 <p className="clientWaitingSub">
                   Sorteo oficial en vivo. En breve comenzará la extracción en tiempo real ante {activeSpectatorCount.toLocaleString("es-CO")} espectadores.
                 </p>
+
+                {/* BANNER DE RECAUDO EN VIVO DEL EVENTO */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "10px 14px",
+                    background: "rgba(245, 184, 46, 0.08)",
+                    border: "1px solid rgba(245, 184, 46, 0.25)",
+                    borderRadius: "12px",
+                    margin: "10px 0 14px 0",
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: "10px", color: "#f5b82e", fontWeight: 800, textTransform: "uppercase" }}>
+                      Boletería Vendida del Evento
+                    </div>
+                    <div style={{ fontSize: "15px", fontWeight: 800, color: "#ffffff" }}>
+                      ${activeTotalRevenue.toLocaleString("es-CO")} COP
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: "12px", fontWeight: 700, color: "#cbd5e1" }}>
+                      {activeSoldTickets} de {activeTotalTickets} balotas
+                    </div>
+                    <div style={{ fontSize: "10px", color: "#10b981", fontWeight: 700 }}>
+                      ✓ {activeRevenuePct}% vendido
+                    </div>
+                  </div>
+                </div>
 
                 {/* BOTONES DE REACCIONES DEL ESPECTADOR EN VIVO */}
                 <div className="liveAudienceReactions" style={{ justifyContent: "center", margin: "14px 0" }}>

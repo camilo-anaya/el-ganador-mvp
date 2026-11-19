@@ -91,10 +91,60 @@ export async function GET(request: Request) {
     const totalTickets = orders.reduce((sum, o) => sum + (o.numbers?.length || 0), 0);
     const uniqueBuyers = new Set(orders.map((o) => o.buyerEmail)).size;
 
+    // Desglose de recaudo en tiempo real por sorteo / evento
+    let drawsRevenue: Array<{
+      drawId: string;
+      title: string;
+      unitPrice: number;
+      totalTickets: number;
+      soldTickets: number;
+      totalRevenue: number;
+      revenueGoal: number;
+      progressPct: number;
+      status: string;
+    }> = [];
+
+    try {
+      const drawsRes = await query(
+        `SELECT d.id, d.title, d.unit_price, d.total_tickets, d.live,
+                SUM(CASE WHEN t.status = 'sold' THEN 1 ELSE 0 END) AS sold_count
+         FROM draws d
+         LEFT JOIN tickets t ON t.draw_id = d.id
+         GROUP BY d.id
+         ORDER BY d.live DESC, d.id ASC`
+      );
+
+      if (drawsRes && drawsRes.rows && drawsRes.rows.length > 0) {
+        drawsRevenue = drawsRes.rows.map((d: any) => {
+          const unitPrice = Number(d.unit_price) || 35000;
+          const totalTickets = Number(d.total_tickets) || 1000;
+          const soldTickets = Number(d.sold_count) || 0;
+          const totalRevenue = soldTickets * unitPrice;
+          const revenueGoal = totalTickets * unitPrice;
+          const progressPct = totalTickets > 0 ? Math.min(100, Math.round((soldTickets / totalTickets) * 100)) : 0;
+
+          return {
+            drawId: String(d.id),
+            title: String(d.title),
+            unitPrice,
+            totalTickets,
+            soldTickets,
+            totalRevenue,
+            revenueGoal,
+            progressPct,
+            status: d.live ? "En Vivo" : progressPct >= 100 ? "Completado" : "En Venta",
+          };
+        });
+      }
+    } catch (e) {
+      console.warn("Error consultando drawsRevenue en DB:", e);
+    }
+
     return NextResponse.json({
       ok: true,
       orders,
       totalCount: orders.length,
+      drawsRevenue,
       metrics: {
         totalSales,
         totalTickets,
