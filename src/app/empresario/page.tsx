@@ -23,6 +23,24 @@ function PanelEmpresarioContent() {
   const [selectedStoryFile, setSelectedStoryFile] = useState<File | null>(null);
   const [isUploadingStory, setIsUploadingStory] = useState(false);
   const [storyUploadStatus, setStoryUploadStatus] = useState<string | null>(null);
+  const [apiOrders, setApiOrders] = useState<any[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState<boolean>(false);
+
+  // Consulta de órdenes y clientes reales desde la API B2B
+  useEffect(() => {
+    if (activeTab === 'crm') {
+      setOrdersLoading(true);
+      fetch('/api/business/orders', { cache: 'no-store' })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.ok && Array.isArray(data.orders)) {
+            setApiOrders(data.orders);
+          }
+        })
+        .catch(() => {})
+        .finally(() => setOrdersLoading(false));
+    }
+  }, [activeTab]);
 
   // Sincronización reactiva de pestañas mediante query params (?tab=...)
   useEffect(() => {
@@ -1354,105 +1372,229 @@ function PanelEmpresarioContent() {
               ========================================================= */}
           {activeTab === 'crm' && (
             <section className="station-block-premium">
-              <div className="compact-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="compact-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
                 <h2>👥 CRM de Clientes y Boletas Compradas</h2>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (confirm('¿Deseas reiniciar los datos de prueba a 0?')) {
-                      localStorage.removeItem('elganador_biz_orders');
-                      localStorage.removeItem('elganador_custom_raffles');
-                      localStorage.removeItem('elganador_custom_stories');
-                      localStorage.removeItem('elganador_raffle_draft');
-                      alert('✅ Datos restablecidos a 0. Ahora puedes realizar pruebas 100% limpias como cliente y empresario.');
-                      window.location.reload();
-                    }
-                  }}
-                  style={{
-                    fontSize: '12px',
-                    padding: '6px 12px',
-                    background: 'rgba(239, 68, 68, 0.1)',
-                    border: '1px solid rgba(239, 68, 68, 0.3)',
-                    color: '#ef4444',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  🔄 Reiniciar Datos a 0
-                </button>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <button
+                    type="button"
+                    disabled={ordersLoading}
+                    onClick={() => {
+                      setOrdersLoading(true);
+                      fetch('/api/business/orders', { cache: 'no-store' })
+                        .then((res) => res.json())
+                        .then((data) => {
+                          if (data && data.ok && Array.isArray(data.orders)) {
+                            setApiOrders(data.orders);
+                          }
+                        })
+                        .catch(() => {})
+                        .finally(() => setOrdersLoading(false));
+                    }}
+                    style={{
+                      fontSize: '12px',
+                      padding: '6px 12px',
+                      background: 'rgba(255,255,255,0.06)',
+                      border: '1px solid rgba(255,255,255,0.15)',
+                      color: '#f4c752',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {ordersLoading ? '⏳ Sincronizando...' : '⚡ Sincronizar'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (confirm('¿Deseas reiniciar los datos de prueba a 0?')) {
+                        localStorage.removeItem('elganador_biz_orders');
+                        localStorage.removeItem('elganador_custom_raffles');
+                        localStorage.removeItem('elganador_custom_stories');
+                        localStorage.removeItem('elganador_raffle_draft');
+                        setApiOrders([]);
+                        alert('✅ Datos restablecidos a 0. Ahora puedes realizar pruebas 100% limpias como cliente y empresario.');
+                        window.location.reload();
+                      }
+                    }}
+                    style={{
+                      fontSize: '12px',
+                      padding: '6px 12px',
+                      background: 'rgba(239, 68, 68, 0.1)',
+                      border: '1px solid rgba(239, 68, 68, 0.3)',
+                      color: '#ef4444',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    🔄 Reiniciar a 0
+                  </button>
+                </div>
               </div>
               <p className="station-subtitle">
-                Lista de compradores verificados, números apartados y recibos bancarios de Wompi / PSE.
+                Lista de compradores verificados, números apartados y recibos bancarios de Wompi / PSE con validación SHA-256.
               </p>
 
               {(() => {
                 let liveTickets: any[] = [];
+                const seenIds = new Set<string>();
+
+                if (Array.isArray(apiOrders)) {
+                  for (const o of apiOrders) {
+                    if (o && o.id && !seenIds.has(o.id)) {
+                      seenIds.add(o.id);
+                      liveTickets.push(o);
+                    }
+                  }
+                }
+
                 try {
                   const stored = localStorage.getItem('elganador_biz_orders');
                   if (stored) {
                     const parsed = JSON.parse(stored);
-                    if (Array.isArray(parsed)) liveTickets = parsed;
+                    if (Array.isArray(parsed)) {
+                      for (const o of parsed) {
+                        if (o && o.id && !seenIds.has(o.id)) {
+                          seenIds.add(o.id);
+                          liveTickets.push(o);
+                        }
+                      }
+                    }
                   }
                 } catch {}
 
-                if (liveTickets.length === 0) {
-                  return (
-                    <div style={{ textAlign: 'center', padding: '40px 20px', background: 'rgba(255,255,255,0.03)', borderRadius: '14px', border: '1px dashed rgba(255,255,255,0.1)' }}>
-                      <div style={{ fontSize: '36px', marginBottom: '10px' }}>📊</div>
-                      <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '6px' }}>0 Clientes / Boletas Registradas</h3>
-                      <p style={{ fontSize: '13px', color: '#888', maxWidth: '380px', margin: '0 auto 16px' }}>
-                        Tus datos están en 0. Cuando un cliente compre o aparte un número a través de la pasarela de pagos Wompi, aparecerá aquí en tiempo real con su hash SHA-256 verificado.
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          shareRaffleLink({
-                            title: storeName,
-                            text: storeBio,
-                            path: `/?tienda=${encodeURIComponent(storeName)}`,
-                          })
-                        }
-                        style={{
-                          display: 'inline-block',
-                          padding: '10px 18px',
-                          background: '#007AFF',
-                          color: '#fff',
-                          fontWeight: 'bold',
-                          fontSize: '13px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        📤 Compartir enlace de mi tienda
-                      </button>
-                    </div>
-                  );
-                }
+                const totalSales = liveTickets.reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0);
+                const totalTickets = liveTickets.reduce((sum, o) => sum + (Array.isArray(o.numbers) ? o.numbers.length : 1), 0);
+                const uniqueBuyers = new Set(liveTickets.map((o) => o.buyerEmail || o.merchant)).size;
 
-                return liveTickets.map((t: any, idx: number) => (
-                  <div key={t.id || idx} className="crm-ticket-item" style={{ marginBottom: '12px' }}>
-                    <div className="crm-ticket-info">
-                      <strong>Cliente Verificado · 📱 {t.merchant || 'Comprador'}</strong>
-                      <span>Boletas: {Array.isArray(t.numbers) ? t.numbers.join(', ') : t.numbers} · {t.raffleTitle} · {t.status || 'Pagado vía Wompi'}</span>
-                      <small>SHA-256: {t.hashSha256 || 'Firma Criptográfica Verificada'}</small>
+                return (
+                  <div>
+                    {/* Tarjetas de métricas del CRM */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '10px', marginBottom: '16px' }}>
+                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(244,199,82,0.2)', borderRadius: '10px', padding: '12px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase' }}>Ventas Totales</div>
+                        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#f4c752', marginTop: '4px' }}>
+                          ${totalSales.toLocaleString('es-CO')} COP
+                        </div>
+                      </div>
+                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '12px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase' }}>Boletas Emitidas</div>
+                        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>
+                          {totalTickets}
+                        </div>
+                      </div>
+                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '12px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase' }}>Compradores</div>
+                        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>
+                          {uniqueBuyers}
+                        </div>
+                      </div>
                     </div>
-                    <button
-                      type="button"
-                      className="btn-compact-action"
-                      onClick={() =>
-                        shareRaffleLink({
-                          title: `Comprobante ${t.raffleTitle}`,
-                          text: `Boletas ${Array.isArray(t.numbers) ? t.numbers.join(', ') : t.numbers} confirmadas con SHA-256`,
-                          path: '/mis-boletas',
-                        })
-                      }
-                    >
-                      📤 Enviar Comprobante
-                    </button>
+
+                    {liveTickets.length === 0 ? (
+                      <div style={{ textAlign: 'center', padding: '36px 20px', background: 'rgba(255,255,255,0.03)', borderRadius: '14px', border: '1px dashed rgba(255,255,255,0.1)' }}>
+                        <div style={{ fontSize: '36px', marginBottom: '10px' }}>📊</div>
+                        <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '6px' }}>0 Clientes / Boletas Registradas</h3>
+                        <p style={{ fontSize: '13px', color: '#888', maxWidth: '380px', margin: '0 auto 16px' }}>
+                          Tus datos están en 0. Cuando un cliente compre o aparte un número a través de la pasarela de pagos Wompi, aparecerá aquí en tiempo real con su hash SHA-256 verificado.
+                        </p>
+                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              shareRaffleLink({
+                                title: storeName,
+                                text: storeBio,
+                                path: `/?tienda=${encodeURIComponent(storeName)}`,
+                              })
+                            }
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px 18px',
+                              background: '#007AFF',
+                              color: '#fff',
+                              fontWeight: 'bold',
+                              fontSize: '13px',
+                              borderRadius: '8px',
+                              border: 'none',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            📤 Compartir mi tienda
+                          </button>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              try {
+                                const sampleNum = Math.floor(100 + Math.random() * 899);
+                                const res = await fetch('/api/business/orders', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    drawId: 'sorteo-oficial',
+                                    raffleTitle: 'iPhone 18 Pro 256 GB',
+                                    buyerName: 'Carlos M. Rodríguez',
+                                    buyerEmail: 'carlos.m@gmail.com',
+                                    numbers: [sampleNum],
+                                    totalAmount: 35000,
+                                  }),
+                                });
+                                const data = await res.json();
+                                if (data && data.ok && data.order) {
+                                  setApiOrders((prev) => [data.order, ...prev]);
+                                  try {
+                                    const stored = JSON.parse(localStorage.getItem('elganador_biz_orders') || '[]');
+                                    stored.unshift(data.order);
+                                    localStorage.setItem('elganador_biz_orders', JSON.stringify(stored));
+                                  } catch {}
+                                  alert(`✅ Venta de prueba registrada: Boleta #${sampleNum} con hash SHA-256.`);
+                                }
+                              } catch (e) {
+                                alert('Error al generar venta de prueba');
+                              }
+                            }}
+                            style={{
+                              display: 'inline-block',
+                              padding: '10px 18px',
+                              background: 'rgba(244,199,82,0.15)',
+                              border: '1px solid rgba(244,199,82,0.4)',
+                              color: '#f4c752',
+                              fontWeight: 'bold',
+                              fontSize: '13px',
+                              borderRadius: '8px',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            🧪 Registrar Venta de Prueba
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      liveTickets.map((t: any, idx: number) => (
+                        <div key={t.id || idx} className="crm-ticket-item" style={{ marginBottom: '12px' }}>
+                          <div className="crm-ticket-info">
+                            <strong>Cliente Verificado · 📱 {t.buyerName || t.merchant || 'Comprador'}</strong>
+                            <span>Boletas: {Array.isArray(t.numbers) ? t.numbers.join(', ') : t.numbers} · {t.raffleTitle} · {t.status || 'Pagado vía Wompi'}</span>
+                            <small>SHA-256: {t.hashSha256 || 'Firma Criptográfica Verificada'}</small>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn-compact-action"
+                            onClick={() =>
+                              shareRaffleLink({
+                                title: `Comprobante ${t.raffleTitle}`,
+                                text: `Boletas ${Array.isArray(t.numbers) ? t.numbers.join(', ') : t.numbers} confirmadas con SHA-256`,
+                                path: '/mis-boletas',
+                              })
+                            }
+                          >
+                            📤 Enviar Comprobante
+                          </button>
+                        </div>
+                      ))
+                    )}
                   </div>
-                ));
+                );
               })()}
             </section>
           )}

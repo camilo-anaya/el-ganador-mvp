@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { readSurface } from "../../lib/auth-role";
 import { fromHex, sha256Hex } from "../../lib/draw-engine/bytes";
 import { canonicalListBytes } from "../../lib/draw-engine/canonical";
 import { deriveWinnerIndex } from "../../lib/draw-engine/derive";
@@ -345,14 +346,25 @@ export default function LiveDrawDemoPage() {
       }
     };
   }, [isCinemaFullscreen]);
-  const [isViewerMode, setIsViewerMode] = useState<boolean>(false);
+
+  // Perfil del usuario y autorización de controles de operador vs espectador
+  const [clientAccount, setClientAccount] = useState<{ displayName: string; email: string; role: string } | null>(null);
+  const isOperator = Boolean(
+    clientAccount?.role === "business" ||
+    (typeof window !== "undefined" && readSurface() === "business")
+  );
+  const [isViewerMode, setIsViewerMode] = useState<boolean>(() => {
+    if (typeof window === "undefined") return true;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("viewer") === "1" || params.get("modo") === "cliente") return true;
+    return readSurface() !== "business";
+  });
   const [userTicketNumber, setUserTicketNumber] = useState<string>("");
   const [ticketSaveFeedback, setTicketSaveFeedback] = useState<string>("");
   const [copiedClientLink, setCopiedClientLink] = useState<boolean>(false);
   const [copiedReminderLink, setCopiedReminderLink] = useState<boolean>(false);
 
-  // Perfil del cliente y boletas oficiales verificadas
-  const [clientAccount, setClientAccount] = useState<{ displayName: string; email: string; role: string } | null>(null);
+  // Boletas oficiales verificadas
   const [officialTickets, setOfficialTickets] = useState<string[]>([]);
   const [clientSearchEmail, setClientSearchEmail] = useState<string>("");
   const [isSearchingTickets, setIsSearchingTickets] = useState<boolean>(false);
@@ -2251,7 +2263,7 @@ export default function LiveDrawDemoPage() {
       )}
 
       {/* 👑 BARRA DE CONTROL DEL EMPRESARIO (Solo visible para el administrador) */}
-      {!isViewerMode && (
+      {!isViewerMode && isOperator && (
         <div className="entrepreneurControlBar">
           <div className="entrepreneurTitleGroup">
             <span className="entrepreneurBadge">👑 MODO EMPRESARIO</span>
@@ -2435,7 +2447,7 @@ export default function LiveDrawDemoPage() {
       )}
 
       <div className="liveDemoContentContainer">
-        {!isViewerMode && (
+        {!isViewerMode && isOperator && (
           <section className="liveDemoHero">
             <p className="liveDemoEyebrow">SISTEMA OFICIAL DE EXTRACCIÓN · EL GANADOR</p>
             <h1>El sorteo se vive<br /><span>en El Ganador.</span></h1>
@@ -2459,7 +2471,7 @@ export default function LiveDrawDemoPage() {
           </div>
         )}
 
-        {!isViewerMode && (
+        {!isViewerMode && isOperator && (
           <div className="liveGameModes" role="group" aria-label="Modo de sorteo">
             <button
               type="button"
@@ -3566,7 +3578,7 @@ export default function LiveDrawDemoPage() {
               </div>
             )}
             {/* EN MODO EMPRESARIO: Barra de ganador en el pie del escenario de pantalla completa */}
-            {!isViewerMode && isCinemaFullscreen && phase === "winner" && winner && (
+            {!isViewerMode && isOperator && isCinemaFullscreen && phase === "winner" && winner && (
               <div className="cinemaWinnerSpotlightBar">
                 <strong>
                   {mode === "balotas"
@@ -3835,7 +3847,7 @@ export default function LiveDrawDemoPage() {
             )}
 
             {/* BOTÓN DISCRETO PARA SALIR DE VISTA CLIENTE (PARA PRUEBAS DEL EMPRESARIO) */}
-            {isViewerMode && (
+            {isViewerMode && isOperator && (
               <div className="clientExitBar">
                 <button
                   type="button"
@@ -3858,7 +3870,7 @@ export default function LiveDrawDemoPage() {
           </div>
 
           {/* DETALLES Y CONTROLES DEL SORTEO (Solo para el empresario) */}
-          {!isViewerMode && (
+          {!isViewerMode && isOperator && (
             <div className="liveDemoDetails">
             <div className="liveDemoPrizeIcon">
               {mode === "balotas" ? (
@@ -4233,7 +4245,7 @@ export default function LiveDrawDemoPage() {
         </div>
       </section>
 
-      {!isViewerMode && (
+      {!isViewerMode && isOperator && (
         <>
           {/* Botón desplegable para optimizar la carga visual y móvil */}
           <div className="auditToggleWrapper" style={{ maxWidth: "1180px", margin: "24px auto 12px auto", padding: "0 14px", width: "100%", boxSizing: "border-box" }}>
