@@ -16686,14 +16686,14 @@ html[data-theme='dark'] .tab-item.active {
    ========================================================= */
 
 /* MODO OSCURO: Estilo Azul Noche Neón */
-[data-theme='dark'] #estacion-urgentes,
-[data-theme='dark'] #estacion-urgentes.station-urgent,
-[data-theme='dark'] #estacion-proximos,
-[data-theme='dark'] #estacion-proximos.station-upcoming,
-html[data-theme='dark'] #estacion-urgentes,
-html[data-theme='dark'] #estacion-urgentes.station-urgent,
-html[data-theme='dark'] #estacion-proximos,
-html[data-theme='dark'] #estacion-proximos.station-upcoming {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3),
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3).station-urgent,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2),
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2).station-upcoming,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3),
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3).station-urgent,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2),
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2).station-upcoming {
   background: linear-gradient(135deg, #0284c7 0%, #1e40af 45%, #0c2340 100%) !important;
   background-color: #0c2340 !important;
   border: 1.5px solid rgba(56, 189, 248, 0.65) !important;
@@ -16704,19 +16704,19 @@ html[data-theme='dark'] #estacion-proximos.station-upcoming {
   overflow: hidden !important;
 }
 
-[data-theme='dark'] #estacion-urgentes .compact-section-title h2,
-[data-theme='dark'] #estacion-proximos .compact-section-title h2,
-html[data-theme='dark'] #estacion-urgentes .compact-section-title h2,
-html[data-theme='dark'] #estacion-proximos .compact-section-title h2 {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-section-title h2,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-section-title h2,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-section-title h2,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-section-title h2 {
   color: #ffffff !important;
   text-shadow: 0 2px 14px rgba(2, 132, 199, 0.65), 0 0 24px rgba(56, 189, 248, 0.45) !important;
   font-weight: 800 !important;
 }
 
-[data-theme='dark'] #estacion-urgentes .compact-raffle-card,
-[data-theme='dark'] #estacion-proximos .compact-raffle-card,
-html[data-theme='dark'] #estacion-urgentes .compact-raffle-card,
-html[data-theme='dark'] #estacion-proximos .compact-raffle-card {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card {
   background: #141c2e !important;
   background-color: #141c2e !important;
   border: 1px solid rgba(56, 189, 248, 0.38) !important;
@@ -16726,52 +16726,52 @@ html[data-theme='dark'] #estacion-proximos .compact-raffle-card {
   color: #ffffff !important;
 }
 
-[data-theme='dark'] #estacion-urgentes .compact-raffle-card:hover,
-[data-theme='dark'] #estacion-proximos .compact-raffle-card:hover,
-html[data-theme='dark'] #estacion-urgentes .compact-raffle-card:hover,
-html[data-theme='dark'] #estacion-proximos .compact-raffle-card:hover {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card:hover,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card:hover,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card:hover,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card:hover {
   border-color: #38bdf8 !important;
   box-shadow: 0 10px 28px rgba(2, 132, 199, 0.5) !important;
   transform: translateY(-3px);
 }
 
-[data-theme='dark'] #estacion-urgentes .compact-raffle-card h3,
-[data-theme='dark'] #estacion-proximos .compact-raffle-card h3,
-html[data-theme='dark'] #estacion-urgentes .compact-raffle-card h3,
-html[data-theme='dark'] #estacion-proximos .compact-raffle-card h3 {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card h3,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card h3,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card h3,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card h3 {
   color: #f8fafc !important;
 }
 
-[data-theme='dark'] #estacion-urgentes .compact-raffle-card small.compact-merchant,
-[data-theme='dark'] #estacion-proximos .compact-raffle-card small.compact-merchant,
-html[data-theme='dark'] #estacion-urgentes .compact-raffle-card small.compact-merchant,
-html[data-theme='dark'] #estacion-proximos .compact-raffle-card small.compact-merchant {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card small.compact-merchant,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card small.compact-merchant,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card small.compact-merchant,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card small.compact-merchant {
   color: #93c5fd !important;
 }
 
-[data-theme='dark'] #estacion-urgentes .compact-raffle-card .progress-labels span,
-[data-theme='dark'] #estacion-proximos .compact-raffle-card .progress-labels span,
-html[data-theme='dark'] #estacion-urgentes .compact-raffle-card .progress-labels span,
-html[data-theme='dark'] #estacion-proximos .compact-raffle-card .progress-labels span {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels span,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels span,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels span,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels span {
   color: #93c5fd !important;
 }
 
-[data-theme='dark'] #estacion-urgentes .compact-raffle-card .progress-labels strong,
-[data-theme='dark'] #estacion-proximos .compact-raffle-card .progress-labels strong,
-html[data-theme='dark'] #estacion-urgentes .compact-raffle-card .progress-labels strong,
-html[data-theme='dark'] #estacion-proximos .compact-raffle-card .progress-labels strong {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels strong,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels strong,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels strong,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels strong {
   color: #38bdf8 !important;
 }
 
 /* MODO CLARO: LAS ESTACIONES URGENTES Y PRÓXIMOS SORTEOS MANTIENEN SU AZUL VIBRANTE CARACTERÍSTICO */
-[data-theme='light'] #estacion-urgentes,
-[data-theme='light'] #estacion-urgentes.station-urgent,
-[data-theme='light'] #estacion-proximos,
-[data-theme='light'] #estacion-proximos.station-upcoming,
-html[data-theme='light'] #estacion-urgentes,
-html[data-theme='light'] #estacion-proximos,
-html:not([data-theme='dark']) #estacion-urgentes,
-html:not([data-theme='dark']) #estacion-proximos {
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3),
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3).station-urgent,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2),
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2).station-upcoming,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3),
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2),
+html:not([data-theme='dark']) :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3),
+html:not([data-theme='dark']) :is(#estacion-proximos, #estacion-proximos-2) {
   background: linear-gradient(135deg, #0284c7 0%, #1e40af 45%, #0c2340 100%) !important;
   background-color: #0c2340 !important;
   border: 1.5px solid rgba(56, 189, 248, 0.65) !important;
@@ -16780,32 +16780,32 @@ html:not([data-theme='dark']) #estacion-proximos {
   border-radius: 20px !important;
 }
 
-[data-theme='light'] #estacion-urgentes .compact-section-title h2,
-[data-theme='light'] #estacion-proximos .compact-section-title h2,
-html[data-theme='light'] #estacion-urgentes .compact-section-title h2,
-html[data-theme='light'] #estacion-proximos .compact-section-title h2,
-html:not([data-theme='dark']) #estacion-urgentes .compact-section-title h2,
-html:not([data-theme='dark']) #estacion-proximos .compact-section-title h2 {
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-section-title h2,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-section-title h2,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-section-title h2,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-section-title h2,
+html:not([data-theme='dark']) :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-section-title h2,
+html:not([data-theme='dark']) :is(#estacion-proximos, #estacion-proximos-2) .compact-section-title h2 {
   color: #ffffff !important;
   text-shadow: 0 2px 14px rgba(2, 132, 199, 0.65), 0 0 24px rgba(56, 189, 248, 0.45) !important;
   font-weight: 800 !important;
 }
 
-[data-theme='light'] #estacion-urgentes .station-subtitle,
-[data-theme='light'] #estacion-proximos .station-subtitle,
-html[data-theme='light'] #estacion-urgentes .station-subtitle,
-html[data-theme='light'] #estacion-proximos .station-subtitle,
-html:not([data-theme='dark']) #estacion-urgentes .station-subtitle,
-html:not([data-theme='dark']) #estacion-proximos .station-subtitle {
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .station-subtitle,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .station-subtitle,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .station-subtitle,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .station-subtitle,
+html:not([data-theme='dark']) :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .station-subtitle,
+html:not([data-theme='dark']) :is(#estacion-proximos, #estacion-proximos-2) .station-subtitle {
   color: #e0f2fe !important;
 }
 
-[data-theme='light'] #estacion-urgentes .compact-raffle-card,
-[data-theme='light'] #estacion-proximos .compact-raffle-card,
-html[data-theme='light'] #estacion-urgentes .compact-raffle-card,
-html[data-theme='light'] #estacion-proximos .compact-raffle-card,
-html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card,
-html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card {
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card,
+html:not([data-theme='dark']) :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card,
+html:not([data-theme='dark']) :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card {
   background: #ffffff !important;
   background-color: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
@@ -16813,50 +16813,50 @@ html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card {
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06) !important;
 }
 
-[data-theme='light'] #estacion-urgentes .compact-raffle-card h3,
-[data-theme='light'] #estacion-proximos .compact-raffle-card h3,
-html[data-theme='light'] #estacion-urgentes .compact-raffle-card h3,
-html[data-theme='light'] #estacion-proximos .compact-raffle-card h3,
-html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card h3,
-html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card h3 {
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card h3,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card h3,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card h3,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card h3,
+html:not([data-theme='dark']) :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card h3,
+html:not([data-theme='dark']) :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card h3 {
   color: #0f172a !important;
   font-weight: 800 !important;
 }
 
-[data-theme='light'] #estacion-urgentes .compact-raffle-card small.compact-merchant,
-[data-theme='light'] #estacion-proximos .compact-raffle-card small.compact-merchant,
-html[data-theme='light'] #estacion-urgentes .compact-raffle-card small.compact-merchant,
-html[data-theme='light'] #estacion-proximos .compact-raffle-card small.compact-merchant,
-html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card small.compact-merchant,
-html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card small.compact-merchant {
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card small.compact-merchant,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card small.compact-merchant,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card small.compact-merchant,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card small.compact-merchant,
+html:not([data-theme='dark']) :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card small.compact-merchant,
+html:not([data-theme='dark']) :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card small.compact-merchant {
   color: #475569 !important;
   font-weight: 600 !important;
 }
 
-[data-theme='light'] #estacion-urgentes .compact-raffle-card .progress-labels span,
-[data-theme='light'] #estacion-proximos .compact-raffle-card .progress-labels span,
-html[data-theme='light'] #estacion-urgentes .compact-raffle-card .progress-labels span,
-html[data-theme='light'] #estacion-proximos .compact-raffle-card .progress-labels span,
-html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card .progress-labels span,
-html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card .progress-labels span {
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels span,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels span,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels span,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels span,
+html:not([data-theme='dark']) :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels span,
+html:not([data-theme='dark']) :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels span {
   color: #334155 !important;
   font-weight: 600 !important;
 }
 
-[data-theme='light'] #estacion-urgentes .compact-raffle-card .progress-labels strong,
-[data-theme='light'] #estacion-proximos .compact-raffle-card .progress-labels strong,
-html[data-theme='light'] #estacion-urgentes .compact-raffle-card .progress-labels strong,
-html[data-theme='light'] #estacion-proximos .compact-raffle-card .progress-labels strong,
-html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card .progress-labels strong,
-html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card .progress-labels strong {
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels strong,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels strong,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels strong,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels strong,
+html:not([data-theme='dark']) :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-labels strong,
+html:not([data-theme='dark']) :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-labels strong {
   color: #0f172a !important;
   font-weight: 800 !important;
 }
 
 
 
-#estacion-urgentes .compact-raffle-card .btn-compact-action,
-#estacion-proximos .compact-raffle-card .btn-compact-action {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .btn-compact-action,
+:is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .btn-compact-action {
   background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
   color: #ffffff !important;
   border: none !important;
@@ -16872,12 +16872,12 @@ html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card .progress-
 }
 
 /* Botón Compartir en Tarjetas: Alta Visibilidad en Modo Blanco y Modo Oscuro (Texto Negro Nítido sobre Blanco) */
-[data-theme='light'] #estacion-urgentes .compact-raffle-card .btn-share-card-compact,
-[data-theme='light'] #estacion-proximos .compact-raffle-card .btn-share-card-compact,
-html[data-theme='light'] #estacion-urgentes .compact-raffle-card .btn-share-card-compact,
-html[data-theme='light'] #estacion-proximos .compact-raffle-card .btn-share-card-compact,
-html:not([data-theme='dark']) #estacion-urgentes .compact-raffle-card .btn-share-card-compact,
-html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card .btn-share-card-compact,
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .btn-share-card-compact,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .btn-share-card-compact,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .btn-share-card-compact,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .btn-share-card-compact,
+html:not([data-theme='dark']) :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .btn-share-card-compact,
+html:not([data-theme='dark']) :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .btn-share-card-compact,
 .compact-raffle-card .btn-share-card-compact,
 .btn-share-card-compact {
   background: #ffffff !important;
@@ -16889,10 +16889,10 @@ html:not([data-theme='dark']) #estacion-proximos .compact-raffle-card .btn-share
   opacity: 1 !important;
 }
 
-[data-theme='light'] #estacion-urgentes .compact-raffle-card .btn-share-card-compact:hover,
-[data-theme='light'] #estacion-proximos .compact-raffle-card .btn-share-card-compact:hover,
-html[data-theme='light'] #estacion-urgentes .compact-raffle-card .btn-share-card-compact:hover,
-html[data-theme='light'] #estacion-proximos .compact-raffle-card .btn-share-card-compact:hover,
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .btn-share-card-compact:hover,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .btn-share-card-compact:hover,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .btn-share-card-compact:hover,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .btn-share-card-compact:hover,
 .compact-raffle-card .btn-share-card-compact:hover {
   background: #0f172a !important;
   border-color: #0f172a !important;
@@ -16900,10 +16900,10 @@ html[data-theme='light'] #estacion-proximos .compact-raffle-card .btn-share-card
   -webkit-text-fill-color: #ffffff !important;
 }
 
-[data-theme='dark'] #estacion-urgentes .compact-raffle-card .btn-share-card-compact,
-[data-theme='dark'] #estacion-proximos .compact-raffle-card .btn-share-card-compact,
-html[data-theme='dark'] #estacion-urgentes .compact-raffle-card .btn-share-card-compact,
-html[data-theme='dark'] #estacion-proximos .compact-raffle-card .btn-share-card-compact {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .btn-share-card-compact,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .btn-share-card-compact,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .btn-share-card-compact,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .btn-share-card-compact {
   background: #1e293b !important;
   color: #f8fafc !important;
   border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
@@ -17062,8 +17062,8 @@ html[data-theme='dark'] .promo-benefits-list li {
 
 /* 2. BARRA PROGRESIVA DE VENTAS: ROJO -> AMARILLO -> VERDE AL COMPLETARSE */
 .progress-fill,
-#estacion-urgentes .compact-raffle-card .progress-fill,
-#estacion-proximos .compact-raffle-card .progress-fill {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card .progress-fill,
+:is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card .progress-fill {
   height: 100% !important;
   border-radius: 999px !important;
   background: linear-gradient(90deg, #ef4444 0%, #f59e0b 50%, #10b981 100%) !important;
@@ -17227,22 +17227,22 @@ html[data-theme='dark'] .app-topbar {
 
 /* Colores dinámicos según avance de llenado */
 .progress-fill.status-red,
-#estacion-urgentes .progress-fill.status-red,
-#estacion-proximos .progress-fill.status-red {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .progress-fill.status-red,
+:is(#estacion-proximos, #estacion-proximos-2) .progress-fill.status-red {
   background: linear-gradient(90deg, #f87171, #ef4444) !important;
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.4) !important;
 }
 
 .progress-fill.status-yellow,
-#estacion-urgentes .progress-fill.status-yellow,
-#estacion-proximos .progress-fill.status-yellow {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .progress-fill.status-yellow,
+:is(#estacion-proximos, #estacion-proximos-2) .progress-fill.status-yellow {
   background: linear-gradient(90deg, #fbbf24, #f59e0b) !important;
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.4) !important;
 }
 
 .progress-fill.status-green,
-#estacion-urgentes .progress-fill.status-green,
-#estacion-proximos .progress-fill.status-green {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .progress-fill.status-green,
+:is(#estacion-proximos, #estacion-proximos-2) .progress-fill.status-green {
   background: linear-gradient(90deg, #34d399, #10b981) !important;
   box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
 }
@@ -17941,22 +17941,22 @@ div[class*='grid-scroll'] {
 
 /* Niveles de color condicionales */
 .progress-fill.status-red,
-#estacion-urgentes .progress-fill.status-red,
-#estacion-proximos .progress-fill.status-red {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .progress-fill.status-red,
+:is(#estacion-proximos, #estacion-proximos-2) .progress-fill.status-red {
   background: linear-gradient(90deg, #f87171, #ef4444) !important;
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.4) !important;
 }
 
 .progress-fill.status-yellow,
-#estacion-urgentes .progress-fill.status-yellow,
-#estacion-proximos .progress-fill.status-yellow {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .progress-fill.status-yellow,
+:is(#estacion-proximos, #estacion-proximos-2) .progress-fill.status-yellow {
   background: linear-gradient(90deg, #fbbf24, #f59e0b) !important;
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.4) !important;
 }
 
 .progress-fill.status-green,
-#estacion-urgentes .progress-fill.status-green,
-#estacion-proximos .progress-fill.status-green {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .progress-fill.status-green,
+:is(#estacion-proximos, #estacion-proximos-2) .progress-fill.status-green {
   background: linear-gradient(90deg, #34d399, #10b981) !important;
   box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
 }
@@ -18441,8 +18441,8 @@ div[class*='grid-scroll'] {
   #estacion-historias,
   #estacion-patrocinador,
   #estacion-en-vivo,
-  #estacion-urgentes,
-  #estacion-proximos,
+  :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3),
+  :is(#estacion-proximos, #estacion-proximos-2),
   #estacion-comercial {
     width: 100% !important;
     max-width: 100% !important;
@@ -19867,8 +19867,8 @@ html[data-theme='light'] .raffle-native-card,
 html[data-theme='light'] .client-profile-card,
 html[data-theme='light'] .quick-setting-card,
 html[data-theme='light'] .auth-card,
-html[data-theme='light'] #estacion-urgentes .compact-raffle-card,
-html[data-theme='light'] #estacion-proximos .compact-raffle-card,
+html[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card,
+html[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card,
 [data-theme='light'] .compact-raffle-card,
 [data-theme='light'] .allied-editorial-card,
 [data-theme='light'] .live-stage-card,
@@ -19877,8 +19877,8 @@ html[data-theme='light'] #estacion-proximos .compact-raffle-card,
 [data-theme='light'] .client-profile-card,
 [data-theme='light'] .quick-setting-card,
 [data-theme='light'] .auth-card,
-[data-theme='light'] #estacion-urgentes .compact-raffle-card,
-[data-theme='light'] #estacion-proximos .compact-raffle-card {
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card {
   background: #ffffff !important;
   background-color: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
@@ -20088,8 +20088,8 @@ html[data-theme='dark'] .raffle-native-card,
 html[data-theme='dark'] .client-profile-card,
 html[data-theme='dark'] .quick-setting-card,
 html[data-theme='dark'] .auth-card,
-html[data-theme='dark'] #estacion-urgentes .compact-raffle-card,
-html[data-theme='dark'] #estacion-proximos .compact-raffle-card,
+html[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card,
+html[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card,
 [data-theme='dark'] .compact-raffle-card,
 [data-theme='dark'] .allied-editorial-card,
 [data-theme='dark'] .live-stage-card,
@@ -20098,8 +20098,8 @@ html[data-theme='dark'] #estacion-proximos .compact-raffle-card,
 [data-theme='dark'] .client-profile-card,
 [data-theme='dark'] .quick-setting-card,
 [data-theme='dark'] .auth-card,
-[data-theme='dark'] #estacion-urgentes .compact-raffle-card,
-[data-theme='dark'] #estacion-proximos .compact-raffle-card {
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-raffle-card,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-raffle-card {
   background: #141c2e !important;
   background-color: #141c2e !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -20259,7 +20259,7 @@ body {
 
 /* Corrección de tarjetas en Modo Claro para el Marketplace general */
 .card, 
-div[class*="card"]:not([class*="live"]):not([class*="compact-raffle"]):not([class*="sci"]):not([class*="official"]):not(#estacion-urgentes):not(#estacion-proximos):not([class*="actions"]):not([class*="compact-card-actions-row"]) {
+div[class*="card"]:not([class*="live"]):not([class*="compact-raffle"]):not([class*="sci"]):not([class*="official"]):not(#estacion-urgentes):not(#estacion-urgentes-2):not(#estacion-urgentes-3):not(#estacion-proximos):not(#estacion-proximos-2):not([class*="actions"]):not([class*="compact-card-actions-row"]) {
   background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--text-color);
@@ -20283,8 +20283,8 @@ div[class*="card"] button[style*="background: #007AFF"] {
    TIPOGRAFÍA LIMPIA ADAPTATIVA (MODO CLARO / OSCURO)
    ========================================================= */
 body:not(.liveDemoPage) h1:not(.liveDemoHero h1),
-body:not(.liveDemoPage) h2:not(.liveDemoHero h1):not(#liveDemoDrawTitle):not(#liveDemoAuditTitle):not(#estacion-urgentes *):not(#estacion-proximos *),
-body:not(.liveDemoPage) h3:not(.liveDemoHero *):not(#liveDemoDrawTitle):not(#liveDemoAuditTitle):not(#estacion-urgentes *):not(#estacion-proximos *),
+body:not(.liveDemoPage) h2:not(.liveDemoHero h1):not(#liveDemoDrawTitle):not(#liveDemoAuditTitle):not(#estacion-urgentes *):not(#estacion-urgentes-2 *):not(#estacion-urgentes-3 *):not(#estacion-proximos *):not(#estacion-proximos-2 *),
+body:not(.liveDemoPage) h3:not(.liveDemoHero *):not(#liveDemoDrawTitle):not(#liveDemoAuditTitle):not(#estacion-urgentes *):not(#estacion-urgentes-2 *):not(#estacion-urgentes-3 *):not(#estacion-proximos *):not(#estacion-proximos-2 *),
 body:not(.liveDemoPage) h4, 
 body:not(.liveDemoPage) h5, 
 body:not(.liveDemoPage) h6 {
@@ -20395,23 +20395,23 @@ p.station-subtitle,
 }
 
 /* Encabezados iluminados inmutables en Estaciones Azules */
-#estacion-urgentes .compact-section-title h2,
-#estacion-proximos .compact-section-title h2,
-[data-theme='light'] #estacion-urgentes .compact-section-title h2,
-[data-theme='light'] #estacion-proximos .compact-section-title h2,
-[data-theme='dark'] #estacion-urgentes .compact-section-title h2,
-[data-theme='dark'] #estacion-proximos .compact-section-title h2 {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-section-title h2,
+:is(#estacion-proximos, #estacion-proximos-2) .compact-section-title h2,
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-section-title h2,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .compact-section-title h2,
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .compact-section-title h2,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .compact-section-title h2 {
   color: #ffffff !important;
   text-shadow: 0 2px 14px rgba(2, 132, 199, 0.65), 0 0 24px rgba(56, 189, 248, 0.45) !important;
   font-weight: 800 !important;
 }
 
-#estacion-urgentes .station-subtitle,
-#estacion-proximos .station-subtitle,
-[data-theme='light'] #estacion-urgentes .station-subtitle,
-[data-theme='light'] #estacion-proximos .station-subtitle,
-[data-theme='dark'] #estacion-urgentes .station-subtitle,
-[data-theme='dark'] #estacion-proximos .station-subtitle {
+:is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .station-subtitle,
+:is(#estacion-proximos, #estacion-proximos-2) .station-subtitle,
+[data-theme='light'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .station-subtitle,
+[data-theme='light'] :is(#estacion-proximos, #estacion-proximos-2) .station-subtitle,
+[data-theme='dark'] :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3) .station-subtitle,
+[data-theme='dark'] :is(#estacion-proximos, #estacion-proximos-2) .station-subtitle {
   color: #e0f2fe !important;
 }
 
@@ -20779,8 +20779,8 @@ header h1,
   #estacion-historias,
   #estacion-patrocinadores,
   #estacion-en-vivo,
-  #estacion-urgentes,
-  #estacion-proximos,
+  :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3),
+  :is(#estacion-proximos, #estacion-proximos-2),
   #estacion-comercial {
     width: 100% !important;
     max-width: 100% !important;
@@ -21140,9 +21140,9 @@ html.dark .app-topbar {
    PESTAÑAS DE SORTEOS PEGADAS A LOS LATERALES + BOTÓN "VER TODO" + GRILLA MODAL
    ========================================================================== */
 .see-all-grid-btn {
-  background: rgba(0, 122, 255, 0.12) !important;
-  color: #007AFF !important;
-  border: 1px solid rgba(0, 122, 255, 0.35) !important;
+  background: rgba(56, 189, 248, 0.22) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(125, 211, 252, 0.55) !important;
   border-radius: 999px !important;
   padding: 4px 10px !important;
   font-size: 0.72rem !important;
@@ -21183,10 +21183,10 @@ html[data-theme='dark'] .see-all-grid-btn {
 @media (max-width: 768px) {
   .station-block-premium,
   #estacion-en-vivo,
-  #estacion-urgentes,
+  :is(#estacion-urgentes, #estacion-urgentes-2, #estacion-urgentes-3),
   #estacion-urgentes-2,
   #estacion-urgentes-3,
-  #estacion-proximos,
+  :is(#estacion-proximos, #estacion-proximos-2),
   #estacion-proximos-2 {
     width: 100% !important;
     max-width: 100% !important;
