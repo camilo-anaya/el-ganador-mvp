@@ -551,14 +551,14 @@ function IngresoContent() {
       {/* Imagen de portada adaptable según modo claro / oscuro del celular */}
       <picture className="portada-2030-bg">
         <source
-          srcSet="/assets/portada-2030-oscuro.png"
+          srcSet="/assets/portada-2030-oscuro.png?v=2"
           media="(prefers-color-scheme: dark)"
         />
         <img
           src={
             theme === "dark"
-              ? "/assets/portada-2030-oscuro.png"
-              : "/assets/portada-2030-claro.png"
+              ? "/assets/portada-2030-oscuro.png?v=2"
+              : "/assets/portada-2030-claro.png?v=2"
           }
           alt="El Ganador - Rifas Online. Sueña, participa y gana"
           draggable={false}
@@ -567,6 +567,31 @@ function IngresoContent() {
 
       {/* Capa interactiva real alineada en la zona inferior (botones táctiles 100% funcionales) */}
       <div className="portada-2030-interactive-layer">
+        <p className="portada-2030-slogan">
+          <span>Sueña, participa y </span>
+          <span className="portada-2030-slogan-gana">
+            gana
+            <svg
+              className="portada-2030-slogan-swoosh"
+              viewBox="0 0 110 14"
+              fill="none"
+              aria-hidden="true"
+            >
+              <defs>
+                <linearGradient id="ganaSwooshGrad" x1="0" y1="7" x2="110" y2="7" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#c58b1f" />
+                  <stop offset="48%" stopColor="#f4c752" />
+                  <stop offset="100%" stopColor="#d99a26" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M2 12.2C32 2.2 76 0.6 108 5.2C76 4.4 36 6.2 2 12.2Z"
+                fill="url(#ganaSwooshGrad)"
+              />
+            </svg>
+          </span>
+        </p>
+
         <button
           type="button"
           onClick={() => switchMode("login")}
