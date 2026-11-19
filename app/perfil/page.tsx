@@ -9,6 +9,7 @@ import BottomNav from '@/components/BottomNav';
 import { useTheme } from '@/context/ThemeContext';
 import { getUserSession } from '@/lib/nativeActions';
 import { supabase } from '@/lib/supabase';
+import { performLogout } from '@/lib/logout';
 
 const IPHONE_AVATARS = ['👑', '🦁', '⚡', '💎', '🚀', '🏆'];
 
@@ -380,10 +381,24 @@ export default function PerfilClientePage() {
                 <span>🎱 Sorteo en Vivo (Balotera y Ruleta)</span>
                 <span>›</span>
               </Link>
-              <Link className="profile-nav-row danger" href="/ingreso?mode=login">
+              <button
+                type="button"
+                className="profile-nav-row danger"
+                onClick={() => void performLogout()}
+                style={{
+                  width: '100%',
+                  background: 'none',
+                  border: 'none',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
                 <span>🚪 Cerrar Sesión / Cambiar Cuenta</span>
                 <span>›</span>
-              </Link>
+              </button>
               <button
                 type="button"
                 className="profile-nav-row danger"

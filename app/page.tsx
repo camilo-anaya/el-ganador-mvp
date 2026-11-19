@@ -12,6 +12,7 @@ import { useRealtimeFeed } from '@/hooks/useRealtimeFeed';
 import { shareRaffleLink } from '@/lib/nativeActions';
 import { useTheme } from '@/context/ThemeContext';
 import StoryViewer from '@/components/StoryViewer';
+import { performLogout } from '@/lib/logout';
 
 interface MerchantStory {
   id: string;
@@ -1664,6 +1665,35 @@ export default function CompactWhiteMarketplacePage() {
                 <span>👤</span> Mi Perfil
               </Link>
             </nav>
+
+            {/* Botón Cerrar Sesión en el menú móvil */}
+            <div style={{ marginTop: 'auto', paddingTop: '14px', borderTop: theme === 'dark' ? '1px solid #222' : '1px solid #e2e8f0' }}>
+              <button
+                type="button"
+                className="mobile-menu-logout-btn"
+                onClick={() => {
+                  setShowMobileMenu(false);
+                  void performLogout();
+                }}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '11px 14px',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(239, 68, 68, 0.45)',
+                  background: theme === 'dark' ? 'rgba(239, 68, 68, 0.14)' : '#fef2f2',
+                  color: '#ef4444',
+                  fontWeight: 800,
+                  fontSize: '0.9rem',
+                  cursor: 'pointer',
+                }}
+              >
+                <span>🚪</span> Cerrar Sesión
+              </button>
+            </div>
           </div>
         </div>
       )}

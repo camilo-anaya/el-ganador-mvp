@@ -4,6 +4,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { performLogout } from '@/lib/logout';
 
 interface DesktopSidebarProps {
   activeEmpresarioTab?:
@@ -177,6 +178,23 @@ export default function DesktopSidebar({
           >
             <span>⚙️</span> Perfil y Ajustes
           </Link>
+          <button
+            type="button"
+            onClick={() => void performLogout()}
+            className="toc-link"
+            style={{
+              width: '100%',
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              color: '#ef4444',
+              fontWeight: 800,
+              cursor: 'pointer',
+              textAlign: 'left',
+              marginTop: '6px',
+            }}
+          >
+            <span>🚪</span> Cerrar Sesión
+          </button>
         </nav>
       </div>
 
