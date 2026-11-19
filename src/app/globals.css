@@ -14425,7 +14425,7 @@ html[data-theme='dark'] .tab-item.active {
   height: 100%;
   max-width: 520px;
   object-fit: cover;
-  object-position: center 38%;
+  object-position: center 28%;
 }
 
 /* Zona inferior de botones reales superpuestos */
@@ -14442,7 +14442,7 @@ html[data-theme='dark'] .tab-item.active {
 
 /* Slogan vectorial nítido (centrado entre RIFAS ONLINE e Iniciar sesión) */
 .portada-2030-slogan {
-  margin: 0 0 clamp(54px, 9.2vh, 92px);
+  margin: 0 0 clamp(44px, 7.6vh, 76px);
   text-align: center;
   font-size: clamp(1.14rem, 4.8vw, 1.4rem);
   font-weight: 500;
@@ -14460,10 +14460,10 @@ html[data-theme='dark'] .tab-item.active {
     padding-bottom: calc(clamp(28px, 6dvh, 52px) + env(safe-area-inset-bottom));
   }
   .portada-2030-bg img {
-    object-position: center 47%;
+    object-position: center 36%;
   }
   .portada-2030-slogan {
-    margin-bottom: clamp(36px, 6.5vh, 56px);
+    margin-bottom: clamp(28px, 5vh, 44px);
     font-size: clamp(1.06rem, 4.5vw, 1.28rem);
   }
 }
