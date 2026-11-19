@@ -1658,8 +1658,8 @@ export default function CompactWhiteMarketplacePage() {
               <Link href="/todos-los-sorteos" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
                 <span>🎟️</span> Todos los Sorteos
               </Link>
-              <Link href="/empresario" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: '#007AFF', fontWeight: 700 }}>
-                <span>💼</span> Portal Empresario
+              <Link href="/ingreso?mode=login&role=business" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: '#007AFF', fontWeight: 700 }}>
+                <span>💼</span> Soy empresa · Ingresar al portal
               </Link>
               <Link href="/perfil" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
                 <span>👤</span> Mi Perfil

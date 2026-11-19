@@ -1,6 +1,7 @@
 'use client';
 
 import { getSupabaseClient } from './supabase';
+import { clearSurfaceCookie, BUSINESS_PRIVATE_KEYS } from './auth-role';
 
 const SESSION_STORAGE_KEYS = [
   'elganador_session',
@@ -17,6 +18,8 @@ const SESSION_STORAGE_KEYS = [
 /**
  * Cierra la sesión completa del usuario (cookie del servidor, Supabase Auth y localStorage)
  * y redirige a la portada inicial de acceso (/ingreso).
+ * Funciona igual para ambas superficies: limpia la cookie de superficie y los
+ * datos privados empresariales para que nada quede mezclado en la siguiente sesión.
  */
 export async function performLogout(redirectTo: string = '/ingreso?logged_out=1') {
   try {
@@ -32,8 +35,11 @@ export async function performLogout(redirectTo: string = '/ingreso?logged_out=1'
 
   try {
     SESSION_STORAGE_KEYS.forEach((k) => localStorage.removeItem(k));
+    BUSINESS_PRIVATE_KEYS.forEach((k) => localStorage.removeItem(k));
     sessionStorage.clear();
   } catch {}
+
+  clearSurfaceCookie();
 
   if (typeof window !== 'undefined') {
     window.location.href = redirectTo;

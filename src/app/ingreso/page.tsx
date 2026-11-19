@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, Suspense, type FormEvent } from "react";
+import { activateSurface } from "@/lib/auth-role";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -230,6 +231,7 @@ function IngresoContent() {
       if (typeof window !== "undefined") {
         const storedRole = effectiveRole === "business" ? "business" : "buyer";
         localStorage.setItem("elganador_role", storedRole);
+        activateSurface(storedRole === "business" ? "business" : "customer");
         localStorage.setItem("elganador_logged_in", "true");
         localStorage.setItem("elganador_user_name", effectiveName);
         localStorage.setItem("elganador_user_email", effectiveEmail);
@@ -263,6 +265,7 @@ function IngresoContent() {
       if (typeof window !== "undefined") {
         const storedRole = effectiveRole === "business" ? "business" : "buyer";
         localStorage.setItem("elganador_role", storedRole);
+        activateSurface(storedRole === "business" ? "business" : "customer");
         localStorage.setItem("elganador_logged_in", "true");
         localStorage.setItem("elganador_user_name", effectiveName);
         localStorage.setItem("elganador_user_email", effectiveEmail);
@@ -296,6 +299,7 @@ function IngresoContent() {
       const bioEmail = isBiz ? "admin@tiendaxyz.com" : "usuario@elganador.co";
       localStorage.setItem("elganador_logged_in", "true");
       localStorage.setItem("elganador_role", storedRole);
+        activateSurface(storedRole === "business" ? "business" : "customer");
       localStorage.setItem("elganador_user_name", bioName);
       localStorage.setItem("elganador_user_email", bioEmail);
       localStorage.setItem(

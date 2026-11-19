@@ -1,4 +1,4 @@
-// src/hooks/useRealtimeFeed.ts
+// hooks/useRealtimeFeed.ts
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';

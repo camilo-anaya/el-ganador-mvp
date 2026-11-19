@@ -4,7 +4,10 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import DesktopSidebar from '@/components/DesktopSidebar';
+import BusinessSidebar from '@/components/business/BusinessSidebar';
+import BusinessBottomNav from '@/components/business/BusinessBottomNav';
+import BusinessAdBanner from '@/components/business/BusinessAdBanner';
+import { performLogout } from '@/lib/logout';
 import RegionalPermitSelectorWithTime, { LegalScope } from '@/components/RegionalPermitSelectorWithTime';
 import { fileToDataUrl, shareRaffleLink } from '@/lib/nativeActions';
 import { uploadStoryToSupabase, uploadKybDocumentToSupabase, uploadLegalDocument } from '@/lib/supabase';
@@ -34,7 +37,7 @@ function PanelEmpresarioContent() {
     } else if (tabParam === 'resumen' || tabParam === 'perfil') {
       setActiveTab('perfil');
     } else if (tabParam === 'pauta') {
-      router.push('/publicidad');
+      router.push('/empresario/publicidad');
       return;
     } else if (tabParam === 'kyb') {
       setActiveTab('kyb');
@@ -43,20 +46,9 @@ function PanelEmpresarioContent() {
     }
   }, [searchParams, router]);
 
-  // 1. Verificación de Rol Empresarial y Habilitación de Modo Demo / Pruebas
+  // 1. Carga de datos privados de la superficie empresarial
   useEffect(() => {
-    const role = localStorage.getItem('elganador_role');
-    const sessionStr = localStorage.getItem('elganador_session');
-    let sessionRole = null;
-    try {
-      if (sessionStr) sessionRole = JSON.parse(sessionStr)?.role;
-    } catch {}
-
-    const hasBusinessRole = role === 'business' || sessionRole === 'business';
-    if (!hasBusinessRole) {
-      // Habilitar acceso de pruebas/auditoría empresarial para que se pueda testear de inmediato
-      localStorage.setItem('elganador_role', 'business');
-    }
+    // El acceso empresarial lo valida BusinessGuard (app/empresario/layout.tsx).
 
     const kybStatus = localStorage.getItem('elganador_kyb_status') || 'approved';
     setKybApproved(kybStatus === 'approved');
@@ -95,7 +87,7 @@ function PanelEmpresarioContent() {
         } else if (tabParam === 'resumen' || tabParam === 'perfil') {
           setActiveTab('perfil');
         } else if (tabParam === 'pauta') {
-          router.push('/publicidad');
+          router.push('/empresario/publicidad');
           return;
         } else if (tabParam === 'kyb') {
           setActiveTab('kyb');
@@ -149,68 +141,6 @@ function PanelEmpresarioContent() {
   const [bioSaved, setBioSaved] = useState(false);
   const [profileViewMode, setProfileViewMode] = useState<'edit' | 'client'>('edit');
   const [isFollowingPreview, setIsFollowingPreview] = useState(false);
-  const [liveBannerAds, setLiveBannerAds] = useState<Array<{
-    id: string;
-    businessName: string;
-    headline: string;
-    description: string;
-    imageUrl: string;
-    ctaText: string;
-    ctaLink: string;
-    badge?: string;
-    planTier?: string;
-  }>>([
-    {
-      id: 'official-el-ganador-b2b',
-      businessName: 'El Ganador Oficial',
-      headline: 'Impulsa tu Marca y Tus Sorteos en El Ganador',
-      description: 'Anuncia tu negocio en el banner principal de toda la app con planes desde $49.900/mes y llega a miles de participantes.',
-      imageUrl: '/banner-el-ganador-oficial.jpg',
-      ctaText: '📢 Publicar Mi Anuncio',
-      ctaLink: '/publicidad',
-      badge: 'OFICIAL · PAUTA ACTIVA',
-    },
-  ]);
-  const [bannerSlideIdx, setBannerSlideIdx] = useState(0);
-
-  // Cargar anuncios activos reales del banner (/api/banner-ads) para mostrarlos igual que en web
-  useEffect(() => {
-    let mounted = true;
-    fetch('/api/banner-ads?activeOnly=true')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (!mounted || !data?.ads || !Array.isArray(data.ads)) return;
-        const activeFromApi = data.ads.map((ad: any) => ({
-          id: ad.id,
-          businessName: ad.businessName || 'Aliado Comercial',
-          headline: ad.headline || 'Promoción Activa',
-          description: ad.description || 'Campaña verificada en la vitrina oficial de El Ganador.',
-          imageUrl: ad.imageUrl || '/banner-el-ganador-oficial.jpg',
-          ctaText: ad.ctaText || 'Ver Promoción',
-          ctaLink: ad.ctaLink || '/publicidad',
-          badge: ad.planTier ? `PAUTA ${String(ad.planTier).toUpperCase()}` : 'ANUNCIO ACTIVO',
-        }));
-        if (activeFromApi.length > 0) {
-          setLiveBannerAds((prev) => {
-            const official = prev[0];
-            const filtered = activeFromApi.filter((a: any) => a.id !== official.id);
-            return [official, ...filtered];
-          });
-        }
-      })
-      .catch(() => {});
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (liveBannerAds.length <= 1) return;
-    const timer = setInterval(() => {
-      setBannerSlideIdx((prev) => (prev + 1) % liveBannerAds.length);
-    }, 5500);
-    return () => clearInterval(timer);
-  }, [liveBannerAds.length]);
 
   // 2. Estado de Publicador de Estados tipo Instagram (Fotos y Videos hasta 120s)
   const [storyMedia, setStoryMedia] = useState<string>('/galeria-premios-el-ganador-realista.jpg');
@@ -370,14 +300,6 @@ function PanelEmpresarioContent() {
     setRafflePhotos([]);
   };
 
-  const handleSelectEmpresarioTab = (tab: string) => {
-    if (tab === 'crear' || tab === 'rifas' || tab === 'crear-rifa') setActiveTab('rifas');
-    else if (tab === 'clientes' || tab === 'crm') setActiveTab('crm');
-    else if (tab === 'resumen' || tab === 'perfil') setActiveTab('perfil');
-    else if (tab === 'sala3d') router.push('/sorteo-en-vivo');
-    else if (tab === 'pauta') router.push('/publicidad');
-    else if (['estados', 'kyb'].includes(tab)) setActiveTab(tab as any);
-  };
 
   // Publicar Estado con Expiración Automática de 24 Horas y Subida a Supabase Storage
   const handlePublishStory = async (e: React.FormEvent) => {
@@ -569,7 +491,7 @@ function PanelEmpresarioContent() {
       {/* BARRA SUPERIOR EMPRESARIAL */}
       <header className="app-topbar">
         <div className="brand-cluster">
-          <Link aria-label="Ir a Vitrina" className="profile-icon-btn" href="/">🏠</Link>
+          <span aria-hidden="true" className="profile-icon-btn">🏪</span>
           <div>
             <span className="brand-title">PERFIL EMPRESARIAL</span>
             <small className="brand-subtitle">{storeName}</small>
@@ -589,14 +511,20 @@ function PanelEmpresarioContent() {
           >
             📤 Compartir Tienda
           </button>
+          <button
+            type="button"
+            className="btn-compact-action"
+            onClick={() => void performLogout()}
+            aria-label="Cerrar sesión empresarial"
+            style={{ background: 'rgba(239, 68, 68, 0.12)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.35)' }}
+          >
+            🚪 Salir
+          </button>
         </div>
       </header>
 
       <div className="desktop-workspace-grid">
-        <DesktopSidebar
-          activeEmpresarioTab={activeTab}
-          onSelectEmpresarioTab={handleSelectEmpresarioTab}
-        />
+        <BusinessSidebar activeKey={activeTab} />
         <main className="app-scroll-canvas" style={{ paddingBottom: '112px' }}>
           {/* AVISO DE ESTADO KYB */}
           {!kybApproved && (
@@ -617,132 +545,8 @@ function PanelEmpresarioContent() {
             </div>
           )}
 
-          {/* BANNER DE PUBLICIDAD ACTIVO (SINCRONIZADO CON WEB Y /PUBLICIDAD) */}
-          {(() => {
-            const currentAd = liveBannerAds[bannerSlideIdx] || liveBannerAds[0];
-            return (
-              <section
-                aria-label="Vitrina Publicitaria Empresarial"
-                style={{
-                  marginBottom: '16px',
-                  borderRadius: '18px',
-                  overflow: 'hidden',
-                  background: '#05070a',
-                  border: '1px solid rgba(245, 184, 46, 0.38)',
-                  boxShadow: '0 10px 26px rgba(0, 0, 0, 0.22)',
-                }}
-              >
-                <div
-                  style={{
-                    position: 'relative',
-                    width: '100%',
-                    height: '180px',
-                    background: '#000000',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <img
-                    src={currentAd.imageUrl}
-                    alt={currentAd.headline}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      display: 'block',
-                    }}
-                  />
-                  <span
-                    style={{
-                      position: 'absolute',
-                      top: '10px',
-                      left: '10px',
-                      padding: '4px 10px',
-                      borderRadius: '999px',
-                      background: 'rgba(5, 7, 10, 0.82)',
-                      border: '1px solid rgba(245, 184, 46, 0.65)',
-                      color: '#fde047',
-                      fontSize: '10px',
-                      fontWeight: 800,
-                      letterSpacing: '0.06em',
-                    }}
-                  >
-                    {currentAd.badge || 'PUBLICIDAD ACTIVA'}
-                  </span>
-                </div>
-
-                <div
-                  style={{
-                    padding: '14px 16px',
-                    background: 'linear-gradient(135deg, #0b1622 0%, #071b14 100%)',
-                    color: '#ffffff',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '10px',
-                  }}
-                >
-                  <div>
-                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#f5b82e', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                      📢 {currentAd.businessName} · Banner Oficial
-                    </div>
-                    <div role="heading" aria-level={3} style={{ margin: '3px 0 4px', fontSize: '15px', fontWeight: 800, color: '#ffffff', lineHeight: 1.25 }}>
-                      {currentAd.headline}
-                    </div>
-                    <p style={{ margin: 0, fontSize: '12.5px', color: '#cbd5e1', lineHeight: 1.4 }}>
-                      {currentAd.description}
-                    </p>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', flexWrap: 'wrap' }}>
-                    <Link
-                      href="/publicidad"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        padding: '9px 14px',
-                        borderRadius: '10px',
-                        background: 'linear-gradient(135deg, #f5b82e 0%, #d97706 100%)',
-                        color: '#090d12',
-                        fontWeight: 800,
-                        fontSize: '12.5px',
-                        textDecoration: 'none',
-                        boxShadow: '0 4px 14px rgba(245, 184, 46, 0.35)',
-                      }}
-                    >
-                      📢 Subir / Gestionar Mi Publicidad →
-                    </Link>
-
-                    {liveBannerAds.length > 1 && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        {liveBannerAds.map((ad, idx) => (
-                          <button
-                            key={ad.id}
-                            type="button"
-                            aria-label={`Ver anuncio ${idx + 1}`}
-                            onClick={() => setBannerSlideIdx(idx)}
-                            style={{
-                              width: idx === bannerSlideIdx ? '20px' : '7px',
-                              height: '7px',
-                              borderRadius: '999px',
-                              border: 'none',
-                              padding: 0,
-                              cursor: 'pointer',
-                              background: idx === bannerSlideIdx ? '#f5b82e' : 'rgba(255,255,255,0.35)',
-                              transition: 'all 0.2s ease',
-                            }}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </section>
-            );
-          })()}
-
+          {/* BANNER DE PUBLICIDAD (componente empresarial independiente) */}
+          <BusinessAdBanner />
           {/* MENÚ DE HERRAMIENTAS DEL EMPRESARIO */}
           <nav className="category-chips" aria-label="Herramientas Empresariales">
             <button
@@ -767,7 +571,7 @@ function PanelEmpresarioContent() {
               🎟️ Publicar Rifa y Cartón
             </button>
             <Link
-              href="/publicidad"
+              href="/empresario/publicidad"
               className="chip-btn"
               style={{ textDecoration: 'none' }}
             >
@@ -1155,8 +959,7 @@ function PanelEmpresarioContent() {
                           <span style={{ fontSize: '14px', fontWeight: 800, color: '#6ee7b7' }}>
                             $ {parseInt(ticketPrice || '35000', 10).toLocaleString('es-CO')} / boleta
                           </span>
-                          <Link
-                            href="/"
+                          <span
                             style={{
                               padding: '7px 12px',
                               borderRadius: '8px',
@@ -1164,11 +967,10 @@ function PanelEmpresarioContent() {
                               color: '#090d12',
                               fontWeight: 800,
                               fontSize: '12px',
-                              textDecoration: 'none',
                             }}
                           >
-                            Ver en Vitrina →
-                          </Link>
+                            Comprar boleta
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -1558,7 +1360,7 @@ function PanelEmpresarioContent() {
                   type="button"
                   onClick={() => {
                     if (confirm('¿Deseas reiniciar los datos de prueba a 0?')) {
-                      localStorage.removeItem('elganador_my_tickets');
+                      localStorage.removeItem('elganador_biz_orders');
                       localStorage.removeItem('elganador_custom_raffles');
                       localStorage.removeItem('elganador_custom_stories');
                       localStorage.removeItem('elganador_raffle_draft');
@@ -1587,7 +1389,7 @@ function PanelEmpresarioContent() {
               {(() => {
                 let liveTickets: any[] = [];
                 try {
-                  const stored = localStorage.getItem('elganador_my_tickets');
+                  const stored = localStorage.getItem('elganador_biz_orders');
                   if (stored) {
                     const parsed = JSON.parse(stored);
                     if (Array.isArray(parsed)) liveTickets = parsed;
@@ -1602,8 +1404,15 @@ function PanelEmpresarioContent() {
                       <p style={{ fontSize: '13px', color: '#888', maxWidth: '380px', margin: '0 auto 16px' }}>
                         Tus datos están en 0. Cuando un cliente compre o aparte un número a través de la pasarela de pagos Wompi, aparecerá aquí en tiempo real con su hash SHA-256 verificado.
                       </p>
-                      <Link
-                        href="/"
+                      <button
+                        type="button"
+                        onClick={() =>
+                          shareRaffleLink({
+                            title: storeName,
+                            text: storeBio,
+                            path: `/?tienda=${encodeURIComponent(storeName)}`,
+                          })
+                        }
                         style={{
                           display: 'inline-block',
                           padding: '10px 18px',
@@ -1612,11 +1421,12 @@ function PanelEmpresarioContent() {
                           fontWeight: 'bold',
                           fontSize: '13px',
                           borderRadius: '8px',
-                          textDecoration: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
                         }}
                       >
-                        🎟️ Probar Compra como Cliente
-                      </Link>
+                        📤 Compartir enlace de mi tienda
+                      </button>
                     </div>
                   );
                 }
@@ -1734,218 +1544,8 @@ function PanelEmpresarioContent() {
         </main>
       </div>
 
-      {/* BARRA INFERIOR FLOTANTE GLASSMORPHISM (MISMO DISEÑO PREDETERMINADO · ESTÁNDAR EMPRESARIAL) */}
-      <nav
-        className="floating-island-nav"
-        aria-label="Navegación Empresarial"
-        style={{
-          position: 'fixed',
-          bottom: 'calc(16px + env(safe-area-inset-bottom, 0px))',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '92%',
-          maxWidth: '410px',
-          height: '64px',
-          backgroundColor: 'rgba(18, 18, 20, 0.92)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderRadius: '999px',
-          border: '1px solid rgba(255, 255, 255, 0.16)',
-          display: 'flex',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          zIndex: 999,
-          boxShadow: '0 16px 36px rgba(0, 0, 0, 0.65)',
-          padding: '0 6px',
-          boxSizing: 'border-box',
-        }}
-      >
-        {/* 1. Vitrina Pública */}
-        <Link
-          href="/"
-          aria-label="Vitrina"
-          title="Vitrina Pública"
-          style={{
-            position: 'relative',
-            width: '50px',
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '50%',
-            textDecoration: 'none',
-            backgroundColor: 'transparent',
-            border: '1px solid transparent',
-            WebkitTapHighlightColor: 'transparent',
-          }}
-        >
-          <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M3 10.5L12 3.5L21 10.5V20C21 20.5523 20.5523 21 20 21H15C14.4477 21 14 20.5523 14 20V15C14 14.4477 13.5523 14 13 14H11C10.4477 14 10 14.4477 10 15V20C10 20.5523 9.55228 21 9 21H4C3.44772 21 3 20.5523 3 20V10.5Z"
-              stroke="rgba(255, 255, 255, 0.72)"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </Link>
-
-        {/* 2. Publicidad B2B */}
-        <Link
-          href="/publicidad"
-          aria-label="Publicidad"
-          title="Publicidad y Banner"
-          style={{
-            position: 'relative',
-            width: '50px',
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '50%',
-            textDecoration: 'none',
-            backgroundColor: 'transparent',
-            border: '1px solid transparent',
-            WebkitTapHighlightColor: 'transparent',
-          }}
-        >
-          <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M3 11V13C3 14.1 3.9 15 5 15H7L12 19V5L7 9H5C3.9 9 3 9.9 3 11Z"
-              stroke="#f5b82e"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path d="M16 9.5C17.2 10.7 17.2 13.3 16 14.5" stroke="#f5b82e" strokeWidth="1.8" strokeLinecap="round" />
-            <path d="M19 7C21.5 9.8 21.5 14.2 19 17" stroke="rgba(245, 184, 46, 0.7)" strokeWidth="1.8" strokeLinecap="round" />
-          </svg>
-        </Link>
-
-        {/* 3. Crear Rifa (Estándar Empresarial) */}
-        <button
-          type="button"
-          aria-label="Crear Rifa"
-          title="Publicar Nueva Rifa"
-          onClick={() => setActiveTab('rifas')}
-          style={{
-            position: 'relative',
-            width: '50px',
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '50%',
-            cursor: 'pointer',
-            backgroundColor: activeTab === 'rifas' ? 'rgba(2, 132, 199, 0.22)' : 'transparent',
-            border: activeTab === 'rifas' ? '1px solid rgba(56, 189, 248, 0.5)' : '1px solid transparent',
-            transform: activeTab === 'rifas' ? 'scale(1.06)' : 'scale(1)',
-            transition: 'all 0.2s ease',
-            WebkitTapHighlightColor: 'transparent',
-          }}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              stroke={activeTab === 'rifas' ? '#38bdf8' : 'rgba(255, 255, 255, 0.72)'}
-              strokeWidth="1.8"
-            />
-            <path
-              d="M12 8V16M8 12H16"
-              stroke={activeTab === 'rifas' ? '#38bdf8' : 'rgba(255, 255, 255, 0.85)'}
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-          {activeTab === 'rifas' && (
-            <span
-              style={{
-                position: 'absolute',
-                bottom: '4px',
-                width: '4px',
-                height: '4px',
-                borderRadius: '50%',
-                backgroundColor: '#38bdf8',
-                boxShadow: '0 0 8px #38bdf8',
-              }}
-            />
-          )}
-        </button>
-
-        {/* 4. Sorteo en Vivo */}
-        <Link
-          href="/sorteo-en-vivo"
-          aria-label="Sorteo en Vivo"
-          title="Sala de Sorteo en Vivo"
-          style={{
-            position: 'relative',
-            width: '50px',
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '50%',
-            textDecoration: 'none',
-            backgroundColor: 'transparent',
-            border: '1px solid transparent',
-            WebkitTapHighlightColor: 'transparent',
-          }}
-        >
-          <svg width="25" height="25" viewBox="0 0 28 28" fill="none">
-            <circle cx="14" cy="14" r="9.5" fill="rgba(255, 255, 255, 0.08)" stroke="rgba(255, 255, 255, 0.72)" strokeWidth="1.6" />
-            <path d="M12 10.5L18 14L12 17.5V10.5Z" fill="#ffffff" />
-            <circle cx="21" cy="7" r="3" fill="#ff3b30" stroke="#ffffff" strokeWidth="1.2" />
-          </svg>
-        </Link>
-
-        {/* 5. Mi Tienda / Perfil Empresarial */}
-        <button
-          type="button"
-          aria-label="Mi Tienda"
-          title="Mi Tienda Empresarial"
-          onClick={() => setActiveTab('perfil')}
-          style={{
-            position: 'relative',
-            width: '50px',
-            height: '50px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '50%',
-            cursor: 'pointer',
-            backgroundColor: activeTab === 'perfil' ? 'rgba(2, 132, 199, 0.22)' : 'transparent',
-            border: activeTab === 'perfil' ? '1px solid rgba(56, 189, 248, 0.5)' : '1px solid transparent',
-            transform: activeTab === 'perfil' ? 'scale(1.06)' : 'scale(1)',
-            transition: 'all 0.2s ease',
-            WebkitTapHighlightColor: 'transparent',
-          }}
-        >
-          <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M3 9L5 4H19L21 9M3 9V11C3 12.1 3.9 13 5 13C6.1 13 7 12.1 7 11C7 12.1 7.9 13 9 13C10.1 13 11 12.1 11 11C11 12.1 11.9 13 13 13C14.1 13 15 12.1 15 11C15 12.1 15.9 13 17 13C18.1 13 19 12.1 19 11V9M5 13V20H19V13"
-              stroke={activeTab === 'perfil' ? '#38bdf8' : 'rgba(255, 255, 255, 0.72)'}
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          {activeTab === 'perfil' && (
-            <span
-              style={{
-                position: 'absolute',
-                bottom: '4px',
-                width: '4px',
-                height: '4px',
-                borderRadius: '50%',
-                backgroundColor: '#38bdf8',
-                boxShadow: '0 0 8px #38bdf8',
-              }}
-            />
-          )}
-        </button>
-      </nav>
+      {/* BARRA INFERIOR EMPRESARIAL (componente independiente) */}
+      <BusinessBottomNav activeKey={activeTab} />
     </div>
   );
 }

@@ -174,7 +174,7 @@ export default function BottomNav({ currentTab: propTab, onExploreClick }: Botto
       setActiveTab('envivo');
     } else if (pathname.startsWith('/mis-boletas')) {
       setActiveTab('boletas');
-    } else if (pathname.startsWith('/perfil') || pathname.startsWith('/empresario')) {
+    } else if (pathname.startsWith('/perfil')) {
       setActiveTab('perfil');
     }
   }, [pathname, propTab]);

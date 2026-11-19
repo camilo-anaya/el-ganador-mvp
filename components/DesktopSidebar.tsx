@@ -1,4 +1,6 @@
-// src/components/DesktopSidebar.tsx
+// components/DesktopSidebar.tsx
+// Navegación de escritorio EXCLUSIVA de la superficie CLIENTE.
+// La navegación empresarial vive en components/business/BusinessSidebar.tsx.
 'use client';
 
 import React from 'react';
@@ -6,31 +8,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { performLogout } from '@/lib/logout';
 
-interface DesktopSidebarProps {
-  activeEmpresarioTab?:
-    | 'resumen'
-    | 'crear'
-    | 'clientes'
-    | 'sala3d'
-    | 'perfil'
-    | 'estados'
-    | 'pauta'
-    | 'rifas'
-    | 'crm'
-    | 'kyb'
-    | string;
-  onSelectEmpresarioTab?: (tab: any) => void;
-}
-
-export default function DesktopSidebar({
-  activeEmpresarioTab,
-  onSelectEmpresarioTab,
-}: DesktopSidebarProps) {
+export default function DesktopSidebar() {
   const pathname = usePathname();
 
   return (
     <aside className="desktop-toc-sidebar" aria-label="Tabla de contenido y navegación rápida">
-      {/* Bloque 1: Navegación General y Acciones Rápidas */}
+      {/* Bloque 1: Navegación general de la vitrina */}
       <div className="toc-section">
         <span className="toc-heading">📌 ACCESOS Y VITRINA</span>
         <nav className="toc-nav-list">
@@ -38,30 +21,7 @@ export default function DesktopSidebar({
             <span>🏠</span> Inicio / Vitrina General
           </Link>
           <Link href="/favoritos" className={`toc-link ${pathname === '/favoritos' ? 'active' : ''}`}>
-            <span>⭐</span> Mis Favoritos & Seguidos
-          </Link>
-
-          {/* ACCESOS DIRECTOS EMPRESARIALES DEBAJO DE INICIO */}
-          <Link
-            href="/empresario?tab=crear"
-            onClick={() => onSelectEmpresarioTab && onSelectEmpresarioTab('crear')}
-            className={`toc-link highlight-action ${
-              pathname === '/empresario' &&
-              (activeEmpresarioTab === 'crear' || activeEmpresarioTab === 'rifas')
-                ? 'active'
-                : ''
-            }`}
-          >
-            <span>➕</span> Publicar Rifa o Cartón
-          </Link>
-          <Link
-            href="/empresario?tab=estados"
-            onClick={() => onSelectEmpresarioTab && onSelectEmpresarioTab('estados')}
-            className={`toc-link highlight-action ${
-              pathname === '/empresario' && activeEmpresarioTab === 'estados' ? 'active' : ''
-            }`}
-          >
-            <span>📸</span> Subir Estado (Story)
+            <span>⭐</span> Mis Favoritos &amp; Seguidos
           </Link>
           <Link
             href="/sorteo-en-vivo?mode=demo"
@@ -85,78 +45,7 @@ export default function DesktopSidebar({
         </nav>
       </div>
 
-      {/* Bloque: Planes Publicitarios Unificados */}
-      <div className="toc-section">
-        <span className="toc-heading">📢 PUBLICIDAD</span>
-        <nav className="toc-nav-list">
-          <Link
-            href="/publicidad"
-            className={`toc-link highlight-action ${pathname === '/publicidad' ? 'active' : ''}`}
-          >
-            <span>📢</span> Planes Publicitarios
-          </Link>
-        </nav>
-      </div>
-
-      {/* Bloque 2: Suite de Trabajo para Empresarios (PC / Tablet) */}
-      <div className="toc-section">
-        <span className="toc-heading">💼 PANEL EMPRESARIAL (B2B)</span>
-        <nav className="toc-nav-list">
-          {pathname === '/empresario' && onSelectEmpresarioTab ? (
-            <>
-              <button
-                type="button"
-                onClick={() => onSelectEmpresarioTab('resumen')}
-                className={`toc-link ${
-                  activeEmpresarioTab === 'resumen' || activeEmpresarioTab === 'perfil'
-                    ? 'active'
-                    : ''
-                }`}
-              >
-                <span>📊</span> Mis Sorteos y Ventas
-              </button>
-              <button
-                type="button"
-                onClick={() => onSelectEmpresarioTab('crear')}
-                className={`toc-link ${
-                  activeEmpresarioTab === 'crear' || activeEmpresarioTab === 'rifas' ? 'active' : ''
-                }`}
-              >
-                <span>➕</span> Publicar Nuevo Sorteo
-              </button>
-              <button
-                type="button"
-                onClick={() => onSelectEmpresarioTab('sala3d')}
-                className={`toc-link ${activeEmpresarioTab === 'sala3d' ? 'active' : ''}`}
-              >
-                <span>🎱</span> Control Sala 3D
-              </button>
-              <button
-                type="button"
-                onClick={() => onSelectEmpresarioTab('clientes')}
-                className={`toc-link ${
-                  activeEmpresarioTab === 'clientes' || activeEmpresarioTab === 'crm'
-                    ? 'active'
-                    : ''
-                }`}
-              >
-                <span>👥</span> CRM Compradores
-              </button>
-            </>
-          ) : (
-            <>
-              <Link href="/empresario" className="toc-link">
-                <span>🏪</span> Abrir Panel de Empresario
-              </Link>
-            </>
-          )}
-          <Link href="/sorteo-en-vivo" className="toc-link">
-            <span>🎱</span> Balotera & Ruleta en Vivo
-          </Link>
-        </nav>
-      </div>
-
-      {/* Bloque 3: Zona del Cliente */}
+      {/* Bloque 2: Zona del cliente */}
       <div className="toc-section">
         <span className="toc-heading">👤 MI CUENTA</span>
         <nav className="toc-nav-list">
@@ -200,7 +89,7 @@ export default function DesktopSidebar({
 
       <div className="toc-pro-summary">
         <strong>⚡ Modo Escritorio Activo</strong>
-        <p>Gestiona tus sorteos, validaciones legales y CRM de compradores con vista extendida en PC/Tablet.</p>
+        <p>Explora sorteos, sigue tiendas y gestiona tus boletas con vista extendida en PC/Tablet.</p>
       </div>
     </aside>
   );
