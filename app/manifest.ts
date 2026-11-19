@@ -9,19 +9,25 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#0f172a",
+    background_color: "#ffffff",
     theme_color: "#007AFF",
     lang: "es-CO",
     icons: [
       {
-        src: "/el-ganador-cards-logo.png",
+        src: "/app-icon-512.png?v=2",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/el-ganador-cards-logo.png",
+        src: "/app-icon-192.png?v=2",
         sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "/app-icon-512.png?v=2",
+        sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
       },
