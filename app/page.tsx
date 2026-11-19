@@ -282,6 +282,177 @@ const RAFFLES_CATALOG: CompactRaffleItem[] = [
     image: '/gafas-dama-hombre.jpg',
     stage: 'upcoming',
   },
+  // --- BLOQUE ADICIONAL 1: A POCAS HORAS DE JUGAR (ÚLTIMOS CUPOS) ---
+  {
+    id: 'kawasaki-z900-hoy',
+    title: 'Kawasaki Z900 ABS 2026 + Casco Certificado',
+    description: 'Kawasaki Z900 ABS 0 km con entrega en concesionario oficial, SOAT, matrícula y casco integral certificado ECE 22.06.',
+    ballotGrid: 100,
+    merchant: 'Motos Caribe Oficial',
+    city: 'Barranquilla',
+    priceCop: '$ 40.000',
+    soldPercent: 94,
+    timeLabel: '⏳ En 1h 20m',
+    category: 'motos',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'iphone-16-pro-max-hoy',
+    title: 'iPhone 16 Pro Max 512 GB + AirPods Pro',
+    description: 'iPhone 16 Pro Max sellado de fábrica con garantía oficial + AirPods Pro de última generación con cancelación activa de ruido.',
+    ballotGrid: 100,
+    merchant: 'TechStore Colombia',
+    city: 'Bogotá',
+    priceCop: '$ 22.000',
+    soldPercent: 91,
+    timeLabel: '⏳ En 1h 50m',
+    category: 'tech',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'reloj-suizo-oro-hoy',
+    title: 'Reloj Automático Edición Dorada + Pulsera',
+    description: 'Reloj automático con cristal de zafiro antirreflejo, caja de acero inoxidable y pulsera en oro laminado 18K con estuche de lujo.',
+    ballotGrid: 100,
+    merchant: 'Joyas & Diamantes ABC',
+    city: 'Cartagena',
+    priceCop: '$ 30.000',
+    soldPercent: 89,
+    timeLabel: '⏳ En 2h 05m',
+    category: 'joyas',
+    image: '/reloj-alta-gama.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'coleccion-gala-dama-hoy',
+    title: 'Bono Boutique Gala + Vestido de Diseñador',
+    description: 'Vestido de alta costura a medida más bono de $ 2.000.000 COP en accesorios y calzado exclusivo de temporada.',
+    ballotGrid: 100,
+    merchant: 'Boutique Elegance & Óptica VIP',
+    city: 'Medellín',
+    priceCop: '$ 15.000',
+    soldPercent: 87,
+    timeLabel: '⏳ En 2h 45m',
+    category: 'moda',
+    image: '/vestidos-dama.jpg',
+    stage: 'closing_soon',
+  },
+  // --- BLOQUE ADICIONAL 2: A POCAS HORAS DE JUGAR (RELÁMPAGO ESTA NOCHE) ---
+  {
+    id: 'ford-ranger-raptor-noche',
+    title: 'Ford Ranger 4x4 Turbo + Tanqueo 1 Año',
+    description: 'Camioneta Ford Ranger 4x4 0 km con paquete todoterreno, papeles incluidos y bono de combustible por 12 meses.',
+    ballotGrid: 200,
+    merchant: 'AutoPremier Colombia 4x4',
+    city: 'Cali',
+    priceCop: '$ 45.000',
+    soldPercent: 85,
+    timeLabel: '⚡ En 3h 30m',
+    category: 'vehiculos',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'macbook-pro-m4-noche',
+    title: 'MacBook Pro M4 16" + Monitor 4K',
+    description: 'Estación de trabajo completa: MacBook Pro chip M4 de 16 pulgadas + monitor profesional 4K UHD para creadores y empresarios.',
+    ballotGrid: 100,
+    merchant: 'TechStore Colombia',
+    city: 'Bogotá',
+    priceCop: '$ 28.000',
+    soldPercent: 83,
+    timeLabel: '⚡ En 4h 10m',
+    category: 'tech',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'combo-zapatos-optica-noche',
+    title: 'Pack Calzado Premium + 2 Gafas Polarizadas',
+    description: 'Dos pares de calzado de cuero artesanal y dos gafas de sol polarizadas con estuche rígido y envío gratis a todo el país.',
+    ballotGrid: 100,
+    merchant: 'Óptica Visión VIP',
+    city: 'Bucaramanga',
+    priceCop: '$ 14.000',
+    soldPercent: 81,
+    timeLabel: '⚡ En 5h 00m',
+    category: 'optica',
+    image: '/zapatos-sandalias-dama.jpg',
+    stage: 'closing_soon',
+  },
+  {
+    id: 'san-andres-vip-noche',
+    title: 'Escapada San Andrés VIP (4 Días · 2 Pers.)',
+    description: 'Tiquetes aéreos ida y vuelta, hotel frente al mar todo incluido y tour privado en yate por los cayos.',
+    ballotGrid: 100,
+    merchant: 'Viajes & Sueños VIP',
+    city: 'Medellín',
+    priceCop: '$ 18.000',
+    soldPercent: 79,
+    timeLabel: '⚡ En 5h 45m',
+    category: 'viajes',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'closing_soon',
+  },
+  // --- BLOQUE ADICIONAL: PRÓXIMOS SORTEOS (GRANDES PREMIOS) ---
+  {
+    id: 'bmw-s1000rr-prox',
+    title: 'BMW S1000RR 0 km + Equipamiento Completo',
+    description: 'Superbike BMW S1000RR modelo 2026 con matrícula, SOAT, chaqueta con protecciones y casco de fibra de carbono.',
+    ballotGrid: 200,
+    merchant: 'Motos Caribe Oficial',
+    city: 'Barranquilla',
+    priceCop: '$ 55.000',
+    soldPercent: 54,
+    timeLabel: '🗓️ Mar 8:00 PM',
+    category: 'motos',
+    image: '/galeria-premios-el-ganador-realista.jpg',
+    stage: 'upcoming',
+  },
+  {
+    id: 'setup-gamer-rtx-prox',
+    title: 'PC Gamer RTX 4090 + Silla Ergonómica + Monitor 240Hz',
+    description: 'Computador gamer armado de alto rendimiento con tarjeta RTX 4090, refrigeración líquida, monitor curvo 240Hz y periféricos mecánicos.',
+    ballotGrid: 100,
+    merchant: 'TechStore Colombia',
+    city: 'Bogotá',
+    priceCop: '$ 30.000',
+    soldPercent: 48,
+    timeLabel: '🗓️ Mié 9:00 PM',
+    category: 'gaming',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'upcoming',
+  },
+  {
+    id: 'anillo-diamante-prox',
+    title: 'Anillo Solitario Diamante + Reloj de Lujo',
+    description: 'Joyería certificada en oro blanco 18K con diamante natural y reloj suizo de colección con certificado notarial.',
+    ballotGrid: 100,
+    merchant: 'Joyas & Diamantes ABC',
+    city: 'Cartagena',
+    priceCop: '$ 45.000',
+    soldPercent: 41,
+    timeLabel: '🗓️ Jue 8:30 PM',
+    category: 'joyas',
+    image: '/reloj-alta-gama.jpg',
+    stage: 'upcoming',
+  },
+  {
+    id: 'europa-madrid-paris-prox',
+    title: 'Tour Europa: Madrid y París (8 Días · 2 Pers.)',
+    description: 'Vuelos internacionales ida y vuelta, hoteles 4 estrellas con desayuno, traslados y seguro de viaje internacional para dos personas.',
+    ballotGrid: 200,
+    merchant: 'Viajes & Sueños VIP',
+    city: 'Medellín',
+    priceCop: '$ 35.000',
+    soldPercent: 39,
+    timeLabel: '🗓️ Vie 9:00 PM',
+    category: 'viajes',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'upcoming',
+  },
 ];
 
 const ALLIED_MERCHANTS = [
@@ -732,6 +903,20 @@ export default function CompactWhiteMarketplacePage() {
   const [activeStory, setActiveStory] = useState<MerchantStory | null>(null);
   const [activeStoryIndex, setActiveStoryIndex] = useState<number | null>(null);
 
+  // Estado del Recuadro "Ver todo" (Catálogo completo por bloques en cuadros, escalable a +1000 sorteos)
+  const [allRafflesModal, setAllRafflesModal] = useState<{
+    title: string;
+    filterStage: 'all' | 'closing_soon' | 'upcoming';
+  } | null>(null);
+  const [modalSearchQuery, setModalSearchQuery] = useState<string>('');
+  const [modalVisibleCount, setModalVisibleCount] = useState<number>(24);
+
+  const openAllRafflesModal = (title: string, filterStage: 'all' | 'closing_soon' | 'upcoming') => {
+    setModalSearchQuery('');
+    setModalVisibleCount(24);
+    setAllRafflesModal({ title, filterStage });
+  };
+
   // Estados de Compra de Boletas y Pasarela Wompi Colombia
   const [ticketModalRaffle, setTicketModalRaffle] = useState<CompactRaffleItem | null>(null);
   const [ticketCount, setTicketCount] = useState<number>(1);
@@ -979,7 +1164,13 @@ export default function CompactWhiteMarketplacePage() {
   );
 
   const liveRoomsList = feed?.liveRooms ?? LIVE_MINI_ROOMS;
-  const rafflesList = [...customRaffles, ...(feed?.raffles ?? RAFFLES_CATALOG)];
+  const apiRaffles = feed?.raffles ?? [];
+  const existingIds = new Set([...customRaffles.map((r) => r.id), ...apiRaffles.map((r) => r.id)]);
+  const rafflesList = [
+    ...customRaffles,
+    ...apiRaffles,
+    ...RAFFLES_CATALOG.filter((r) => !existingIds.has(r.id)),
+  ];
 
   const filterByCat = (list: typeof RAFFLES_CATALOG) => {
     if (selectedCategory === 'all') return list;
@@ -997,6 +1188,132 @@ export default function CompactWhiteMarketplacePage() {
   );
   const upcomingRaffles = filterByCat(
     rafflesList.filter((r) => r.stage === 'upcoming')
+  );
+
+  // División en bloques para mostrar mayor contenido (3 bloques A pocas horas + 2 bloques Próximos)
+  const closingSoonBlock1 = closingSoonRaffles.slice(0, 4);
+  const closingSoonBlock2 = closingSoonRaffles.slice(4, 8);
+  const closingSoonBlock3 = closingSoonRaffles.slice(8);
+  const upcomingBlock1 = upcomingRaffles.slice(0, 5);
+  const upcomingBlock2 = upcomingRaffles.slice(5);
+
+  const renderRaffleCard = (item: CompactRaffleItem, variant: 'urgent' | 'upcoming') => (
+    <article
+      key={item.id}
+      className={
+        variant === 'urgent'
+          ? 'compact-raffle-card card-type-urgent'
+          : `compact-raffle-card card-type-upcoming card-cat-${item.category}`
+      }
+    >
+      <div
+        className="compact-raffle-media"
+        onClick={() => setSelectedRaffleDetail(item)}
+        style={{ cursor: 'pointer' }}
+        title="Ver detalle del sorteo"
+      >
+        <img src={item.image} alt={item.title} loading="lazy" />
+        <span className={variant === 'urgent' ? 'urgent-time-badge' : 'compact-date-badge'}>
+          {item.timeLabel}
+        </span>
+        <span className="compact-price-tag">{item.priceCop}</span>
+      </div>
+
+      <div className="compact-raffle-body">
+        <div className="compact-merchant-row">
+          <small className="compact-merchant">🏪 {item.merchant}</small>
+          <button
+            type="button"
+            className={`btn-follow-merchant ${followedBrands[item.merchant] ? 'is-following' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleToggleFollow(item.merchant);
+            }}
+            title={followedBrands[item.merchant] ? 'Siguiendo a esta empresa' : 'Seguir a esta empresa'}
+          >
+            {followedBrands[item.merchant] ? '✓ Siguiendo' : '+ Seguir'}
+          </button>
+        </div>
+        <h3
+          onClick={() => setSelectedRaffleDetail(item)}
+          style={{ cursor: 'pointer' }}
+          title="Ver detalle del sorteo"
+        >
+          {item.title}
+        </h3>
+
+        {(() => {
+          const grid = item.ballotGrid || 100;
+          const soldCount = Math.round((grid * item.soldPercent) / 100);
+          const remainingCount = Math.max(0, grid - soldCount);
+          return (
+            <div className="progress-container">
+              <div className="progress-labels">
+                <span>🎟️ <strong>{soldCount}</strong> de {grid} balotas</span>
+                <strong>{item.soldPercent}% ({remainingCount} disp.)</strong>
+              </div>
+              <div className="progress-track">
+                <div className={`progress-fill ${getProgressStatusClass(item.soldPercent)}`} style={{ width: `${item.soldPercent}%` }} />
+              </div>
+            </div>
+          );
+        })()}
+
+        <div className="compact-card-actions-row" style={{ background: 'transparent', border: 'none', outline: 'none', boxShadow: 'none', padding: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <button
+            type="button"
+            className="btn-compact-action"
+            onClick={() => handleOpenTicketModal(item)}
+            style={{
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              padding: '6px 14px',
+              borderRadius: '8px',
+              background: '#007AFF',
+              color: '#ffffff',
+              border: 'none',
+              cursor: 'pointer',
+              flex: 1,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Comprar
+          </button>
+          <button
+            type="button"
+            className={`btn-like-card-compact ${likedRaffles.includes(item.id) ? 'is-liked' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleToggleLikeRaffle(item.id, item.title);
+            }}
+            title={likedRaffles.includes(item.id) ? `Te gusta este sorteo (${(raffleLikes[item.id] || 45) + 1} me gusta)` : `Dar me gusta (${raffleLikes[item.id] || 45} me gusta)`}
+            aria-label="Me gusta este sorteo"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill={likedRaffles.includes(item.id) ? '#ef4444' : 'none'} stroke={likedRaffles.includes(item.id) ? '#ef4444' : '#94a3b8'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="btn-share-card-compact"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleShareRaffle(item);
+            }}
+            title="Compartir sorteo"
+            aria-label="Compartir este sorteo"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="18" cy="5" r="3" />
+              <circle cx="6" cy="12" r="3" />
+              <circle cx="18" cy="19" r="3" />
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </article>
   );
 
   return (
@@ -1679,247 +1996,101 @@ export default function CompactWhiteMarketplacePage() {
           </DesktopScrollStrip>
         </section>
 
-        {/* SECCIÓN 2: RECUADROS COMPACTOS ⏳ A POCAS HORAS DE JUGAR */}
+        {/* SECCIÓN 2A: ⏳ SORTEOS A POCAS HORAS DE JUGAR (BLOQUE 1) */}
         <section id="estacion-urgentes" className="station-block-premium station-urgent" aria-label="Sorteos a pocas horas de jugar">
           <div className="compact-section-title">
-            <h2>⏳ Sorteos a pocas horas de jugar</h2>
+            <h2>⏳ A pocas horas de jugar</h2>
+            <button
+              type="button"
+              className="see-all-grid-btn"
+              onClick={() => openAllRafflesModal('⏳ Todos los sorteos a pocas horas', 'closing_soon')}
+            >
+              Ver todo ({closingSoonRaffles.length}) →
+            </button>
           </div>
 
           <DesktopScrollStrip ariaLabel="Cierre próximo">
-            {closingSoonRaffles.map((item) => (
-              <article key={item.id} className="compact-raffle-card card-type-urgent">
-                <div
-                  className="compact-raffle-media"
-                  onClick={() => setSelectedRaffleDetail(item)}
-                  style={{ cursor: 'pointer' }}
-                  title="Ver detalle del sorteo"
-                >
-                  <img src={item.image} alt={item.title} loading="lazy" />
-                  <span className="urgent-time-badge">{item.timeLabel}</span>
-                  <span className="compact-price-tag">{item.priceCop}</span>
-                </div>
-
-                <div className="compact-raffle-body">
-                  <div className="compact-merchant-row">
-                    <small className="compact-merchant">🏪 {item.merchant}</small>
-                    <button
-                      type="button"
-                      className={`btn-follow-merchant ${followedBrands[item.merchant] ? 'is-following' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleToggleFollow(item.merchant);
-                      }}
-                      title={followedBrands[item.merchant] ? 'Siguiendo a esta empresa' : 'Seguir a esta empresa'}
-                    >
-                      {followedBrands[item.merchant] ? '✓ Siguiendo' : '+ Seguir'}
-                    </button>
-                  </div>
-                  <h3
-                    onClick={() => setSelectedRaffleDetail(item)}
-                    style={{ cursor: 'pointer' }}
-                    title="Ver detalle del sorteo"
-                  >
-                    {item.title}
-                  </h3>
-
-                  {(() => {
-                    const grid = item.ballotGrid || 100;
-                    const soldCount = Math.round((grid * item.soldPercent) / 100);
-                    const remainingCount = Math.max(0, grid - soldCount);
-                    return (
-                      <div className="progress-container">
-                        <div className="progress-labels">
-                          <span>🎟️ <strong>{soldCount}</strong> de {grid} balotas</span>
-                          <strong>{item.soldPercent}% ({remainingCount} disp.)</strong>
-                        </div>
-                        <div className="progress-track">
-                          <div className={`progress-fill ${getProgressStatusClass(item.soldPercent)}`} style={{ width: `${item.soldPercent}%` }} />
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                  <div className="compact-card-actions-row" style={{ background: 'transparent', border: 'none', outline: 'none', boxShadow: 'none', padding: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <button
-                      type="button"
-                      className="btn-compact-action"
-                      onClick={() => handleOpenTicketModal(item)}
-                      style={{
-                        fontSize: '0.78rem',
-                        fontWeight: 800,
-                        padding: '6px 14px',
-                        borderRadius: '8px',
-                        background: '#007AFF',
-                        color: '#ffffff',
-                        border: 'none',
-                        cursor: 'pointer',
-                        flex: 1,
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      Comprar
-                    </button>
-                    <button
-                      type="button"
-                      className={`btn-like-card-compact ${likedRaffles.includes(item.id) ? 'is-liked' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleToggleLikeRaffle(item.id, item.title);
-                      }}
-                      title={likedRaffles.includes(item.id) ? `Te gusta este sorteo (${(raffleLikes[item.id] || 45) + 1} me gusta)` : `Dar me gusta (${raffleLikes[item.id] || 45} me gusta)`}
-                      aria-label="Me gusta este sorteo"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill={likedRaffles.includes(item.id) ? "#ef4444" : "none"} stroke={likedRaffles.includes(item.id) ? "#ef4444" : "#94a3b8"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                      </svg>
-                    </button>
-                    <button
-                      type="button"
-                      className="btn-share-card-compact"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleShareRaffle(item);
-                      }}
-                      title="Compartir sorteo"
-                      aria-label="Compartir este sorteo"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="18" cy="5" r="3" />
-                        <circle cx="6" cy="12" r="3" />
-                        <circle cx="18" cy="19" r="3" />
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
+            {closingSoonBlock1.map((item) => renderRaffleCard(item, 'urgent'))}
           </DesktopScrollStrip>
         </section>
 
-        
+        {/* SECCIÓN 2B: 🔥 ÚLTIMOS CUPOS · CIERRAN HOY (BLOQUE 2 A POCAS HORAS) */}
+        {closingSoonBlock2.length > 0 && (
+          <section id="estacion-urgentes-2" className="station-block-premium station-urgent" aria-label="Últimos cupos cierran hoy">
+            <div className="compact-section-title">
+              <h2>🔥 Últimos cupos · Cierran hoy</h2>
+              <button
+                type="button"
+                className="see-all-grid-btn"
+                onClick={() => openAllRafflesModal('🔥 Últimos cupos · Cierran hoy', 'closing_soon')}
+              >
+                Ver todo →
+              </button>
+            </div>
 
-        {/* SECCIÓN 3: RECUADROS COMPACTOS 🎟️ PRÓXIMOS SORTEOS */}
+            <DesktopScrollStrip ariaLabel="Últimos cupos hoy">
+              {closingSoonBlock2.map((item) => renderRaffleCard(item, 'urgent'))}
+            </DesktopScrollStrip>
+          </section>
+        )}
+
+        {/* SECCIÓN 2C: ⚡ RELÁMPAGO · JUEGAN ESTA NOCHE (BLOQUE 3 A POCAS HORAS) */}
+        {closingSoonBlock3.length > 0 && (
+          <section id="estacion-urgentes-3" className="station-block-premium station-urgent" aria-label="Sorteos relámpago esta noche">
+            <div className="compact-section-title">
+              <h2>⚡ Relámpago · Juegan esta noche</h2>
+              <button
+                type="button"
+                className="see-all-grid-btn"
+                onClick={() => openAllRafflesModal('⚡ Sorteos relámpago de hoy', 'closing_soon')}
+              >
+                Ver todo →
+              </button>
+            </div>
+
+            <DesktopScrollStrip ariaLabel="Relámpago esta noche">
+              {closingSoonBlock3.map((item) => renderRaffleCard(item, 'urgent'))}
+            </DesktopScrollStrip>
+          </section>
+        )}
+
+        {/* SECCIÓN 3A: 🎟️ PRÓXIMOS SORTEOS (BLOQUE 1) */}
         <section id="estacion-proximos" className="station-block-premium station-upcoming" aria-label="Próximos sorteos">
           <div className="compact-section-title">
             <h2>🎟️ Próximos Sorteos</h2>
+            <button
+              type="button"
+              className="see-all-grid-btn"
+              onClick={() => openAllRafflesModal('🎟️ Todos los próximos sorteos', 'upcoming')}
+            >
+              Ver todo ({upcomingRaffles.length}) →
+            </button>
           </div>
 
           <DesktopScrollStrip ariaLabel="Próximos sorteos">
-            {upcomingRaffles.map((item) => (
-              <article key={item.id} className={`compact-raffle-card card-type-upcoming card-cat-${item.category}`}>
-                <div
-                  className="compact-raffle-media"
-                  onClick={() => setSelectedRaffleDetail(item)}
-                  style={{ cursor: 'pointer' }}
-                  title="Ver detalle del sorteo"
-                >
-                  <img src={item.image} alt={item.title} loading="lazy" />
-                  <span className="compact-date-badge">{item.timeLabel}</span>
-                  <span className="compact-price-tag">{item.priceCop}</span>
-                </div>
-
-                <div className="compact-raffle-body">
-                  <div className="compact-merchant-row">
-                    <small className="compact-merchant">🏪 {item.merchant}</small>
-                    <button
-                      type="button"
-                      className={`btn-follow-merchant ${followedBrands[item.merchant] ? 'is-following' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleToggleFollow(item.merchant);
-                      }}
-                      title={followedBrands[item.merchant] ? 'Siguiendo a esta empresa' : 'Seguir a esta empresa'}
-                    >
-                      {followedBrands[item.merchant] ? '✓ Siguiendo' : '+ Seguir'}
-                    </button>
-                  </div>
-                  <h3
-                    onClick={() => setSelectedRaffleDetail(item)}
-                    style={{ cursor: 'pointer' }}
-                    title="Ver detalle del sorteo"
-                  >
-                    {item.title}
-                  </h3>
-
-                  {(() => {
-                    const grid = item.ballotGrid || 100;
-                    const soldCount = Math.round((grid * item.soldPercent) / 100);
-                    const remainingCount = Math.max(0, grid - soldCount);
-                    return (
-                      <div className="progress-container">
-                        <div className="progress-labels">
-                          <span>🎟️ <strong>{soldCount}</strong> de {grid} balotas</span>
-                          <strong>{item.soldPercent}% ({remainingCount} disp.)</strong>
-                        </div>
-                        <div className="progress-track">
-                          <div className={`progress-fill ${getProgressStatusClass(item.soldPercent)}`} style={{ width: `${item.soldPercent}%` }} />
-                        </div>
-                      </div>
-                    );
-                  })()}
-
-                  <div className="compact-card-actions-row" style={{ background: 'transparent', border: 'none', outline: 'none', boxShadow: 'none', padding: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <button
-                      type="button"
-                      className="btn-compact-action"
-                      onClick={() => handleOpenTicketModal(item)}
-                      style={{
-                        fontSize: '0.78rem',
-                        fontWeight: 800,
-                        padding: '6px 14px',
-                        borderRadius: '8px',
-                        background: '#007AFF',
-                        color: '#ffffff',
-                        border: 'none',
-                        cursor: 'pointer',
-                        flex: 1,
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      Comprar
-                    </button>
-                    <button
-                      type="button"
-                      className={`btn-like-card-compact ${likedRaffles.includes(item.id) ? 'is-liked' : ''}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleToggleLikeRaffle(item.id, item.title);
-                      }}
-                      title={likedRaffles.includes(item.id) ? `Te gusta este sorteo (${(raffleLikes[item.id] || 45) + 1} me gusta)` : `Dar me gusta (${raffleLikes[item.id] || 45} me gusta)`}
-                      aria-label="Me gusta este sorteo"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill={likedRaffles.includes(item.id) ? "#ef4444" : "none"} stroke={likedRaffles.includes(item.id) ? "#ef4444" : "#94a3b8"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                      </svg>
-                    </button>
-                    <button
-                      type="button"
-                      className="btn-share-card-compact"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleShareRaffle(item);
-                      }}
-                      title="Compartir sorteo"
-                      aria-label="Compartir este sorteo"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="18" cy="5" r="3" />
-                        <circle cx="6" cy="12" r="3" />
-                        <circle cx="18" cy="19" r="3" />
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
+            {upcomingBlock1.map((item) => renderRaffleCard(item, 'upcoming'))}
           </DesktopScrollStrip>
         </section>
 
-        
+        {/* SECCIÓN 3B: 🚀 GRANDES PREMIOS · PRÓXIMAMENTE (BLOQUE 2 PRÓXIMOS) */}
+        {upcomingBlock2.length > 0 && (
+          <section id="estacion-proximos-2" className="station-block-premium station-upcoming" aria-label="Grandes premios próximamente">
+            <div className="compact-section-title">
+              <h2>🚀 Grandes Premios · Próximamente</h2>
+              <button
+                type="button"
+                className="see-all-grid-btn"
+                onClick={() => openAllRafflesModal('🚀 Catálogo completo de sorteos', 'all')}
+              >
+                Ver todo ({rafflesList.length}) →
+              </button>
+            </div>
+
+            <DesktopScrollStrip ariaLabel="Grandes premios próximamente">
+              {upcomingBlock2.map((item) => renderRaffleCard(item, 'upcoming'))}
+            </DesktopScrollStrip>
+          </section>
+        )}
 
         {/* ESTACIÓN: 📢 VITRINA COMERCIAL, PAUTA PUBLICITARIA Y MARCAS ALIADAS */}
         <section
@@ -2655,6 +2826,304 @@ export default function CompactWhiteMarketplacePage() {
           }}
         />
       )}
+
+      {/* RECUADRO MODAL "VER TODO" — TODAS LAS RIFAS POR BLOQUES EN CUADROS (ESCALABLE A +1000) */}
+      {allRafflesModal && (() => {
+        const isDark = theme === 'dark';
+        const q = modalSearchQuery.trim().toLowerCase();
+        const baseList =
+          allRafflesModal.filterStage === 'all'
+            ? rafflesList
+            : rafflesList.filter((r) => r.stage === allRafflesModal.filterStage);
+        const filteredModalList = q
+          ? baseList.filter(
+              (r) =>
+                r.title.toLowerCase().includes(q) ||
+                r.merchant.toLowerCase().includes(q) ||
+                r.city.toLowerCase().includes(q) ||
+                r.category.toLowerCase().includes(q)
+            )
+          : baseList;
+        const visibleItems = filteredModalList.slice(0, modalVisibleCount);
+        const hasMore = filteredModalList.length > modalVisibleCount;
+
+        return (
+          <div
+            className="all-raffles-modal-backdrop"
+            role="dialog"
+            aria-modal="true"
+            aria-label={allRafflesModal.title}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 10000,
+              backgroundColor: isDark ? '#09090b' : '#f8fafc',
+              color: isDark ? '#f8fafc' : '#0f172a',
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100vw',
+              height: '100dvh',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Cabecera fija con buscador y filtros por bloque */}
+            <div
+              style={{
+                padding: 'calc(env(safe-area-inset-top, 0px) + 12px) 12px 10px 12px',
+                backgroundColor: isDark ? '#111113' : '#ffffff',
+                borderBottom: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                flexShrink: 0,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+                <div style={{ minWidth: 0 }}>
+                  <h2 style={{ margin: 0, fontSize: '1.02rem', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a' }}>
+                    {allRafflesModal.title}
+                  </h2>
+                  <small style={{ fontSize: '0.72rem', color: isDark ? '#94a3b8' : '#64748b', fontWeight: 600 }}>
+                    {filteredModalList.length.toLocaleString()} sorteos activos · Vista por bloques
+                  </small>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setAllRafflesModal(null)}
+                  aria-label="Cerrar catálogo completo"
+                  style={{
+                    width: '34px',
+                    height: '34px',
+                    borderRadius: '50%',
+                    border: isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid #cbd5e1',
+                    background: isDark ? '#1f1f23' : '#f1f5f9',
+                    color: isDark ? '#ffffff' : '#0f172a',
+                    fontSize: '16px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Buscador + pestañas de bloque */}
+              <input
+                type="search"
+                value={modalSearchQuery}
+                onChange={(e) => {
+                  setModalSearchQuery(e.target.value);
+                  setModalVisibleCount(24);
+                }}
+                placeholder="🔍 Buscar premio, comercio o ciudad..."
+                style={{
+                  width: '100%',
+                  padding: '9px 12px',
+                  borderRadius: '10px',
+                  border: isDark ? '1px solid rgba(255,255,255,0.16)' : '1px solid #cbd5e1',
+                  background: isDark ? '#18181b' : '#f8fafc',
+                  color: isDark ? '#ffffff' : '#0f172a',
+                  fontSize: '0.84rem',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+
+              <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', scrollbarWidth: 'none' }}>
+                {[
+                  { id: 'all' as const, label: `✨ Todos (${rafflesList.length})` },
+                  { id: 'closing_soon' as const, label: `⏳ A pocas horas (${rafflesList.filter((r) => r.stage === 'closing_soon').length})` },
+                  { id: 'upcoming' as const, label: `🎟️ Próximos (${rafflesList.filter((r) => r.stage === 'upcoming').length})` },
+                ].map((tab) => {
+                  const active = allRafflesModal.filterStage === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      onClick={() => {
+                        setAllRafflesModal({ title: tab.label.replace(/\s*\(\d+\)$/, ''), filterStage: tab.id });
+                        setModalVisibleCount(24);
+                      }}
+                      style={{
+                        padding: '6px 12px',
+                        borderRadius: '999px',
+                        border: active ? '1px solid #007AFF' : isDark ? '1px solid rgba(255,255,255,0.16)' : '1px solid #cbd5e1',
+                        background: active ? '#007AFF' : isDark ? '#18181b' : '#f1f5f9',
+                        color: active ? '#ffffff' : isDark ? '#e2e8f0' : '#334155',
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        whiteSpace: 'nowrap',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Grilla desplazable de cuadros por bloques */}
+            <div
+              style={{
+                flex: 1,
+                overflowY: 'auto',
+                padding: '10px 8px calc(env(safe-area-inset-bottom, 0px) + 24px) 8px',
+                WebkitOverflowScrolling: 'touch',
+              }}
+            >
+              {visibleItems.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '48px 16px', color: isDark ? '#94a3b8' : '#64748b' }}>
+                  <p style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0 0 6px' }}>No encontramos sorteos con esa búsqueda</p>
+                  <small>Prueba con otra palabra o cambia de bloque arriba.</small>
+                </div>
+              ) : (
+                <>
+                  <div className="all-raffles-grid">
+                    {visibleItems.map((item) => (
+                      <article
+                        key={`grid-${item.id}`}
+                        className="all-raffles-grid-card"
+                        style={{
+                          background: isDark ? '#141417' : '#ffffff',
+                          border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+                          borderRadius: '14px',
+                          overflow: 'hidden',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          boxShadow: isDark ? '0 4px 14px rgba(0,0,0,0.4)' : '0 2px 10px rgba(15,23,42,0.06)',
+                        }}
+                      >
+                        <div
+                          onClick={() => {
+                            setAllRafflesModal(null);
+                            setSelectedRaffleDetail(item);
+                          }}
+                          style={{ position: 'relative', width: '100%', height: '124px', cursor: 'pointer', overflow: 'hidden', background: '#000' }}
+                        >
+                          <img src={item.image} alt={item.title} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          <span
+                            style={{
+                              position: 'absolute',
+                              top: '6px',
+                              left: '6px',
+                              background: item.stage === 'closing_soon' ? 'rgba(220, 38, 38, 0.92)' : 'rgba(15, 23, 42, 0.85)',
+                              color: '#ffffff',
+                              fontSize: '0.64rem',
+                              fontWeight: 800,
+                              padding: '2px 6px',
+                              borderRadius: '6px',
+                            }}
+                          >
+                            {item.timeLabel}
+                          </span>
+                          <span
+                            style={{
+                              position: 'absolute',
+                              bottom: '6px',
+                              right: '6px',
+                              background: 'rgba(0, 0, 0, 0.82)',
+                              color: '#fbbf24',
+                              fontSize: '0.72rem',
+                              fontWeight: 900,
+                              padding: '2px 7px',
+                              borderRadius: '6px',
+                            }}
+                          >
+                            {item.priceCop}
+                          </span>
+                        </div>
+
+                        <div style={{ padding: '8px', display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
+                          <small style={{ fontSize: '0.66rem', color: isDark ? '#94a3b8' : '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            🏪 {item.merchant}
+                          </small>
+                          <h3
+                            onClick={() => {
+                              setAllRafflesModal(null);
+                              setSelectedRaffleDetail(item);
+                            }}
+                            style={{
+                              margin: 0,
+                              fontSize: '0.78rem',
+                              fontWeight: 800,
+                              lineHeight: 1.25,
+                              color: isDark ? '#ffffff' : '#0f172a',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                              minHeight: '2.5em',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {item.title}
+                          </h3>
+
+                          <div style={{ width: '100%', height: '5px', borderRadius: '999px', background: isDark ? 'rgba(255,255,255,0.12)' : '#e2e8f0', overflow: 'hidden' }}>
+                            <div style={{ width: `${item.soldPercent}%`, height: '100%', background: item.soldPercent >= 85 ? '#ef4444' : '#007AFF' }} />
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.64rem', color: isDark ? '#cbd5e1' : '#475569', fontWeight: 700 }}>
+                            <span>{item.soldPercent}% vendido</span>
+                            <span>{item.city}</span>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setAllRafflesModal(null);
+                              handleOpenTicketModal(item);
+                            }}
+                            style={{
+                              marginTop: 'auto',
+                              width: '100%',
+                              padding: '7px 8px',
+                              borderRadius: '8px',
+                              border: 'none',
+                              background: '#007AFF',
+                              color: '#ffffff',
+                              fontSize: '0.74rem',
+                              fontWeight: 800,
+                              cursor: 'pointer',
+                            }}
+                          >
+                            Comprar
+                          </button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+
+                  {hasMore && (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+                      <button
+                        type="button"
+                        onClick={() => setModalVisibleCount((c) => c + 24)}
+                        style={{
+                          padding: '10px 22px',
+                          borderRadius: '999px',
+                          border: '1px solid #007AFF',
+                          background: 'rgba(0, 122, 255, 0.12)',
+                          color: '#007AFF',
+                          fontSize: '0.82rem',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        Cargar más sorteos ({filteredModalList.length - modalVisibleCount} restantes)
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* =========================================================
           MODAL DE COMPARTIR EN REDES SOCIALES Y ENLACE DIRECTO

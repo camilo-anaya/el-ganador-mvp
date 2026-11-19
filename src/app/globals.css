@@ -21134,3 +21134,78 @@ html.dark .app-topbar {
     border-radius: 0 !important;
   }
 }
+
+
+/* ==========================================================================
+   PESTAÑAS DE SORTEOS PEGADAS A LOS LATERALES + BOTÓN "VER TODO" + GRILLA MODAL
+   ========================================================================== */
+.see-all-grid-btn {
+  background: rgba(0, 122, 255, 0.12) !important;
+  color: #007AFF !important;
+  border: 1px solid rgba(0, 122, 255, 0.35) !important;
+  border-radius: 999px !important;
+  padding: 4px 10px !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  transition: background 0.15s ease, transform 0.15s ease !important;
+}
+
+.see-all-grid-btn:hover {
+  background: #007AFF !important;
+  color: #ffffff !important;
+}
+
+[data-theme='dark'] .see-all-grid-btn,
+html[data-theme='dark'] .see-all-grid-btn {
+  background: rgba(56, 189, 248, 0.16) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+.all-raffles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .all-raffles-grid {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .station-block-premium,
+  #estacion-en-vivo,
+  #estacion-urgentes,
+  #estacion-urgentes-2,
+  #estacion-urgentes-3,
+  #estacion-proximos,
+  #estacion-proximos-2 {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    box-sizing: border-box !important;
+  }
+
+  .station-block-premium .compact-section-title {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+}
