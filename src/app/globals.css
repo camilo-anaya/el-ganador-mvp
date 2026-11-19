@@ -16103,8 +16103,8 @@ body {
   }
 
   .app-topbar {
-    padding-top: max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) !important;
-    padding-bottom: 12px !important;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+    padding-bottom: 10px !important;
     padding-left: 16px !important;
     padding-right: 16px !important;
     width: 100% !important;
@@ -20534,9 +20534,9 @@ p.station-subtitle,
 }
 
 
-/* Protección total contra Dynamic Island y Notch Face ID en iPhone */
+/* Protección total contra Dynamic Island y Notch Face ID en iPhone (ajustado justo debajo del notch) */
 header, .app-topbar, .native-topbar, header.main-header {
-  padding-top: max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) !important;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
 }
 
 body {

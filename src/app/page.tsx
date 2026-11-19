@@ -1016,7 +1016,7 @@ export default function CompactWhiteMarketplacePage() {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: 'max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) 16px 12px 16px',
+          padding: 'calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px 16px',
           backgroundColor: theme === 'dark' ? '#000000' : '#ffffff',
           borderBottom: theme === 'dark' ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
           width: '100%',
