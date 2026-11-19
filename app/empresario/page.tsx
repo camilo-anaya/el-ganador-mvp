@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DesktopSidebar from '@/components/DesktopSidebar';
 import RegionalPermitSelectorWithTime, { LegalScope } from '@/components/RegionalPermitSelectorWithTime';
-import { IosHomeIcon, IosLiveBallIcon, IosPlusIcon, IosStoreIcon } from '@/components/NativeBottomTabBar';
 import { fileToDataUrl, shareRaffleLink } from '@/lib/nativeActions';
 import { uploadStoryToSupabase, uploadKybDocumentToSupabase, uploadLegalDocument } from '@/lib/supabase';
 
@@ -148,6 +147,70 @@ function PanelEmpresarioContent() {
     website: 'https://motoscaribe.com.co',
   });
   const [bioSaved, setBioSaved] = useState(false);
+  const [profileViewMode, setProfileViewMode] = useState<'edit' | 'client'>('edit');
+  const [isFollowingPreview, setIsFollowingPreview] = useState(false);
+  const [liveBannerAds, setLiveBannerAds] = useState<Array<{
+    id: string;
+    businessName: string;
+    headline: string;
+    description: string;
+    imageUrl: string;
+    ctaText: string;
+    ctaLink: string;
+    badge?: string;
+    planTier?: string;
+  }>>([
+    {
+      id: 'official-el-ganador-b2b',
+      businessName: 'El Ganador Oficial',
+      headline: 'Impulsa tu Marca y Tus Sorteos en El Ganador',
+      description: 'Anuncia tu negocio en el banner principal de toda la app con planes desde $49.900/mes y llega a miles de participantes.',
+      imageUrl: '/banner-el-ganador-oficial.jpg',
+      ctaText: '📢 Publicar Mi Anuncio',
+      ctaLink: '/publicidad',
+      badge: 'OFICIAL · PAUTA ACTIVA',
+    },
+  ]);
+  const [bannerSlideIdx, setBannerSlideIdx] = useState(0);
+
+  // Cargar anuncios activos reales del banner (/api/banner-ads) para mostrarlos igual que en web
+  useEffect(() => {
+    let mounted = true;
+    fetch('/api/banner-ads?activeOnly=true')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!mounted || !data?.ads || !Array.isArray(data.ads)) return;
+        const activeFromApi = data.ads.map((ad: any) => ({
+          id: ad.id,
+          businessName: ad.businessName || 'Aliado Comercial',
+          headline: ad.headline || 'Promoción Activa',
+          description: ad.description || 'Campaña verificada en la vitrina oficial de El Ganador.',
+          imageUrl: ad.imageUrl || '/banner-el-ganador-oficial.jpg',
+          ctaText: ad.ctaText || 'Ver Promoción',
+          ctaLink: ad.ctaLink || '/publicidad',
+          badge: ad.planTier ? `PAUTA ${String(ad.planTier).toUpperCase()}` : 'ANUNCIO ACTIVO',
+        }));
+        if (activeFromApi.length > 0) {
+          setLiveBannerAds((prev) => {
+            const official = prev[0];
+            const filtered = activeFromApi.filter((a: any) => a.id !== official.id);
+            return [official, ...filtered];
+          });
+        }
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (liveBannerAds.length <= 1) return;
+    const timer = setInterval(() => {
+      setBannerSlideIdx((prev) => (prev + 1) % liveBannerAds.length);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, [liveBannerAds.length]);
 
   // 2. Estado de Publicador de Estados tipo Instagram (Fotos y Videos hasta 120s)
   const [storyMedia, setStoryMedia] = useState<string>('/galeria-premios-el-ganador-realista.jpg');
@@ -534,7 +597,7 @@ function PanelEmpresarioContent() {
           activeEmpresarioTab={activeTab}
           onSelectEmpresarioTab={handleSelectEmpresarioTab}
         />
-        <main className="app-scroll-canvas">
+        <main className="app-scroll-canvas" style={{ paddingBottom: '112px' }}>
           {/* AVISO DE ESTADO KYB */}
           {!kybApproved && (
             <div className="station-block-premium" style={{ background: '#451a03', border: '1px solid #f59e0b', color: '#fef3c7', padding: '14px', borderRadius: '14px', marginBottom: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
@@ -553,6 +616,132 @@ function PanelEmpresarioContent() {
               </button>
             </div>
           )}
+
+          {/* BANNER DE PUBLICIDAD ACTIVO (SINCRONIZADO CON WEB Y /PUBLICIDAD) */}
+          {(() => {
+            const currentAd = liveBannerAds[bannerSlideIdx] || liveBannerAds[0];
+            return (
+              <section
+                aria-label="Vitrina Publicitaria Empresarial"
+                style={{
+                  marginBottom: '16px',
+                  borderRadius: '18px',
+                  overflow: 'hidden',
+                  background: '#05070a',
+                  border: '1px solid rgba(245, 184, 46, 0.38)',
+                  boxShadow: '0 10px 26px rgba(0, 0, 0, 0.22)',
+                }}
+              >
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '180px',
+                    background: '#000000',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <img
+                    src={currentAd.imageUrl}
+                    alt={currentAd.headline}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain',
+                      display: 'block',
+                    }}
+                  />
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: '10px',
+                      left: '10px',
+                      padding: '4px 10px',
+                      borderRadius: '999px',
+                      background: 'rgba(5, 7, 10, 0.82)',
+                      border: '1px solid rgba(245, 184, 46, 0.65)',
+                      color: '#fde047',
+                      fontSize: '10px',
+                      fontWeight: 800,
+                      letterSpacing: '0.06em',
+                    }}
+                  >
+                    {currentAd.badge || 'PUBLICIDAD ACTIVA'}
+                  </span>
+                </div>
+
+                <div
+                  style={{
+                    padding: '14px 16px',
+                    background: 'linear-gradient(135deg, #0b1622 0%, #071b14 100%)',
+                    color: '#ffffff',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '10px',
+                  }}
+                >
+                  <div>
+                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#f5b82e', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      📢 {currentAd.businessName} · Banner Oficial
+                    </div>
+                    <div role="heading" aria-level={3} style={{ margin: '3px 0 4px', fontSize: '15px', fontWeight: 800, color: '#ffffff', lineHeight: 1.25 }}>
+                      {currentAd.headline}
+                    </div>
+                    <p style={{ margin: 0, fontSize: '12.5px', color: '#cbd5e1', lineHeight: 1.4 }}>
+                      {currentAd.description}
+                    </p>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', flexWrap: 'wrap' }}>
+                    <Link
+                      href="/publicidad"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        padding: '9px 14px',
+                        borderRadius: '10px',
+                        background: 'linear-gradient(135deg, #f5b82e 0%, #d97706 100%)',
+                        color: '#090d12',
+                        fontWeight: 800,
+                        fontSize: '12.5px',
+                        textDecoration: 'none',
+                        boxShadow: '0 4px 14px rgba(245, 184, 46, 0.35)',
+                      }}
+                    >
+                      📢 Subir / Gestionar Mi Publicidad →
+                    </Link>
+
+                    {liveBannerAds.length > 1 && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {liveBannerAds.map((ad, idx) => (
+                          <button
+                            key={ad.id}
+                            type="button"
+                            aria-label={`Ver anuncio ${idx + 1}`}
+                            onClick={() => setBannerSlideIdx(idx)}
+                            style={{
+                              width: idx === bannerSlideIdx ? '20px' : '7px',
+                              height: '7px',
+                              borderRadius: '999px',
+                              border: 'none',
+                              padding: 0,
+                              cursor: 'pointer',
+                              background: idx === bannerSlideIdx ? '#f5b82e' : 'rgba(255,255,255,0.35)',
+                              transition: 'all 0.2s ease',
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </section>
+            );
+          })()}
 
           {/* MENÚ DE HERRAMIENTAS DEL EMPRESARIO */}
           <nav className="category-chips" aria-label="Herramientas Empresariales">
@@ -601,88 +790,504 @@ function PanelEmpresarioContent() {
           </nav>
 
           {/* =========================================================
-              MÓDULO 1: BIOGRAFÍA DE ALMACÉN TIPO FACEBOOK + REDES
+              MÓDULO 1: PERFIL EMPRESARIAL ORGANIZADO + VISTA COMO CLIENTE
               ========================================================= */}
           {activeTab === 'perfil' && (
-            <section className="station-block-premium">
-              {/* Portada panorámica grande + Logo circular superpuesto */}
-              <div className="fb-store-cover-wrapper">
-                <img src={coverPhoto} alt="Portada del almacén" className="fb-store-cover-img" />
-                <div className="fb-cover-actions">
-                  <label className="media-native-btn dark">
-                    📷 Cámara Portada
-                    <input type="file" accept="image/*" capture="environment" hidden onChange={(e) => handleImagePick(e, setCoverPhoto)} />
-                  </label>
-                  <label className="media-native-btn dark">
-                    🖼️ Galería Portada
-                    <input type="file" accept="image/*" hidden onChange={(e) => handleImagePick(e, setCoverPhoto)} />
-                  </label>
-                </div>
-
-                <div className="fb-store-avatar-box">
-                  <img src={logoPhoto} alt="Logo del almacén" className="fb-store-avatar-img" />
-                  <label className="fb-avatar-picker-btn">
-                    📷
-                    <input type="file" accept="image/*" capture="environment" hidden onChange={(e) => handleImagePick(e, setLogoPhoto)} />
-                  </label>
-                </div>
-              </div>
-
-              <div className="fb-store-meta-header">
-                <h2>{storeName}</h2>
-                <p>📍 {storeCategory} · ✅ Comercio Verificado (+18)</p>
-              </div>
-
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setBioSaved(true);
-                  setTimeout(() => setBioSaved(false), 2500);
+            <section
+              className="station-block-premium"
+              style={{
+                padding: '16px',
+                borderRadius: '20px',
+                background: 'var(--bg-card, #ffffff)',
+                border: '1px solid rgba(148, 163, 184, 0.22)',
+                boxShadow: '0 8px 24px rgba(15, 23, 42, 0.08)',
+              }}
+            >
+              {/* Selector Editar vs Vista Previa como Cliente */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '8px',
+                  padding: '5px',
+                  borderRadius: '14px',
+                  background: 'rgba(15, 23, 42, 0.08)',
+                  marginBottom: '16px',
                 }}
-                className="auth-form"
               >
-                <label className="input-group">
-                  <span>Nombre Comercial del Almacén</span>
-                  <input type="text" value={storeName} onChange={(e) => setStoreName(e.target.value)} required />
-                </label>
-
-                <label className="input-group">
-                  <span>Categoría y Ubicación Principal</span>
-                  <input type="text" value={storeCategory} onChange={(e) => setStoreCategory(e.target.value)} required />
-                </label>
-
-                <label className="input-group">
-                  <span>Biografía Comercial del Negocio</span>
-                  <textarea rows={3} value={storeBio} onChange={(e) => setStoreBio(e.target.value)} required />
-                </label>
-
-                <div className="compact-section-title">
-                  <h2>🔗 Canales y Redes Sociales Oficiales</h2>
-                </div>
-
-                <div className="b2b-two-cols">
-                  <label className="input-group">
-                    <span>📱 Enlace WhatsApp Comercial</span>
-                    <input type="url" placeholder="https://wa.me/57..." value={socials.whatsapp} onChange={(e) => setSocials({ ...socials, whatsapp: e.target.value })} />
-                  </label>
-                  <label className="input-group">
-                    <span>📸 Instagram Oficial</span>
-                    <input type="url" placeholder="https://instagram.com/..." value={socials.instagram} onChange={(e) => setSocials({ ...socials, instagram: e.target.value })} />
-                  </label>
-                  <label className="input-group">
-                    <span>📘 Página de Facebook</span>
-                    <input type="url" placeholder="https://facebook.com/..." value={socials.facebook} onChange={(e) => setSocials({ ...socials, facebook: e.target.value })} />
-                  </label>
-                  <label className="input-group">
-                    <span>🎵 Perfil de TikTok</span>
-                    <input type="url" placeholder="https://tiktok.com/@..." value={socials.tiktok} onChange={(e) => setSocials({ ...socials, tiktok: e.target.value })} />
-                  </label>
-                </div>
-
-                <button type="submit" className="btn-submit-gold">
-                  {bioSaved ? '✅ Biografía y Redes Actualizadas en Vitrina' : 'Guardar Perfil Empresarial'}
+                <button
+                  type="button"
+                  onClick={() => setProfileViewMode('edit')}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    border: 'none',
+                    fontWeight: 700,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    background: profileViewMode === 'edit' ? '#0c2340' : 'transparent',
+                    color: profileViewMode === 'edit' ? '#ffffff' : 'inherit',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  ✏️ Editar Mi Tienda
                 </button>
-              </form>
+                <button
+                  type="button"
+                  onClick={() => setProfileViewMode('client')}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    border: 'none',
+                    fontWeight: 700,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    background: profileViewMode === 'client' ? '#046a38' : 'transparent',
+                    color: profileViewMode === 'client' ? '#ffffff' : 'inherit',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  👁️ Ver como Cliente
+                </button>
+              </div>
+
+              {/* Portada panorámica + Avatar circular perfectamente proporcionado */}
+              <div style={{ position: 'relative', marginBottom: '48px' }}>
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    height: '168px',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    background: '#0b1622',
+                  }}
+                >
+                  <img
+                    src={coverPhoto}
+                    alt="Portada del almacén"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.45) 100%)',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                  {profileViewMode === 'edit' && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        display: 'flex',
+                        gap: '6px',
+                        flexWrap: 'wrap',
+                        justifyContent: 'flex-end',
+                      }}
+                    >
+                      <label
+                        style={{
+                          padding: '6px 10px',
+                          borderRadius: '999px',
+                          background: 'rgba(10, 14, 20, 0.82)',
+                          border: '1px solid rgba(255,255,255,0.22)',
+                          color: '#ffffff',
+                          fontSize: '11.5px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        📷 Cámara
+                        <input type="file" accept="image/*" capture="environment" hidden onChange={(e) => handleImagePick(e, setCoverPhoto)} />
+                      </label>
+                      <label
+                        style={{
+                          padding: '6px 10px',
+                          borderRadius: '999px',
+                          background: 'rgba(10, 14, 20, 0.82)',
+                          border: '1px solid rgba(255,255,255,0.22)',
+                          color: '#ffffff',
+                          fontSize: '11.5px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        🖼️ Portada
+                        <input type="file" accept="image/*" hidden onChange={(e) => handleImagePick(e, setCoverPhoto)} />
+                      </label>
+                    </div>
+                  )}
+                  {profileViewMode === 'client' && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        top: '10px',
+                        left: '10px',
+                        padding: '4px 10px',
+                        borderRadius: '999px',
+                        background: 'rgba(4, 106, 56, 0.92)',
+                        color: '#ffffff',
+                        fontSize: '11px',
+                        fontWeight: 800,
+                      }}
+                    >
+                      👁️ Vista Pública de Cliente
+                    </span>
+                  )}
+                </div>
+
+                {/* Logo circular controlado (84x84) sin desbordarse jamás */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '-40px',
+                    left: '16px',
+                    width: '84px',
+                    height: '84px',
+                    borderRadius: '50%',
+                    border: '3px solid #f5b82e',
+                    background: '#0b0e12',
+                    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.32)',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <img
+                    src={logoPhoto}
+                    alt="Logo del almacén"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+
+                {profileViewMode === 'edit' && (
+                  <label
+                    title="Cambiar logo de la tienda"
+                    style={{
+                      position: 'absolute',
+                      bottom: '-40px',
+                      left: '74px',
+                      width: '30px',
+                      height: '30px',
+                      borderRadius: '50%',
+                      background: '#0c2340',
+                      border: '2px solid #ffffff',
+                      color: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 10px rgba(0,0,0,0.28)',
+                    }}
+                  >
+                    📷
+                    <input type="file" accept="image/*" hidden onChange={(e) => handleImagePick(e, setLogoPhoto)} />
+                  </label>
+                )}
+              </div>
+
+              {/* Encabezado limpio del comercio */}
+              <div style={{ marginBottom: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                  <h2 style={{ margin: 0, fontSize: '20px', fontWeight: 800, lineHeight: 1.2 }}>{storeName}</h2>
+                  <span
+                    style={{
+                      padding: '3px 8px',
+                      borderRadius: '999px',
+                      background: 'rgba(16, 185, 129, 0.16)',
+                      border: '1px solid rgba(16, 185, 129, 0.45)',
+                      color: '#059669',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                    }}
+                  >
+                    ✅ Verificado +18
+                  </span>
+                </div>
+                <p style={{ margin: '5px 0 0', fontSize: '13px', opacity: 0.8 }}>
+                  📍 {storeCategory}
+                </p>
+              </div>
+
+              {/* =================================================
+                  MODO A: VISTA PREVIA EXACTA DE CÓMO LO VE UN CLIENTE
+                  ================================================= */}
+              {profileViewMode === 'client' ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <p style={{ margin: 0, fontSize: '13.5px', lineHeight: 1.55, opacity: 0.9 }}>
+                    {storeBio}
+                  </p>
+
+                  {/* Métricas de confianza visibles al comprador */}
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(3, 1fr)',
+                      gap: '8px',
+                    }}
+                  >
+                    <div style={{ padding: '10px 8px', borderRadius: '12px', background: 'rgba(12, 35, 64, 0.08)', textAlign: 'center' }}>
+                      <div style={{ fontSize: '16px', fontWeight: 800 }}>⭐ 4.9</div>
+                      <div style={{ fontSize: '11px', opacity: 0.75 }}>Reputación</div>
+                    </div>
+                    <div style={{ padding: '10px 8px', borderRadius: '12px', background: 'rgba(12, 35, 64, 0.08)', textAlign: 'center' }}>
+                      <div style={{ fontSize: '16px', fontWeight: 800 }}>🛡️ KYB</div>
+                      <div style={{ fontSize: '11px', opacity: 0.75 }}>RUT & Legal</div>
+                    </div>
+                    <div style={{ padding: '10px 8px', borderRadius: '12px', background: 'rgba(12, 35, 64, 0.08)', textAlign: 'center' }}>
+                      <div style={{ fontSize: '16px', fontWeight: 800 }}>🎟️ 100%</div>
+                      <div style={{ fontSize: '11px', opacity: 0.75 }}>SHA-256</div>
+                    </div>
+                  </div>
+
+                  {/* Acciones principales que ve el cliente */}
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <button
+                      type="button"
+                      onClick={() => setIsFollowingPreview((v) => !v)}
+                      style={{
+                        padding: '11px 14px',
+                        borderRadius: '12px',
+                        border: 'none',
+                        fontWeight: 800,
+                        fontSize: '13.5px',
+                        cursor: 'pointer',
+                        background: isFollowingPreview
+                          ? 'rgba(16, 185, 129, 0.18)'
+                          : 'linear-gradient(135deg, #046a38 0%, #024a26 100%)',
+                        color: isFollowingPreview ? '#059669' : '#ffffff',
+                      }}
+                    >
+                      {isFollowingPreview ? '✓ Siguiendo Tienda' : '🔔 Seguir Tienda'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        shareRaffleLink({
+                          title: storeName,
+                          text: storeBio,
+                          path: `/?tienda=${encodeURIComponent(storeName)}`,
+                        })
+                      }
+                      style={{
+                        padding: '11px 14px',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(148, 163, 184, 0.4)',
+                        background: 'transparent',
+                        fontWeight: 700,
+                        fontSize: '13.5px',
+                        cursor: 'pointer',
+                        color: 'inherit',
+                      }}
+                    >
+                      📤 Compartir
+                    </button>
+                  </div>
+
+                  {/* Canales oficiales clickeables */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {socials.whatsapp && (
+                      <a href={socials.whatsapp} target="_blank" rel="noreferrer" style={{ padding: '7px 12px', borderRadius: '999px', background: 'rgba(34, 197, 94, 0.14)', color: '#15803d', fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}>
+                        📱 WhatsApp
+                      </a>
+                    )}
+                    {socials.instagram && (
+                      <a href={socials.instagram} target="_blank" rel="noreferrer" style={{ padding: '7px 12px', borderRadius: '999px', background: 'rgba(236, 72, 153, 0.14)', color: '#be185d', fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}>
+                        📸 Instagram
+                      </a>
+                    )}
+                    {socials.facebook && (
+                      <a href={socials.facebook} target="_blank" rel="noreferrer" style={{ padding: '7px 12px', borderRadius: '999px', background: 'rgba(59, 130, 246, 0.14)', color: '#1d4ed8', fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}>
+                        📘 Facebook
+                      </a>
+                    )}
+                    {socials.tiktok && (
+                      <a href={socials.tiktok} target="_blank" rel="noreferrer" style={{ padding: '7px 12px', borderRadius: '999px', background: 'rgba(15, 23, 42, 0.12)', color: 'inherit', fontSize: '12px', fontWeight: 700, textDecoration: 'none' }}>
+                        🎵 TikTok
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Vitrina de sorteos activos de la tienda */}
+                  <div style={{ borderTop: '1px solid rgba(148, 163, 184, 0.22)', paddingTop: '14px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                      <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 800 }}>🎟️ Sorteos Activos de {storeName}</h3>
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab('rifas')}
+                        style={{ background: 'none', border: 'none', color: '#0284c7', fontWeight: 700, fontSize: '12px', cursor: 'pointer' }}
+                      >
+                        + Publicar otro
+                      </button>
+                    </div>
+                    <div
+                      style={{
+                        borderRadius: '14px',
+                        overflow: 'hidden',
+                        border: '1px solid rgba(148, 163, 184, 0.25)',
+                        background: '#0c2340',
+                        color: '#ffffff',
+                      }}
+                    >
+                      <img
+                        src={coverPhoto}
+                        alt="Sorteo destacado"
+                        style={{ width: '100%', height: '140px', objectFit: 'cover', display: 'block' }}
+                      />
+                      <div style={{ padding: '12px' }}>
+                        <div style={{ fontSize: '11px', color: '#fde047', fontWeight: 700 }}>🔥 SORTEO VERIFICADO EN VITRINA</div>
+                        <div style={{ fontSize: '15px', fontWeight: 800, margin: '4px 0 6px' }}>
+                          {raffleTitle || 'Gran Sorteo Oficial · Premio Destacado'}
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: '14px', fontWeight: 800, color: '#6ee7b7' }}>
+                            $ {parseInt(ticketPrice || '35000', 10).toLocaleString('es-CO')} / boleta
+                          </span>
+                          <Link
+                            href="/"
+                            style={{
+                              padding: '7px 12px',
+                              borderRadius: '8px',
+                              background: '#f5b82e',
+                              color: '#090d12',
+                              fontWeight: 800,
+                              fontSize: '12px',
+                              textDecoration: 'none',
+                            }}
+                          >
+                            Ver en Vitrina →
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                /* =================================================
+                   MODO B: FORMULARIO DE EDICIÓN ORGANIZADO
+                   ================================================= */
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setBioSaved(true);
+                    setTimeout(() => setBioSaved(false), 2500);
+                  }}
+                  className="auth-form"
+                  style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}
+                >
+                  <label className="input-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Nombre Comercial del Almacén</span>
+                    <input
+                      type="text"
+                      value={storeName}
+                      onChange={(e) => setStoreName(e.target.value)}
+                      required
+                      style={{ padding: '11px 13px', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.4)', fontSize: '14px' }}
+                    />
+                  </label>
+
+                  <label className="input-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Categoría y Ubicación Principal</span>
+                    <input
+                      type="text"
+                      value={storeCategory}
+                      onChange={(e) => setStoreCategory(e.target.value)}
+                      required
+                      style={{ padding: '11px 13px', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.4)', fontSize: '14px' }}
+                    />
+                  </label>
+
+                  <label className="input-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Biografía Comercial del Negocio</span>
+                    <textarea
+                      rows={3}
+                      value={storeBio}
+                      onChange={(e) => setStoreBio(e.target.value)}
+                      required
+                      style={{ padding: '11px 13px', borderRadius: '12px', border: '1px solid rgba(148,163,184,0.4)', fontSize: '14px', resize: 'vertical' }}
+                    />
+                  </label>
+
+                  <div style={{ borderTop: '1px solid rgba(148,163,184,0.22)', paddingTop: '12px' }}>
+                    <h3 style={{ margin: '0 0 10px', fontSize: '14.5px', fontWeight: 800 }}>🔗 Canales y Redes Sociales Oficiales</h3>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+                      <label className="input-group" style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <span style={{ fontSize: '12px', fontWeight: 700 }}>📱 WhatsApp Comercial</span>
+                        <input
+                          type="url"
+                          placeholder="https://wa.me/57..."
+                          value={socials.whatsapp}
+                          onChange={(e) => setSocials({ ...socials, whatsapp: e.target.value })}
+                          style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.4)', fontSize: '13.5px' }}
+                        />
+                      </label>
+                      <label className="input-group" style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <span style={{ fontSize: '12px', fontWeight: 700 }}>📸 Instagram Oficial</span>
+                        <input
+                          type="url"
+                          placeholder="https://instagram.com/..."
+                          value={socials.instagram}
+                          onChange={(e) => setSocials({ ...socials, instagram: e.target.value })}
+                          style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.4)', fontSize: '13.5px' }}
+                        />
+                      </label>
+                      <label className="input-group" style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <span style={{ fontSize: '12px', fontWeight: 700 }}>📘 Página de Facebook</span>
+                        <input
+                          type="url"
+                          placeholder="https://facebook.com/..."
+                          value={socials.facebook}
+                          onChange={(e) => setSocials({ ...socials, facebook: e.target.value })}
+                          style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.4)', fontSize: '13.5px' }}
+                        />
+                      </label>
+                      <label className="input-group" style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <span style={{ fontSize: '12px', fontWeight: 700 }}>🎵 Perfil de TikTok</span>
+                        <input
+                          type="url"
+                          placeholder="https://tiktok.com/@..."
+                          value={socials.tiktok}
+                          onChange={(e) => setSocials({ ...socials, tiktok: e.target.value })}
+                          style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.4)', fontSize: '13.5px' }}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn-submit-gold"
+                    style={{
+                      width: '100%',
+                      padding: '14px 18px',
+                      borderRadius: '14px',
+                      border: 'none',
+                      background: bioSaved
+                        ? 'linear-gradient(135deg, #10b981 0%, #047857 100%)'
+                        : 'linear-gradient(135deg, #f5b82e 0%, #d97706 100%)',
+                      color: bioSaved ? '#ffffff' : '#090d12',
+                      fontWeight: 800,
+                      fontSize: '14.5px',
+                      cursor: 'pointer',
+                      boxShadow: '0 8px 20px rgba(245, 184, 46, 0.32)',
+                    }}
+                  >
+                    {bioSaved ? '✅ Biografía y Redes Actualizadas en Vitrina' : '💾 Guardar Perfil Empresarial'}
+                  </button>
+                </form>
+              )}
             </section>
           )}
 
@@ -1129,33 +1734,216 @@ function PanelEmpresarioContent() {
         </main>
       </div>
 
-      {/* BARRA INFERIOR ENLAZADA CON MOTOR LEGAL Y PERFIL */}
+      {/* BARRA INFERIOR FLOTANTE GLASSMORPHISM (MISMO DISEÑO PREDETERMINADO · ESTÁNDAR EMPRESARIAL) */}
       <nav
-        className="native-bottom-tabbar mobile-bottom-nav"
-        aria-label="Navegación Empresario"
+        className="floating-island-nav"
+        aria-label="Navegación Empresarial"
         style={{
           position: 'fixed',
-          bottom: 0,
-          left: 0,
-          width: '100%',
-          zIndex: 9999,
+          bottom: 'calc(16px + env(safe-area-inset-bottom, 0px))',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '92%',
+          maxWidth: '410px',
+          height: '64px',
+          backgroundColor: 'rgba(18, 18, 20, 0.92)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: '999px',
+          border: '1px solid rgba(255, 255, 255, 0.16)',
+          display: 'flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          zIndex: 999,
+          boxShadow: '0 16px 36px rgba(0, 0, 0, 0.65)',
+          padding: '0 6px',
+          boxSizing: 'border-box',
         }}
       >
-        <Link className="tab-item" href="/">
-          <span className="tab-icon"><IosHomeIcon /></span>
-          <span className="tab-text">Vitrina</span>
+        {/* 1. Vitrina Pública */}
+        <Link
+          href="/"
+          aria-label="Vitrina"
+          title="Vitrina Pública"
+          style={{
+            position: 'relative',
+            width: '50px',
+            height: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            textDecoration: 'none',
+            backgroundColor: 'transparent',
+            border: '1px solid transparent',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M3 10.5L12 3.5L21 10.5V20C21 20.5523 20.5523 21 20 21H15C14.4477 21 14 20.5523 14 20V15C14 14.4477 13.5523 14 13 14H11C10.4477 14 10 14.4477 10 15V20C10 20.5523 9.55228 21 9 21H4C3.44772 21 3 20.5523 3 20V10.5Z"
+              stroke="rgba(255, 255, 255, 0.72)"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </Link>
-        <Link className="tab-item" href="/sorteo-en-vivo">
-          <span className="tab-icon"><IosLiveBallIcon /></span>
-          <span className="tab-text">Sorteo en Vivo</span>
+
+        {/* 2. Publicidad B2B */}
+        <Link
+          href="/publicidad"
+          aria-label="Publicidad"
+          title="Publicidad y Banner"
+          style={{
+            position: 'relative',
+            width: '50px',
+            height: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            textDecoration: 'none',
+            backgroundColor: 'transparent',
+            border: '1px solid transparent',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M3 11V13C3 14.1 3.9 15 5 15H7L12 19V5L7 9H5C3.9 9 3 9.9 3 11Z"
+              stroke="#f5b82e"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path d="M16 9.5C17.2 10.7 17.2 13.3 16 14.5" stroke="#f5b82e" strokeWidth="1.8" strokeLinecap="round" />
+            <path d="M19 7C21.5 9.8 21.5 14.2 19 17" stroke="rgba(245, 184, 46, 0.7)" strokeWidth="1.8" strokeLinecap="round" />
+          </svg>
         </Link>
-        <button type="button" onClick={() => setActiveTab('rifas')} className={`tab-item ${activeTab === 'rifas' ? 'active' : ''}`}>
-          <span className="tab-icon"><IosPlusIcon active={activeTab === 'rifas'} /></span>
-          <span className="tab-text">Crear Rifa</span>
+
+        {/* 3. Crear Rifa (Estándar Empresarial) */}
+        <button
+          type="button"
+          aria-label="Crear Rifa"
+          title="Publicar Nueva Rifa"
+          onClick={() => setActiveTab('rifas')}
+          style={{
+            position: 'relative',
+            width: '50px',
+            height: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            backgroundColor: activeTab === 'rifas' ? 'rgba(2, 132, 199, 0.22)' : 'transparent',
+            border: activeTab === 'rifas' ? '1px solid rgba(56, 189, 248, 0.5)' : '1px solid transparent',
+            transform: activeTab === 'rifas' ? 'scale(1.06)' : 'scale(1)',
+            transition: 'all 0.2s ease',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              stroke={activeTab === 'rifas' ? '#38bdf8' : 'rgba(255, 255, 255, 0.72)'}
+              strokeWidth="1.8"
+            />
+            <path
+              d="M12 8V16M8 12H16"
+              stroke={activeTab === 'rifas' ? '#38bdf8' : 'rgba(255, 255, 255, 0.85)'}
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+          {activeTab === 'rifas' && (
+            <span
+              style={{
+                position: 'absolute',
+                bottom: '4px',
+                width: '4px',
+                height: '4px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                boxShadow: '0 0 8px #38bdf8',
+              }}
+            />
+          )}
         </button>
-        <button type="button" onClick={() => setActiveTab('perfil')} className={`tab-item ${activeTab === 'perfil' ? 'active' : ''}`}>
-          <span className="tab-icon"><IosStoreIcon active={activeTab === 'perfil'} /></span>
-          <span className="tab-text">Mi Tienda</span>
+
+        {/* 4. Sorteo en Vivo */}
+        <Link
+          href="/sorteo-en-vivo"
+          aria-label="Sorteo en Vivo"
+          title="Sala de Sorteo en Vivo"
+          style={{
+            position: 'relative',
+            width: '50px',
+            height: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            textDecoration: 'none',
+            backgroundColor: 'transparent',
+            border: '1px solid transparent',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          <svg width="25" height="25" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="9.5" fill="rgba(255, 255, 255, 0.08)" stroke="rgba(255, 255, 255, 0.72)" strokeWidth="1.6" />
+            <path d="M12 10.5L18 14L12 17.5V10.5Z" fill="#ffffff" />
+            <circle cx="21" cy="7" r="3" fill="#ff3b30" stroke="#ffffff" strokeWidth="1.2" />
+          </svg>
+        </Link>
+
+        {/* 5. Mi Tienda / Perfil Empresarial */}
+        <button
+          type="button"
+          aria-label="Mi Tienda"
+          title="Mi Tienda Empresarial"
+          onClick={() => setActiveTab('perfil')}
+          style={{
+            position: 'relative',
+            width: '50px',
+            height: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            backgroundColor: activeTab === 'perfil' ? 'rgba(2, 132, 199, 0.22)' : 'transparent',
+            border: activeTab === 'perfil' ? '1px solid rgba(56, 189, 248, 0.5)' : '1px solid transparent',
+            transform: activeTab === 'perfil' ? 'scale(1.06)' : 'scale(1)',
+            transition: 'all 0.2s ease',
+            WebkitTapHighlightColor: 'transparent',
+          }}
+        >
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M3 9L5 4H19L21 9M3 9V11C3 12.1 3.9 13 5 13C6.1 13 7 12.1 7 11C7 12.1 7.9 13 9 13C10.1 13 11 12.1 11 11C11 12.1 11.9 13 13 13C14.1 13 15 12.1 15 11C15 12.1 15.9 13 17 13C18.1 13 19 12.1 19 11V9M5 13V20H19V13"
+              stroke={activeTab === 'perfil' ? '#38bdf8' : 'rgba(255, 255, 255, 0.72)'}
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          {activeTab === 'perfil' && (
+            <span
+              style={{
+                position: 'absolute',
+                bottom: '4px',
+                width: '4px',
+                height: '4px',
+                borderRadius: '50%',
+                backgroundColor: '#38bdf8',
+                boxShadow: '0 0 8px #38bdf8',
+              }}
+            />
+          )}
         </button>
       </nav>
     </div>

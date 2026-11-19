@@ -551,13 +551,13 @@ function IngresoContent() {
       {/* Imagen de portada adaptable según modo claro / oscuro del celular */}
       <picture className="portada-2030-bg">
         <source
-          srcSet="/assets/portada-2030-oscuro.png?v=2"
+          srcSet="/assets/portada-2030-oscuro.png?v=3"
           media="(prefers-color-scheme: dark)"
         />
         <img
           src={
             theme === "dark"
-              ? "/assets/portada-2030-oscuro.png?v=2"
+              ? "/assets/portada-2030-oscuro.png?v=3"
               : "/assets/portada-2030-claro.png?v=2"
           }
           alt="El Ganador - Rifas Online. Sueña, participa y gana"
