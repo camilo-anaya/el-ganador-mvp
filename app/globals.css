@@ -14557,11 +14557,19 @@ html[data-theme='dark'] .tab-item.active {
   transform: scale(0.98);
 }
 
-[data-theme='dark'] .btn-2030-register {
+.portada-2030-shell.is-dark .btn-2030-register,
+.portada-2030-shell.is-dark .btn-2030-register span,
+[data-theme='dark'] .btn-2030-register,
+[data-theme='dark'] .btn-2030-register span {
   background: rgba(10, 14, 12, 0.92);
   border: 1.5px solid #e2b04a;
-  color: #ffffff;
+  color: #ffffff !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.mobileSheetHeaderHero .mobileSansTitle,
+h1.mobileSansTitle {
+  color: #ffffff !important;
 }
 
 /* Enlace inferior Explorar rifas */

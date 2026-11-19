@@ -609,9 +609,10 @@ function IngresoContent() {
           type="button"
           onClick={() => switchMode("register")}
           className="btn-2030-register"
+          style={theme === "dark" ? { color: "#ffffff", borderColor: "#e2b04a" } : undefined}
         >
           {theme === "dark" && <span className="icon-user-outline">👤</span>}
-          <span>Crear cuenta</span>
+          <span style={theme === "dark" ? { color: "#ffffff" } : undefined}>Crear cuenta</span>
         </button>
 
         <div className="portada-2030-explore">
@@ -652,7 +653,7 @@ function IngresoContent() {
       {/* Cabecera con tipografía y mensaje de bienvenida */}
       <div className="mobileSheetHeaderHero">
         <p className="mobileScriptGreeting">¡Hola de nuevo!</p>
-        <h1 className="mobileSansTitle">Inicia Sesión</h1>
+        <h1 className="mobileSansTitle" style={{ color: "#ffffff" }}>Inicia Sesión</h1>
         <p className="mobileSubNotice">
           Entra a tu cuenta para jugar, consultar boletas y reclamar premios.
         </p>
@@ -843,7 +844,7 @@ function IngresoContent() {
       {/* Cabecera con tipografía y mensaje de bienvenida */}
       <div className="mobileSheetHeaderHero">
         <p className="mobileScriptGreeting">¡Bienvenido!</p>
-        <h1 className="mobileSansTitle">Crea tu Cuenta</h1>
+        <h1 className="mobileSansTitle" style={{ color: "#ffffff" }}>Crea tu Cuenta</h1>
         <p className="mobileSubNotice">
           Únete a El Ganador y participa en las mejores rifas de Colombia.
         </p>
