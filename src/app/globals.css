@@ -14440,11 +14440,11 @@ html[data-theme='dark'] .tab-item.active {
   padding-top: 16px;
 }
 
-/* Slogan vectorial nítido (reemplaza texto rasterizado de la imagen) */
+/* Slogan vectorial nítido (centrado entre RIFAS ONLINE e Iniciar sesión) */
 .portada-2030-slogan {
-  margin: 0 0 clamp(14px, 3vh, 32px);
+  margin: 0 0 clamp(54px, 9.2vh, 92px);
   text-align: center;
-  font-size: clamp(1.12rem, 4.7vw, 1.38rem);
+  font-size: clamp(1.14rem, 4.8vw, 1.4rem);
   font-weight: 500;
   font-style: italic;
   letter-spacing: -0.01em;
@@ -14463,8 +14463,8 @@ html[data-theme='dark'] .tab-item.active {
     object-position: center 47%;
   }
   .portada-2030-slogan {
-    margin-bottom: 12px;
-    font-size: clamp(1.04rem, 4.4vw, 1.25rem);
+    margin-bottom: clamp(36px, 6.5vh, 56px);
+    font-size: clamp(1.06rem, 4.5vw, 1.28rem);
   }
 }
 
