@@ -706,31 +706,51 @@ export default function CompactWhiteMarketplacePage() {
   const [customBannerAds, setCustomBannerAds] = useState<(typeof SPONSOR_CAROUSEL_ADS)[0][]>([]);
 
   useEffect(() => {
-    const syncAutonomousBannerAds = () => {
+    const syncAutonomousBannerAds = async () => {
+      const now = Date.now();
+      let localPaid: (typeof SPONSOR_CAROUSEL_ADS)[0][] = [];
       try {
         const raw = localStorage.getItem('elganador_banner_ads_v1');
-        if (!raw) {
-          setCustomBannerAds([]);
-          return;
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            localPaid = parsed.filter(
+              (ad: { paid?: boolean; active?: boolean; expiresAt?: string }) =>
+                ad &&
+                ad.paid === true &&
+                ad.active !== false &&
+                (!ad.expiresAt || new Date(ad.expiresAt).getTime() > now)
+            );
+            if (localPaid.length !== parsed.length) {
+              localStorage.setItem('elganador_banner_ads_v1', JSON.stringify(localPaid));
+            }
+          }
         }
-        const parsed = JSON.parse(raw);
-        if (!Array.isArray(parsed)) return;
-        const now = Date.now();
-        const activePaid = parsed.filter(
-          (ad: { paid?: boolean; active?: boolean; expiresAt?: string }) =>
-            ad &&
-            ad.paid === true &&
-            ad.active !== false &&
-            (!ad.expiresAt || new Date(ad.expiresAt).getTime() > now)
-        );
-        // Purgar suscripciones vencidas automáticamente
-        if (activePaid.length !== parsed.length) {
-          localStorage.setItem('elganador_banner_ads_v1', JSON.stringify(activePaid));
-        }
-        setCustomBannerAds(activePaid);
       } catch {
-        setCustomBannerAds([]);
+        localPaid = [];
       }
+
+      // Sincroniza también desde el servidor (/api/banner-ads) para que todas las empresas activas roten globalmente
+      let serverPaid: (typeof SPONSOR_CAROUSEL_ADS)[0][] = [];
+      try {
+        const res = await fetch('/api/banner-ads', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data?.ads)) {
+            serverPaid = data.ads.filter(
+              (ad: { paid?: boolean; active?: boolean; expiresAt?: string }) =>
+                ad &&
+                ad.paid === true &&
+                ad.active !== false &&
+                (!ad.expiresAt || new Date(ad.expiresAt).getTime() > now)
+            );
+          }
+        }
+      } catch {}
+
+      const seen = new Set(serverPaid.map((a) => a.id));
+      const merged = [...serverPaid, ...localPaid.filter((a) => !seen.has(a.id))];
+      setCustomBannerAds(merged);
     };
 
     syncAutonomousBannerAds();

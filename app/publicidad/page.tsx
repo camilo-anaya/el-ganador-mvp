@@ -90,17 +90,18 @@ export default function PlanesPublicitariosPage() {
   const [adHeadline, setAdHeadline] = useState('20% OFF en accesorios + Matrícula Gratis');
   const [adDescription, setAdDescription] = useState('Promoción exclusiva para la comunidad de El Ganador. Envíos a toda Colombia.');
   const [adCoupon, setAdCoupon] = useState('ELGANADOR20');
+  const [adCtaLink, setAdCtaLink] = useState('https://wa.me/573001234567');
   const [adImage, setAdImage] = useState('/banner-el-ganador-oficial.jpg');
   const [adActive, setAdActive] = useState(true);
   const [bannerSaved, setBannerSaved] = useState(false);
-  const [activeSubInfo, setActiveSubInfo] = useState<{ planName: string; cycle: string; expiresAt: string; reference: string } | null>(null);
+  const [activeSubInfo, setActiveSubInfo] = useState<{ planName: string; cycle: string; expiresAt: string; reference: string; clicks?: number } | null>(null);
   const [autonomousPublishedNotice, setAutonomousPublishedNotice] = useState<string | null>(null);
 
-  const publishAutonomousBannerAd = (
+  const publishAutonomousBannerAd = async (
     plan: PlanInfo,
     cycle: 'mensual' | 'trimestral' | 'anual',
     reference: string,
-    draftOverride?: { brand?: string; headline?: string; description?: string; coupon?: string; image?: string; active?: boolean }
+    draftOverride?: { brand?: string; headline?: string; description?: string; coupon?: string; ctaLink?: string; image?: string; active?: boolean }
   ) => {
     try {
       const days = cycle === 'anual' ? 365 : cycle === 'trimestral' ? 90 : 30;
@@ -110,18 +111,19 @@ export default function PlanesPublicitariosPage() {
       const titleVal = (draftOverride?.headline ?? adHeadline).trim() || 'Promoción Oficial El Ganador';
       const descVal = (draftOverride?.description ?? adDescription).trim() || 'Patrocinador verificado con suscripción mensual activa en El Ganador.';
       const couponRaw = (draftOverride?.coupon ?? adCoupon).trim();
+      const ctaLinkVal = (draftOverride?.ctaLink ?? adCtaLink).trim() || '/publicidad';
       const imageVal = draftOverride?.image || adImage || '/banner-el-ganador-oficial.jpg';
 
       const publishedAd = {
         id: `ad-sub-${reference}`,
-        tag: `⚡ PATROCINADOR ${plan.name.toUpperCase()}`,
+        tag: plan.id === 'enterprise' ? '👑 PATROCINADOR ENTERPRISE VIP' : `⚡ PATROCINADOR ${plan.name.toUpperCase()}`,
         brand: brandVal,
         category: `${plan.territory} · Suscripción ${cycle}`,
         title: titleVal,
         description: descVal,
         coupon: couponRaw ? (couponRaw.toLowerCase().startsWith('cupón') ? couponRaw : `Cupón: ${couponRaw}`) : 'Cupón: ELGANADOR',
-        ctaText: 'Ver Vitrina & Promoción →',
-        ctaLink: '/publicidad',
+        ctaText: ctaLinkVal.startsWith('http') ? 'Ir a la Oferta Directa ↗' : 'Ver Vitrina & Promoción →',
+        ctaLink: ctaLinkVal,
         image: imageVal,
         badge: `✓ Suscripción ${cycle} activa`,
         paid: true,
@@ -133,6 +135,28 @@ export default function PlanesPublicitariosPage() {
         expiresAt,
       };
 
+      // 1. Persistir globalmente en el servidor (/api/banner-ads) para que todos los usuarios lo vean
+      try {
+        await fetch('/api/banner-ads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'activate_subscription',
+            businessEmail,
+            planId: plan.id,
+            billingCycle: cycle,
+            reference,
+            brand: brandVal,
+            title: titleVal,
+            description: descVal,
+            coupon: couponRaw || 'ELGANADOR',
+            ctaLink: ctaLinkVal,
+            image: imageVal,
+          }),
+        });
+      } catch {}
+
+      // 2. Respaldo local instantáneo
       const existingRaw = localStorage.getItem('elganador_banner_ads_v1');
       const existing: Array<{ id: string; reference?: string }> = existingRaw ? JSON.parse(existingRaw) : [];
       const filtered = Array.isArray(existing) ? existing.filter((item) => item.id !== publishedAd.id && item.reference !== reference) : [];
@@ -157,6 +181,25 @@ export default function PlanesPublicitariosPage() {
     } catch (err) {
       console.error('Error publicando banner autónomo:', err);
     }
+  };
+
+  // Apagado inmediato del anuncio cuando se cancela/desactiva la suscripción
+  const handleTurnOffSubscription = async () => {
+    try {
+      await fetch('/api/banner-ads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'cancel_subscription', businessEmail }),
+      });
+    } catch {}
+    try {
+      localStorage.removeItem('elganador_active_plan');
+      localStorage.setItem('elganador_banner_ads_v1', JSON.stringify([]));
+      window.dispatchEvent(new Event('elganador_banner_ads_updated'));
+    } catch {}
+    setActiveSubInfo(null);
+    setAutonomousPublishedNotice(null);
+    alert('🔴 Suscripción apagada. Tu publicidad se retiró automáticamente del banner principal.');
   };
 
   useEffect(() => {
@@ -221,7 +264,7 @@ export default function PlanesPublicitariosPage() {
     reader.readAsDataURL(file);
   };
 
-  const handleSaveBannerConfig = (e: React.FormEvent) => {
+  const handleSaveBannerConfig = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const adData = {
@@ -229,15 +272,35 @@ export default function PlanesPublicitariosPage() {
         headline: adHeadline,
         description: adDescription,
         coupon: adCoupon,
+        ctaLink: adCtaLink,
         image: adImage,
         active: adActive,
       };
       localStorage.setItem('elganador_business_ad', JSON.stringify(adData));
 
+      // Sincroniza borrador / actualización en el servidor (/api/banner-ads)
+      try {
+        await fetch('/api/banner-ads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'save_draft',
+            businessEmail,
+            brand: adBrand,
+            title: adHeadline,
+            description: adDescription,
+            coupon: adCoupon,
+            ctaLink: adCtaLink,
+            image: adImage,
+            active: adActive,
+          }),
+        });
+      } catch {}
+
       // Si ya tiene suscripción mensual pagada y activa, actualiza su banner en vivo de inmediato
       if (activeSubInfo) {
         const matchedPlan = PUBLICITY_PLANS.find((p) => p.name === activeSubInfo.planName) || PUBLICITY_PLANS[1];
-        publishAutonomousBannerAd(
+        await publishAutonomousBannerAd(
           matchedPlan,
           (activeSubInfo.cycle as 'mensual' | 'trimestral' | 'anual') || 'mensual',
           activeSubInfo.reference,
@@ -249,7 +312,7 @@ export default function PlanesPublicitariosPage() {
       } else {
         setBannerSaved(true);
         setTimeout(() => setBannerSaved(false), 3000);
-        alert('💾 Borrador guardado. Completa el pago de tu suscripción mensual arriba para que tu anuncio se monte automáticamente en el banner principal.');
+        alert('💾 Borrador guardado (Estado: APAGADO). Realiza el pago de tu suscripción mensual arriba para habilitarlo automáticamente en el banner principal.');
       }
     } catch (err) {
       console.error(err);
@@ -702,6 +765,51 @@ export default function PlanesPublicitariosPage() {
               )}
             </div>
 
+            {/* PANEL DE ESTADO EN VIVO DEL BANNER (ENCENDIDO / APAGADO SEGÚN SUSCRIPCIÓN) */}
+            <div
+              style={{
+                marginBottom: '14px',
+                padding: '12px 16px',
+                borderRadius: '12px',
+                background: activeSubInfo
+                  ? isDark ? 'rgba(16, 185, 129, 0.14)' : '#ecfdf5'
+                  : isDark ? 'rgba(239, 68, 68, 0.14)' : '#fef2f2',
+                border: activeSubInfo ? '1px solid #10b981' : '1px solid rgba(239, 68, 68, 0.45)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '10px',
+              }}
+            >
+              <div>
+                <div style={{ fontSize: '0.86rem', fontWeight: 900, color: activeSubInfo ? (isDark ? '#6ee7b7' : '#065f46') : (isDark ? '#fca5a5' : '#991b1b') }}>
+                  {activeSubInfo
+                    ? `🟢 BANNER ENCENDIDO EN VIVO · ${activeSubInfo.planName} (${activeSubInfo.cycle})`
+                    : '🔴 BANNER APAGADO · Sin suscripción mensual activa'}
+                </div>
+                <small style={{ fontSize: '0.76rem', color: isDark ? '#cbd5e1' : '#475569' }}>
+                  {activeSubInfo
+                    ? `Vigente hasta ${new Date(activeSubInfo.expiresAt).toLocaleDateString('es-CO')} · Se apaga automáticamente si no se renueva.`
+                    : 'Sube tu diseño y guarda el borrador. En cuanto realices el pago de tu suscripción mensual, se habilita automáticamente en el banner principal.'}
+                </small>
+              </div>
+              {activeSubInfo && (
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <Link href="/" style={{ padding: '7px 12px', borderRadius: '8px', background: '#10b981', color: '#ffffff', textDecoration: 'none', fontWeight: 800, fontSize: '0.78rem' }}>
+                    Ver en Vivo →
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleTurnOffSubscription}
+                    style={{ padding: '7px 12px', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid #ef4444', color: isDark ? '#fca5a5' : '#b91c1c', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer' }}
+                  >
+                    ⏹️ Apagar / Cancelar
+                  </button>
+                </div>
+              )}
+            </div>
+
             {autonomousPublishedNotice && (
               <div style={{ marginBottom: '14px', padding: '12px 16px', borderRadius: '12px', background: isDark ? 'rgba(16, 185, 129, 0.16)' : '#ecfdf5', border: '1px solid #10b981', color: isDark ? '#6ee7b7' : '#065f46', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', fontSize: '0.86rem', fontWeight: 700 }}>
                 <span>🎉 {autonomousPublishedNotice}</span>
@@ -765,6 +873,19 @@ export default function PlanesPublicitariosPage() {
                   placeholder="Ej: ELGANADOR20"
                   style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid #cbd5e1', background: isDark ? '#0f172a' : '#ffffff', fontSize: '0.9rem', color: isDark ? '#ffffff' : '#0f172a' }}
                   required
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: isDark ? '#cbd5e1' : '#334155', marginBottom: '6px' }}>
+                  Enlace de Destino o WhatsApp de Ventas:
+                </label>
+                <input
+                  type="url"
+                  value={adCtaLink}
+                  onChange={(e) => setAdCtaLink(e.target.value)}
+                  placeholder="https://wa.me/573001234567"
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid #cbd5e1', background: isDark ? '#0f172a' : '#ffffff', fontSize: '0.9rem', color: isDark ? '#ffffff' : '#0f172a' }}
                 />
               </div>
 
