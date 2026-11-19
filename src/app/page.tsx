@@ -339,7 +339,7 @@ const RAFFLES_CATALOG: CompactRaffleItem[] = [
     image: '/vestidos-dama.jpg',
     stage: 'closing_soon',
   },
-  // --- BLOQUE ADICIONAL 2: A POCAS HORAS DE JUGAR (RELÁMPAGO ESTA NOCHE) ---
+  // --- BLOQUE PRÓXIMOS SORTEOS #2 (FECHAS FUTURAS) ---
   {
     id: 'ford-ranger-raptor-noche',
     title: 'Ford Ranger 4x4 Turbo + Tanqueo 1 Año',
@@ -348,11 +348,11 @@ const RAFFLES_CATALOG: CompactRaffleItem[] = [
     merchant: 'AutoPremier Colombia 4x4',
     city: 'Cali',
     priceCop: '$ 45.000',
-    soldPercent: 85,
-    timeLabel: '⚡ En 3h 30m',
+    soldPercent: 46,
+    timeLabel: '🗓️ Sáb 28 Nov · 8:00 PM',
     category: 'vehiculos',
     image: '/galeria-premios-el-ganador-realista.jpg',
-    stage: 'closing_soon',
+    stage: 'upcoming',
   },
   {
     id: 'macbook-pro-m4-noche',
@@ -362,11 +362,11 @@ const RAFFLES_CATALOG: CompactRaffleItem[] = [
     merchant: 'TechStore Colombia',
     city: 'Bogotá',
     priceCop: '$ 28.000',
-    soldPercent: 83,
-    timeLabel: '⚡ En 4h 10m',
+    soldPercent: 51,
+    timeLabel: '🗓️ Dom 29 Nov · 7:00 PM',
     category: 'tech',
     image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
-    stage: 'closing_soon',
+    stage: 'upcoming',
   },
   {
     id: 'combo-zapatos-optica-noche',
@@ -376,11 +376,11 @@ const RAFFLES_CATALOG: CompactRaffleItem[] = [
     merchant: 'Óptica Visión VIP',
     city: 'Bucaramanga',
     priceCop: '$ 14.000',
-    soldPercent: 81,
-    timeLabel: '⚡ En 5h 00m',
+    soldPercent: 38,
+    timeLabel: '🗓️ Mié 2 Dic · 8:00 PM',
     category: 'optica',
     image: '/zapatos-sandalias-dama.jpg',
-    stage: 'closing_soon',
+    stage: 'upcoming',
   },
   {
     id: 'san-andres-vip-noche',
@@ -390,11 +390,11 @@ const RAFFLES_CATALOG: CompactRaffleItem[] = [
     merchant: 'Viajes & Sueños VIP',
     city: 'Medellín',
     priceCop: '$ 18.000',
-    soldPercent: 79,
-    timeLabel: '⚡ En 5h 45m',
+    soldPercent: 42,
+    timeLabel: '🗓️ Sáb 5 Dic · 9:00 PM',
     category: 'viajes',
     image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
-    stage: 'closing_soon',
+    stage: 'upcoming',
   },
   // --- BLOQUE ADICIONAL: PRÓXIMOS SORTEOS (GRANDES PREMIOS) ---
   {
@@ -1190,12 +1190,12 @@ export default function CompactWhiteMarketplacePage() {
     rafflesList.filter((r) => r.stage === 'upcoming')
   );
 
-  // División en bloques para mostrar mayor contenido (3 bloques A pocas horas + 2 bloques Próximos)
+  // División en bloques para mostrar mayor contenido (2 bloques A pocas horas + 3 bloques Próximos con fechas futuras)
   const closingSoonBlock1 = closingSoonRaffles.slice(0, 4);
-  const closingSoonBlock2 = closingSoonRaffles.slice(4, 8);
-  const closingSoonBlock3 = closingSoonRaffles.slice(8);
+  const closingSoonBlock2 = closingSoonRaffles.slice(4);
   const upcomingBlock1 = upcomingRaffles.slice(0, 5);
-  const upcomingBlock2 = upcomingRaffles.slice(5);
+  const upcomingBlock2 = upcomingRaffles.slice(5, 9);
+  const upcomingBlock3 = upcomingRaffles.slice(9);
 
   const renderRaffleCard = (item: CompactRaffleItem, variant: 'urgent' | 'upcoming') => (
     <article
@@ -2052,8 +2052,8 @@ export default function CompactWhiteMarketplacePage() {
           </DesktopScrollStrip>
         </section>
 
-        {/* SECCIÓN 3B: 🎟️ PRÓXIMOS SORTEOS #2 */}
-        {closingSoonBlock3.length > 0 && (
+        {/* SECCIÓN 3B: 🎟️ PRÓXIMOS SORTEOS #2 (FECHAS FUTURAS) */}
+        {upcomingBlock2.length > 0 && (
           <section id="estacion-urgentes-3" className="station-block-premium station-upcoming" aria-label="Próximos sorteos #2">
             <div className="compact-section-title">
               <h2>🎟️ Próximos Sorteos #2</h2>
@@ -2067,13 +2067,13 @@ export default function CompactWhiteMarketplacePage() {
             </div>
 
             <DesktopScrollStrip ariaLabel="Próximos sorteos 2">
-              {closingSoonBlock3.map((item) => renderRaffleCard(item, 'upcoming'))}
+              {upcomingBlock2.map((item) => renderRaffleCard(item, 'upcoming'))}
             </DesktopScrollStrip>
           </section>
         )}
 
-        {/* SECCIÓN 3B: 🚀 GRANDES PREMIOS · PRÓXIMAMENTE (BLOQUE 2 PRÓXIMOS) */}
-        {upcomingBlock2.length > 0 && (
+        {/* SECCIÓN 3C: 🚀 GRANDES PREMIOS · PRÓXIMAMENTE (FECHAS FUTURAS) */}
+        {upcomingBlock3.length > 0 && (
           <section id="estacion-proximos-2" className="station-block-premium station-upcoming" aria-label="Grandes premios próximamente">
             <div className="compact-section-title">
               <h2>🚀 Grandes Premios · Próximamente</h2>
@@ -2087,7 +2087,7 @@ export default function CompactWhiteMarketplacePage() {
             </div>
 
             <DesktopScrollStrip ariaLabel="Grandes premios próximamente">
-              {upcomingBlock2.map((item) => renderRaffleCard(item, 'upcoming'))}
+              {upcomingBlock3.map((item) => renderRaffleCard(item, 'upcoming'))}
             </DesktopScrollStrip>
           </section>
         )}
