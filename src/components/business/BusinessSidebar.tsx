@@ -6,9 +6,10 @@ import React from 'react';
 import Link from 'next/link';
 import { performLogout } from '@/lib/logout';
 
-export type BusinessNavKey = 'perfil' | 'estados' | 'rifas' | 'publicidad' | 'crm' | 'kyb' | 'envivo';
+export type BusinessNavKey = 'marketplace' | 'perfil' | 'estados' | 'rifas' | 'publicidad' | 'crm' | 'kyb' | 'envivo';
 
 export const BUSINESS_NAV_ITEMS: Array<{ key: BusinessNavKey; label: string; href: string; icon: string }> = [
+  { key: 'marketplace', label: 'Marketplace (Vitrina)', href: '/', icon: '🏛️' },
   { key: 'perfil', label: 'Mi Tienda', href: '/empresario?tab=perfil', icon: '🏪' },
   { key: 'rifas', label: 'Publicar Rifa y Cartón', href: '/empresario?tab=rifas', icon: '🎟️' },
   { key: 'estados', label: 'Subir Estado (Story 24h)', href: '/empresario?tab=estados', icon: '📸' },

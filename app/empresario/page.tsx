@@ -518,6 +518,23 @@ function PanelEmpresarioContent() {
           </div>
         </div>
         <div className="topbar-actions">
+          <Link
+            href="/"
+            className="btn-compact-action"
+            title="Ver Marketplace público con rifas y publicidad de todos los comercios"
+            style={{
+              textDecoration: 'none',
+              background: 'rgba(56, 189, 248, 0.16)',
+              color: '#38bdf8',
+              border: '1px solid rgba(56, 189, 248, 0.45)',
+              fontWeight: 800,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            🏛️ Ver Vitrina (Marketplace)
+          </Link>
           <button
             type="button"
             className="btn-compact-action"
@@ -569,6 +586,22 @@ function PanelEmpresarioContent() {
           <BusinessAdBanner />
           {/* MENÚ DE HERRAMIENTAS DEL EMPRESARIO */}
           <nav className="category-chips" aria-label="Herramientas Empresariales">
+            <Link
+              href="/"
+              className="chip-btn"
+              style={{
+                textDecoration: 'none',
+                borderColor: 'rgba(56, 189, 248, 0.45)',
+                color: '#38bdf8',
+                fontWeight: 800,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+              title="Explorar rifas y publicidad de otros empresarios en la vitrina pública"
+            >
+              🏛️ Marketplace (Vitrina) ↗
+            </Link>
             <button
               type="button"
               onClick={() => setActiveTab('perfil')}

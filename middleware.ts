@@ -8,14 +8,16 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 const SURFACE_COOKIE = 'elganador_surface';
 
-/** Rutas que pertenecen SOLO a la superficie cliente. */
+/** Rutas que pertenecen SOLO a la superficie cliente privada.
+ * Nota: "/" (Marketplace) y "/todos-los-sorteos" son públicos para que los empresarios
+ * puedan ver las rifas y publicidad de otros comercios.
+ */
 const CLIENT_ONLY_PREFIXES = [
   '/favoritos',
   '/mis-boletas',
   '/perfil',
   '/comprar-boleta',
   '/comprar',
-  '/todos-los-sorteos',
   '/cuenta',
   '/pago',
   '/chat-premio',
@@ -29,7 +31,6 @@ const LEGACY_BUSINESS_REDIRECTS: Record<string, string> = {
 };
 
 function isClientOnly(pathname: string) {
-  if (pathname === '/') return true;
   return CLIENT_ONLY_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
 

@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { readSurface } from '@/lib/auth-role';
 
 interface BottomNavProps {
   currentTab?: 'explorar' | 'favoritos' | 'envivo' | 'boletas' | 'perfil';
@@ -159,6 +160,11 @@ function NavProfileIcon({ active }: { active: boolean }) {
 export default function BottomNav({ currentTab: propTab, onExploreClick }: BottomNavProps = {}) {
   const pathname = usePathname();
   const [activeTab, setActiveTab] = useState<string>('explorar');
+  const [isBusiness, setIsBusiness] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsBusiness(readSurface() === 'business');
+  }, []);
 
   // Sincronizar automáticamente la pestaña activa con la ruta actual
   useEffect(() => {
@@ -174,7 +180,7 @@ export default function BottomNav({ currentTab: propTab, onExploreClick }: Botto
       setActiveTab('envivo');
     } else if (pathname.startsWith('/mis-boletas')) {
       setActiveTab('boletas');
-    } else if (pathname.startsWith('/perfil')) {
+    } else if (pathname.startsWith('/perfil') || pathname.startsWith('/empresario')) {
       setActiveTab('perfil');
     }
   }, [pathname, propTab]);
@@ -184,7 +190,12 @@ export default function BottomNav({ currentTab: propTab, onExploreClick }: Botto
     { id: 'favoritos', renderIcon: (active: boolean) => <NavHeartIcon active={active} />, href: '/favoritos', label: 'Favoritos' },
     { id: 'envivo', renderIcon: (active: boolean) => <NavLiveIcon active={active} />, href: '/sorteo-en-vivo', label: 'En Vivo' },
     { id: 'boletas', renderIcon: (active: boolean) => <NavTicketIcon active={active} />, href: '/mis-boletas', label: 'Boletas' },
-    { id: 'perfil', renderIcon: (active: boolean) => <NavProfileIcon active={active} />, href: '/perfil', label: 'Perfil' },
+    {
+      id: 'perfil',
+      renderIcon: (active: boolean) => <NavProfileIcon active={active} />,
+      href: isBusiness ? '/empresario' : '/perfil',
+      label: isBusiness ? 'Mi Tienda' : 'Perfil',
+    },
   ];
 
   return (

@@ -17,6 +17,13 @@ function Icon({ name, active }: { name: BusinessNavKey; active: boolean }) {
   const c = active ? ACTIVE : STROKE;
   const common = { fill: 'none', stroke: c, strokeWidth: 1.8, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
   switch (name) {
+    case 'marketplace':
+      return (
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <path {...common} d="M3 9.5L12 3L21 9.5V20C21 20.55 20.55 21 20 21H4C3.45 21 3 20.55 3 20V9.5Z" />
+          <path {...common} d="M9 21V12H15V21" />
+        </svg>
+      );
     case 'perfil':
       return (
         <svg width="23" height="23" viewBox="0 0 24 24">
@@ -57,6 +64,7 @@ function Icon({ name, active }: { name: BusinessNavKey; active: boolean }) {
 }
 
 const ITEMS: Array<{ key: BusinessNavKey; label: string; href: string }> = [
+  { key: 'marketplace', label: 'Vitrina', href: '/' },
   { key: 'perfil', label: 'Mi Tienda', href: '/empresario?tab=perfil' },
   { key: 'rifas', label: 'Crear Rifa', href: '/empresario?tab=rifas' },
   { key: 'publicidad', label: 'Publicidad', href: '/empresario/publicidad' },
@@ -74,8 +82,8 @@ export default function BusinessBottomNav({ activeKey }: Props) {
         bottom: 'calc(16px + env(safe-area-inset-bottom, 0px))',
         left: '50%',
         transform: 'translateX(-50%)',
-        width: '92%',
-        maxWidth: '410px',
+        width: '94%',
+        maxWidth: '430px',
         height: '64px',
         backgroundColor: 'rgba(18, 18, 20, 0.92)',
         backdropFilter: 'blur(20px)',
@@ -87,7 +95,7 @@ export default function BusinessBottomNav({ activeKey }: Props) {
         alignItems: 'center',
         zIndex: 999,
         boxShadow: '0 16px 36px rgba(0, 0, 0, 0.65)',
-        padding: '0 6px',
+        padding: '0 4px',
         boxSizing: 'border-box',
       }}
     >
@@ -101,8 +109,8 @@ export default function BusinessBottomNav({ activeKey }: Props) {
             title={item.label}
             style={{
               position: 'relative',
-              width: '50px',
-              height: '50px',
+              width: '46px',
+              height: '46px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

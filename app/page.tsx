@@ -13,6 +13,7 @@ import { shareRaffleLink } from '@/lib/nativeActions';
 import { useTheme } from '@/context/ThemeContext';
 import StoryViewer from '@/components/StoryViewer';
 import { performLogout } from '@/lib/logout';
+import { readSurface } from '@/lib/auth-role';
 
 interface MerchantStory {
   id: string;
@@ -702,6 +703,11 @@ export default function CompactWhiteMarketplacePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const [isAdPaused, setIsAdPaused] = useState(false);
+  const [isBusinessSession, setIsBusinessSession] = useState(false);
+
+  useEffect(() => {
+    setIsBusinessSession(readSurface() === 'business');
+  }, []);
 
   // Publicidad autónoma de clientes con pago y suscripción mensual activa
   const [customBannerAds, setCustomBannerAds] = useState<(typeof SPONSOR_CAROUSEL_ADS)[0][]>([]);
@@ -1497,7 +1503,31 @@ export default function CompactWhiteMarketplacePage() {
         </div>
 
         {/* Notificaciones (Selector de tema trasladado a Perfil) */}
-        <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {isBusinessSession && (
+            <Link
+              href="/empresario"
+              className="btn-compact-action"
+              title="Regresar a mi panel empresarial"
+              style={{
+                textDecoration: 'none',
+                background: 'rgba(56, 189, 248, 0.16)',
+                color: '#38bdf8',
+                border: '1px solid rgba(56, 189, 248, 0.45)',
+                fontWeight: 800,
+                fontSize: '12px',
+                padding: '5px 11px',
+                borderRadius: '8px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+              }}
+            >
+              <span>🏪</span>
+              <span>Mi Tienda</span>
+            </Link>
+          )}
+
           {/* CAMPANA DE NOTIFICACIONES RECTA Y SIMÉTRICA */}
           <div className="notif-bell-container" style={{ position: 'relative' }}>
             <button
@@ -1598,6 +1628,47 @@ export default function CompactWhiteMarketplacePage() {
         </div>
       </header>
 
+      {/* BANNER INFORMATIVO PARA EMPRESARIOS NAVEGANDO LA VITRINA */}
+      {isBusinessSession && (
+        <aside
+          role="complementary"
+          aria-label="Aviso modo vitrina empresarial"
+          style={{
+            background: 'linear-gradient(90deg, rgba(2, 132, 199, 0.18), rgba(56, 189, 248, 0.12))',
+            borderBottom: '1px solid rgba(56, 189, 248, 0.3)',
+            color: '#38bdf8',
+            padding: '8px 16px',
+            fontSize: '0.82rem',
+            fontWeight: 600,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '10px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span>🏛️</span>
+            <span><strong>Modo Vitrina:</strong> Explora rifas, historias y publicidad de otros empresarios.</span>
+          </div>
+          <Link
+            href="/empresario"
+            style={{
+              color: '#ffffff',
+              background: '#0284c7',
+              padding: '4px 12px',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Volver a Mi Tienda →
+          </Link>
+        </aside>
+      )}
+
       {/* MENÚ MÓVIL LATERAL DESLIZABLE (ACTIVADO POR ≡) */}
       {showMobileMenu && (
         <div
@@ -1658,9 +1729,34 @@ export default function CompactWhiteMarketplacePage() {
               <Link href="/todos-los-sorteos" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
                 <span>🎟️</span> Todos los Sorteos
               </Link>
-              <Link href="/ingreso?mode=login&role=business" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: '#007AFF', fontWeight: 700 }}>
-                <span>💼</span> Soy empresa · Ingresar al portal
-              </Link>
+              {isBusinessSession ? (
+                <Link
+                  href="/empresario"
+                  onClick={() => setShowMobileMenu(false)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    textDecoration: 'none',
+                    color: '#38bdf8',
+                    fontWeight: 800,
+                    background: 'rgba(56, 189, 248, 0.12)',
+                    border: '1px solid rgba(56, 189, 248, 0.35)',
+                  }}
+                >
+                  <span>🏪</span> Mi Tienda / Panel Empresarial
+                </Link>
+              ) : (
+                <Link
+                  href="/ingreso?mode=login&role=business"
+                  onClick={() => setShowMobileMenu(false)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: '#007AFF', fontWeight: 700 }}
+                >
+                  <span>💼</span> Soy empresa · Ingresar al portal
+                </Link>
+              )}
               <Link href="/perfil" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
                 <span>👤</span> Mi Perfil
               </Link>

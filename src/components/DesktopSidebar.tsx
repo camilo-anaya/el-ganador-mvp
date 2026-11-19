@@ -3,16 +3,36 @@
 // La navegación empresarial vive en components/business/BusinessSidebar.tsx.
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { performLogout } from '@/lib/logout';
+import { readSurface } from '@/lib/auth-role';
 
 export default function DesktopSidebar() {
   const pathname = usePathname();
+  const [isBusiness, setIsBusiness] = useState(false);
+
+  useEffect(() => {
+    setIsBusiness(readSurface() === 'business');
+  }, []);
 
   return (
     <aside className="desktop-toc-sidebar" aria-label="Tabla de contenido y navegación rápida">
+      {isBusiness && (
+        <div className="toc-section" style={{ background: 'rgba(56, 189, 248, 0.08)', borderRadius: '12px', padding: '10px', border: '1px solid rgba(56, 189, 248, 0.25)', marginBottom: '14px' }}>
+          <span className="toc-heading" style={{ color: '#38bdf8' }}>💼 MI PORTAL EMPRESARIAL</span>
+          <nav className="toc-nav-list">
+            <Link
+              href="/empresario"
+              className="toc-link"
+              style={{ color: '#38bdf8', fontWeight: 800, background: 'rgba(56, 189, 248, 0.12)' }}
+            >
+              <span>🏪</span> Volver a Mi Tienda / Panel
+            </Link>
+          </nav>
+        </div>
+      )}
       {/* Bloque 1: Navegación general de la vitrina */}
       <div className="toc-section">
         <span className="toc-heading">📌 ACCESOS Y VITRINA</span>
