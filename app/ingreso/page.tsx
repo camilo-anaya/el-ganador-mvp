@@ -54,11 +54,15 @@ function IngresoContent() {
   const [idFrontFileName, setIdFrontFileName] = useState("");
   const [idBackFileName, setIdBackFileName] = useState("");
 
-  // Documentación Empresa
+  // Documentación Empresa (Verificación Obligatoria de Local Comercial)
   const [nit, setNit] = useState("");
+  const [legalRepName, setLegalRepName] = useState("");
+  const [businessAddress, setBusinessAddress] = useState("");
   const [rutFileName, setRutFileName] = useState("");
   const [camaraComercioFileName, setCamaraComercioFileName] = useState("");
   const [camaraComercioDate, setCamaraComercioDate] = useState("");
+  const [storeFrontFileName, setStoreFrontFileName] = useState("");
+  const [bankCertFileName, setBankCertFileName] = useState("");
 
   // =========================================================================
   // 3. ESTADOS PARA LA VERSIÓN ORIGINAL EN PC Y TABLETS
@@ -152,24 +156,46 @@ function IngresoContent() {
             businessName: effectiveName,
             companyName: effectiveName,
             nit: nit.trim() || "901.884.221-5",
-            legalRepName: effectiveName,
-            repFullName: effectiveName,
+            legalRepName: legalRepName.trim() || effectiveName,
+            repFullName: legalRepName.trim() || effectiveName,
             legalRepId: docNumber.trim() || "1020304050",
             repDocType: docType,
             repDocNumber: docNumber.trim() || "1020304050",
             phone: regPhone.trim() || pcPhone.trim() || "3124589021",
             repPhone: regPhone.trim() || pcPhone.trim() || "3124589021",
-            address: "Dirección Comercial Verificada",
+            address: businessAddress.trim() || "Dirección Comercial Verificada",
             city: city.trim() || "Bogotá D.C.",
             email: effectiveEmail,
             password: effectivePass,
             rutFileName: rutFileName || "RUT_Oficial_2026.pdf",
             camaraComercioFileName: camaraComercioFileName || "CamaraComercio_Reciente.pdf",
             camaraComercioDate: camaraComercioDate || new Date().toISOString().split("T")[0],
-            idFrontFileName: idFrontFileName || "Cedula_RepLegal_Frontal.jpg",
-            idBackFileName: idBackFileName || "Cedula_RepLegal_Trasera.jpg",
+            idFrontFileName: idFrontFileName || "Cedula_Propietario_Frontal.jpg",
+            idBackFileName: idBackFileName || "Cedula_Propietario_Trasera.jpg",
+            storeFrontFileName: storeFrontFileName || "Fachada_Local_Comercial.jpg",
+            bankCertFileName: bankCertFileName || "",
             termsAccepted: ageConfirmed,
           };
+          if (typeof window !== "undefined") {
+            localStorage.setItem(
+              "elganador_business_docs",
+              JSON.stringify({
+                businessName: effectiveName,
+                nit: nit.trim(),
+                legalRepName: legalRepName.trim() || effectiveName,
+                address: businessAddress.trim(),
+                city: city.trim(),
+                rutFileName,
+                camaraComercioFileName,
+                camaraComercioDate,
+                idFrontFileName,
+                idBackFileName,
+                storeFrontFileName,
+                bankCertFileName,
+                submittedAt: new Date().toISOString(),
+              })
+            );
+          }
         } else {
           payload = {
             role: "buyer",
@@ -303,6 +329,22 @@ function IngresoContent() {
     void executeAuth("login", mobilePhone, mobileLoginPassword, role);
   };
 
+  const validateBusinessDocs = (): string | null => {
+    const missing: string[] = [];
+    if (!nit.trim()) missing.push("NIT del comercio");
+    if (!legalRepName.trim()) missing.push("Nombre del propietario / rep. legal");
+    if (!businessAddress.trim()) missing.push("Dirección física del local");
+    if (!rutFileName) missing.push("RUT actualizado (DIAN)");
+    if (!camaraComercioFileName) missing.push("Cámara de Comercio vigente");
+    if (!idFrontFileName) missing.push("Fotocopia Cédula del propietario (frontal)");
+    if (!idBackFileName) missing.push("Fotocopia Cédula del propietario (trasera)");
+    if (!storeFrontFileName) missing.push("Foto de la fachada del local");
+    if (missing.length > 0) {
+      return `Para verificar tu local comercial debes completar y adjuntar: ${missing.join(", ")}.`;
+    }
+    return null;
+  };
+
   const handleMobileRegister = (e: FormEvent) => {
     e.preventDefault();
     if (!ageConfirmed) {
@@ -312,6 +354,13 @@ function IngresoContent() {
     if (regPassword && regConfirmPassword && regPassword !== regConfirmPassword) {
       setAuthError("Las contraseñas no coinciden.");
       return;
+    }
+    if (role === "business") {
+      const docErr = validateBusinessDocs();
+      if (docErr) {
+        setAuthError(docErr);
+        return;
+      }
     }
     void executeAuth("register", regEmail || regPhone, regPassword, role, regName);
   };
@@ -345,6 +394,13 @@ function IngresoContent() {
     if (mode === "register" && !ageConfirmed) {
       setAuthError("Debes confirmar que eres mayor de 18 años y resides en una jurisdicción autorizada en Colombia.");
       return;
+    }
+    if (mode === "register" && role === "business") {
+      const docErr = validateBusinessDocs();
+      if (docErr) {
+        setAuthError(docErr);
+        return;
+      }
     }
     void executeAuth(mode, pcEmail, pcPassword, role, pcName);
   };
@@ -943,12 +999,94 @@ function IngresoContent() {
             </div>
           </div>
 
+          {/* DOCUMENTOS OBLIGATORIOS PARA VERIFICACIÓN DE LOCAL COMERCIAL (EMPRESARIOS) */}
+          {role === "business" && (
+            <div style={{ padding: '14px', borderRadius: '14px', background: 'rgba(0, 122, 255, 0.1)', border: '1px solid rgba(56, 189, 248, 0.35)', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '6px' }}>
+              <div style={{ fontSize: '0.84rem', fontWeight: 900, color: '#38bdf8' }}>
+                🏢 Documentos Obligatorios de Verificación del Local
+              </div>
+              <small style={{ fontSize: '0.72rem', color: '#cbd5e1', lineHeight: 1.35 }}>
+                Requeridos para avalar tu comercio aliado, habilitar sorteos y pagos con Wompi en Colombia.
+              </small>
+
+              <div className="mobileFieldGroup" style={{ margin: 0 }}>
+                <label className="mobileFieldLabel">NIT del Comercio *</label>
+                <div className="mobileInputCard">
+                  <input type="text" className="mobileInputClean" placeholder="Ej: 901.884.221-5" value={nit} onChange={(e) => setNit(e.target.value)} required />
+                </div>
+              </div>
+
+              <div className="mobileFieldGroup" style={{ margin: 0 }}>
+                <label className="mobileFieldLabel">Propietario / Representante Legal *</label>
+                <div className="mobileInputCard">
+                  <input type="text" className="mobileInputClean" placeholder="Nombre completo del propietario" value={legalRepName} onChange={(e) => setLegalRepName(e.target.value)} required />
+                </div>
+              </div>
+
+              <div className="mobileFieldGroup" style={{ margin: 0 }}>
+                <label className="mobileFieldLabel">Dirección Física del Local *</label>
+                <div className="mobileInputCard">
+                  <input type="text" className="mobileInputClean" placeholder="Ej: Cra 15 # 85-20 Local 102" value={businessAddress} onChange={(e) => setBusinessAddress(e.target.value)} required />
+                </div>
+              </div>
+
+              <div className="mobileFieldGroup" style={{ margin: 0 }}>
+                <label className="mobileFieldLabel">📄 RUT Actualizado (DIAN · PDF o Foto) *</label>
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: rutFileName ? '1px solid #4ade80' : '1px dashed rgba(56,189,248,0.5)', cursor: 'pointer' }}>
+                  <span style={{ fontSize: '0.8rem', color: rutFileName ? '#4ade80' : '#e2e8f0' }}>
+                    {rutFileName ? '✓ ' + rutFileName : '📁 Adjuntar RUT actualizado *'}
+                  </span>
+                  <input type="file" accept="image/*,.pdf" style={{ display: 'none' }} onChange={(e) => { if (e.target.files?.[0]) setRutFileName(e.target.files[0].name); }} />
+                </label>
+              </div>
+
+              <div className="mobileFieldGroup" style={{ margin: 0 }}>
+                <label className="mobileFieldLabel">🏛️ Cámara de Comercio Vigente (≤ 30 días) *</label>
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: camaraComercioFileName ? '1px solid #4ade80' : '1px dashed rgba(56,189,248,0.5)', cursor: 'pointer' }}>
+                  <span style={{ fontSize: '0.8rem', color: camaraComercioFileName ? '#4ade80' : '#e2e8f0' }}>
+                    {camaraComercioFileName ? '✓ ' + camaraComercioFileName : '📁 Adjuntar Cámara de Comercio *'}
+                  </span>
+                  <input type="file" accept="image/*,.pdf" style={{ display: 'none' }} onChange={(e) => { if (e.target.files?.[0]) setCamaraComercioFileName(e.target.files[0].name); }} />
+                </label>
+              </div>
+
+              <div className="mobileFieldGroup" style={{ margin: 0 }}>
+                <label className="mobileFieldLabel">📅 Fecha de Expedición Cámara de Comercio</label>
+                <div className="mobileInputCard">
+                  <input type="date" className="mobileInputClean" value={camaraComercioDate} onChange={(e) => setCamaraComercioDate(e.target.value)} />
+                </div>
+              </div>
+
+              <div className="mobileFieldGroup" style={{ margin: 0 }}>
+                <label className="mobileFieldLabel">🏪 Foto de la Fachada del Local Físico *</label>
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: storeFrontFileName ? '1px solid #4ade80' : '1px dashed rgba(56,189,248,0.5)', cursor: 'pointer' }}>
+                  <span style={{ fontSize: '0.8rem', color: storeFrontFileName ? '#4ade80' : '#e2e8f0' }}>
+                    {storeFrontFileName ? '✓ ' + storeFrontFileName : '📸 Subir foto de fachada del local *'}
+                  </span>
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => { if (e.target.files?.[0]) setStoreFrontFileName(e.target.files[0].name); }} />
+                </label>
+              </div>
+
+              <div className="mobileFieldGroup" style={{ margin: 0 }}>
+                <label className="mobileFieldLabel">🏦 Certificado Bancario (Opcional · para dispersión de ventas)</label>
+                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.04)', border: '1px dashed rgba(255,255,255,0.22)', cursor: 'pointer' }}>
+                  <span style={{ fontSize: '0.78rem', color: bankCertFileName ? '#4ade80' : '#cbd5e1' }}>
+                    {bankCertFileName ? '✓ ' + bankCertFileName : '📁 Adjuntar certificado bancario (opcional)'}
+                  </span>
+                  <input type="file" accept="image/*,.pdf" style={{ display: 'none' }} onChange={(e) => { if (e.target.files?.[0]) setBankCertFileName(e.target.files[0].name); }} />
+                </label>
+              </div>
+            </div>
+          )}
+
           {/* Adjuntar Foto Cédula Frontal y Trasera */}
           <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">📸 Cédula Frontal (Opcional - solo para premios)</label>
-            <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: '1px dashed rgba(255,255,255,0.25)', cursor: 'pointer' }}>
+            <label className="mobileFieldLabel">
+              {role === "business" ? "🪪 Fotocopia / Foto Cédula del Propietario (Cara Frontal) *" : "📸 Cédula Frontal (Opcional - solo para premios)"}
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: idFrontFileName ? '1px solid #4ade80' : '1px dashed rgba(255,255,255,0.25)', cursor: 'pointer' }}>
               <span style={{ fontSize: '0.82rem', color: idFrontFileName ? '#4ade80' : '#cbd5e1' }}>
-                {idFrontFileName ? '✓ ' + idFrontFileName : '📁 Subir foto cara frontal (opcional)'}
+                {idFrontFileName ? '✓ ' + idFrontFileName : (role === "business" ? '📁 Subir cédula propietario frontal *' : '📁 Subir foto cara frontal (opcional)')}
               </span>
               <input
                 type="file"
@@ -964,10 +1102,12 @@ function IngresoContent() {
           </div>
 
           <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">📸 Cédula Trasera (Opcional)</label>
-            <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: '1px dashed rgba(255,255,255,0.25)', cursor: 'pointer' }}>
+            <label className="mobileFieldLabel">
+              {role === "business" ? "🪪 Fotocopia / Foto Cédula del Propietario (Cara Trasera) *" : "📸 Cédula Trasera (Opcional)"}
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: idBackFileName ? '1px solid #4ade80' : '1px dashed rgba(255,255,255,0.25)', cursor: 'pointer' }}>
               <span style={{ fontSize: '0.82rem', color: idBackFileName ? '#4ade80' : '#cbd5e1' }}>
-                {idBackFileName ? '✓ ' + idBackFileName : '📁 Subir foto cara trasera (opcional)'}
+                {idBackFileName ? '✓ ' + idBackFileName : (role === "business" ? '📁 Subir cédula propietario trasera *' : '📁 Subir foto cara trasera (opcional)')}
               </span>
               <input
                 type="file"
@@ -1248,6 +1388,48 @@ function IngresoContent() {
                   onChange={(e) => setPcPassword(e.target.value)}
                 />
               </label>
+
+              {mode === "register" && role === "business" && (
+                <div style={{ padding: "12px", borderRadius: "10px", background: "rgba(0, 122, 255, 0.08)", border: "1px solid rgba(56, 189, 248, 0.35)", display: "flex", flexDirection: "column", gap: "8px", margin: "6px 0" }}>
+                  <strong style={{ fontSize: "12px", color: "#0284c7" }}>🏢 Documentos Obligatorios de Verificación del Local</strong>
+                  <label>
+                    NIT del comercio *
+                    <input required type="text" placeholder="Ej: 901.884.221-5" value={nit} onChange={(e) => setNit(e.target.value)} />
+                  </label>
+                  <label>
+                    Propietario / Representante Legal *
+                    <input required type="text" placeholder="Nombre completo del propietario" value={legalRepName} onChange={(e) => setLegalRepName(e.target.value)} />
+                  </label>
+                  <label>
+                    Dirección física exacta del local *
+                    <input required type="text" placeholder="Ej: Cra 15 # 85-20 Local 102" value={businessAddress} onChange={(e) => setBusinessAddress(e.target.value)} />
+                  </label>
+                  <label>
+                    📄 RUT Actualizado (DIAN · PDF o foto) *
+                    <input required type="file" accept="image/*,.pdf" onChange={(e) => { if (e.target.files?.[0]) setRutFileName(e.target.files[0].name); }} />
+                  </label>
+                  <label>
+                    🏛️ Cámara de Comercio vigente (≤ 30 días) *
+                    <input required type="file" accept="image/*,.pdf" onChange={(e) => { if (e.target.files?.[0]) setCamaraComercioFileName(e.target.files[0].name); }} />
+                  </label>
+                  <label>
+                    🪪 Fotocopia Cédula Propietario (Cara Frontal) *
+                    <input required type="file" accept="image/*,.pdf" onChange={(e) => { if (e.target.files?.[0]) setIdFrontFileName(e.target.files[0].name); }} />
+                  </label>
+                  <label>
+                    🪪 Fotocopia Cédula Propietario (Cara Trasera) *
+                    <input required type="file" accept="image/*,.pdf" onChange={(e) => { if (e.target.files?.[0]) setIdBackFileName(e.target.files[0].name); }} />
+                  </label>
+                  <label>
+                    🏪 Foto de la Fachada del Local Físico *
+                    <input required type="file" accept="image/*" onChange={(e) => { if (e.target.files?.[0]) setStoreFrontFileName(e.target.files[0].name); }} />
+                  </label>
+                  <label>
+                    🏦 Certificado Bancario (opcional)
+                    <input type="file" accept="image/*,.pdf" onChange={(e) => { if (e.target.files?.[0]) setBankCertFileName(e.target.files[0].name); }} />
+                  </label>
+                </div>
+              )}
 
               {mode === "register" && (
                 <label className="legal-checkbox">
