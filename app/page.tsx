@@ -1718,11 +1718,11 @@ export default function CompactWhiteMarketplacePage() {
               
               {/* FOTO GRANDE Y DESTACADA DE BORDE A BORDE (FULL BLEED) */}
               <div
-                className="official-ad-media"
+                className={`official-ad-media ${currentAd.id === 'ad-el-ganador-oficial' ? 'is-official-brand' : ''}`}
                 style={{
                   position: 'relative',
                   width: '100%',
-                  height: '195px',
+                  height: '255px',
                   borderRadius: '0px',
                   overflow: 'hidden',
                   background: '#000000',
@@ -1734,7 +1734,13 @@ export default function CompactWhiteMarketplacePage() {
                   key={currentAd.id}
                   src={currentAd.image}
                   alt={currentAd.brand}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px' }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: currentAd.id === 'ad-el-ganador-oficial' ? 'contain' : 'cover',
+                    borderRadius: '0px',
+                    background: '#000000',
+                  }}
                 />
 
                 {/* BADGE FLOTANTE DE PATROCINADOR VIP */}
@@ -1761,7 +1767,7 @@ export default function CompactWhiteMarketplacePage() {
               </div>
 
               {/* INFORMACIÓN COMPACTA Y COMERCIAL DE ALTO IMPACTO */}
-              <div className="official-ad-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '3px', width: '100%', padding: '6px 14px 0 14px', boxSizing: 'border-box' }}>
+              <div className="official-ad-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '4px', width: '100%', padding: '14px 14px 2px 14px', boxSizing: 'border-box' }}>
                 <div className="ad-pill-and-counter" style={{ marginBottom: '1px' }}>
                   <span
                     className="official-ad-pill"
