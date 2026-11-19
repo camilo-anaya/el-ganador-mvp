@@ -2034,26 +2034,6 @@ export default function CompactWhiteMarketplacePage() {
           </section>
         )}
 
-        {/* SECCIÓN 2C: ⚡ RELÁMPAGO · JUEGAN ESTA NOCHE (BLOQUE 3 A POCAS HORAS) */}
-        {closingSoonBlock3.length > 0 && (
-          <section id="estacion-urgentes-3" className="station-block-premium station-urgent" aria-label="Sorteos relámpago esta noche">
-            <div className="compact-section-title">
-              <h2>⚡ Relámpago · Juegan esta noche</h2>
-              <button
-                type="button"
-                className="see-all-grid-btn"
-                onClick={() => openAllRafflesModal('⚡ Sorteos relámpago de hoy', 'closing_soon')}
-              >
-                Ver todo →
-              </button>
-            </div>
-
-            <DesktopScrollStrip ariaLabel="Relámpago esta noche">
-              {closingSoonBlock3.map((item) => renderRaffleCard(item, 'urgent'))}
-            </DesktopScrollStrip>
-          </section>
-        )}
-
         {/* SECCIÓN 3A: 🎟️ PRÓXIMOS SORTEOS (BLOQUE 1) */}
         <section id="estacion-proximos" className="station-block-premium station-upcoming" aria-label="Próximos sorteos">
           <div className="compact-section-title">
@@ -2071,6 +2051,26 @@ export default function CompactWhiteMarketplacePage() {
             {upcomingBlock1.map((item) => renderRaffleCard(item, 'upcoming'))}
           </DesktopScrollStrip>
         </section>
+
+        {/* SECCIÓN 3B: 🎟️ PRÓXIMOS SORTEOS #2 */}
+        {closingSoonBlock3.length > 0 && (
+          <section id="estacion-urgentes-3" className="station-block-premium station-upcoming" aria-label="Próximos sorteos #2">
+            <div className="compact-section-title">
+              <h2>🎟️ Próximos Sorteos #2</h2>
+              <button
+                type="button"
+                className="see-all-grid-btn"
+                onClick={() => openAllRafflesModal('🎟️ Próximos Sorteos #2', 'upcoming')}
+              >
+                Ver todo →
+              </button>
+            </div>
+
+            <DesktopScrollStrip ariaLabel="Próximos sorteos 2">
+              {closingSoonBlock3.map((item) => renderRaffleCard(item, 'upcoming'))}
+            </DesktopScrollStrip>
+          </section>
+        )}
 
         {/* SECCIÓN 3B: 🚀 GRANDES PREMIOS · PRÓXIMAMENTE (BLOQUE 2 PRÓXIMOS) */}
         {upcomingBlock2.length > 0 && (
