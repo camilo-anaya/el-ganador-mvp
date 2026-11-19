@@ -86,10 +86,78 @@ export default function PlanesPublicitariosPage() {
   const [copiedContact, setCopiedContact] = useState<boolean>(false);
 
   // Estados unificados de Beneficios y Configuración de Banner de Patrocinador
+  const [adBrand, setAdBrand] = useState('Mi Empresa Oficial');
   const [adHeadline, setAdHeadline] = useState('20% OFF en accesorios + Matrícula Gratis');
+  const [adDescription, setAdDescription] = useState('Promoción exclusiva para la comunidad de El Ganador. Envíos a toda Colombia.');
   const [adCoupon, setAdCoupon] = useState('ELGANADOR20');
+  const [adImage, setAdImage] = useState('/banner-el-ganador-oficial.jpg');
   const [adActive, setAdActive] = useState(true);
   const [bannerSaved, setBannerSaved] = useState(false);
+  const [activeSubInfo, setActiveSubInfo] = useState<{ planName: string; cycle: string; expiresAt: string; reference: string } | null>(null);
+  const [autonomousPublishedNotice, setAutonomousPublishedNotice] = useState<string | null>(null);
+
+  const publishAutonomousBannerAd = (
+    plan: PlanInfo,
+    cycle: 'mensual' | 'trimestral' | 'anual',
+    reference: string,
+    draftOverride?: { brand?: string; headline?: string; description?: string; coupon?: string; image?: string; active?: boolean }
+  ) => {
+    try {
+      const days = cycle === 'anual' ? 365 : cycle === 'trimestral' ? 90 : 30;
+      const nowIso = new Date().toISOString();
+      const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+      const brandVal = (draftOverride?.brand ?? adBrand).trim() || 'Marca Patrocinadora';
+      const titleVal = (draftOverride?.headline ?? adHeadline).trim() || 'Promoción Oficial El Ganador';
+      const descVal = (draftOverride?.description ?? adDescription).trim() || 'Patrocinador verificado con suscripción mensual activa en El Ganador.';
+      const couponRaw = (draftOverride?.coupon ?? adCoupon).trim();
+      const imageVal = draftOverride?.image || adImage || '/banner-el-ganador-oficial.jpg';
+
+      const publishedAd = {
+        id: `ad-sub-${reference}`,
+        tag: `⚡ PATROCINADOR ${plan.name.toUpperCase()}`,
+        brand: brandVal,
+        category: `${plan.territory} · Suscripción ${cycle}`,
+        title: titleVal,
+        description: descVal,
+        coupon: couponRaw ? (couponRaw.toLowerCase().startsWith('cupón') ? couponRaw : `Cupón: ${couponRaw}`) : 'Cupón: ELGANADOR',
+        ctaText: 'Ver Vitrina & Promoción →',
+        ctaLink: '/publicidad',
+        image: imageVal,
+        badge: `✓ Suscripción ${cycle} activa`,
+        paid: true,
+        active: draftOverride?.active ?? adActive,
+        planId: plan.id,
+        billingCycle: cycle,
+        reference,
+        activatedAt: nowIso,
+        expiresAt,
+      };
+
+      const existingRaw = localStorage.getItem('elganador_banner_ads_v1');
+      const existing: Array<{ id: string; reference?: string }> = existingRaw ? JSON.parse(existingRaw) : [];
+      const filtered = Array.isArray(existing) ? existing.filter((item) => item.id !== publishedAd.id && item.reference !== reference) : [];
+      const updated = [publishedAd, ...filtered];
+      localStorage.setItem('elganador_banner_ads_v1', JSON.stringify(updated));
+
+      const activePlanRecord = {
+        planId: plan.id,
+        planName: plan.name,
+        cycle,
+        reference,
+        status: 'activo',
+        activatedAt: nowIso,
+        expiresAt,
+      };
+      localStorage.setItem('elganador_active_plan', JSON.stringify(activePlanRecord));
+      localStorage.removeItem('elganador_pending_banner_ad');
+      window.dispatchEvent(new Event('elganador_banner_ads_updated'));
+
+      setActiveSubInfo({ planName: plan.name, cycle, expiresAt, reference });
+      setAutonomousPublishedNotice(`¡Suscripción ${cycle} activada! Tu anuncio "${titleVal}" ya se montó automáticamente en el banner principal.`);
+    } catch (err) {
+      console.error('Error publicando banner autónomo:', err);
+    }
+  };
 
   useEffect(() => {
     try {
@@ -101,21 +169,88 @@ export default function PlanesPublicitariosPage() {
       const savedAd = localStorage.getItem('elganador_business_ad');
       if (savedAd) {
         const a = JSON.parse(savedAd);
+        if (a.brand) setAdBrand(a.brand);
         if (a.headline) setAdHeadline(a.headline);
+        if (a.description) setAdDescription(a.description);
         if (a.coupon) setAdCoupon(a.coupon);
+        if (a.image) setAdImage(a.image);
         if (typeof a.active === 'boolean') setAdActive(a.active);
       }
+
+      // Cargar suscripción activa existente
+      const activePlanRaw = localStorage.getItem('elganador_active_plan');
+      if (activePlanRaw) {
+        const ap = JSON.parse(activePlanRaw);
+        if (ap?.status === 'activo' && ap?.expiresAt && new Date(ap.expiresAt).getTime() > Date.now()) {
+          setActiveSubInfo({ planName: ap.planName, cycle: ap.cycle || 'mensual', expiresAt: ap.expiresAt, reference: ap.reference });
+        }
+      }
+
+      // Activación autónoma al regresar desde Wompi tras pago aprobado (?status=plan_activado&ref=...)
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const statusParam = params.get('status');
+        const refParam = params.get('ref');
+        const planParam = params.get('plan');
+        if (statusParam === 'plan_activado' && refParam) {
+          const pendingRaw = localStorage.getItem('elganador_pending_banner_ad');
+          const pending = pendingRaw ? JSON.parse(pendingRaw) : null;
+          const matchedPlan =
+            PUBLICITY_PLANS.find((p) => p.id === (planParam || pending?.planId)) || PUBLICITY_PLANS[1];
+          const cycle: 'mensual' | 'trimestral' | 'anual' = pending?.cycle || 'mensual';
+          publishAutonomousBannerAd(matchedPlan, cycle, refParam, pending?.draft);
+        }
+      }
     } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleBannerImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2.5 * 1024 * 1024) {
+      alert('⚠️ La imagen debe pesar menos de 2.5 MB para cargar rápido en el banner.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setAdImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleSaveBannerConfig = (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const adData = { headline: adHeadline, coupon: adCoupon, active: adActive };
+      const adData = {
+        brand: adBrand,
+        headline: adHeadline,
+        description: adDescription,
+        coupon: adCoupon,
+        image: adImage,
+        active: adActive,
+      };
       localStorage.setItem('elganador_business_ad', JSON.stringify(adData));
-      setBannerSaved(true);
-      setTimeout(() => setBannerSaved(false), 3000);
-      alert('✅ ¡Configuración de Banner de Patrocinador guardada con éxito!');
+
+      // Si ya tiene suscripción mensual pagada y activa, actualiza su banner en vivo de inmediato
+      if (activeSubInfo) {
+        const matchedPlan = PUBLICITY_PLANS.find((p) => p.name === activeSubInfo.planName) || PUBLICITY_PLANS[1];
+        publishAutonomousBannerAd(
+          matchedPlan,
+          (activeSubInfo.cycle as 'mensual' | 'trimestral' | 'anual') || 'mensual',
+          activeSubInfo.reference,
+          adData
+        );
+        setBannerSaved(true);
+        setTimeout(() => setBannerSaved(false), 3000);
+        alert('✅ ¡Banner actualizado en vivo! Tu pauta activa ya refleja los cambios en el carrusel principal.');
+      } else {
+        setBannerSaved(true);
+        setTimeout(() => setBannerSaved(false), 3000);
+        alert('💾 Borrador guardado. Completa el pago de tu suscripción mensual arriba para que tu anuncio se monte automáticamente en el banner principal.');
+      }
     } catch (err) {
       console.error(err);
     }
@@ -144,9 +279,9 @@ export default function PlanesPublicitariosPage() {
 
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://elganador.co';
     const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-    const redirectUrl = isLocal ? undefined : `${origin}/empresario?tab=pauta&status=plan_activado&ref=${reference}&plan=${plan.id}`;
+    const redirectUrl = isLocal ? undefined : `${origin}/publicidad?status=plan_activado&ref=${reference}&plan=${plan.id}`;
 
-    // Guardar registro local de suscripción iniciada
+    // Guardar borrador del banner + registro local de suscripción iniciada para publicación autónoma tras pago
     try {
       const pendingSub = {
         planId: plan.id,
@@ -158,6 +293,22 @@ export default function PlanesPublicitariosPage() {
         createdAt: new Date().toISOString(),
       };
       localStorage.setItem('elganador_active_plan', JSON.stringify(pendingSub));
+      localStorage.setItem(
+        'elganador_pending_banner_ad',
+        JSON.stringify({
+          planId: plan.id,
+          cycle: billingCycle,
+          reference,
+          draft: {
+            brand: adBrand,
+            headline: adHeadline,
+            description: adDescription,
+            coupon: adCoupon,
+            image: adImage,
+            active: adActive,
+          },
+        })
+      );
     } catch {}
 
     // Si window.WidgetCheckout está disponible
@@ -198,8 +349,8 @@ export default function PlanesPublicitariosPage() {
         setIsProcessing(false);
         const transaction = result?.transaction;
         if (transaction?.status === 'APPROVED') {
-          alert(`🎉 ¡Pago aprobado con éxito! Tu ${plan.name} ha sido activado.`);
-          window.location.href = redirectUrl || '/publicidad';
+          publishAutonomousBannerAd(plan, billingCycle, reference);
+          alert(`🎉 ¡Pago aprobado con éxito! Tu ${plan.name} está activo y tu publicidad ya fue montada automáticamente en el banner principal.`);
         } else if (transaction?.status === 'DECLINED' || transaction?.status === 'ERROR') {
           alert('⚠️ La transacción de pauta publicitaria no fue aprobada.');
         }
@@ -551,7 +702,30 @@ export default function PlanesPublicitariosPage() {
               )}
             </div>
 
-            <form onSubmit={handleSaveBannerConfig} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', alignItems: 'end' }}>
+            {autonomousPublishedNotice && (
+              <div style={{ marginBottom: '14px', padding: '12px 16px', borderRadius: '12px', background: isDark ? 'rgba(16, 185, 129, 0.16)' : '#ecfdf5', border: '1px solid #10b981', color: isDark ? '#6ee7b7' : '#065f46', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', fontSize: '0.86rem', fontWeight: 700 }}>
+                <span>🎉 {autonomousPublishedNotice}</span>
+                <Link href="/" style={{ padding: '6px 14px', borderRadius: '8px', background: '#10b981', color: '#ffffff', textDecoration: 'none', fontWeight: 800, fontSize: '0.8rem' }}>
+                  Ver en el Banner Principal →
+                </Link>
+              </div>
+            )}
+
+            <form onSubmit={handleSaveBannerConfig} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px', alignItems: 'end' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: isDark ? '#cbd5e1' : '#334155', marginBottom: '6px' }}>
+                  Nombre de tu Marca o Empresa:
+                </label>
+                <input
+                  type="text"
+                  value={adBrand}
+                  onChange={(e) => setAdBrand(e.target.value)}
+                  placeholder="Ej: Motos Caribe Oficial"
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid #cbd5e1', background: isDark ? '#0f172a' : '#ffffff', fontSize: '0.9rem', color: isDark ? '#ffffff' : '#0f172a' }}
+                  required
+                />
+              </div>
+
               <div>
                 <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: isDark ? '#cbd5e1' : '#334155', marginBottom: '6px' }}>
                   Frase o Beneficio Promocional:
@@ -568,6 +742,20 @@ export default function PlanesPublicitariosPage() {
 
               <div>
                 <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: isDark ? '#cbd5e1' : '#334155', marginBottom: '6px' }}>
+                  Descripción breve del anuncio:
+                </label>
+                <input
+                  type="text"
+                  value={adDescription}
+                  onChange={(e) => setAdDescription(e.target.value)}
+                  placeholder="Ej: Envíos a toda Colombia y garantía oficial"
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid #cbd5e1', background: isDark ? '#0f172a' : '#ffffff', fontSize: '0.9rem', color: isDark ? '#ffffff' : '#0f172a' }}
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: isDark ? '#cbd5e1' : '#334155', marginBottom: '6px' }}>
                   Código de Cupón o Descuento para Compradores:
                 </label>
                 <input
@@ -577,6 +765,18 @@ export default function PlanesPublicitariosPage() {
                   placeholder="Ej: ELGANADOR20"
                   style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid #cbd5e1', background: isDark ? '#0f172a' : '#ffffff', fontSize: '0.9rem', color: isDark ? '#ffffff' : '#0f172a' }}
                   required
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: isDark ? '#cbd5e1' : '#334155', marginBottom: '6px' }}>
+                  Foto del Banner Publicitario (JPG/PNG · máx 2.5 MB):
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleBannerImageUpload}
+                  style={{ width: '100%', padding: '8px 10px', borderRadius: '8px', border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid #cbd5e1', background: isDark ? '#0f172a' : '#ffffff', fontSize: '0.82rem', color: isDark ? '#ffffff' : '#0f172a' }}
                 />
               </div>
 
@@ -607,7 +807,7 @@ export default function PlanesPublicitariosPage() {
                     whiteSpace: 'nowrap'
                   }}
                 >
-                  💾 Actualizar Anuncio
+                  {activeSubInfo ? '🚀 Actualizar en Vivo' : '💾 Guardar Borrador'}
                 </button>
               </div>
             </form>
@@ -615,23 +815,29 @@ export default function PlanesPublicitariosPage() {
             {/* VISTA PREVIA DEL BANNER EN VIVO */}
             <div style={{ marginTop: '16px', borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid #cbd5e1', paddingTop: '14px' }}>
               <span style={{ fontSize: '11px', fontWeight: 800, color: isDark ? '#94a3b8' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: '8px' }}>
-                👁️ Vista Previa en Carrusel de Vitrina:
+                👁️ Vista Previa en Carrusel de Vitrina {activeSubInfo ? `· Suscripción ${activeSubInfo.cycle} activa` : '· Se publica automáticamente al pagar tu plan mensual'}:
               </span>
-              <div style={{ background: isDark ? '#0f172a' : '#ffffff', padding: '14px 18px', borderRadius: '10px', border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid #e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
-                <div>
-                  <span style={{ fontSize: '10.5px', fontWeight: 800, color: '#f59e0b', background: isDark ? 'rgba(245, 158, 11, 0.18)' : '#fef3c7', padding: '2px 8px', borderRadius: '4px', textTransform: 'uppercase', display: 'inline-block', marginBottom: '4px' }}>
-                    ⚡ Patrocinador Oficial
-                  </span>
-                  <p style={{ margin: '2px 0', fontSize: '0.95rem', fontWeight: 800, color: isDark ? '#ffffff' : '#0f172a' }}>
-                    {adHeadline || 'Tu Anuncio Aquí'}
-                  </p>
-                  <span style={{ fontSize: '0.8rem', color: isDark ? '#cbd5e1' : '#64748b' }}>
-                    Cupón Exclusivo: <strong style={{ color: '#007AFF' }}>{adCoupon || 'ELGANADOR'}</strong>
+              <div style={{ background: isDark ? '#0f172a' : '#ffffff', borderRadius: '12px', overflow: 'hidden', border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid #e2e8f0' }}>
+                <img src={adImage || '/banner-el-ganador-oficial.jpg'} alt="Vista previa del banner" style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block' }} />
+                <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+                  <div>
+                    <span style={{ fontSize: '10.5px', fontWeight: 800, color: '#f59e0b', background: isDark ? 'rgba(245, 158, 11, 0.18)' : '#fef3c7', padding: '2px 8px', borderRadius: '4px', textTransform: 'uppercase', display: 'inline-block', marginBottom: '4px' }}>
+                      ⚡ {adBrand || 'Patrocinador Oficial'}
+                    </span>
+                    <p style={{ margin: '2px 0', fontSize: '0.95rem', fontWeight: 800, color: isDark ? '#ffffff' : '#0f172a' }}>
+                      {adHeadline || 'Tu Anuncio Aquí'}
+                    </p>
+                    <p style={{ margin: '2px 0 4px', fontSize: '0.78rem', color: isDark ? '#94a3b8' : '#64748b' }}>
+                      {adDescription}
+                    </p>
+                    <span style={{ fontSize: '0.8rem', color: isDark ? '#cbd5e1' : '#64748b' }}>
+                      Cupón Exclusivo: <strong style={{ color: '#007AFF' }}>{adCoupon || 'ELGANADOR'}</strong>
+                    </span>
+                  </div>
+                  <span style={{ padding: '6px 14px', background: '#007AFF', color: '#fff', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 700 }}>
+                    Ver Vitrina & Promoción →
                   </span>
                 </div>
-                <span style={{ padding: '6px 14px', background: '#007AFF', color: '#fff', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 700 }}>
-                  Aprovechar Descuento →
-                </span>
               </div>
             </div>
           </div>

@@ -607,6 +607,19 @@ const VIBRANT_AD_THEMES = [
 
 const SPONSOR_CAROUSEL_ADS = [
   {
+    id: 'ad-el-ganador-oficial',
+    tag: '👑 PUBLICIDAD OFICIAL · EL GANADOR',
+    brand: 'El Ganador · Rifas Online',
+    category: 'Plataforma Oficial de Sorteos Verificables · Colombia',
+    title: 'EL GANADOR · Rifas Online 100% Verificables',
+    description: 'Participa en sorteos reales con balotera auditable SHA-256 o pauta tu marca aquí con suscripción mensual y llega a miles de compradores.',
+    coupon: 'Cupón: ELGANADOR',
+    ctaText: 'Pautar o Participar Ahora →',
+    ctaLink: '/publicidad',
+    image: '/banner-el-ganador-oficial.jpg',
+    badge: '👑 Oficial El Ganador',
+  },
+  {
     id: 'ad-tech',
     tag: '⚡ PATROCINADOR OFICIAL DESTACADO',
     brand: 'TechStore Colombia',
@@ -689,15 +702,66 @@ export default function CompactWhiteMarketplacePage() {
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const [isAdPaused, setIsAdPaused] = useState(false);
 
+  // Publicidad autónoma de clientes con pago y suscripción mensual activa
+  const [customBannerAds, setCustomBannerAds] = useState<(typeof SPONSOR_CAROUSEL_ADS)[0][]>([]);
+
+  useEffect(() => {
+    const syncAutonomousBannerAds = () => {
+      try {
+        const raw = localStorage.getItem('elganador_banner_ads_v1');
+        if (!raw) {
+          setCustomBannerAds([]);
+          return;
+        }
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return;
+        const now = Date.now();
+        const activePaid = parsed.filter(
+          (ad: { paid?: boolean; active?: boolean; expiresAt?: string }) =>
+            ad &&
+            ad.paid === true &&
+            ad.active !== false &&
+            (!ad.expiresAt || new Date(ad.expiresAt).getTime() > now)
+        );
+        // Purgar suscripciones vencidas automáticamente
+        if (activePaid.length !== parsed.length) {
+          localStorage.setItem('elganador_banner_ads_v1', JSON.stringify(activePaid));
+        }
+        setCustomBannerAds(activePaid);
+      } catch {
+        setCustomBannerAds([]);
+      }
+    };
+
+    syncAutonomousBannerAds();
+    window.addEventListener('storage', syncAutonomousBannerAds);
+    window.addEventListener('elganador_banner_ads_updated', syncAutonomousBannerAds);
+    const expiryCheck = setInterval(syncAutonomousBannerAds, 60000);
+    return () => {
+      window.removeEventListener('storage', syncAutonomousBannerAds);
+      window.removeEventListener('elganador_banner_ads_updated', syncAutonomousBannerAds);
+      clearInterval(expiryCheck);
+    };
+  }, []);
+
+  // Lista unificada: Anuncio oficial de El Ganador + pautas pagadas autónomas + patrocinadores base
+  const activeSponsorAds = [
+    SPONSOR_CAROUSEL_ADS[0],
+    ...customBannerAds,
+    ...SPONSOR_CAROUSEL_ADS.slice(1),
+  ];
+  const safeAdIndex = currentAdIndex % activeSponsorAds.length;
+  const currentAd = activeSponsorAds[safeAdIndex] || SPONSOR_CAROUSEL_ADS[0];
+
   useEffect(() => {
     if (isAdPaused) return;
     const interval = setInterval(() => {
-      setCurrentAdIndex((prev) => (prev + 1) % SPONSOR_CAROUSEL_ADS.length);
-    }, 4000);
+      setCurrentAdIndex((prev) => (prev + 1) % activeSponsorAds.length);
+    }, 4500);
     return () => clearInterval(interval);
-  }, [isAdPaused]);
+  }, [isAdPaused, activeSponsorAds.length]);
 
-      const currentAdTheme = VIBRANT_AD_THEMES[currentAdIndex % VIBRANT_AD_THEMES.length];
+  const currentAdTheme = VIBRANT_AD_THEMES[safeAdIndex % VIBRANT_AD_THEMES.length];
   const { theme, setThemePreference } = useTheme();
 
   // Controladores táctiles y de avance / retroceso para el Carrusel de Patrocinadores
@@ -709,14 +773,14 @@ export default function CompactWhiteMarketplacePage() {
     if (e) {
       e.stopPropagation();
     }
-    setCurrentAdIndex((prev) => (prev - 1 + SPONSOR_CAROUSEL_ADS.length) % SPONSOR_CAROUSEL_ADS.length);
+    setCurrentAdIndex((prev) => (prev - 1 + activeSponsorAds.length) % activeSponsorAds.length);
   };
 
   const handleNextAd = (e?: React.MouseEvent | React.TouchEvent) => {
     if (e) {
       e.stopPropagation();
     }
-    setCurrentAdIndex((prev) => (prev + 1) % SPONSOR_CAROUSEL_ADS.length);
+    setCurrentAdIndex((prev) => (prev + 1) % activeSponsorAds.length);
   };
 
   const handleAdTouchStart = (e: React.TouchEvent) => {
@@ -734,11 +798,9 @@ export default function CompactWhiteMarketplacePage() {
     if (Math.abs(deltaX) > 35) {
       adIsSwiping.current = true;
       if (deltaX < 0) {
-        // Deslizar hacia la izquierda -> avanzar
-        setCurrentAdIndex((prev) => (prev + 1) % SPONSOR_CAROUSEL_ADS.length);
+        setCurrentAdIndex((prev) => (prev + 1) % activeSponsorAds.length);
       } else {
-        // Deslizar hacia la derecha -> retroceder
-        setCurrentAdIndex((prev) => (prev - 1 + SPONSOR_CAROUSEL_ADS.length) % SPONSOR_CAROUSEL_ADS.length);
+        setCurrentAdIndex((prev) => (prev - 1 + activeSponsorAds.length) % activeSponsorAds.length);
       }
     }
     adTouchStartX.current = null;
@@ -1643,7 +1705,7 @@ export default function CompactWhiteMarketplacePage() {
               adIsSwiping.current = false;
               return;
             }
-            setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
+            setSelectedVitrinaAd(currentAd);
           }}
           onMouseEnter={() => setIsAdPaused(true)}
           onMouseLeave={() => setIsAdPaused(false)}
@@ -1669,9 +1731,9 @@ export default function CompactWhiteMarketplacePage() {
                 }}
               >
                 <img
-                  key={SPONSOR_CAROUSEL_ADS[currentAdIndex].id}
-                  src={SPONSOR_CAROUSEL_ADS[currentAdIndex].image}
-                  alt={SPONSOR_CAROUSEL_ADS[currentAdIndex].brand}
+                  key={currentAd.id}
+                  src={currentAd.image}
+                  alt={currentAd.brand}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '0px' }}
                 />
 
@@ -1713,7 +1775,7 @@ export default function CompactWhiteMarketplacePage() {
                       fontWeight: 800,
                     }}
                   >
-                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].tag}
+                    {currentAd.tag}
                   </span>
                 </div>
 
@@ -1732,7 +1794,7 @@ export default function CompactWhiteMarketplacePage() {
                     letterSpacing: '-0.2px',
                   }}
                 >
-                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].title}
+                  {currentAd.title}
                 </h3>
 
                 <p
@@ -1751,25 +1813,25 @@ export default function CompactWhiteMarketplacePage() {
                     maxWidth: '92%',
                   }}
                 >
-                  {SPONSOR_CAROUSEL_ADS[currentAdIndex].description}
+                  {currentAd.description}
                 </p>
 
                 {/* MÉTRICA EN VIVO Y BOTÓN SEGUIR CENTRADOS */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '3px 0' }}>
                   <span suppressHydrationWarning style={{ fontSize: '0.7rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    👥 {(brandFollowerCounts[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] || 1580).toLocaleString()} pendientes
+                    👥 {(brandFollowerCounts[currentAd.brand] || 1580).toLocaleString()} pendientes
                   </span>
                   <button
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleToggleFollow(SPONSOR_CAROUSEL_ADS[currentAdIndex].brand);
+                      handleToggleFollow(currentAd.brand);
                     }}
                     style={{
                       padding: '2px 8px',
                       borderRadius: '6px',
                       border: '1px solid #ffffff',
-                      background: followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
+                      background: followedBrands[currentAd.brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
                       color: '#ffffff',
                       fontSize: '0.7rem',
                       fontWeight: 800,
@@ -1778,7 +1840,7 @@ export default function CompactWhiteMarketplacePage() {
                     }}
                     title="Seguir empresa para recibir alertas de sus rifas y descuentos"
                   >
-                    {followedBrands[SPONSOR_CAROUSEL_ADS[currentAdIndex].brand] ? '✓ Siguiendo' : '🔔 Seguir'}
+                    {followedBrands[currentAd.brand] ? '✓ Siguiendo' : '🔔 Seguir'}
                   </button>
                 </div>
 
@@ -1789,7 +1851,7 @@ export default function CompactWhiteMarketplacePage() {
                     className="btn-ad-emerald"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedVitrinaAd(SPONSOR_CAROUSEL_ADS[currentAdIndex]);
+                      setSelectedVitrinaAd(currentAd);
                     }}
                     style={{
                       background: currentAdTheme.btnBg,
@@ -1817,7 +1879,7 @@ export default function CompactWhiteMarketplacePage() {
                       fontWeight: 700,
                     }}
                   >
-                    {SPONSOR_CAROUSEL_ADS[currentAdIndex].coupon}
+                    {currentAd.coupon}
                   </span>
                 </div>
               </div>
@@ -1882,7 +1944,7 @@ export default function CompactWhiteMarketplacePage() {
                   flexShrink: 0,
                 }}
               >
-                {SPONSOR_CAROUSEL_ADS.map((ad, idx) => (
+                {activeSponsorAds.map((ad, idx) => (
                   <button
                     key={ad.id}
                     type="button"
@@ -1892,14 +1954,14 @@ export default function CompactWhiteMarketplacePage() {
                     }}
                     className="ad-dot-btn"
                     style={{
-                      width: currentAdIndex === idx ? '24px' : '8px',
+                      width: safeAdIndex === idx ? '24px' : '8px',
                       height: '8px',
                       borderRadius: '999px',
                       border: 'none',
                       padding: 0,
                       cursor: 'pointer',
-                      background: currentAdIndex === idx ? '#ffd700' : 'rgba(255, 255, 255, 0.4)',
-                      boxShadow: currentAdIndex === idx ? '0 0 8px rgba(255, 215, 0, 0.6)' : 'none',
+                      background: safeAdIndex === idx ? '#ffd700' : 'rgba(255, 255, 255, 0.4)',
+                      boxShadow: safeAdIndex === idx ? '0 0 8px rgba(255, 215, 0, 0.6)' : 'none',
                       transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
                     aria-label={`Ver patrocinador ${idx + 1}: ${ad.brand}`}
