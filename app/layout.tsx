@@ -16,10 +16,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/app-icon-192.png?v=3', sizes: '192x192', type: 'image/png' },
-      { url: '/app-icon-512.png?v=3', sizes: '512x512', type: 'image/png' },
+      { url: '/app-icon-192.png?v=4', sizes: '192x192', type: 'image/png' },
+      { url: '/app-icon-512.png?v=4', sizes: '512x512', type: 'image/png' },
     ],
-    apple: '/apple-touch-icon.png?v=3',
+    apple: '/apple-touch-icon.png?v=4',
   },
 };
 
@@ -43,9 +43,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="El Ganador" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/app-icon-192.png?v=3" />
-        <link rel="manifest" href="/manifest.webmanifest?v=3" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=4" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/app-icon-192.png?v=4" />
+        <link rel="manifest" href="/manifest.webmanifest?v=4" />
 
         {/* Script oficial de Wompi indispensable para evitar pantallas de carga infinitas */}
         <script src="https://checkout.wompi.co/widget.js" async />
