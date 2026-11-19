@@ -329,7 +329,7 @@ export default function PlanesPublicitariosPage() {
     return basePrice;
   };
 
-  const handlePayPlanWithWompi = (plan: PlanInfo) => {
+  const handlePayPlanWithWompi = async (plan: PlanInfo) => {
     setIsProcessing(true);
     const finalPrice = calculatePrice(plan.priceMonthly);
     const amountInCents = finalPrice * 100;
@@ -367,6 +367,7 @@ export default function PlanesPublicitariosPage() {
             headline: adHeadline,
             description: adDescription,
             coupon: adCoupon,
+            ctaLink: adCtaLink,
             image: adImage,
             active: adActive,
           },
@@ -374,57 +375,74 @@ export default function PlanesPublicitariosPage() {
       );
     } catch {}
 
-    // Si window.WidgetCheckout está disponible
-    if (typeof window !== 'undefined' && (window as unknown as { WidgetCheckout?: new (opts: Record<string, unknown>) => { open: (cb: (res: { transaction?: { status: string } }) => void) => void } }).WidgetCheckout) {
-      const WidgetCheckout = (window as unknown as { WidgetCheckout: new (opts: Record<string, unknown>) => { open: (cb: (res: { transaction?: { status: string } }) => void) => void } }).WidgetCheckout;
-      const config: Record<string, unknown> = {
-        currency: 'COP',
-        amountInCents,
-        amount_in_cents: amountInCents,
-        reference,
-        publicKey,
-        public_key: publicKey,
-        customerData: {
-          email: businessEmail,
-          fullName: 'Empresa Aliada',
-          phoneNumber: '3001234567',
-          phoneNumberPrefix: '+57',
-          legalId: '900123456',
-          legalIdType: 'NIT'
-        },
-        customer_data: {
-          email: businessEmail,
-          fullName: 'Empresa Aliada',
-          phoneNumber: '3001234567',
-          phoneNumberPrefix: '+57',
-          legalId: '900123456',
-          legalIdType: 'NIT'
-        }
-      };
-
-      if (redirectUrl) {
-        config.redirectUrl = redirectUrl;
-      }
-
-      const checkout = new WidgetCheckout(config);
-
-      checkout.open((result) => {
-        setIsProcessing(false);
-        const transaction = result?.transaction;
-        if (transaction?.status === 'APPROVED') {
-          publishAutonomousBannerAd(plan, billingCycle, reference);
-          alert(`🎉 ¡Pago aprobado con éxito! Tu ${plan.name} está activo y tu publicidad ya fue montada automáticamente en el banner principal.`);
-        } else if (transaction?.status === 'DECLINED' || transaction?.status === 'ERROR') {
-          alert('⚠️ La transacción de pauta publicitaria no fue aprobada.');
-        }
+    // Firma de integridad SHA-256 (si WOMPI_INTEGRITY_SECRET está configurado)
+    let integritySignature: string | null = null;
+    try {
+      const sigRes = await fetch('/api/payments/wompi-signature', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference, amountInCents, currency: 'COP' }),
       });
+      if (sigRes.ok) {
+        const sigData = await sigRes.json();
+        if (sigData?.signature) integritySignature = String(sigData.signature);
+      }
+    } catch {}
+
+    const isMobileDevice =
+      typeof window !== 'undefined' &&
+      (window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+
+    // En móvil: Web Checkout oficial directo (evita bloqueo táctil del iframe en iOS/Android)
+    if (isMobileDevice || typeof window === 'undefined' || !(window as unknown as { WidgetCheckout?: unknown }).WidgetCheckout) {
+      const params = new URLSearchParams({
+        'public-key': publicKey,
+        currency: 'COP',
+        'amount-in-cents': String(amountInCents),
+        reference,
+        'customer-data:email': businessEmail,
+        'customer-data:full-name': adBrand || 'Empresa Aliada',
+        'customer-data:phone-number': '3001234567',
+        'customer-data:phone-number-prefix': '+57',
+      });
+      if (redirectUrl) params.set('redirect-url', redirectUrl);
+      if (integritySignature) params.set('signature:integrity', integritySignature);
+      window.location.href = `https://checkout.wompi.co/p/?${params.toString()}`;
       return;
     }
 
-    // Fallback: Redirección inmediata a Wompi
-    const wompiCheckoutUrl = `https://checkout.wompi.co/p/?public-key=${publicKey}&currency=COP&amount-in-cents=${amountInCents}&reference=${reference}&redirect-url=${encodeURIComponent(redirectUrl || '')}&customer-data:email=${encodeURIComponent(businessEmail)}`;
+    // En escritorio: Widget oficial en camelCase limpio
+    const WidgetCheckout = (window as unknown as { WidgetCheckout: new (opts: Record<string, unknown>) => { open: (cb: (res: { transaction?: { status: string } }) => void) => void } }).WidgetCheckout;
+    const config: Record<string, unknown> = {
+      currency: 'COP',
+      amountInCents,
+      reference,
+      publicKey,
+      customerData: {
+        email: businessEmail,
+        fullName: adBrand || 'Empresa Aliada',
+        phoneNumber: '3001234567',
+        phoneNumberPrefix: '+57',
+        legalId: '900123456',
+        legalIdType: 'NIT',
+      },
+    };
+    if (redirectUrl) config.redirectUrl = redirectUrl;
+    if (integritySignature) config.signature = { integrity: integritySignature };
 
-    window.location.href = wompiCheckoutUrl;
+    const checkout = new WidgetCheckout(config);
+    setTimeout(() => setIsProcessing(false), 2500);
+
+    checkout.open((result) => {
+      setIsProcessing(false);
+      const transaction = result?.transaction;
+      if (transaction?.status === 'APPROVED') {
+        publishAutonomousBannerAd(plan, billingCycle, reference);
+        alert(`🎉 ¡Pago aprobado con éxito! Tu ${plan.name} está activo y tu publicidad ya fue montada automáticamente en el banner principal.`);
+      } else if (transaction?.status === 'DECLINED' || transaction?.status === 'ERROR') {
+        alert('⚠️ La transacción de pauta publicitaria no fue aprobada.');
+      }
+    });
   };
 
   return (

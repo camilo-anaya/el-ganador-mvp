@@ -1097,7 +1097,7 @@ export default function CompactWhiteMarketplacePage() {
       localStorage.setItem('elganador_my_tickets', JSON.stringify(myTickets));
     } catch {}
 
-    // 2. Integración Oficial Wompi (Modal Widget o Redirección Automática)
+    // 2. Integración Oficial Wompi (Web Checkout directo en móvil para evitar bloqueo táctil de iframe iOS + Widget limpio en escritorio)
     const configuredKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || '';
     const publicKey = configuredKey && !configuredKey.includes('tu_llave') && !configuredKey.includes('xxxxxx')
       ? configuredKey
@@ -1108,57 +1108,75 @@ export default function CompactWhiteMarketplacePage() {
     const redirectUrl = isLocal ? undefined : `${origin}/mis-boletas?status=aprobado&ref=${ref}`;
     const cleanPhone = buyerPh.replace(/\D/g, '').slice(-10) || '3001234567';
 
-    // Si window.WidgetCheckout está disponible
-    if (typeof window !== 'undefined' && (window as unknown as { WidgetCheckout?: new (opts: Record<string, unknown>) => { open: (cb: (res: { transaction?: { status: string } }) => void) => void } }).WidgetCheckout) {
-      const WidgetCheckout = (window as unknown as { WidgetCheckout: new (opts: Record<string, unknown>) => { open: (cb: (res: { transaction?: { status: string } }) => void) => void } }).WidgetCheckout;
-      const checkoutConfig: Record<string, unknown> = {
-        currency: 'COP',
-        amountInCents: totalAmountInCents,
-        amount_in_cents: totalAmountInCents,
-        reference: ref,
-        publicKey,
-        public_key: publicKey,
-        customerData: {
-          email: buyerMail,
-          fullName: buyerNam,
-          phoneNumber: cleanPhone,
-          phoneNumberPrefix: '+57',
-          legalId: '123456789',
-          legalIdType: 'CC'
-        },
-        customer_data: {
-          email: buyerMail,
-          fullName: buyerNam,
-          phoneNumber: cleanPhone,
-          phoneNumberPrefix: '+57',
-          legalId: '123456789',
-          legalIdType: 'CC'
-        }
-      };
-
-      if (redirectUrl) {
-        checkoutConfig.redirectUrl = redirectUrl;
-      }
-
-      const checkout = new WidgetCheckout(checkoutConfig);
-
-      checkout.open((result) => {
-        setIsProcessingWompi(false);
-        const transaction = result?.transaction;
-        if (transaction?.status === 'APPROVED') {
-          alert('🎉 ¡Pago aprobado con éxito! Tu boleta ha sido sellada y registrada.');
-          window.location.href = redirectUrl || '/mis-boletas';
-        } else if (transaction?.status === 'DECLINED' || transaction?.status === 'ERROR') {
-          alert('⚠️ El pago no se completó. Puedes volver a intentarlo cuando gustes.');
-        }
+    // Firma de integridad SHA-256 (si WOMPI_INTEGRITY_SECRET está configurado en servidor/Vercel)
+    let integritySignature: string | null = null;
+    try {
+      const sigRes = await fetch('/api/payments/wompi-signature', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference: ref, amountInCents: totalAmountInCents, currency: 'COP' }),
       });
+      if (sigRes.ok) {
+        const sigData = await sigRes.json();
+        if (sigData?.signature) integritySignature = String(sigData.signature);
+      }
+    } catch {}
+
+    const isMobileDevice =
+      typeof window !== 'undefined' &&
+      (window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+
+    // En móvil: Web Checkout oficial de Wompi en página completa (100% táctil: PSE, Nequi, DaviPlata, Tarjeta, Bancolombia, QR)
+    if (isMobileDevice || typeof window === 'undefined' || !(window as unknown as { WidgetCheckout?: unknown }).WidgetCheckout) {
+      const params = new URLSearchParams({
+        'public-key': publicKey,
+        currency: 'COP',
+        'amount-in-cents': String(totalAmountInCents),
+        reference: ref,
+        'customer-data:email': buyerMail,
+        'customer-data:full-name': buyerNam,
+        'customer-data:phone-number': cleanPhone,
+        'customer-data:phone-number-prefix': '+57',
+      });
+      if (redirectUrl) params.set('redirect-url', redirectUrl);
+      if (integritySignature) params.set('signature:integrity', integritySignature);
+      window.location.href = `https://checkout.wompi.co/p/?${params.toString()}`;
       return;
     }
 
-    // Fallback: Redirección inmediata al Checkout oficial de Wompi
-    const wompiCheckoutUrl = `https://checkout.wompi.co/p/?public-key=${publicKey}&currency=COP&amount-in-cents=${totalAmountInCents}&reference=${ref}&redirect-url=${encodeURIComponent(redirectUrl || '')}&customer-data:email=${encodeURIComponent(buyerMail)}&customer-data:full-name=${encodeURIComponent(buyerNam)}&customer-data:phone-number=${encodeURIComponent(buyerPh)}`;
+    // En escritorio: Widget oficial en camelCase limpio
+    const WidgetCheckout = (window as unknown as { WidgetCheckout: new (opts: Record<string, unknown>) => { open: (cb: (res: { transaction?: { status: string } }) => void) => void } }).WidgetCheckout;
+    const checkoutConfig: Record<string, unknown> = {
+      currency: 'COP',
+      amountInCents: totalAmountInCents,
+      reference: ref,
+      publicKey,
+      customerData: {
+        email: buyerMail,
+        fullName: buyerNam,
+        phoneNumber: cleanPhone,
+        phoneNumberPrefix: '+57',
+        legalId: '123456789',
+        legalIdType: 'CC',
+      },
+    };
+    if (redirectUrl) checkoutConfig.redirectUrl = redirectUrl;
+    if (integritySignature) checkoutConfig.signature = { integrity: integritySignature };
 
-    window.location.href = wompiCheckoutUrl;
+    const checkout = new WidgetCheckout(checkoutConfig);
+    // Evita que el botón quede bloqueado si el usuario cierra el popup con la X
+    setTimeout(() => setIsProcessingWompi(false), 2500);
+
+    checkout.open((result) => {
+      setIsProcessingWompi(false);
+      const transaction = result?.transaction;
+      if (transaction?.status === 'APPROVED') {
+        alert('🎉 ¡Pago aprobado con éxito! Tu boleta ha sido sellada y registrada.');
+        window.location.href = redirectUrl || '/mis-boletas';
+      } else if (transaction?.status === 'DECLINED' || transaction?.status === 'ERROR') {
+        alert('⚠️ El pago no se completó. Puedes volver a intentarlo cuando gustes.');
+      }
+    });
   };
   const [pullDistance, setPullDistance] = useState<number>(0);
   const [sharedToast, setSharedToast] = useState<string | null>(null);
