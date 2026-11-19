@@ -51,6 +51,15 @@ export default function StoryViewer({ stories, initialIndex, onClose }: StoryVie
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : 0));
   }, []);
 
+  // Bloquea el scroll del fondo mientras el visor pantalla completa está abierto
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, []);
+
   // Sincroniza índice si cambia initialIndex
   useEffect(() => {
     setCurrentIndex(initialIndex);
@@ -167,20 +176,40 @@ export default function StoryViewer({ stories, initialIndex, onClose }: StoryVie
     }
   };
 
-  const hasPrev = safeIndex > 0;
-  const hasNext = safeIndex < stories.length - 1;
-
   return (
     <div
       className="story-modal-backdrop"
-      style={{ zIndex: 10000 }}
-      onClick={handleForceClose}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100vw',
+        height: '100dvh',
+        padding: 0,
+        margin: 0,
+        background: '#000000',
+        zIndex: 10000,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
       role="dialog"
       aria-modal="true"
       aria-label={`Historia de ${currentStory.merchant}`}
     >
       <div
         className="story-modal-card"
+        style={{
+          position: 'relative',
+          width: '100vw',
+          maxWidth: '100vw',
+          height: '100dvh',
+          maxHeight: '100dvh',
+          borderRadius: 0,
+          border: 'none',
+          boxShadow: 'none',
+          margin: 0,
+          background: '#000000',
+        }}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
@@ -189,7 +218,7 @@ export default function StoryViewer({ stories, initialIndex, onClose }: StoryVie
         <div
           style={{
             position: 'absolute',
-            top: '12px',
+            top: 'calc(env(safe-area-inset-top, 0px) + 12px)',
             left: '12px',
             right: '12px',
             display: 'flex',
@@ -242,7 +271,13 @@ export default function StoryViewer({ stories, initialIndex, onClose }: StoryVie
         </div>
 
         {/* Cabecera del Comercio */}
-        <div className="story-modal-header" style={{ zIndex: 30 }}>
+        <div
+          className="story-modal-header"
+          style={{
+            top: 'calc(env(safe-area-inset-top, 0px) + 26px)',
+            zIndex: 30,
+          }}
+        >
           <div className="story-modal-merchant">
             <img src={currentStory.avatar} alt={currentStory.merchant} />
             <div>
@@ -262,96 +297,21 @@ export default function StoryViewer({ stories, initialIndex, onClose }: StoryVie
           </button>
         </div>
 
-        {/* Contenido Multimedia */}
+        {/* Contenido Multimedia en Pantalla Completa (sin botones visibles de carrusel) */}
         <div className="story-modal-media" style={{ position: 'relative', width: '100%', height: '100%' }}>
-          {/* Zonas táctiles laterales (izq: retroceder, der: avanzar) */}
+          {/* Zonas táctiles invisibles izquierda (anterior) y derecha (siguiente) */}
           <div
+            className="story-tap-prev"
             onClick={handleTapPrev}
-            style={{ position: 'absolute', left: 0, top: 0, width: '32%', height: '100%', zIndex: 10, cursor: 'pointer' }}
-            aria-hidden="true"
+            style={{ position: 'absolute', left: 0, top: 0, width: '35%', height: '100%', zIndex: 10, cursor: 'pointer' }}
+            aria-label="Historia anterior"
           />
           <div
+            className="story-tap-next"
             onClick={handleTapNext}
-            style={{ position: 'absolute', right: 0, top: 0, width: '68%', height: '100%', zIndex: 10, cursor: 'pointer' }}
-            aria-hidden="true"
+            style={{ position: 'absolute', right: 0, top: 0, width: '65%', height: '100%', zIndex: 10, cursor: 'pointer' }}
+            aria-label="Siguiente historia"
           />
-
-          {/* Botón visible IZQUIERDA (Historia anterior de empresario) */}
-          <button
-            type="button"
-            className="story-nav-arrow story-nav-prev"
-            onClick={(e) => {
-              e.stopPropagation();
-              handlePrev();
-            }}
-            aria-label="Historia anterior"
-            title="Historia anterior"
-            style={{
-              position: 'absolute',
-              left: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              zIndex: 25,
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              background: 'rgba(0, 0, 0, 0.55)',
-              backdropFilter: 'blur(6px)',
-              WebkitBackdropFilter: 'blur(6px)',
-              border: '1.5px solid rgba(255, 255, 255, 0.45)',
-              color: '#ffffff',
-              fontSize: '22px',
-              fontWeight: 800,
-              lineHeight: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              opacity: hasPrev ? 1 : 0.4,
-              padding: 0,
-              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
-            }}
-          >
-            ‹
-          </button>
-
-          {/* Botón visible DERECHA (Siguiente historia de empresario) */}
-          <button
-            type="button"
-            className="story-nav-arrow story-nav-next"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleNext();
-            }}
-            aria-label={hasNext ? 'Siguiente historia' : 'Finalizar historias'}
-            title={hasNext ? 'Siguiente historia' : 'Finalizar historias'}
-            style={{
-              position: 'absolute',
-              right: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              zIndex: 25,
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              background: 'rgba(0, 0, 0, 0.55)',
-              backdropFilter: 'blur(6px)',
-              WebkitBackdropFilter: 'blur(6px)',
-              border: '1.5px solid rgba(255, 255, 255, 0.45)',
-              color: '#ffffff',
-              fontSize: '22px',
-              fontWeight: 800,
-              lineHeight: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              padding: 0,
-              boxShadow: '0 4px 14px rgba(0, 0, 0, 0.4)',
-            }}
-          >
-            ›
-          </button>
 
           {isVideo ? (
             <video
@@ -374,7 +334,13 @@ export default function StoryViewer({ stories, initialIndex, onClose }: StoryVie
           )}
 
           {/* Textos y Llamada a la Acción (CTA) */}
-          <div className="story-modal-overlay-text" style={{ zIndex: 20 }}>
+          <div
+            className="story-modal-overlay-text"
+            style={{
+              zIndex: 20,
+              paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)',
+            }}
+          >
             <span className="story-icon-pill">🔥 Lanzamiento Verificado</span>
             <h3>{currentStory.headline}</h3>
             <p>{currentStory.caption}</p>
