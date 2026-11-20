@@ -3638,16 +3638,16 @@
   color: #0f172a;
 }
 
-/* Fila 1: App Bar Principal */
+/* Fila 1: App Bar Principal Ultra Compacta y Optimizada */
 .studioAppTopBar {
   max-width: 1460px;
   margin: 0 auto;
-  padding: 8px clamp(12px, 3vw, 24px);
+  padding: 4px clamp(8px, 2vw, 16px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  min-height: 56px;
+  gap: 8px;
+  min-height: 42px;
   box-sizing: border-box;
 }
 
@@ -3655,23 +3655,25 @@
 .studioLeftGroup {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .studioBackBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
+  gap: 5px;
+  padding: 3px 9px;
+  height: 27px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   text-decoration: none;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 .isDark .studioBackBtn {
@@ -3700,64 +3702,66 @@
 .studioBrandPill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   text-decoration: none;
 }
 
 .studioBrandLogo {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
   display: grid;
   place-items: center;
   font-weight: 900;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0;
   border: 1.5px solid #d4af37;
   background: #0f172a;
   color: #f5d47a;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
 }
 
 .studioBrandText {
   display: flex;
   flex-direction: column;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
 .studioBrandTitle {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 900;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
 }
 
 .isDark .studioBrandTitle { color: #ffffff; }
 .isLight .studioBrandTitle { color: #0f172a; }
 
 .studioBrandTag {
-  font-size: 8.5px;
+  font-size: 7.5px;
   font-weight: 800;
-  letter-spacing: 1.5px;
+  letter-spacing: 1.2px;
   color: #d4af37;
 }
 
 .studioOperatorLiveBadge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
+  gap: 5px;
+  padding: 2px 8px;
+  height: 22px;
   border-radius: 999px;
   background: linear-gradient(105deg, #d4a737, #f7d879);
   color: #092415;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 900;
   letter-spacing: 0.5px;
-  box-shadow: 0 2px 8px rgba(212, 167, 55, 0.35);
+  box-shadow: 0 1px 4px rgba(212, 167, 55, 0.3);
+  box-sizing: border-box;
 }
 
 .studioOperatorLiveBadge .pulseDot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #092415;
   animation: pulseOp 1.5s infinite;
@@ -3769,64 +3773,66 @@
   100% { transform: scale(0.95); opacity: 0.8; }
 }
 
-/* Centro: Recaudo en Vivo Widget */
+/* Centro: Recaudo en Vivo Widget (Cápsula Ultra Slim) */
 .studioRevenueWidget {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 14px;
-  border-radius: 12px;
+  gap: 8px;
+  padding: 2px 10px;
+  border-radius: 999px;
   transition: all 0.2s ease;
   margin: 0 auto;
-  background: linear-gradient(135deg, rgba(12, 44, 29, 0.96), rgba(7, 24, 16, 0.98));
-  border: 1.5px solid rgba(220, 185, 80, 0.55);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, rgba(10, 38, 24, 0.96), rgba(6, 20, 13, 0.98));
+  border: 1px solid rgba(220, 185, 80, 0.55);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
   color: #ffffff !important;
+  box-sizing: border-box;
 }
 
 .isDark .studioRevenueWidget {
-  background: linear-gradient(135deg, rgba(12, 44, 29, 0.96), rgba(7, 24, 16, 0.98));
-  border: 1.5px solid rgba(245, 184, 46, 0.55);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, rgba(10, 38, 24, 0.96), rgba(6, 20, 13, 0.98));
+  border: 1px solid rgba(245, 184, 46, 0.55);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   color: #ffffff !important;
 }
 
 .isLight .studioRevenueWidget {
   background: linear-gradient(135deg, #0d3820, #082415);
-  border: 1.5px solid #d4af37;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  border: 1px solid #d4af37;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   color: #ffffff !important;
 }
 
 .revenueCoinBadge {
-  font-size: 22px;
+  font-size: 15px;
   line-height: 1;
 }
 
 .revenueDetails {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .revenueTopMeta {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 9.5px;
+  font-size: 8px;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
   color: #ffffff !important;
+  line-height: 1.1;
 }
 
 .revenueLabel {
-  color: #ffffff !important;
+  color: #f5d47a !important;
   font-weight: 800;
 }
 
 .revenueRaffleName {
-  max-width: 170px;
+  max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3837,11 +3843,11 @@
 .revenueNumberRow {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 5px;
 }
 
 .revenueAmount {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 900;
   line-height: 1;
   color: #ffffff !important;
@@ -3851,20 +3857,21 @@
 .isLight .revenueAmount { color: #ffffff !important; }
 
 .currencyText {
-  font-size: 9.5px;
+  font-size: 8px;
   font-weight: 800;
-  margin-left: 2px;
+  margin-left: 1px;
   color: #ffffff !important;
 }
 
 .revenueProgressPill {
-  font-size: 10.5px;
+  font-size: 9px;
   font-weight: 700;
-  padding: 1px 6px;
+  padding: 1px 5px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.16) !important;
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  line-height: 1.1;
 }
 
 .isDark .revenueProgressPill {
@@ -3881,7 +3888,7 @@
 .studioRightControls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
@@ -3889,8 +3896,10 @@
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 2px;
+  padding: 1px;
   gap: 2px;
+  height: 27px;
+  box-sizing: border-box;
 }
 
 .isDark .studioThemeSegmented {
@@ -3904,9 +3913,10 @@
 }
 
 .studioThemeSegmented button {
-  padding: 4px 8px;
+  padding: 2px 6px;
+  height: 23px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
   border: none;
   cursor: pointer;
@@ -3915,7 +3925,8 @@
   color: inherit;
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 2px;
+  box-sizing: border-box;
 }
 
 .isDark .studioThemeSegmented button.isActive {
@@ -3933,17 +3944,19 @@
 .studioRoomSwitchBtn,
 .studioAudioTestBtn,
 .studioAudioToggleBtn {
-  padding: 6px 11px;
+  padding: 3px 8px;
+  height: 27px;
   border-radius: 999px;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 800;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   transition: all 0.2s ease;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 .isDark .studioRoomSwitchBtn,
@@ -3984,11 +3997,11 @@
   color: #f87171;
 }
 
-/* Fila 2: Barra de Herramientas de Estudio (Studio Producer Toolbar) */
+/* Fila 2: Barra de Herramientas de Estudio (Studio Producer Toolbar Slim) */
 .studioProducerToolbar {
   width: 100%;
-  border-top: 1px solid rgba(220, 185, 80, 0.25);
-  padding: 6px clamp(12px, 3vw, 24px);
+  border-top: 1px solid rgba(220, 185, 80, 0.2);
+  padding: 2px clamp(8px, 2vw, 16px);
   box-sizing: border-box;
 }
 
@@ -4006,12 +4019,12 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
-  padding: 2px 0;
+  padding: 1px 0;
 }
 
 .studioProducerToolsScroll::-webkit-scrollbar {
@@ -4019,30 +4032,32 @@
 }
 
 .studioToolsLabel {
-  font-size: 9.5px;
+  font-size: 8px;
   font-weight: 900;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   color: #d4af37;
   text-transform: uppercase;
   white-space: nowrap;
-  margin-right: 4px;
+  margin-right: 2px;
   flex-shrink: 0;
 }
 
 .studioToolChip {
-  padding: 6px 12px;
+  padding: 2px 8px;
+  height: 24px;
   border-radius: 999px;
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   border: 1px solid;
   touch-action: manipulation;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .isDark .studioToolChip {
@@ -4073,12 +4088,12 @@
   border-color: #fff1a8 !important;
   color: #092415 !important;
   font-weight: 900;
-  box-shadow: 0 2px 8px rgba(212, 167, 55, 0.25);
+  box-shadow: 0 1px 6px rgba(212, 167, 55, 0.25);
 }
 
 .studioToolChip.isPreviewBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(212, 167, 55, 0.45);
+  box-shadow: 0 3px 10px rgba(212, 167, 55, 0.4);
 }
 
 /* ============================================================================
@@ -4087,39 +4102,59 @@
 @media (max-width: 900px) {
   .studioRevenueWidget {
     margin: 0;
-    padding: 4px 10px;
+    padding: 2px 8px;
   }
   .revenueTopMeta {
-    font-size: 8.5px;
+    font-size: 7.5px;
   }
   .revenueRaffleName {
-    max-width: 120px;
+    max-width: 110px;
   }
   .revenueAmount {
-    font-size: 13.5px;
+    font-size: 12px;
   }
 }
 
 @media (max-width: 680px) {
   .studioAppTopBar {
-    padding: 6px 10px;
-    min-height: 48px;
-    gap: 6px;
+    padding: 3px 6px;
+    min-height: 38px;
+    gap: 4px;
   }
   .studioBackLabel {
     display: none;
   }
   .studioBackBtn {
-    padding: 6px 8px;
+    padding: 3px 6px;
+    height: 25px;
+  }
+  .studioBrandLogo {
+    width: 24px;
+    height: 24px;
+    font-size: 9px;
   }
   .studioBrandTag {
     display: none;
   }
   .studioBrandTitle {
-    font-size: 11.5px;
+    font-size: 10px;
   }
   .studioOperatorLiveBadge {
     display: none;
+  }
+  .studioRevenueWidget {
+    padding: 2px 6px;
+    gap: 4px;
+  }
+  .revenueCoinBadge {
+    font-size: 13px;
+  }
+  .revenueAmount {
+    font-size: 11.5px;
+  }
+  .revenueProgressPill {
+    font-size: 8px;
+    padding: 0 3px;
   }
   .themeText,
   .roomSwitchText,
@@ -4130,11 +4165,16 @@
   .studioRoomSwitchBtn,
   .studioAudioTestBtn,
   .studioAudioToggleBtn {
-    padding: 5px 8px;
-    font-size: 12px;
+    padding: 3px 6px;
+    height: 25px;
+    font-size: 11px;
+  }
+  .studioThemeSegmented {
+    height: 25px;
   }
   .studioThemeSegmented button {
-    padding: 4px 6px;
+    padding: 2px 5px;
+    height: 21px;
   }
   .revenueRaffleName {
     display: none;
@@ -4143,7 +4183,12 @@
     display: none;
   }
   .studioProducerToolbar {
-    padding: 4px 10px;
+    padding: 2px 6px;
+  }
+  .studioToolChip {
+    padding: 2px 6px;
+    height: 22px;
+    font-size: 9.5px;
   }
 }
 
@@ -4180,54 +4225,54 @@
 }
 
 .liveDemoHero {
-  max-width: 1460px !important;
-  margin: 28px auto 24px auto !important;
-  padding: 32px 28px !important;
-  background: #ffffff !important;
-  border-radius: 24px !important;
-  border: 1.5px solid #e2e8f0 !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  max-width: 1200px !important;
+  margin: 4px auto 10px auto !important;
+  padding: 0 16px !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
   text-align: center !important;
   box-sizing: border-box !important;
 }
 
 .liveDemoHero .liveDemoEyebrow,
 .liveDemoEyebrow {
-  color: #b48008 !important;
-  font-size: 11.5px !important;
+  color: #d4af37 !important;
+  font-size: 10px !important;
   font-weight: 900 !important;
-  letter-spacing: 2.2px !important;
-  text-shadow: none !important;
-  margin-bottom: 8px !important;
+  letter-spacing: 2px !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
+  margin-bottom: 2px !important;
 }
 
 .liveDemoHero h1 {
-  color: #000000 !important;
-  font-size: clamp(28px, 4.5vw, 54px) !important;
+  color: #ffffff !important;
+  font-size: clamp(20px, 2.6vw, 30px) !important;
   font-weight: 900 !important;
-  line-height: 1.08 !important;
-  letter-spacing: -1.5px !important;
-  text-shadow: none !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.5px !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8) !important;
   margin: 0 !important;
 }
 
 .liveDemoHero h1 span {
-  background: linear-gradient(135deg, #d4af37 0%, #b48008 100%) !important;
+  background: linear-gradient(135deg, #f5d47a 0%, #d4af37 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  color: #b48008 !important;
+  color: #f5d47a !important;
   text-shadow: none !important;
-  filter: none !important;
+  filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.4)) !important;
 }
 
 .liveDemoHero > p:last-child {
-  max-width: 680px !important;
-  margin: 12px auto 0 !important;
-  color: #1e293b !important;
-  font-size: 14.5px !important;
-  font-weight: 600 !important;
-  line-height: 1.6 !important;
-  text-shadow: none !important;
+  max-width: 620px !important;
+  margin: 3px auto 0 !important;
+  color: #cbd5e1 !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 1.35 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
 }
 
 /* ETAPA PRINCIPAL DEL SORTEO EN VERDE ESMERALDA DE LUJO */

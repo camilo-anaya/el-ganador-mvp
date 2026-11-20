@@ -2489,7 +2489,7 @@ export default function LiveDrawDemoPage() {
         {!isViewerMode && isOperator && (
           <section className="liveDemoHero">
             <p className="liveDemoEyebrow">SISTEMA OFICIAL DE EXTRACCIÓN · EL GANADOR</p>
-            <h1>El sorteo se vive<br /><span>en El Ganador.</span></h1>
+            <h1>El sorteo se vive <span>en El Ganador.</span></h1>
             <p>El Círculo Dorado con física en tiempo real y ruleta comunitaria. Configura el cartón y presiona el botón "Iniciar sorteo" para comenzar la extracción.</p>
           </section>
         )}
