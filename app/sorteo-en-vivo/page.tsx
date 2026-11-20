@@ -330,6 +330,9 @@ export default function LiveDrawDemoPage() {
   const [socialFeedback, setSocialFeedback] = useState<string>("");
   const [isGeneratingSocial, setIsGeneratingSocial] = useState<boolean>(false);
   const [isCinemaFullscreen, setIsCinemaFullscreen] = useState<boolean>(false);
+  const [showWinnerChatModal, setShowWinnerChatModal] = useState<boolean>(false);
+  const [winnerChatMessages, setWinnerChatMessages] = useState<Array<{ sender: "merchant" | "client"; text: string; time: string }>>([]);
+  const [winnerChatInput, setWinnerChatInput] = useState<string>("");
 
   // Bloqueo de scroll y fullscreen inmersivo para el motor de sorteos
   useEffect(() => {
@@ -530,6 +533,92 @@ export default function LiveDrawDemoPage() {
       if (autoCloseIntervalRef.current) window.clearInterval(autoCloseIntervalRef.current);
     };
   }, [phase, winner, isUserWinner, activeDrawId, activeDrawTitle, mode, sponsorBumper.brand, auditHash, router]);
+
+  // Despliegue automático de la ventana de chat entre el comercio y el cliente al ganar
+  useEffect(() => {
+    if (phase === "winner" && winner) {
+      const merchantName = activeDraw?.admin || sponsorBumper.brand || "Motos Caribe Oficial";
+      const prizeName = activeDrawTitle || "Premio Mayor";
+      const winningNumber = winner || "01";
+
+      try {
+        const saved = localStorage.getItem(`elganador_chat_${activeDrawId}`);
+        if (saved) {
+          setWinnerChatMessages(JSON.parse(saved));
+        } else {
+          setWinnerChatMessages([
+            {
+              sender: "merchant",
+              text: `¡Hola y felicitaciones! 🎉 Has resultado ganador oficial de "${prizeName}" con la balota #${winningNumber} (Sorteo auditado con SHA-256). Por favor indícanos tus datos para coordinar el acta notarial y la entrega física o envío del premio:\n\n1. Nombre completo y Cédula\n2. Ciudad y Dirección de recepción\n3. Teléfono de contacto`,
+              time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            },
+          ]);
+        }
+      } catch {
+        setWinnerChatMessages([
+          {
+            sender: "merchant",
+            text: `¡Hola y felicitaciones! 🎉 Has resultado ganador oficial de "${prizeName}" con la balota #${winningNumber} (Sorteo auditado con SHA-256). Por favor indícanos tus datos para coordinar el acta notarial y la entrega física o envío del premio:\n\n1. Nombre completo y Cédula\n2. Ciudad y Dirección de recepción\n3. Teléfono de contacto`,
+            time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          },
+        ]);
+      }
+
+      // Despliega automáticamente la ventana de chat tras 2.2 segundos de celebración
+      const chatTimer = window.setTimeout(() => {
+        setShowWinnerChatModal(true);
+      }, 2200);
+
+      return () => window.clearTimeout(chatTimer);
+    }
+  }, [phase, winner, activeDrawId, activeDrawTitle, activeDraw?.admin, sponsorBumper.brand, mode]);
+
+  const handleSendWinnerChatMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!winnerChatInput.trim()) return;
+
+    const userText = winnerChatInput.trim();
+    const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const newMsg = {
+      sender: "client" as const,
+      text: userText,
+      time,
+    };
+
+    const updated = [...winnerChatMessages, newMsg];
+    setWinnerChatMessages(updated);
+    setWinnerChatInput("");
+
+    try {
+      localStorage.setItem(`elganador_chat_${activeDrawId}`, JSON.stringify(updated));
+    } catch {}
+
+    window.setTimeout(() => {
+      let replyText = "¡Excelente! Hemos recibido tus datos. Un asesor comercial del comercio se pondrá en contacto contigo para emitir el acta oficial y realizar la entrega de tu premio.";
+      const lower = userText.toLowerCase();
+      if (lower.includes("cedula") || lower.includes("cédula") || lower.includes("documento")) {
+        replyText = "Cédula registrada con éxito. Recuerda que para la entrega física o envío solo debes presentar tu documento original y tu tiquete digital de El Ganador.";
+      } else if (lower.includes("direccion") || lower.includes("dirección") || lower.includes("ciudad")) {
+        replyText = "Dirección y ciudad tomadas correctamente. Se programará el despacho mediante transporte asegurado con trazabilidad en tiempo real.";
+      } else if (lower.includes("horario") || lower.includes("hora") || lower.includes("cuando")) {
+        replyText = "Nuestros puntos de entrega oficial y atención operan de Lunes a Sábado de 8:00 AM a 6:00 PM.";
+      }
+
+      const replyMsg = {
+        sender: "merchant" as const,
+        text: replyText,
+        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      };
+
+      setWinnerChatMessages((prev) => {
+        const next = [...prev, replyMsg];
+        try {
+          localStorage.setItem(`elganador_chat_${activeDrawId}`, JSON.stringify(next));
+        } catch {}
+        return next;
+      });
+    }, 1100);
+  };
 
   const triggerReaction = (emoji: string) => {
     setReactionCounts((prev) => ({ ...prev, [emoji]: (prev[emoji] || 0) + 1 }));
@@ -4214,6 +4303,15 @@ export default function LiveDrawDemoPage() {
                     <div className="winnerExclusiveActions">
                       <button
                         type="button"
+                        className="btnWinnerChatCoordination"
+                        onClick={() => setShowWinnerChatModal(true)}
+                        title="Abrir chat en vivo con el comercio para coordinar la entrega"
+                      >
+                        💬 Coordinar Entrega del Premio con el Comercio (Chat en Vivo)
+                      </button>
+
+                      <button
+                        type="button"
                         className="btnManualSaveAndHome"
                         onClick={() => router.push("/")}
                         title="Guardar premio en mis premios e ir al inicio"
@@ -4222,6 +4320,14 @@ export default function LiveDrawDemoPage() {
                       </button>
 
                       <div className="winnerSubActionsRow">
+                        <button
+                          className="winnerChatButton"
+                          onClick={() => setShowWinnerChatModal(true)}
+                          type="button"
+                          title="Abrir ventana de chat con el comercio"
+                        >
+                          💬 Chat Comercio
+                        </button>
                         <button
                           className="winnerSocialShareButton"
                           onClick={handleDirectShareWinner}
@@ -4338,6 +4444,14 @@ export default function LiveDrawDemoPage() {
                     </div>
 
                     <div className="winnerCardActionButtons">
+                      <button
+                        className="winnerChatButton"
+                        onClick={() => setShowWinnerChatModal(true)}
+                        type="button"
+                        title="Abrir ventana de chat con el comercio"
+                      >
+                        💬 Chat Comercio
+                      </button>
                       <button
                         className="winnerSocialShareButton"
                         onClick={handleDirectShareWinner}
@@ -4828,6 +4942,22 @@ export default function LiveDrawDemoPage() {
               <div className="ticketTopActions">
                 <button
                   type="button"
+                  className="btnTicketAction btnTicketChat"
+                  onClick={() => {
+                    setShowTicketModal(false);
+                    setShowWinnerChatModal(true);
+                  }}
+                  style={{
+                    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                    color: "#ffffff",
+                    borderColor: "#34d399",
+                  }}
+                  title="Abrir chat para coordinar la entrega del premio"
+                >
+                  💬 Coordinar Entrega
+                </button>
+                <button
+                  type="button"
                   className="btnTicketAction btnTicketPrint"
                   onClick={() => window.print()}
                 >
@@ -5034,6 +5164,137 @@ export default function LiveDrawDemoPage() {
                 </div>
               </div>
               <div className="ticketSawtoothBottom" aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE CHAT EN VIVO DE COORDINACIÓN Y ENTREGA (COMERCIO Y CLIENTE GANADOR) */}
+      {showWinnerChatModal && (
+        <div
+          className="winnerChatModalOverlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="winnerChatTitle"
+        >
+          <div className="winnerChatModalContainer">
+            {/* CABECERA OFICIAL DEL CHAT */}
+            <div className="winnerChatHeader">
+              <div className="winnerChatHeaderLeft">
+                <div className="winnerChatMerchantTagRow">
+                  <span className="winnerChatMerchantBadge">🏪 COMERCIO OFICIAL</span>
+                  <span className="winnerChatVerifiedPill">✓ Conectado</span>
+                </div>
+                <h3 id="winnerChatTitle">
+                  {activeDraw?.admin || sponsorBumper.brand || "Motos Caribe Oficial"}
+                </h3>
+                <p className="winnerChatMeta">
+                  Sorteo: <strong>{activeDrawTitle}</strong> · Balota Ganadora:{" "}
+                  <span className="winnerChatNumberTag">#{winner || rouletteWinnerNum}</span>
+                </p>
+              </div>
+              <button
+                type="button"
+                className="winnerChatCloseBtn"
+                onClick={() => setShowWinnerChatModal(false)}
+                aria-label="Cerrar chat de coordinación"
+                title="Cerrar ventana de chat"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* AVISO DE SEGURIDAD Y HABEAS DATA */}
+            <div className="winnerChatSecurityBanner">
+              <span className="securityIcon">🛡️</span>
+              <div className="securityText">
+                <strong>Canal Oficial de Coordinación y Entrega de Premios</strong>
+                <small>Supervisado por El Ganador · Sello Criptográfico SHA-256 Verificado</small>
+              </div>
+            </div>
+
+            {/* LISTA DE MENSAJES DEL CHAT */}
+            <div className="winnerChatMessagesList">
+              {winnerChatMessages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`winnerChatMessageItem ${msg.sender === "client" ? "isClient" : "isMerchant"}`}
+                >
+                  <div className="winnerChatSenderLabel">
+                    {msg.sender === "client"
+                      ? "👤 Tú (Ganador Oficial)"
+                      : `🏪 ${activeDraw?.admin || sponsorBumper.brand || "Comercio Organizador"}`}
+                  </div>
+                  <div className="winnerChatMessageBubble">
+                    <p className="winnerChatMessageText">{msg.text}</p>
+                    <span className="winnerChatMessageTime">{msg.time}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* SUGERENCIAS RÁPIDAS DE DATOS DE ENTREGA */}
+            <div className="winnerChatQuickSuggestions">
+              <span className="suggestionsLabel">Acciones rápidas:</span>
+              <button
+                type="button"
+                onClick={() => setWinnerChatInput("Hola, mi cédula es  y mi dirección de entrega es: ")}
+              >
+                📍 Indicar Dirección
+              </button>
+              <button
+                type="button"
+                onClick={() => setWinnerChatInput("¿En qué horario y dirección puedo pasar a reclamar el premio?")}
+              >
+                🕒 Horario de Atención
+              </button>
+              <button
+                type="button"
+                onClick={() => setWinnerChatInput("¿Qué documentos debo presentar para el acta de entrega?")}
+              >
+                📋 Requisitos
+              </button>
+            </div>
+
+            {/* FORMULARIO DE ENVÍO DE MENSAJE */}
+            <form onSubmit={handleSendWinnerChatMessage} className="winnerChatInputForm">
+              <input
+                type="text"
+                placeholder="Escribe tu mensaje, dirección de entrega o ciudad..."
+                value={winnerChatInput}
+                onChange={(e) => setWinnerChatInput(e.target.value)}
+                className="winnerChatInputField"
+              />
+              <button type="submit" className="winnerChatSendBtn">
+                Enviar 📨
+              </button>
+            </form>
+
+            {/* ACCIONES DEL PIE DE CHAT (WHATSAPP DIRECTO + CERTIFICADO) */}
+            <div className="winnerChatFooterActions">
+              <a
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                  `¡Hola! Soy el ganador oficial de "${activeDrawTitle}" en El Ganador con la balota #${winner || rouletteWinnerNum}. Me comunico para coordinar el acta de entrega de mi premio.`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="winnerChatWhatsAppBtn"
+              >
+                <span>📲</span> Coordinar también por WhatsApp
+              </a>
+
+              {winnerTicket && (
+                <button
+                  type="button"
+                  className="winnerChatCertBtn"
+                  onClick={() => {
+                    setShowWinnerChatModal(false);
+                    setShowTicketModal(true);
+                  }}
+                >
+                  🎟️ Ver Certificado Notarial
+                </button>
+              )}
             </div>
           </div>
         </div>
