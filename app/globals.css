@@ -21358,3 +21358,118 @@ html[data-theme='dark'] .see-all-grid-btn {
     white-space: nowrap !important;
   }
 }
+
+/* ==========================================================================
+   SUITE DE FLUIDEZ ULTRA-NATIVA (EXPERIENCIA 60/120 FPS NATIVE FEEL)
+   ========================================================================== */
+
+/* 1. Eliminación total del retraso de 300ms y destello gris en toques táctiles */
+*, *::before, *::after {
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+html {
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  touch-action: manipulation;
+  overscroll-behavior-y: none;
+}
+
+/* 2. Respuesta háptica visual instantánea (Micro-Scale 120ms Spring) en elementos interactivos */
+button,
+a,
+[role="button"],
+.chip-btn,
+.toc-link,
+.btn-compact-action,
+.story-bubble-btn,
+.raffle-card,
+.nav-ticket-btn,
+.mobileCategoryChip {
+  touch-action: manipulation !important;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Efecto elástico táctil de app nativa al presionar (estilo iOS UIKit / SwiftUI) */
+button:active:not(:disabled),
+a:active:not([disabled]),
+[role="button"]:active,
+.chip-btn:active,
+.btn-compact-action:active,
+.story-bubble-btn:active,
+.floating-island-nav a:active,
+.business-bottom-nav a:active {
+  transform: scale(0.968) !important;
+  transition: transform 0.1s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+/* 3. Selección de texto protegida solo para campos de entrada */
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  touch-action: auto !important;
+}
+
+/* 4. Aceleración por hardware GPU en listas y lienzos de desplazamiento inercial */
+.app-scroll-canvas,
+.desktop-workspace-grid .app-scroll-canvas,
+.stories-strip,
+.category-chips,
+.horizontal-snap-carousel,
+.hybrid-strip-track,
+.raffle-grid-scroll,
+.drawer-content {
+  -webkit-overflow-scrolling: touch !important;
+  scroll-behavior: smooth !important;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: scroll-position;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 5. Aislamiento de gestos en carruseles horizontales para evitar navegación involuntaria */
+.stories-strip,
+.category-chips,
+.horizontal-snap-carousel,
+.hybrid-strip-track {
+  overscroll-behavior-x: contain !important;
+  touch-action: pan-x pan-y !important;
+}
+
+/* 6. Optimización de renderizado en tarjetas y estaciones fuera de pantalla (Content Visibility) */
+.raffle-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 320px;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 7. Barras flotantes y navegación superior promovidas a capas de composición GPU sin parpadeo */
+.app-topbar,
+.floating-island-nav,
+.business-bottom-nav,
+.notif-fb-dropdown {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 8. Transiciones fluidas de modal y hojas deslizables estilo iOS Spring */
+.notif-fb-dropdown {
+  transition: opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), transform 0.22s cubic-bezier(0.32, 0.72, 0, 1) !important;
+}

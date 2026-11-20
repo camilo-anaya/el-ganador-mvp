@@ -1193,6 +1193,7 @@ export default function CompactWhiteMarketplacePage() {
   const [wonPrizes, setWonPrizes] = useState<WonPrize[]>([]);
   const [showNotifDropdown, setShowNotifDropdown] = useState<boolean>(false);
   const touchStartYRef = useRef<number | null>(null);
+  const pullRafRef = useRef<number | null>(null);
 
   const { data: feed, isRefreshing, lastSync, refreshNow } = useRealtimeFeed(
     INITIAL_FEED_DATA,
@@ -1245,12 +1246,16 @@ export default function CompactWhiteMarketplacePage() {
     if (touchStartYRef.current === null) return;
     if (typeof window !== 'undefined' && window.scrollY > 0) {
       touchStartYRef.current = null;
+      if (pullRafRef.current) cancelAnimationFrame(pullRafRef.current);
       setPullDistance(0);
       return;
     }
     const deltaY = e.touches[0].clientY - touchStartYRef.current;
     if (deltaY > 0) {
-      setPullDistance(Math.min(92, deltaY * 0.45));
+      if (pullRafRef.current) cancelAnimationFrame(pullRafRef.current);
+      pullRafRef.current = requestAnimationFrame(() => {
+        setPullDistance(Math.min(92, deltaY * 0.45));
+      });
     } else {
       setPullDistance(0);
     }
@@ -1258,6 +1263,7 @@ export default function CompactWhiteMarketplacePage() {
 
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent) => {
+      if (pullRafRef.current) cancelAnimationFrame(pullRafRef.current);
       if (touchStartYRef.current !== null && typeof window !== 'undefined' && window.scrollY === 0) {
         const endY = e.changedTouches?.[0]?.clientY ?? touchStartYRef.current;
         if (endY - touchStartYRef.current > 65 || pullDistance >= 50) {
