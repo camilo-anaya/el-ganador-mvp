@@ -2320,7 +2320,7 @@ export default function LiveDrawDemoPage() {
       {/* 👑 BARRA SUPERIOR INTEGRADA DE ESTUDIO Y NAVEGACIÓN UNIVERSAL */}
       {!isCinemaFullscreen && (
         <header className={`studioUnifiedHeader ${theme === 'dark' ? 'isDark' : 'isLight'}`}>
-          {/* FILA 1: BARRA DE NAVEGACIÓN Y RECAUDO PRINCIPAL */}
+          {/* FILA 1: BARRA DE NAVEGACIÓN Y CONTROLES DEL SISTEMA */}
           <div className="studioAppTopBar">
             {/* GRUPO IZQUIERDO: VOLVER + BRANDING + BADGE */}
             <div className="studioLeftGroup">
@@ -2349,32 +2349,6 @@ export default function LiveDrawDemoPage() {
                 </span>
               )}
             </div>
-
-            {/* CENTRO: CONTEO EN TIEMPO REAL DEL DINERO (Solo en Modo Empresario) */}
-            {!isViewerMode && isOperator && (
-              <div
-                className="studioRevenueWidget"
-                title={`Recaudo oficial en vivo: ${activeDrawTitle}`}
-                style={{ color: '#ffffff' }}
-              >
-                <span className="revenueCoinBadge">💰</span>
-                <div className="revenueDetails">
-                  <div className="revenueTopMeta" style={{ color: '#ffffff' }}>
-                    <span className="revenueLabel" style={{ color: '#ffffff' }}>RECAUDO EN VIVO</span>
-                    <span className="revenueRaffleName" style={{ color: '#ffffff' }}>· {activeDrawTitle}</span>
-                  </div>
-                  <div className="revenueNumberRow">
-                    <strong className="revenueAmount" style={{ color: '#ffffff' }}>
-                      ${activeTotalRevenue.toLocaleString('es-CO')}
-                      <span className="currencyText" style={{ color: '#ffffff' }}> COP</span>
-                    </strong>
-                    <span className="revenueProgressPill" style={{ color: '#ffffff' }}>
-                      ({activeSoldTickets} / {activeTotalTickets} balotas · {activeRevenuePct}%)
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {/* DERECHA: CONTROLES DEL SISTEMA (TEMA, SALA, AUDIO) */}
             <div className="studioRightControls">
@@ -2444,41 +2418,68 @@ export default function LiveDrawDemoPage() {
             </div>
           </div>
 
-          {/* FILA 2: BARRA DE HERRAMIENTAS DE ESTUDIO (Solo visible para el empresario operador) */}
+          {/* FILA 2: BARRA DE PRODUCCIÓN Y RECAUDO EN VIVO (Solo visible para el empresario operador) */}
           {!isViewerMode && isOperator && (
             <div className="studioProducerToolbar">
-              <div className="studioProducerToolsScroll">
-                <span className="studioToolsLabel">HERRAMIENTAS DE EMISIÓN:</span>
-
-                <button
-                  type="button"
-                  className={`studioToolChip ${copiedClientLink ? 'isSuccess' : ''}`}
-                  onClick={handleCopyClientLink}
-                  title="Copiar enlace para enviar por WhatsApp a los compradores"
+              <div className="studioProducerDeck">
+                {/* RECAUDO EN VIVO: Grande, claro, horizontal y sin saltos de línea */}
+                <div
+                  className="studioRevenueWidget"
+                  title={`Recaudo oficial en vivo: ${activeDrawTitle}`}
+                  style={{ color: '#ffffff' }}
                 >
-                  <span>📱</span>
-                  <span>{copiedClientLink ? '✓ ¡Enlace copiado!' : 'Copiar enlace clientes'}</span>
-                </button>
+                  <span className="revenueCoinBadge">💰</span>
+                  <div className="revenueDetails">
+                    <div className="revenueTopMeta" style={{ color: '#ffffff' }}>
+                      <span className="revenueLabel" style={{ color: '#ffffff' }}>RECAUDO EN VIVO</span>
+                      <span className="revenueRaffleName" style={{ color: '#ffffff' }}>· {activeDrawTitle}</span>
+                    </div>
+                    <div className="revenueNumberRow">
+                      <strong className="revenueAmount" style={{ color: '#ffffff' }}>
+                        ${activeTotalRevenue.toLocaleString('es-CO')}
+                        <span className="currencyText" style={{ color: '#ffffff' }}> COP</span>
+                      </strong>
+                      <span className="revenueProgressPill" style={{ color: '#ffffff' }}>
+                        ({activeSoldTickets} / {activeTotalTickets} balotas · {activeRevenuePct}%)
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
-                <button
-                  type="button"
-                  className={`studioToolChip ${copiedReminderLink ? 'isSuccess' : ''}`}
-                  onClick={handleCopyGoogleReminderLink}
-                  title="Copiar enlace directo de agendamiento en Google Calendar para los clientes"
-                >
-                  <span>📅</span>
-                  <span>{copiedReminderLink ? '✓ ¡Link Calendar copiado!' : 'Link Google Calendar'}</span>
-                </button>
+                {/* HERRAMIENTAS DE EMISIÓN */}
+                <div className="studioProducerToolsScroll">
+                  <span className="studioToolsLabel">HERRAMIENTAS DE EMISIÓN:</span>
 
-                <button
-                  type="button"
-                  className="studioToolChip isPreviewBtn"
-                  onClick={() => setIsViewerMode(true)}
-                  title="Ver cómo lo ve el cliente en su celular"
-                >
-                  <span>👁️</span>
-                  <span>Ver como cliente (Móvil)</span>
-                </button>
+                  <button
+                    type="button"
+                    className={`studioToolChip ${copiedClientLink ? 'isSuccess' : ''}`}
+                    onClick={handleCopyClientLink}
+                    title="Copiar enlace para enviar por WhatsApp a los compradores"
+                  >
+                    <span>📱</span>
+                    <span>{copiedClientLink ? '✓ ¡Enlace copiado!' : 'Copiar enlace clientes'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`studioToolChip ${copiedReminderLink ? 'isSuccess' : ''}`}
+                    onClick={handleCopyGoogleReminderLink}
+                    title="Copiar enlace directo de agendamiento en Google Calendar para los clientes"
+                  >
+                    <span>📅</span>
+                    <span>{copiedReminderLink ? '✓ ¡Link Calendar copiado!' : 'Link Google Calendar'}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    className="studioToolChip isPreviewBtn"
+                    onClick={() => setIsViewerMode(true)}
+                    title="Ver cómo lo ve el cliente en su celular"
+                  >
+                    <span>👁️</span>
+                    <span>Ver como cliente (Móvil)</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}

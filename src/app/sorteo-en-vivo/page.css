@@ -3642,12 +3642,12 @@
 .studioAppTopBar {
   max-width: 1460px;
   margin: 0 auto;
-  padding: 10px clamp(14px, 3vw, 26px);
+  padding: 8px clamp(14px, 3vw, 26px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 58px;
+  min-height: 52px;
   box-sizing: border-box;
 }
 
@@ -3773,121 +3773,6 @@
   100% { transform: scale(0.95); opacity: 0.8; }
 }
 
-/* Centro: Recaudo en Vivo Widget (Cápsula Imponente, Grande y Prominente) */
-.studioRevenueWidget {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 8px 24px;
-  border-radius: 999px;
-  transition: all 0.2s ease;
-  margin: 0 auto;
-  background: linear-gradient(135deg, rgba(14, 52, 34, 0.98), rgba(8, 28, 18, 0.99));
-  border: 2px solid rgba(220, 185, 80, 0.85);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-  color: #ffffff !important;
-  box-sizing: border-box;
-}
-
-.isDark .studioRevenueWidget {
-  background: linear-gradient(135deg, rgba(14, 52, 34, 0.98), rgba(8, 28, 18, 0.99));
-  border: 2px solid rgba(245, 184, 46, 0.85);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-  color: #ffffff !important;
-}
-
-.isLight .studioRevenueWidget {
-  background: linear-gradient(135deg, #0d3820, #082415);
-  border: 2px solid #d4af37;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-  color: #ffffff !important;
-}
-
-.revenueCoinBadge {
-  font-size: 26px;
-  line-height: 1;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
-}
-
-.revenueDetails {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.revenueTopMeta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: #ffffff !important;
-  line-height: 1.1;
-}
-
-.revenueLabel {
-  color: #f5d47a !important;
-  font-weight: 900;
-}
-
-.revenueRaffleName {
-  max-width: 240px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #ffffff !important;
-  opacity: 0.95;
-  font-size: 11px;
-}
-
-.revenueNumberRow {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-}
-
-.revenueAmount {
-  font-size: 20px;
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.3px;
-  color: #ffffff !important;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
-}
-
-.isDark .revenueAmount { color: #ffffff !important; }
-.isLight .revenueAmount { color: #ffffff !important; }
-
-.currencyText {
-  font-size: 12px;
-  font-weight: 900;
-  margin-left: 2px;
-  color: #f5d47a !important;
-}
-
-.revenueProgressPill {
-  font-size: 12px;
-  font-weight: 800;
-  padding: 2.5px 10px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.22) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  line-height: 1.15;
-}
-
-.isDark .revenueProgressPill {
-  background: rgba(255, 255, 255, 0.22) !important;
-  color: #ffffff !important;
-}
-
-.isLight .revenueProgressPill {
-  background: rgba(255, 255, 255, 0.22) !important;
-  color: #ffffff !important;
-}
-
 /* Derecha: Controles del Sistema */
 .studioRightControls {
   display: flex;
@@ -4001,16 +3886,16 @@
   color: #f87171;
 }
 
-/* Fila 2: Barra de Herramientas de Estudio (Studio Producer Toolbar) */
+/* Fila 2: Barra de Producción y Recaudo (Studio Producer Deck) */
 .studioProducerToolbar {
   width: 100%;
   border-top: 1px solid rgba(220, 185, 80, 0.22);
-  padding: 6px clamp(14px, 3vw, 26px);
+  padding: 8px clamp(14px, 3vw, 26px);
   box-sizing: border-box;
 }
 
 .isDark .studioProducerToolbar {
-  background: rgba(5, 20, 14, 0.7);
+  background: rgba(5, 20, 14, 0.85);
 }
 
 .isLight .studioProducerToolbar {
@@ -4018,9 +3903,141 @@
   border-top-color: #e2e8f0;
 }
 
-.studioProducerToolsScroll {
+.studioProducerDeck {
   max-width: 1460px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+/* Recaudo en Vivo Widget: Amplio, Horizontal, Cómodo y sin saltos de línea */
+.studioRevenueWidget {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 22px;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+  margin: 0;
+  background: linear-gradient(135deg, rgba(14, 52, 34, 0.98), rgba(8, 28, 18, 0.99));
+  border: 1.5px solid rgba(220, 185, 80, 0.85);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  color: #ffffff !important;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.isDark .studioRevenueWidget {
+  background: linear-gradient(135deg, rgba(14, 52, 34, 0.98), rgba(8, 28, 18, 0.99));
+  border: 1.5px solid rgba(245, 184, 46, 0.85);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  color: #ffffff !important;
+}
+
+.isLight .studioRevenueWidget {
+  background: linear-gradient(135deg, #0c331e, #072013);
+  border: 1.5px solid #d4af37;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.25);
+  color: #ffffff !important;
+}
+
+.revenueCoinBadge {
+  font-size: 26px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+  flex-shrink: 0;
+}
+
+.revenueDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  white-space: nowrap;
+}
+
+.revenueTopMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #ffffff !important;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.revenueLabel {
+  color: #f5d47a !important;
+  font-weight: 900;
+}
+
+.revenueRaffleName {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #ffffff !important;
+  opacity: 0.95;
+  font-size: 11px;
+}
+
+.revenueNumberRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.revenueAmount {
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.3px;
+  color: #ffffff !important;
+  white-space: nowrap;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.isDark .revenueAmount { color: #ffffff !important; }
+.isLight .revenueAmount { color: #ffffff !important; }
+
+.currencyText {
+  font-size: 12px;
+  font-weight: 900;
+  margin-left: 2px;
+  color: #f5d47a !important;
+  white-space: nowrap;
+}
+
+.revenueProgressPill {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.isDark .revenueProgressPill {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+}
+
+.isLight .revenueProgressPill {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+}
+
+.studioProducerToolsScroll {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -4029,6 +4046,7 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-x: contain;
   padding: 2px 0;
+  flex-shrink: 0;
 }
 
 .studioProducerToolsScroll::-webkit-scrollbar {
@@ -4104,13 +4122,19 @@
    RESPONSIVE MÓVIL Y NATIVE APP (PANTALLAS CHICAS < 900px Y < 680px)
    ============================================================================ */
 @media (max-width: 900px) {
+  .studioProducerDeck {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
   .studioRevenueWidget {
-    margin: 0;
-    padding: 6px 18px;
+    margin: 0 auto;
+    padding: 6px 16px;
     gap: 12px;
+    max-width: 100%;
   }
   .revenueCoinBadge {
-    font-size: 23px;
+    font-size: 22px;
   }
   .revenueTopMeta {
     font-size: 10px;
@@ -4122,7 +4146,11 @@
     font-size: 17px;
   }
   .revenueProgressPill {
-    font-size: 11.5px;
+    font-size: 11px;
+  }
+  .studioProducerToolsScroll {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -4154,22 +4182,60 @@
     display: none;
   }
   .studioRevenueWidget {
-    padding: 6px 14px;
-    gap: 10px;
+    padding: 5px 12px;
+    gap: 8px;
   }
   .revenueCoinBadge {
-    font-size: 20px;
+    font-size: 18px;
   }
   .revenueTopMeta {
-    font-size: 9.5px;
+    font-size: 9px;
   }
   .revenueAmount {
-    font-size: 15.5px;
+    font-size: 14.5px;
   }
   .revenueProgressPill {
-    font-size: 10.5px;
+    font-size: 9.5px;
     padding: 2px 6px;
   }
+  .themeText,
+  .roomSwitchText,
+  .audioTestText,
+  .audioToggleText {
+    display: none;
+  }
+  .studioRoomSwitchBtn,
+  .studioAudioTestBtn,
+  .studioAudioToggleBtn {
+    padding: 5px 10px;
+    height: 32px;
+    font-size: 12px;
+  }
+  .studioThemeSegmented {
+    height: 32px;
+  }
+  .studioThemeSegmented button {
+    padding: 3px 7px;
+    height: 26px;
+  }
+  .revenueRaffleName {
+    display: none;
+  }
+  .studioToolsLabel {
+    display: none;
+  }
+  .studioProducerToolbar {
+    padding: 6px 10px;
+  }
+  .studioProducerToolsScroll {
+    justify-content: flex-start;
+  }
+  .studioToolChip {
+    padding: 4px 10px;
+    height: 28px;
+    font-size: 11px;
+  }
+}
   .themeText,
   .roomSwitchText,
   .audioTestText,
