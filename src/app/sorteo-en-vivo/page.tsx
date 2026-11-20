@@ -2320,19 +2320,10 @@ export default function LiveDrawDemoPage() {
       {/* 👑 BARRA SUPERIOR INTEGRADA DE ESTUDIO Y NAVEGACIÓN UNIVERSAL */}
       {!isCinemaFullscreen && (
         <header className={`studioUnifiedHeader ${theme === 'dark' ? 'isDark' : 'isLight'}`}>
-          {/* FILA 1: BARRA DE NAVEGACIÓN Y CONTROLES DEL SISTEMA */}
+          {/* FILA 1: BRANDING A LA IZQUIERDA + RECAUDO EN VIVO A LA DERECHA */}
           <div className="studioAppTopBar">
-            {/* GRUPO IZQUIERDO: VOLVER + BRANDING + BADGE */}
+            {/* GRUPO IZQUIERDO: BRANDING PEGADO AL LATERAL + BADGE + VOLVER A INICIO */}
             <div className="studioLeftGroup">
-              <Link
-                href="/"
-                className="studioBackBtn"
-                title="Volver al Inicio / Vitrina Principal"
-              >
-                <span className="studioBackArrow">←</span>
-                <span className="studioBackLabel">Inicio</span>
-              </Link>
-
               <Link href="/" className="studioBrandPill" aria-label="El Ganador, ir al inicio">
                 <span className="studioBrandLogo">EG</span>
                 <div className="studioBrandText">
@@ -2348,105 +2339,112 @@ export default function LiveDrawDemoPage() {
                   <span className="pulseDot" /> MODO EMPRESARIO
                 </span>
               )}
+
+              <Link
+                href="/"
+                className="studioBackBtn"
+                title="Volver al Inicio / Vitrina Principal"
+              >
+                <span className="studioBackArrow">←</span>
+                <span className="studioBackLabel">Volver al Inicio</span>
+              </Link>
             </div>
 
-            {/* DERECHA: CONTROLES DEL SISTEMA (TEMA, SALA, AUDIO) */}
-            <div className="studioRightControls">
-              {/* SELECTOR SEGMENTADO DE TEMA (CLARO / OSCURO) */}
+            {/* DERECHA: RECAUDO EN VIVO (EL RECUADRO GRANDE A LA DERECHA) */}
+            {!isViewerMode && isOperator ? (
               <div
-                className="studioThemeSegmented"
-                role="group"
-                aria-label="Selector de tema Claro y Oscuro"
+                className="studioRevenueWidget"
+                title={`Recaudo oficial en vivo: ${activeDrawTitle}`}
+                style={{ color: '#ffffff' }}
               >
+                <span className="revenueCoinBadge">💰</span>
+                <div className="revenueDetails">
+                  <div className="revenueTopMeta" style={{ color: '#ffffff' }}>
+                    <span className="revenueLabel" style={{ color: '#ffffff' }}>RECAUDO EN VIVO</span>
+                    <span className="revenueRaffleName" style={{ color: '#ffffff' }}>· {activeDrawTitle}</span>
+                  </div>
+                  <div className="revenueNumberRow">
+                    <strong className="revenueAmount" style={{ color: '#ffffff' }}>
+                      ${activeTotalRevenue.toLocaleString('es-CO')}
+                      <span className="currencyText" style={{ color: '#ffffff' }}> COP</span>
+                    </strong>
+                    <span className="revenueProgressPill" style={{ color: '#ffffff' }}>
+                      ({activeSoldTickets} / {activeTotalTickets} balotas · {activeRevenuePct}%)
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* En modo espectador (sin recaudo), los controles de sala se muestran aquí */
+              <div className="studioRightControls">
+                <div
+                  className="studioThemeSegmented"
+                  role="group"
+                  aria-label="Selector de tema Claro y Oscuro"
+                >
+                  <button
+                    type="button"
+                    className={theme === 'light' ? 'isActive' : ''}
+                    onClick={() => setThemePreference('light')}
+                    title="Activar Modo Claro"
+                  >
+                    ☀️<span className="themeText"> Claro</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={theme === 'dark' ? 'isActive' : ''}
+                    onClick={() => setThemePreference('dark')}
+                    title="Activar Modo Oscuro"
+                  >
+                    🌙<span className="themeText"> Oscuro</span>
+                  </button>
+                </div>
+
+                {availableDraws.length > 1 && (
+                  <button
+                    type="button"
+                    className="studioRoomSwitchBtn"
+                    onClick={() => {
+                      const currentIndex = availableDraws.findIndex((d) => d.id === activeDrawId);
+                      const nextIndex = (currentIndex + 1) % availableDraws.length;
+                      switchLiveDraw(availableDraws[nextIndex]);
+                    }}
+                    title="Cambiar a otra sala de sorteo en vivo"
+                  >
+                    🔄 <span className="roomSwitchText">Sala</span> ({availableDraws.length})
+                  </button>
+                )}
+
                 <button
                   type="button"
-                  className={theme === 'light' ? 'isActive' : ''}
-                  onClick={() => setThemePreference('light')}
-                  title="Activar Modo Claro"
+                  className="studioAudioTestBtn"
+                  onClick={() => {
+                    drawAudio.playQuickSoundCheck();
+                    setIsMuted(false);
+                  }}
+                  title="Probar sonido en celular / parlantes"
                 >
-                  ☀️<span className="themeText"> Claro</span>
+                  🔔 <span className="audioTestText">Probar</span>
                 </button>
+
                 <button
                   type="button"
-                  className={theme === 'dark' ? 'isActive' : ''}
-                  onClick={() => setThemePreference('dark')}
-                  title="Activar Modo Oscuro"
+                  className={`studioAudioToggleBtn ${isMuted ? 'isMuted' : 'isActive'}`}
+                  onClick={() => setIsMuted(drawAudio.toggleMute())}
+                  title={isMuted ? 'Activar audio del sorteo' : 'Silenciar audio'}
                 >
-                  🌙<span className="themeText"> Oscuro</span>
+                  <span>{isMuted ? '🔇' : '🔊'}</span>
+                  <span className="audioToggleText">{isMuted ? 'Silenciado' : 'Audio'}</span>
                 </button>
               </div>
-
-              {/* CAMBIO DE SALA DE SORTEO */}
-              {availableDraws.length > 1 && (
-                <button
-                  type="button"
-                  className="studioRoomSwitchBtn"
-                  onClick={() => {
-                    const currentIndex = availableDraws.findIndex((d) => d.id === activeDrawId);
-                    const nextIndex = (currentIndex + 1) % availableDraws.length;
-                    switchLiveDraw(availableDraws[nextIndex]);
-                  }}
-                  title="Cambiar a otra sala de sorteo en vivo"
-                >
-                  🔄 <span className="roomSwitchText">Sala</span> ({availableDraws.length})
-                </button>
-              )}
-
-              {/* PROBAR AUDIO */}
-              <button
-                type="button"
-                className="studioAudioTestBtn"
-                onClick={() => {
-                  drawAudio.playQuickSoundCheck();
-                  setIsMuted(false);
-                }}
-                title="Probar sonido en celular / parlantes"
-              >
-                🔔 <span className="audioTestText">Probar</span>
-              </button>
-
-              {/* SOUND TOGGLE */}
-              <button
-                type="button"
-                className={`studioAudioToggleBtn ${isMuted ? 'isMuted' : 'isActive'}`}
-                onClick={() => setIsMuted(drawAudio.toggleMute())}
-                title={isMuted ? 'Activar audio del sorteo' : 'Silenciar audio'}
-              >
-                <span>{isMuted ? '🔇' : '🔊'}</span>
-                <span className="audioToggleText">{isMuted ? 'Silenciado' : 'Audio'}</span>
-              </button>
-            </div>
+            )}
           </div>
 
-          {/* FILA 2: BARRA DE PRODUCCIÓN Y RECAUDO EN VIVO (Solo visible para el empresario operador) */}
+          {/* FILA 2: BARRA DE PRODUCCIÓN Y CONTROLES DEL SISTEMA (Solo visible para el empresario operador) */}
           {!isViewerMode && isOperator && (
             <div className="studioProducerToolbar">
               <div className="studioProducerDeck">
-                {/* RECAUDO EN VIVO: Grande, claro, horizontal y sin saltos de línea */}
-                <div
-                  className="studioRevenueWidget"
-                  title={`Recaudo oficial en vivo: ${activeDrawTitle}`}
-                  style={{ color: '#ffffff' }}
-                >
-                  <span className="revenueCoinBadge">💰</span>
-                  <div className="revenueDetails">
-                    <div className="revenueTopMeta" style={{ color: '#ffffff' }}>
-                      <span className="revenueLabel" style={{ color: '#ffffff' }}>RECAUDO EN VIVO</span>
-                      <span className="revenueRaffleName" style={{ color: '#ffffff' }}>· {activeDrawTitle}</span>
-                    </div>
-                    <div className="revenueNumberRow">
-                      <strong className="revenueAmount" style={{ color: '#ffffff' }}>
-                        ${activeTotalRevenue.toLocaleString('es-CO')}
-                        <span className="currencyText" style={{ color: '#ffffff' }}> COP</span>
-                      </strong>
-                      <span className="revenueProgressPill" style={{ color: '#ffffff' }}>
-                        ({activeSoldTickets} / {activeTotalTickets} balotas · {activeRevenuePct}%)
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* HERRAMIENTAS DE EMISIÓN */}
+                {/* IZQUIERDA: HERRAMIENTAS DE EMISIÓN */}
                 <div className="studioProducerToolsScroll">
                   <span className="studioToolsLabel">HERRAMIENTAS DE EMISIÓN:</span>
 
@@ -2478,6 +2476,73 @@ export default function LiveDrawDemoPage() {
                   >
                     <span>👁️</span>
                     <span>Ver como cliente (Móvil)</span>
+                  </button>
+                </div>
+
+                {/* DERECHA: CONTROLES DEL SISTEMA (TEMA, SALA, AUDIO) */}
+                <div className="studioRightControls">
+                  {/* SELECTOR SEGMENTADO DE TEMA (CLARO / OSCURO) */}
+                  <div
+                    className="studioThemeSegmented"
+                    role="group"
+                    aria-label="Selector de tema Claro y Oscuro"
+                  >
+                    <button
+                      type="button"
+                      className={theme === 'light' ? 'isActive' : ''}
+                      onClick={() => setThemePreference('light')}
+                      title="Activar Modo Claro"
+                    >
+                      ☀️<span className="themeText"> Claro</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={theme === 'dark' ? 'isActive' : ''}
+                      onClick={() => setThemePreference('dark')}
+                      title="Activar Modo Oscuro"
+                    >
+                      🌙<span className="themeText"> Oscuro</span>
+                    </button>
+                  </div>
+
+                  {/* CAMBIO DE SALA DE SORTEO */}
+                  {availableDraws.length > 1 && (
+                    <button
+                      type="button"
+                      className="studioRoomSwitchBtn"
+                      onClick={() => {
+                        const currentIndex = availableDraws.findIndex((d) => d.id === activeDrawId);
+                        const nextIndex = (currentIndex + 1) % availableDraws.length;
+                        switchLiveDraw(availableDraws[nextIndex]);
+                      }}
+                      title="Cambiar a otra sala de sorteo en vivo"
+                    >
+                      🔄 <span className="roomSwitchText">Sala</span> ({availableDraws.length})
+                    </button>
+                  )}
+
+                  {/* PROBAR AUDIO */}
+                  <button
+                    type="button"
+                    className="studioAudioTestBtn"
+                    onClick={() => {
+                      drawAudio.playQuickSoundCheck();
+                      setIsMuted(false);
+                    }}
+                    title="Probar sonido en celular / parlantes"
+                  >
+                    🔔 <span className="audioTestText">Probar</span>
+                  </button>
+
+                  {/* SOUND TOGGLE */}
+                  <button
+                    type="button"
+                    className={`studioAudioToggleBtn ${isMuted ? 'isMuted' : 'isActive'}`}
+                    onClick={() => setIsMuted(drawAudio.toggleMute())}
+                    title={isMuted ? 'Activar audio del sorteo' : 'Silenciar audio'}
+                  >
+                    <span>{isMuted ? '🔇' : '🔊'}</span>
+                    <span className="audioToggleText">{isMuted ? 'Silenciado' : 'Audio'}</span>
                   </button>
                 </div>
               </div>

@@ -3638,20 +3638,20 @@
   color: #0f172a;
 }
 
-/* Fila 1: App Bar Principal Amplia, Confortable y Espaciosa */
+/* Fila 1: App Bar Principal - Branding en el Extremo Lateral y Recaudo a la Derecha */
 .studioAppTopBar {
-  max-width: 1460px;
+  max-width: 1540px;
   margin: 0 auto;
-  padding: 8px clamp(14px, 3vw, 26px);
+  padding: 8px clamp(12px, 2.5vw, 24px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 52px;
+  min-height: 56px;
   box-sizing: border-box;
 }
 
-/* Grupo Izquierdo: Volver + Brand */
+/* Grupo Izquierdo: Branding Pegado al Lateral + Badge + Botón Volver */
 .studioLeftGroup {
   display: flex;
   align-items: center;
@@ -3659,51 +3659,12 @@
   flex-shrink: 0;
 }
 
-.studioBackBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 14px;
-  height: 36px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 800;
-  text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  box-sizing: border-box;
-}
-
-.isDark .studioBackBtn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #f8fafc;
-}
-
-.isDark .studioBackBtn:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(220, 185, 80, 0.6);
-  color: #f5d47a;
-}
-
-.isLight .studioBackBtn {
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  color: #0f172a;
-}
-
-.isLight .studioBackBtn:hover {
-  background: #e2e8f0;
-  color: #000000;
-}
-
 .studioBrandPill {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   text-decoration: none;
+  margin-left: 0;
 }
 
 .studioBrandLogo {
@@ -3773,158 +3734,59 @@
   100% { transform: scale(0.95); opacity: 0.8; }
 }
 
-/* Derecha: Controles del Sistema */
-.studioRightControls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.studioThemeSegmented {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  padding: 2px;
-  gap: 3px;
-  height: 36px;
-  box-sizing: border-box;
-}
-
-.isDark .studioThemeSegmented {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.isLight .studioThemeSegmented {
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-}
-
-.studioThemeSegmented button {
-  padding: 4px 10px;
-  height: 30px;
-  border-radius: 999px;
-  font-size: 11.5px;
-  font-weight: 800;
-  border: none;
-  cursor: pointer;
-  background: transparent;
-  transition: all 0.2s ease;
-  color: inherit;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  box-sizing: border-box;
-}
-
-.isDark .studioThemeSegmented button.isActive {
-  background: #1e293b;
-  color: #ffffff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-}
-
-.isLight .studioThemeSegmented button.isActive {
-  background: #ffffff;
-  color: #0f172a;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-}
-
-.studioRoomSwitchBtn,
-.studioAudioTestBtn,
-.studioAudioToggleBtn {
-  padding: 5px 13px;
-  height: 36px;
-  border-radius: 999px;
-  font-size: 12.5px;
-  font-weight: 800;
-  cursor: pointer;
+.studioBackBtn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s ease;
+  padding: 5px 13px;
+  height: 32px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
+  white-space: nowrap;
 }
 
-.isDark .studioRoomSwitchBtn,
-.isDark .studioAudioTestBtn {
+.isDark .studioBackBtn {
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   color: #f8fafc;
 }
 
-.isDark .studioRoomSwitchBtn:hover,
-.isDark .studioAudioTestBtn:hover {
-  background: rgba(255, 255, 255, 0.18);
+.isDark .studioBackBtn:hover {
+  background: rgba(255, 255, 255, 0.16);
   border-color: rgba(220, 185, 80, 0.6);
   color: #f5d47a;
 }
 
-.isLight .studioRoomSwitchBtn,
-.isLight .studioAudioTestBtn {
-  background: #f8fafc;
+.isLight .studioBackBtn {
+  background: #f1f5f9;
   border: 1px solid #cbd5e1;
   color: #0f172a;
 }
 
-.isLight .studioRoomSwitchBtn:hover,
-.isLight .studioAudioTestBtn:hover {
+.isLight .studioBackBtn:hover {
   background: #e2e8f0;
+  color: #000000;
 }
 
-.studioAudioToggleBtn.isActive {
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid #22c55e;
-  color: #22c55e;
-}
-
-.studioAudioToggleBtn.isMuted {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #f87171;
-}
-
-/* Fila 2: Barra de Producción y Recaudo (Studio Producer Deck) */
-.studioProducerToolbar {
-  width: 100%;
-  border-top: 1px solid rgba(220, 185, 80, 0.22);
-  padding: 8px clamp(14px, 3vw, 26px);
-  box-sizing: border-box;
-}
-
-.isDark .studioProducerToolbar {
-  background: rgba(5, 20, 14, 0.85);
-}
-
-.isLight .studioProducerToolbar {
-  background: #f8fafc;
-  border-top-color: #e2e8f0;
-}
-
-.studioProducerDeck {
-  max-width: 1460px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  box-sizing: border-box;
-}
-
-/* Recaudo en Vivo Widget: Amplio, Horizontal, Cómodo y sin saltos de línea */
+/* Recaudo en Vivo Widget: Ubicado a la Derecha de la Fila 1 (Sin Desbordes) */
 .studioRevenueWidget {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  padding: 8px 22px;
+  gap: 12px;
+  padding: 6px 18px;
   border-radius: 999px;
   transition: all 0.2s ease;
   margin: 0;
   background: linear-gradient(135deg, rgba(14, 52, 34, 0.98), rgba(8, 28, 18, 0.99));
   border: 1.5px solid rgba(220, 185, 80, 0.85);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
   color: #ffffff !important;
   box-sizing: border-box;
   flex-shrink: 0;
@@ -3939,14 +3801,14 @@
 }
 
 .isLight .studioRevenueWidget {
-  background: linear-gradient(135deg, #0c331e, #072013);
+  background: linear-gradient(135deg, #092e1a, #051a0f);
   border: 1.5px solid #d4af37;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.22);
   color: #ffffff !important;
 }
 
 .revenueCoinBadge {
-  font-size: 26px;
+  font-size: 24px;
   line-height: 1;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
   flex-shrink: 0;
@@ -3955,17 +3817,17 @@
 .revenueDetails {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   white-space: nowrap;
 }
 
 .revenueTopMeta {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
+  gap: 5px;
+  font-size: 10px;
   font-weight: 900;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.7px;
   text-transform: uppercase;
   color: #ffffff !important;
   line-height: 1.1;
@@ -3978,24 +3840,24 @@
 }
 
 .revenueRaffleName {
-  max-width: 220px;
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   color: #ffffff !important;
   opacity: 0.95;
-  font-size: 11px;
+  font-size: 10.5px;
 }
 
 .revenueNumberRow {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   white-space: nowrap;
 }
 
 .revenueAmount {
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.3px;
@@ -4008,7 +3870,7 @@
 .isLight .revenueAmount { color: #ffffff !important; }
 
 .currencyText {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 900;
   margin-left: 2px;
   color: #f5d47a !important;
@@ -4016,9 +3878,9 @@
 }
 
 .revenueProgressPill {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
-  padding: 3px 10px;
+  padding: 2.5px 8px;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
@@ -4037,10 +3899,38 @@
   color: #ffffff !important;
 }
 
+/* Fila 2: Barra de Producción y Controles de Sala (Simétrica y Balanceada) */
+.studioProducerToolbar {
+  width: 100%;
+  border-top: 1px solid rgba(220, 185, 80, 0.22);
+  padding: 6px clamp(12px, 2.5vw, 24px);
+  box-sizing: border-box;
+}
+
+.isDark .studioProducerToolbar {
+  background: rgba(5, 20, 14, 0.85);
+}
+
+.isLight .studioProducerToolbar {
+  background: #f8fafc;
+  border-top-color: #e2e8f0;
+}
+
+.studioProducerDeck {
+  max-width: 1540px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+/* Herramientas de Emisión a la Izquierda en Fila 2 */
 .studioProducerToolsScroll {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
@@ -4054,25 +3944,25 @@
 }
 
 .studioToolsLabel {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 900;
-  letter-spacing: 1px;
+  letter-spacing: 0.9px;
   color: #d4af37;
   text-transform: uppercase;
   white-space: nowrap;
-  margin-right: 4px;
+  margin-right: 3px;
   flex-shrink: 0;
 }
 
 .studioToolChip {
-  padding: 5px 13px;
-  height: 31px;
+  padding: 4px 12px;
+  height: 30px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -4116,6 +4006,119 @@
 .studioToolChip.isPreviewBtn:hover {
   transform: translateY(-1px);
   box-shadow: 0 3px 10px rgba(212, 167, 55, 0.4);
+}
+
+/* Controles del Sistema a la Derecha en Fila 2 */
+.studioRightControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.studioThemeSegmented {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px;
+  gap: 2px;
+  height: 32px;
+  box-sizing: border-box;
+}
+
+.isDark .studioThemeSegmented {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.isLight .studioThemeSegmented {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+}
+
+.studioThemeSegmented button {
+  padding: 3px 8px;
+  height: 26px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.2s ease;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  box-sizing: border-box;
+}
+
+.isDark .studioThemeSegmented button.isActive {
+  background: #1e293b;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.isLight .studioThemeSegmented button.isActive {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.studioRoomSwitchBtn,
+.studioAudioTestBtn,
+.studioAudioToggleBtn {
+  padding: 4px 11px;
+  height: 32px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+.isDark .studioRoomSwitchBtn,
+.isDark .studioAudioTestBtn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+}
+
+.isDark .studioRoomSwitchBtn:hover,
+.isDark .studioAudioTestBtn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(220, 185, 80, 0.6);
+  color: #f5d47a;
+}
+
+.isLight .studioRoomSwitchBtn,
+.isLight .studioAudioTestBtn {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.isLight .studioRoomSwitchBtn:hover,
+.isLight .studioAudioTestBtn:hover {
+  background: #e2e8f0;
+}
+
+.studioAudioToggleBtn.isActive {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid #22c55e;
+  color: #22c55e;
+}
+
+.studioAudioToggleBtn.isMuted {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
 }
 
 /* ============================================================================
@@ -4229,41 +4232,6 @@
   }
   .studioProducerToolsScroll {
     justify-content: flex-start;
-  }
-  .studioToolChip {
-    padding: 4px 10px;
-    height: 28px;
-    font-size: 11px;
-  }
-}
-  .themeText,
-  .roomSwitchText,
-  .audioTestText,
-  .audioToggleText {
-    display: none;
-  }
-  .studioRoomSwitchBtn,
-  .studioAudioTestBtn,
-  .studioAudioToggleBtn {
-    padding: 5px 10px;
-    height: 32px;
-    font-size: 12px;
-  }
-  .studioThemeSegmented {
-    height: 32px;
-  }
-  .studioThemeSegmented button {
-    padding: 3px 7px;
-    height: 26px;
-  }
-  .revenueRaffleName {
-    display: none;
-  }
-  .studioToolsLabel {
-    display: none;
-  }
-  .studioProducerToolbar {
-    padding: 5px 10px;
   }
   .studioToolChip {
     padding: 4px 10px;
