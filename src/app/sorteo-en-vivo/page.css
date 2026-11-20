@@ -3638,16 +3638,16 @@
   color: #0f172a;
 }
 
-/* Fila 1: App Bar Principal Optimizada y Confortable */
+/* Fila 1: App Bar Principal Amplia, Confortable y Espaciosa */
 .studioAppTopBar {
   max-width: 1460px;
   margin: 0 auto;
-  padding: 6px clamp(10px, 2.5vw, 20px);
+  padding: 10px clamp(14px, 3vw, 26px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  min-height: 52px;
+  gap: 16px;
+  min-height: 58px;
   box-sizing: border-box;
 }
 
@@ -3655,18 +3655,18 @@
 .studioLeftGroup {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-shrink: 0;
 }
 
 .studioBackBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  height: 33px;
+  gap: 7px;
+  padding: 6px 14px;
+  height: 36px;
   border-radius: 999px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 800;
   text-decoration: none;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -3702,23 +3702,23 @@
 .studioBrandPill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   text-decoration: none;
 }
 
 .studioBrandLogo {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   display: grid;
   place-items: center;
   font-weight: 900;
-  font-size: 11.5px;
+  font-size: 12.5px;
   letter-spacing: 0;
   border: 1.5px solid #d4af37;
   background: #0f172a;
   color: #f5d47a;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .studioBrandText {
@@ -3728,31 +3728,31 @@
 }
 
 .studioBrandTitle {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 900;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.9px;
 }
 
 .isDark .studioBrandTitle { color: #ffffff; }
 .isLight .studioBrandTitle { color: #0f172a; }
 
 .studioBrandTag {
-  font-size: 8.5px;
+  font-size: 9px;
   font-weight: 800;
-  letter-spacing: 1.4px;
+  letter-spacing: 1.5px;
   color: #d4af37;
 }
 
 .studioOperatorLiveBadge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 3px 10px;
-  height: 26px;
+  gap: 7px;
+  padding: 4px 12px;
+  height: 28px;
   border-radius: 999px;
   background: linear-gradient(105deg, #d4a737, #f7d879);
   color: #092415;
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 900;
   letter-spacing: 0.5px;
   box-shadow: 0 1px 6px rgba(212, 167, 55, 0.35);
@@ -3773,18 +3773,18 @@
   100% { transform: scale(0.95); opacity: 0.8; }
 }
 
-/* Centro: Recaudo en Vivo Widget (Cápsula Clara, Legible y Confortable) */
+/* Centro: Recaudo en Vivo Widget (Cápsula Amplia, Clara y con Espacio) */
 .studioRevenueWidget {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 4px 14px;
+  gap: 12px;
+  padding: 6px 18px;
   border-radius: 999px;
   transition: all 0.2s ease;
   margin: 0 auto;
   background: linear-gradient(135deg, rgba(12, 44, 29, 0.98), rgba(7, 24, 16, 0.99));
   border: 1.5px solid rgba(220, 185, 80, 0.65);
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
   color: #ffffff !important;
   box-sizing: border-box;
 }
@@ -3792,35 +3792,35 @@
 .isDark .studioRevenueWidget {
   background: linear-gradient(135deg, rgba(12, 44, 29, 0.98), rgba(7, 24, 16, 0.99));
   border: 1.5px solid rgba(245, 184, 46, 0.65);
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
   color: #ffffff !important;
 }
 
 .isLight .studioRevenueWidget {
   background: linear-gradient(135deg, #0d3820, #082415);
   border: 1.5px solid #d4af37;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   color: #ffffff !important;
 }
 
 .revenueCoinBadge {
-  font-size: 18px;
+  font-size: 21px;
   line-height: 1;
 }
 
 .revenueDetails {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .revenueTopMeta {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 9px;
+  gap: 5px;
+  font-size: 9.5px;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
   color: #ffffff !important;
   line-height: 1.1;
@@ -3832,7 +3832,7 @@
 }
 
 .revenueRaffleName {
-  max-width: 170px;
+  max-width: 190px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3843,11 +3843,11 @@
 .revenueNumberRow {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 8px;
 }
 
 .revenueAmount {
-  font-size: 15px;
+  font-size: 16.5px;
   font-weight: 900;
   line-height: 1;
   color: #ffffff !important;
@@ -3857,17 +3857,17 @@
 .isLight .revenueAmount { color: #ffffff !important; }
 
 .currencyText {
-  font-size: 9.5px;
+  font-size: 10.5px;
   font-weight: 800;
   margin-left: 2px;
   color: #ffffff !important;
 }
 
 .revenueProgressPill {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 4px;
+  padding: 2px 8px;
+  border-radius: 5px;
   background: rgba(255, 255, 255, 0.18) !important;
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -3888,7 +3888,7 @@
 .studioRightControls {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-shrink: 0;
 }
 
@@ -3897,8 +3897,8 @@
   align-items: center;
   border-radius: 999px;
   padding: 2px;
-  gap: 2px;
-  height: 33px;
+  gap: 3px;
+  height: 36px;
   box-sizing: border-box;
 }
 
@@ -3913,10 +3913,10 @@
 }
 
 .studioThemeSegmented button {
-  padding: 3px 8px;
-  height: 27px;
+  padding: 4px 10px;
+  height: 30px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 800;
   border: none;
   cursor: pointer;
@@ -3944,15 +3944,15 @@
 .studioRoomSwitchBtn,
 .studioAudioTestBtn,
 .studioAudioToggleBtn {
-  padding: 4px 11px;
-  height: 33px;
+  padding: 5px 13px;
+  height: 36px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 800;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   transition: all 0.2s ease;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -4001,7 +4001,7 @@
 .studioProducerToolbar {
   width: 100%;
   border-top: 1px solid rgba(220, 185, 80, 0.22);
-  padding: 4px clamp(10px, 2.5vw, 20px);
+  padding: 6px clamp(14px, 3vw, 26px);
   box-sizing: border-box;
 }
 
@@ -4019,7 +4019,7 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   overflow-x: auto;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
@@ -4032,25 +4032,25 @@
 }
 
 .studioToolsLabel {
-  font-size: 9px;
+  font-size: 9.5px;
   font-weight: 900;
-  letter-spacing: 0.9px;
+  letter-spacing: 1px;
   color: #d4af37;
   text-transform: uppercase;
   white-space: nowrap;
-  margin-right: 3px;
+  margin-right: 4px;
   flex-shrink: 0;
 }
 
 .studioToolChip {
-  padding: 4px 11px;
-  height: 28px;
+  padding: 5px 13px;
+  height: 31px;
   border-radius: 999px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -4102,59 +4102,59 @@
 @media (max-width: 900px) {
   .studioRevenueWidget {
     margin: 0;
-    padding: 3px 10px;
+    padding: 5px 12px;
   }
   .revenueTopMeta {
-    font-size: 8.5px;
+    font-size: 9px;
   }
   .revenueRaffleName {
-    max-width: 130px;
+    max-width: 140px;
   }
   .revenueAmount {
-    font-size: 13.5px;
+    font-size: 14.5px;
   }
 }
 
 @media (max-width: 680px) {
   .studioAppTopBar {
-    padding: 4px 8px;
-    min-height: 44px;
-    gap: 6px;
+    padding: 6px 10px;
+    min-height: 48px;
+    gap: 8px;
   }
   .studioBackLabel {
     display: none;
   }
   .studioBackBtn {
-    padding: 4px 8px;
-    height: 29px;
+    padding: 5px 10px;
+    height: 32px;
   }
   .studioBrandLogo {
-    width: 27px;
-    height: 27px;
-    font-size: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
   }
   .studioBrandTag {
     display: none;
   }
   .studioBrandTitle {
-    font-size: 11px;
+    font-size: 12px;
   }
   .studioOperatorLiveBadge {
     display: none;
   }
   .studioRevenueWidget {
-    padding: 3px 8px;
-    gap: 6px;
+    padding: 4px 10px;
+    gap: 8px;
   }
   .revenueCoinBadge {
-    font-size: 15px;
+    font-size: 17px;
   }
   .revenueAmount {
-    font-size: 12.5px;
+    font-size: 13.5px;
   }
   .revenueProgressPill {
-    font-size: 9px;
-    padding: 1px 4px;
+    font-size: 9.5px;
+    padding: 1px 5px;
   }
   .themeText,
   .roomSwitchText,
@@ -4165,16 +4165,16 @@
   .studioRoomSwitchBtn,
   .studioAudioTestBtn,
   .studioAudioToggleBtn {
-    padding: 4px 8px;
-    height: 29px;
-    font-size: 11.5px;
+    padding: 5px 10px;
+    height: 32px;
+    font-size: 12px;
   }
   .studioThemeSegmented {
-    height: 29px;
+    height: 32px;
   }
   .studioThemeSegmented button {
-    padding: 3px 6px;
-    height: 25px;
+    padding: 3px 7px;
+    height: 26px;
   }
   .revenueRaffleName {
     display: none;
@@ -4183,12 +4183,12 @@
     display: none;
   }
   .studioProducerToolbar {
-    padding: 3px 8px;
+    padding: 5px 10px;
   }
   .studioToolChip {
-    padding: 3px 8px;
-    height: 25px;
-    font-size: 10.5px;
+    padding: 4px 10px;
+    height: 28px;
+    font-size: 11px;
   }
 }
 
@@ -4225,9 +4225,9 @@
 }
 
 .liveDemoHero {
-  max-width: 1200px !important;
-  margin: 10px auto 14px auto !important;
-  padding: 0 20px !important;
+  max-width: 1240px !important;
+  margin: 20px auto 24px auto !important;
+  padding: 0 24px !important;
   background: transparent !important;
   border-radius: 0 !important;
   border: none !important;
@@ -4239,21 +4239,21 @@
 .liveDemoHero .liveDemoEyebrow,
 .liveDemoEyebrow {
   color: #d4af37 !important;
-  font-size: 11.5px !important;
+  font-size: 12px !important;
   font-weight: 900 !important;
-  letter-spacing: 2.4px !important;
+  letter-spacing: 2.6px !important;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
-  margin-bottom: 4px !important;
+  margin-bottom: 6px !important;
 }
 
 .liveDemoHero h1 {
   color: #ffffff !important;
-  font-size: clamp(24px, 3.2vw, 38px) !important;
+  font-size: clamp(26px, 3.6vw, 42px) !important;
   font-weight: 900 !important;
-  line-height: 1.18 !important;
+  line-height: 1.2 !important;
   letter-spacing: -0.8px !important;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85) !important;
-  margin: 0 0 4px 0 !important;
+  margin: 0 0 8px 0 !important;
 }
 
 .liveDemoHero h1 span {
@@ -4266,12 +4266,12 @@
 }
 
 .liveDemoHero > p:last-child {
-  max-width: 720px !important;
-  margin: 4px auto 0 !important;
+  max-width: 740px !important;
+  margin: 6px auto 0 !important;
   color: #cbd5e1 !important;
-  font-size: 14px !important;
+  font-size: 14.5px !important;
   font-weight: 500 !important;
-  line-height: 1.5 !important;
+  line-height: 1.55 !important;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
 }
 
