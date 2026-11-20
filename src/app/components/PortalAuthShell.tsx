@@ -157,8 +157,22 @@ export default function PortalAuthShell({ audience, children, wideAuthPanel = fa
 
       <section className="premiumHeadline">
         <span className="premiumStoryBadge premiumHeadlineBadge"><span aria-hidden="true">✦</span> {business ? "TU NEGOCIO, EN EL CENTRO" : "UN MERCADO DE POSIBILIDADES"}</span>
-        <h1>{business ? <>Haz crecer tu local.<em> Comparte la emoción.</em></> : <>Descubre tu próxima <em>oportunidad de ganar.</em></>}</h1>
-        <p>{business ? "Un espacio sencillo para presentar tus premios, conectar con clientes y seguir cada rifa." : "Regístrate gratis para explorar premios, conocer tiendas y consultar tus participaciones cuando quieras."}</p>
+        <h1 style={{ color: '#ffffff' }}>
+          {business ? (
+            <>
+              <span style={{ color: '#ffffff' }}>Haz crecer tu local.</span>
+              <em style={{ color: '#f0c650', fontStyle: 'normal' }}> Comparte la emoción.</em>
+            </>
+          ) : (
+            <>
+              <span style={{ color: '#ffffff' }}>Descubre tu próxima </span>
+              <em style={{ color: '#f0c650', fontStyle: 'normal' }}>oportunidad de ganar.</em>
+            </>
+          )}
+        </h1>
+        <p style={{ color: '#eaf0e8' }}>
+          {business ? "Un espacio sencillo para presentar tus premios, conectar con clientes y seguir cada rifa." : "Regístrate gratis para explorar premios, conocer tiendas y consultar tus participaciones cuando quieras."}
+        </p>
       </section>
 
       <div className={`premiumEntryGrid ${authInline ? "hasInlineAuth" : ""}`}>

@@ -19910,6 +19910,33 @@ html[data-theme='light'] .allied-footer-meta strong,
   color: #0f172a !important;
 }
 
+/* Excepción esencial: En PortalAuthShell / premiumHeadline (fondo casino verde oscuro permanente) el texto debe ser siempre blanco y el em dorado */
+html[data-theme='light'] .premiumHeadline h1,
+[data-theme='light'] .premiumHeadline h1,
+html[data-theme='dark'] .premiumHeadline h1,
+[data-theme='dark'] .premiumHeadline h1,
+.premiumHeadline h1,
+.premiumHeadline h1 span {
+  color: #ffffff !important;
+}
+
+html[data-theme='light'] .premiumHeadline h1 em,
+[data-theme='light'] .premiumHeadline h1 em,
+html[data-theme='dark'] .premiumHeadline h1 em,
+[data-theme='dark'] .premiumHeadline h1 em,
+.premiumHeadline h1 em {
+  color: #f0c650 !important;
+  font-style: normal !important;
+}
+
+html[data-theme='light'] .premiumHeadline > p,
+[data-theme='light'] .premiumHeadline > p,
+html[data-theme='dark'] .premiumHeadline > p,
+[data-theme='dark'] .premiumHeadline > p,
+.premiumHeadline > p {
+  color: #eaf0e8 !important;
+}
+
 html[data-theme='light'] .compact-merchant,
 html[data-theme='light'] .station-subtitle,
 html[data-theme='light'] .allied-description,
