@@ -3610,106 +3610,522 @@
 }
 
 /* ============================================================================
-   FRANJA SUPERIOR BLANCA DE LUJO CON BRANDING OFICIAL
+   BARRA SUPERIOR DE TRANSMISIÓN Y ESTUDIO UNIFICADO (NATIVE APP FLUIDITY)
+   - Reorganización total: 1 sola barra superior unificada de lujo.
+   - Cero choques de color, cero desorden, adaptabilidad 100% móvil y táctil.
    ============================================================================ */
-.liveDemoTopNavStrip {
+.studioUnifiedHeader {
   width: 100%;
-  background: #ffffff !important;
-  border-bottom: 2px solid #dfbd5a !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28) !important;
-  position: relative;
-  z-index: 100;
+  position: sticky;
+  top: 0;
+  z-index: 120;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
-.liveDemoHeader {
+.studioUnifiedHeader.isDark {
+  background: linear-gradient(180deg, rgba(8, 30, 20, 0.96) 0%, rgba(5, 18, 12, 0.98) 100%);
+  border-bottom: 1.5px solid rgba(220, 185, 80, 0.35);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  color: #f8fafc;
+}
+
+.studioUnifiedHeader.isLight {
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1.5px solid #cbd5e1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  color: #0f172a;
+}
+
+/* Fila 1: App Bar Principal */
+.studioAppTopBar {
   max-width: 1460px;
-  min-height: 68px;
+  margin: 0 auto;
+  padding: 8px clamp(12px, 3vw, 24px);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
-  margin: 0 auto;
-  padding: 0 clamp(16px, 4vw, 42px) !important;
-  border-bottom: none !important;
-  background: transparent !important;
+  gap: 12px;
+  min-height: 56px;
+  box-sizing: border-box;
 }
 
-.liveDemoBrand {
-  color: #0f172a !important;
-  font-size: 13.5px !important;
-  font-weight: 950 !important;
-  letter-spacing: 1.2px !important;
+/* Grupo Izquierdo: Volver + Brand */
+.studioLeftGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.studioBackBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.isDark .studioBackBtn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #f8fafc;
+}
+
+.isDark .studioBackBtn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(220, 185, 80, 0.6);
+  color: #f5d47a;
+}
+
+.isLight .studioBackBtn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.isLight .studioBackBtn:hover {
+  background: #e2e8f0;
+  color: #000000;
+}
+
+.studioBrandPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   text-decoration: none;
 }
 
-.liveDemoBrandMark {
-  background: #0f172a !important;
-  color: #d4af37 !important;
-  border: 1.5px solid #d4af37 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18) !important;
+.studioBrandLogo {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 0;
+  border: 1.5px solid #d4af37;
+  background: #0f172a;
+  color: #f5d47a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.liveDemoBrand small {
-  color: #0284c7 !important;
-  font-weight: 850 !important;
-  letter-spacing: 2.2px !important;
+.studioBrandText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
 }
 
-.liveDemoHeaderActions > a {
-  color: #0f172a !important;
-  font-weight: 800 !important;
+.studioBrandTitle {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
-.liveDemoHeaderActions > a:hover,
-.liveDemoMarketLink:hover {
-  color: #0284c7 !important;
+.isDark .studioBrandTitle { color: #ffffff; }
+.isLight .studioBrandTitle { color: #0f172a; }
+
+.studioBrandTag {
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #d4af37;
 }
 
-.btnBackToHome {
-  background: #f1f5f9 !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
-  font-weight: 800 !important;
+.studioOperatorLiveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(105deg, #d4a737, #f7d879);
+  color: #092415;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(212, 167, 55, 0.35);
 }
 
-.btnBackToHome:hover {
-  background: #e2e8f0 !important;
-  color: #000000 !important;
+.studioOperatorLiveBadge .pulseDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #092415;
+  animation: pulseOp 1.5s infinite;
 }
 
-.btnSwitchRoom {
-  background: #f8fafc !important;
-  border: 1.5px solid #cbd5e1 !important;
-  color: #0f172a !important;
-  font-weight: 800 !important;
+@keyframes pulseOp {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
 }
 
-.demoLabel {
-  color: #0f172a !important;
-  background: #f1f5f9 !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06) !important;
+/* Centro: Recaudo en Vivo Widget */
+.studioRevenueWidget {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  margin: 0 auto;
 }
 
-.audioTestBtn {
-  background: #f8fafc !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
-  font-weight: 800 !important;
+.isDark .studioRevenueWidget {
+  background: linear-gradient(135deg, rgba(245, 184, 46, 0.14), rgba(216, 181, 80, 0.05));
+  border: 1.5px solid rgba(245, 184, 46, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.audioToggleBtn.active {
-  background: #f0fdf4 !important;
-  border: 1px solid #86efac !important;
-  color: #15803d !important;
-  font-weight: 800 !important;
+.isLight .studioRevenueWidget {
+  background: #fefce8;
+  border: 1.5px solid #facc15;
+  box-shadow: 0 2px 8px rgba(234, 179, 8, 0.15);
 }
 
-.audioToggleBtn.muted {
-  background: #f8fafc !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
-  font-weight: 800 !important;
+.revenueCoinBadge {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.revenueDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.revenueTopMeta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #eab308;
+}
+
+.revenueRaffleName {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.9;
+}
+
+.revenueNumberRow {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.revenueAmount {
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.isDark .revenueAmount { color: #ffffff; }
+.isLight .revenueAmount { color: #0f172a; }
+
+.currencyText {
+  font-size: 9.5px;
+  font-weight: 800;
+  margin-left: 2px;
+  color: #eab308;
+}
+
+.revenueProgressPill {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.isDark .revenueProgressPill {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+.isLight .revenueProgressPill {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* Derecha: Controles del Sistema */
+.studioRightControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.studioThemeSegmented {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.isDark .studioThemeSegmented {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.isLight .studioThemeSegmented {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+}
+
+.studioThemeSegmented button {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  transition: all 0.2s ease;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.isDark .studioThemeSegmented button.isActive {
+  background: #1e293b;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.isLight .studioThemeSegmented button.isActive {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.studioRoomSwitchBtn,
+.studioAudioTestBtn,
+.studioAudioToggleBtn {
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.isDark .studioRoomSwitchBtn,
+.isDark .studioAudioTestBtn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #f8fafc;
+}
+
+.isDark .studioRoomSwitchBtn:hover,
+.isDark .studioAudioTestBtn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(220, 185, 80, 0.6);
+  color: #f5d47a;
+}
+
+.isLight .studioRoomSwitchBtn,
+.isLight .studioAudioTestBtn {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+}
+
+.isLight .studioRoomSwitchBtn:hover,
+.isLight .studioAudioTestBtn:hover {
+  background: #e2e8f0;
+}
+
+.studioAudioToggleBtn.isActive {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid #22c55e;
+  color: #22c55e;
+}
+
+.studioAudioToggleBtn.isMuted {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+/* Fila 2: Barra de Herramientas de Estudio (Studio Producer Toolbar) */
+.studioProducerToolbar {
+  width: 100%;
+  border-top: 1px solid rgba(220, 185, 80, 0.25);
+  padding: 6px clamp(12px, 3vw, 24px);
+  box-sizing: border-box;
+}
+
+.isDark .studioProducerToolbar {
+  background: rgba(5, 20, 14, 0.7);
+}
+
+.isLight .studioProducerToolbar {
+  background: #f8fafc;
+  border-top-color: #e2e8f0;
+}
+
+.studioProducerToolsScroll {
+  max-width: 1460px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  padding: 2px 0;
+}
+
+.studioProducerToolsScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.studioToolsLabel {
+  font-size: 9.5px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #d4af37;
+  text-transform: uppercase;
+  white-space: nowrap;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.studioToolChip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border: 1px solid;
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+
+.isDark .studioToolChip {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+}
+
+.isDark .studioToolChip:hover {
+  background: rgba(16, 185, 129, 0.24);
+  color: #ffffff;
+}
+
+.isLight .studioToolChip {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.studioToolChip.isSuccess {
+  background: #10b981 !important;
+  border-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+.studioToolChip.isPreviewBtn {
+  background: linear-gradient(105deg, #d4a737, #f7d879) !important;
+  border-color: #fff1a8 !important;
+  color: #092415 !important;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(212, 167, 55, 0.25);
+}
+
+.studioToolChip.isPreviewBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(212, 167, 55, 0.45);
+}
+
+/* ============================================================================
+   RESPONSIVE MÓVIL Y NATIVE APP (PANTALLAS CHICAS < 900px Y < 680px)
+   ============================================================================ */
+@media (max-width: 900px) {
+  .studioRevenueWidget {
+    margin: 0;
+    padding: 4px 8px;
+  }
+  .revenueTopMeta {
+    display: none;
+  }
+  .revenueAmount {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 680px) {
+  .studioAppTopBar {
+    padding: 6px 10px;
+    min-height: 48px;
+    gap: 6px;
+  }
+  .studioBackLabel {
+    display: none;
+  }
+  .studioBackBtn {
+    padding: 6px 8px;
+  }
+  .studioBrandTag {
+    display: none;
+  }
+  .studioBrandTitle {
+    font-size: 11.5px;
+  }
+  .studioOperatorLiveBadge {
+    display: none;
+  }
+  .themeText,
+  .roomSwitchText,
+  .audioTestText,
+  .audioToggleText {
+    display: none;
+  }
+  .studioRoomSwitchBtn,
+  .studioAudioTestBtn,
+  .studioAudioToggleBtn {
+    padding: 5px 8px;
+    font-size: 12px;
+  }
+  .studioThemeSegmented button {
+    padding: 4px 6px;
+  }
+  .revenueRaffleName {
+    display: none;
+  }
+  .studioToolsLabel {
+    display: none;
+  }
+  .studioProducerToolbar {
+    padding: 4px 10px;
+  }
 }
 
 /* ============================================================================
@@ -5445,103 +5861,7 @@
    SEPARACIÓN DE ROLES: MODO EMPRESARIO VS MODO CLIENTE (CELULAR / ESPECTADOR)
    ============================================================================ */
 
-/* 1. BARRA DE CONTROL DEL EMPRESARIO (Solo visible para el administrador) */
-.entrepreneurControlBar {
-  max-width: 1460px;
-  margin: 10px auto 14px;
-  padding: 10px 18px;
-  background: linear-gradient(135deg, rgba(16, 68, 40, 0.95), rgba(8, 38, 22, 0.98));
-  border: 1px solid rgba(220, 185, 80, 0.45);
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  z-index: 20;
-  box-sizing: border-box;
-}
-
-.entrepreneurTitleGroup {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.entrepreneurBadge {
-  background: linear-gradient(105deg, #d4a737, #f7d879);
-  color: #092415;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.5px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.entrepreneurSub {
-  color: #cde2d3;
-  font-size: 11.5px;
-  font-weight: 600;
-}
-
-.entrepreneurActions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.btnCopyClientLink,
-.btnCopyReminderLink,
-.btnToggleClientPreview {
-  padding: 7px 14px;
-  border-radius: 8px;
-  font-size: 11.5px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.btnCopyClientLink {
-  background: #0d3820;
-  border: 1px solid #38ef7d;
-  color: #aff5ca;
-}
-
-.btnCopyClientLink:hover {
-  background: #155531;
-  color: #ffffff;
-}
-
-.btnCopyReminderLink {
-  background: rgba(14, 165, 233, 0.15);
-  border: 1px solid #38bdf8;
-  color: #bae6fd;
-}
-
-.btnCopyReminderLink:hover {
-  background: rgba(14, 165, 233, 0.3);
-  color: #ffffff;
-  border-color: #7dd3fc;
-}
-
-.btnToggleClientPreview {
-  background: linear-gradient(105deg, #ffe482, #d99f22);
-  border: 1px solid #fff5cb;
-  color: #081f12;
-}
-
-.btnToggleClientPreview:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(217, 159, 34, 0.4);
-}
+/* 1. MODO ESPECTADOR (CELULAR) - BARRA Y CONTROLES PRO */
 
 /* 2. TARJETAS DEL CLIENTE EN MODO ESPECTADOR (CELULAR) */
 .clientViewerWaitingCard,

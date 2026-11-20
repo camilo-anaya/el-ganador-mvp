@@ -2316,218 +2316,171 @@ export default function LiveDrawDemoPage() {
         </div>
       )}
 
-      {/* 👑 BARRA DE CONTROL DEL EMPRESARIO (Solo visible para el administrador) */}
-      {!isViewerMode && isOperator && (
-        <div className="entrepreneurControlBar">
-          <div className="entrepreneurTitleGroup">
-            <span className="entrepreneurBadge">👑 MODO EMPRESARIO</span>
-            <span className="entrepreneurSub">Panel de Emisión y Transmisión de Sorteos</span>
-          </div>
-          <div className="entrepreneurActions">
-            <button
-              type="button"
-              className="btnCopyClientLink"
-              onClick={handleCopyClientLink}
-              title="Copiar enlace para enviar por WhatsApp a los compradores"
-            >
-              📱 {copiedClientLink ? "✓ ¡Enlace copiado!" : "Copiar enlace para clientes"}
-            </button>
-            <button
-              type="button"
-              className="btnCopyReminderLink"
-              onClick={handleCopyGoogleReminderLink}
-              title="Copiar enlace directo de agendamiento en Google Calendar para los clientes"
-            >
-              📅 {copiedReminderLink ? "✓ ¡Link de Google Calendar copiado!" : "Copiar link de Google Calendar"}
-            </button>
-            <button
-              type="button"
-              className="btnToggleClientPreview"
-              onClick={() => {
-                setIsViewerMode(true);
-                // setIsCinemaFullscreen(false);
-              }}
-              title="Ver cómo lo ve el cliente en su celular"
-            >
-              👁️ Ver como cliente (Móvil)
-            </button>
-          </div>
-
-          {/* CONTEO EN TIEMPO REAL DEL DINERO EN BALOTAS VENDIDAS POR SORTEO */}
-          <div
-            className="entrepreneurRevenueTicker"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              padding: '6px 14px',
-              background: 'rgba(245, 184, 46, 0.12)',
-              border: '1.5px solid rgba(245, 184, 46, 0.4)',
-              borderRadius: '10px',
-              marginLeft: 'auto',
-            }}
-          >
-            <span style={{ fontSize: '20px' }}>💰</span>
-            <div>
-              <div style={{ fontSize: '10px', color: '#f5b82e', fontWeight: 800, textTransform: 'uppercase' }}>
-                RECAUDO EN VIVO · {activeDrawTitle}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                <strong style={{ fontSize: '15px', color: '#ffffff', fontWeight: 900 }}>
-                  ${activeTotalRevenue.toLocaleString('es-CO')} COP
-                </strong>
-                <span style={{ fontSize: '11px', color: '#cbd5e1' }}>
-                  ({activeSoldTickets} / {activeTotalTickets} balotas · {activeRevenuePct}%)
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* FRANJA SUPERIOR BLANCA DE LUJO CON BRANDING OFICIAL */}
-      {/* BARRA SUPERIOR UNIVERSAL: NAVEGACIÓN PERMANENTE AL INICIO Y CAMBIO DE SALA */}
+      {/* 👑 BARRA SUPERIOR INTEGRADA DE ESTUDIO Y NAVEGACIÓN UNIVERSAL */}
       {!isCinemaFullscreen && (
-        <div className="liveDemoTopNavStrip" style={{ display: 'block', width: '100%', position: 'sticky', top: 0, zIndex: 120 }}>
-          <header className="liveDemoHeader" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <header className={`studioUnifiedHeader ${theme === 'dark' ? 'isDark' : 'isLight'}`}>
+          {/* FILA 1: BARRA DE NAVEGACIÓN Y RECAUDO PRINCIPAL */}
+          <div className="studioAppTopBar">
+            {/* GRUPO IZQUIERDO: VOLVER + BRANDING + BADGE */}
+            <div className="studioLeftGroup">
               <Link
                 href="/"
-                className="btnBackToHome"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '8px 14px',
-                  borderRadius: '12px',
-                  background: '#f1f5f9',
-                  border: '1px solid #cbd5e1',
-                  color: '#0f172a',
-                  fontWeight: 800,
-                  fontSize: '0.84rem',
-                  textDecoration: 'none',
-                  cursor: 'pointer'
-                }}
+                className="studioBackBtn"
                 title="Volver al Inicio / Vitrina Principal"
               >
-                <span>←</span>
-                <span>Volver al Inicio</span>
+                <span className="studioBackArrow">←</span>
+                <span className="studioBackLabel">Inicio</span>
               </Link>
 
-              <Link href="/" className="liveDemoBrand" aria-label="El Ganador, ir al inicio">
-                <span className="liveDemoBrandMark">EG</span>
-                <span>EL GANADOR<small>SALA OFICIAL</small></span>
+              <Link href="/" className="studioBrandPill" aria-label="El Ganador, ir al inicio">
+                <span className="studioBrandLogo">EG</span>
+                <div className="studioBrandText">
+                  <span className="studioBrandTitle">EL GANADOR</span>
+                  <span className="studioBrandTag">
+                    {!isViewerMode && isOperator ? 'SALA DE EMISIÓN' : 'SALA OFICIAL'}
+                  </span>
+                </div>
               </Link>
+
+              {!isViewerMode && isOperator && (
+                <span className="studioOperatorLiveBadge">
+                  <span className="pulseDot" /> MODO EMPRESARIO
+                </span>
+              )}
             </div>
 
-            <div className="liveDemoHeaderActions" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-              {/* SELECTOR SEGMENTADO DE TEMA (CLARO / OSCURO) EN SALA EN VIVO */}
+            {/* CENTRO: CONTEO EN TIEMPO REAL DEL DINERO (Solo en Modo Empresario) */}
+            {!isViewerMode && isOperator && (
               <div
-                className="theme-segmented-switch"
+                className="studioRevenueWidget"
+                title={`Recaudo oficial en vivo: ${activeDrawTitle}`}
+              >
+                <span className="revenueCoinBadge">💰</span>
+                <div className="revenueDetails">
+                  <div className="revenueTopMeta">
+                    <span className="revenueLabel">RECAUDO EN VIVO</span>
+                    <span className="revenueRaffleName">· {activeDrawTitle}</span>
+                  </div>
+                  <div className="revenueNumberRow">
+                    <strong className="revenueAmount">
+                      ${activeTotalRevenue.toLocaleString('es-CO')}
+                      <small className="currencyText">COP</small>
+                    </strong>
+                    <span className="revenueProgressPill">
+                      {activeRevenuePct}% ({activeSoldTickets}/{activeTotalTickets})
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* DERECHA: CONTROLES DEL SISTEMA (TEMA, SALA, AUDIO) */}
+            <div className="studioRightControls">
+              {/* SELECTOR SEGMENTADO DE TEMA (CLARO / OSCURO) */}
+              <div
+                className="studioThemeSegmented"
                 role="group"
                 aria-label="Selector de tema Claro y Oscuro"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  background: '#f1f5f9',
-                  borderRadius: '999px',
-                  padding: '3px',
-                  border: '1px solid #cbd5e1',
-                  gap: '2px',
-                }}
               >
                 <button
                   type="button"
+                  className={theme === 'light' ? 'isActive' : ''}
                   onClick={() => setThemePreference('light')}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '999px',
-                    fontSize: '11px',
-                    fontWeight: 800,
-                    border: 'none',
-                    cursor: 'pointer',
-                    background: theme === 'light' ? '#ffffff' : 'transparent',
-                    color: '#0f172a',
-                    boxShadow: theme === 'light' ? '0 2px 6px rgba(0, 0, 0, 0.12)' : 'none',
-                    transition: 'all 0.2s ease',
-                  }}
                   title="Activar Modo Claro"
                 >
-                  ☀️ Claro
+                  ☀️<span className="themeText"> Claro</span>
                 </button>
                 <button
                   type="button"
+                  className={theme === 'dark' ? 'isActive' : ''}
                   onClick={() => setThemePreference('dark')}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '5px 10px',
-                    borderRadius: '999px',
-                    fontSize: '11px',
-                    fontWeight: 800,
-                    border: 'none',
-                    cursor: 'pointer',
-                    background: theme === 'dark' ? '#0f172a' : 'transparent',
-                    color: theme === 'dark' ? '#ffffff' : '#64748b',
-                    boxShadow: theme === 'dark' ? '0 2px 6px rgba(0, 0, 0, 0.4)' : 'none',
-                    transition: 'all 0.2s ease',
-                  }}
                   title="Activar Modo Oscuro"
                 >
-                  🌙 Oscuro
+                  🌙<span className="themeText"> Oscuro</span>
                 </button>
               </div>
+
+              {/* CAMBIO DE SALA DE SORTEO */}
               {availableDraws.length > 1 && (
                 <button
                   type="button"
-                  className="btnSwitchRoom"
+                  className="studioRoomSwitchBtn"
                   onClick={() => {
                     const currentIndex = availableDraws.findIndex((d) => d.id === activeDrawId);
                     const nextIndex = (currentIndex + 1) % availableDraws.length;
                     switchLiveDraw(availableDraws[nextIndex]);
                   }}
-                  style={{
-                    padding: '7px 12px',
-                    borderRadius: '10px',
-                    background: '#f8fafc',
-                    border: '1.5px solid #cbd5e1',
-                    color: '#0f172a',
-                    fontSize: '0.78rem',
-                    fontWeight: 800,
-                    cursor: 'pointer'
-                  }}
                   title="Cambiar a otra sala de sorteo en vivo"
                 >
-                  🔄 Ver otra Sala ({availableDraws.length})
+                  🔄 <span className="roomSwitchText">Sala</span> ({availableDraws.length})
                 </button>
               )}
 
+              {/* PROBAR AUDIO */}
               <button
-                className="audioTestBtn"
+                type="button"
+                className="studioAudioTestBtn"
                 onClick={() => {
                   drawAudio.playQuickSoundCheck();
                   setIsMuted(false);
                 }}
-                title="Probar sonido en celular"
-                type="button"
+                title="Probar sonido en celular / parlantes"
               >
-                🔔 Probar audio
+                🔔 <span className="audioTestText">Probar</span>
               </button>
+
+              {/* SOUND TOGGLE */}
               <button
-                className={`audioToggleBtn ${isMuted ? "muted" : "active"}`}
-                onClick={() => setIsMuted(drawAudio.toggleMute())}
-                title={isMuted ? "Activar audio" : "Silenciar audio"}
                 type="button"
+                className={`studioAudioToggleBtn ${isMuted ? 'isMuted' : 'isActive'}`}
+                onClick={() => setIsMuted(drawAudio.toggleMute())}
+                title={isMuted ? 'Activar audio del sorteo' : 'Silenciar audio'}
               >
-                {isMuted ? "🔇 Silenciado" : "🔊 Audio"}
+                <span>{isMuted ? '🔇' : '🔊'}</span>
+                <span className="audioToggleText">{isMuted ? 'Silenciado' : 'Audio'}</span>
               </button>
             </div>
-          </header>
-        </div>
+          </div>
+
+          {/* FILA 2: BARRA DE HERRAMIENTAS DE ESTUDIO (Solo visible para el empresario operador) */}
+          {!isViewerMode && isOperator && (
+            <div className="studioProducerToolbar">
+              <div className="studioProducerToolsScroll">
+                <span className="studioToolsLabel">HERRAMIENTAS DE EMISIÓN:</span>
+
+                <button
+                  type="button"
+                  className={`studioToolChip ${copiedClientLink ? 'isSuccess' : ''}`}
+                  onClick={handleCopyClientLink}
+                  title="Copiar enlace para enviar por WhatsApp a los compradores"
+                >
+                  <span>📱</span>
+                  <span>{copiedClientLink ? '✓ ¡Enlace copiado!' : 'Copiar enlace clientes'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  className={`studioToolChip ${copiedReminderLink ? 'isSuccess' : ''}`}
+                  onClick={handleCopyGoogleReminderLink}
+                  title="Copiar enlace directo de agendamiento en Google Calendar para los clientes"
+                >
+                  <span>📅</span>
+                  <span>{copiedReminderLink ? '✓ ¡Link Calendar copiado!' : 'Link Google Calendar'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="studioToolChip isPreviewBtn"
+                  onClick={() => setIsViewerMode(true)}
+                  title="Ver cómo lo ve el cliente en su celular"
+                >
+                  <span>👁️</span>
+                  <span>Ver como cliente (Móvil)</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </header>
       )}
 
       <div className="liveDemoContentContainer">
