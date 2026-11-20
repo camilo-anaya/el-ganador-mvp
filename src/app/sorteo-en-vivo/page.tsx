@@ -425,6 +425,7 @@ export default function LiveDrawDemoPage() {
   const [showSponsorModal, setShowSponsorModal] = useState(false);
   const [sponsorFollowers, setSponsorFollowers] = useState(1580);
   const [isFollowingSponsor, setIsFollowingSponsor] = useState(false);
+  const [isHudCollapsed, setIsHudCollapsed] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -2618,104 +2619,94 @@ export default function LiveDrawDemoPage() {
           <div
             className={`liveDemoMachine ${mode === "ruleta" ? "modeWheel" : ""} ${phase === "spinning" ? "isSpinning" : ""} ${phase === "winner" ? "hasWinner" : ""} stage_${stage} ${isCinemaFullscreen ? "cinemaFullscreenActive" : ""}`}
           >
-            {/* Stream HUD Superior: EN DIRECTO + Rating CRM + Control de Audio */}
-            <div className="cinemaStageTopHud">
-              <Link
-                href="/"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  padding: '4px 10px',
-                  borderRadius: '8px',
-                  background: 'rgba(0,0,0,0.6)',
-                  border: '1px solid rgba(255,255,255,0.25)',
-                  color: '#ffffff',
-                  fontSize: '0.72rem',
-                  fontWeight: 800,
-                  textDecoration: 'none',
-                  marginRight: '8px'
-                }}
-                title="Salir al panel de inicio"
-              >
-                ← Salir al Inicio
-              </Link>
-              <div className="cinemaLiveBadge">
-                <i />
-                <span>
-                  EN DIRECTO · {activeDrawTitle} ·{" "}
-                  {mode === "balotas"
-                    ? `CARTÓN 01 A ${cartonSize}`
-                    : `RULETA 01 A ${String(wheelSize).padStart(2, "0")}`}
-                </span>
-              </div>
-
-              {/* RATING & RETENCIÓN DE ESPECTADORES CRM */}
-              <div className="liveRatingHud">
-                <div className="ratingSpectators">
+            {/* Stream HUD Superior: EN DIRECTO + Rating CRM + Control de Audio (MINIMIZABLE) */}
+            <div className={`cinemaStageTopHud ${isHudCollapsed ? "isCollapsed" : ""}`}>
+              {isHudCollapsed ? (
+                <button
+                  type="button"
+                  className="cinemaHudRestoreBtn"
+                  onClick={() => setIsHudCollapsed(false)}
+                  title="Expandir funciones de transmisión"
+                  aria-label="Expandir funciones"
+                >
                   <span className="livePulseDot" />
-                  <span>👁️ {activeSpectatorCount.toLocaleString("es-CO")} espectadores</span>
-                </div>
-                <div className="ratingMetric">
-                  <span className="ratingStars">⭐ 4.9</span>
-                  <span style={{ fontSize: "9px", color: "#94a3b8" }}>Rating</span>
-                </div>
-                <div className="ratingWatchTime">
-                  <span>⏱️ {formatWatchTime(spectatorDuration)}</span>
-                </div>
-
-                {/* CONTEO EN TIEMPO REAL DEL DINERO EN BALOTAS VENDIDAS POR ESTE EVENTO */}
-                <div
-                  className="ratingRevenueTicker"
-                  title={`Recaudo oficial acumulado: ${activeSoldTickets} balotas vendidas a $${activeUnitPrice.toLocaleString("es-CO")} COP`}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    padding: "2px 8px",
-                    borderRadius: "6px",
-                    background: "rgba(245, 184, 46, 0.16)",
-                    border: "1px solid rgba(245, 184, 46, 0.4)",
-                    color: "#f5b82e",
-                    fontSize: "11px",
-                    fontWeight: 800,
-                  }}
-                >
-                  <span>💰</span>
-                  <strong style={{ color: "#ffffff" }}>${activeTotalRevenue.toLocaleString("es-CO")} COP</strong>
-                  <span style={{ fontSize: "9px", color: "#cbd5e1" }}>({activeSoldTickets} vendidas)</span>
-                </div>
-              </div>
-
-              <div className="cinemaHudRight" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <button
-                  type="button"
-                  className="cinemaAudioBtn"
-                  onClick={() => {
-                    if (isCinemaFullscreen) {
-                      exitCinemaFullscreen();
-                    } else {
-                      enterCinemaFullscreen();
-                    }
-                  }}
-                  title={isCinemaFullscreen ? "Salir de pantalla completa" : "Ver en pantalla completa"}
-                  style={{
-                    background: isCinemaFullscreen ? 'rgba(0, 122, 255, 0.85)' : 'rgba(0, 0, 0, 0.65)',
-                    border: '1px solid rgba(255, 255, 255, 0.35)',
-                    color: '#ffffff',
-                    fontWeight: 700,
-                  }}
-                >
-                  {isCinemaFullscreen ? "🗗 Salir Pantalla Completa" : "⛶ Pantalla Completa"}
+                  <span className="hudRestoreLabel">EN VIVO</span>
+                  <span className="hudRestoreCount">👁️ {activeSpectatorCount.toLocaleString("es-CO")}</span>
+                  <span className="hudRestoreIcon">⚙️</span>
                 </button>
-                <button
-                  type="button"
-                  className="cinemaAudioBtn"
-                  onClick={() => setIsMuted(drawAudio.toggleMute())}
-                >
-                  {isMuted ? "🔇 Silenciado" : "🔊 Sonido"}
-                </button>
-              </div>
+              ) : (
+                <>
+                  {/* BOTÓN SALIR: Solo cuando está en modo pantalla completa / cinema */}
+                  {isCinemaFullscreen && (
+                    <button
+                      type="button"
+                      className="cinemaHudActionBtn cinemaExitBtn"
+                      onClick={exitCinemaFullscreen}
+                      title="Salir de pantalla completa"
+                    >
+                      ← Salir
+                    </button>
+                  )}
+
+                  {/* BADGE EN DIRECTO */}
+                  <div className="cinemaLiveBadge">
+                    <span className="livePulseDot" />
+                    <span>
+                      EN DIRECTO · {mode === "balotas" ? `01 A ${cartonSize}` : `RULETA ${wheelSize}`}
+                    </span>
+                  </div>
+
+                  {/* ESPECTADORES Y RATING */}
+                  <div className="liveRatingHud">
+                    <div className="ratingSpectators" title="Espectadores conectados en tiempo real">
+                      <span>👁️ {activeSpectatorCount.toLocaleString("es-CO")}</span>
+                    </div>
+                    <div className="ratingMetric" title="Calificación promedio">
+                      <span>⭐ 4.9</span>
+                    </div>
+                  </div>
+
+                  {/* CONTROLES RÁPIDOS: PANTALLA COMPLETA + AUDIO + BOTÓN MINIMIZAR */}
+                  <div className="cinemaHudRight">
+                    <button
+                      type="button"
+                      className="cinemaHudIconBtn"
+                      onClick={() => {
+                        if (isCinemaFullscreen) {
+                          exitCinemaFullscreen();
+                        } else {
+                          enterCinemaFullscreen();
+                        }
+                      }}
+                      title={isCinemaFullscreen ? "Salir de pantalla completa" : "Ver en pantalla completa"}
+                      aria-label="Pantalla completa"
+                    >
+                      {isCinemaFullscreen ? "🗗" : "⛶"}
+                    </button>
+
+                    <button
+                      type="button"
+                      className="cinemaHudIconBtn"
+                      onClick={() => setIsMuted(drawAudio.toggleMute())}
+                      title={isMuted ? "Activar audio" : "Silenciar audio"}
+                      aria-label="Audio"
+                    >
+                      {isMuted ? "🔇" : "🔊"}
+                    </button>
+
+                    {/* BOTÓN PARA MINIMIZAR ESTAS FUNCIONES */}
+                    <button
+                      type="button"
+                      className="cinemaHudIconBtn cinemaMinimizeBtn"
+                      onClick={() => setIsHudCollapsed(true)}
+                      title="Minimizar estas funciones"
+                      aria-label="Minimizar funciones"
+                    >
+                      −
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* PATROCINADOR OFICIAL CON CONTROLES MÓVILES (MINIMIZAR, MOVER, QUITAR) Y POSICIONADO ABAJO EN WEB */}
