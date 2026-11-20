@@ -121,13 +121,34 @@ class NativeDrawAudioEngine {
   // Compatibilidad retroactiva en caso de llamadas legadas
   attachAudioElement(_el: HTMLAudioElement | null): void {}
 
+  /**
+   * Desbloquea y precarga todos los elementos de audio en el primer toque/gesto del usuario.
+   * Evita bloqueos de autoplay en Safari iOS, Chrome Android y WebViews.
+   */
+  unlockAllAudio(): void {
+    if (typeof window === "undefined") return;
+    forceApplePlaybackAudioSession();
+    const all = [this.bank.balotas, this.bank.ruleta, this.bank.test, this.bank.voice];
+    for (const el of all) {
+      if (el) {
+        if (el.readyState === 0 || el.error) {
+          try {
+            el.load();
+          } catch {}
+        }
+      }
+    }
+  }
+
   prepareMode(mode: SequenceMode): void {
     if (typeof window === "undefined") return;
     forceApplePlaybackAudioSession();
     const target = mode === "balotas" ? this.bank.balotas : this.bank.ruleta;
-    if (target && target !== this.activeMasterEl && target.readyState === 0) {
+    if (target && target !== this.activeMasterEl) {
       try {
-        target.load();
+        if (target.readyState === 0 || target.error) {
+          target.load();
+        }
       } catch {}
     }
   }
@@ -306,9 +327,15 @@ class NativeDrawAudioEngine {
     el.muted = this.isMuted;
     el.volume = 1.0;
 
-    if (el.readyState >= 1 && el.currentTime > 0.05) {
+    // Resetear posición de audio SIEMPRE a 0 (vital tras repeticiones o estados "ended")
+    try {
+      el.currentTime = 0;
+    } catch {}
+
+    // Si el elemento está descargado o en error, forzar recarga
+    if (el.readyState === 0 || el.error) {
       try {
-        el.currentTime = 0;
+        el.load();
       } catch {}
     }
 
@@ -352,9 +379,13 @@ class NativeDrawAudioEngine {
     el.muted = false;
     el.volume = 1.0;
 
-    if (el.readyState >= 1 && el.currentTime > 0.05) {
+    try {
+      el.currentTime = 0;
+    } catch {}
+
+    if (el.readyState === 0 || el.error) {
       try {
-        el.currentTime = 0;
+        el.load();
       } catch {}
     }
 
@@ -384,21 +415,25 @@ class NativeDrawAudioEngine {
     _err: unknown
   ): void {
     try {
-      if (!el.src.endsWith(fallbackUrl)) {
+      const cleanFallback = fallbackUrl.split('?')[0];
+      if (!el.src || !el.src.includes(cleanFallback)) {
         el.src = fallbackUrl;
         el.muted = this.isMuted;
         el.volume = 1.0;
+        try {
+          el.load();
+        } catch {}
         const retry = el.play();
         if (retry && typeof retry.then === "function") {
           retry
             .then(() => {
               if (targetState === "playing") this.currentRunVoiceEmbedded = true;
-              this.emitStatus(targetState, "🔊 Audio oficial activo");
+              this.emitStatus(targetState, "🔊 Audio oficial activo (vía códec alternativo)");
             })
             .catch(() => {
               this.emitStatus(
                 "blocked",
-                "Tu navegador pausó el inicio automático. Toca el botón ▶ del reproductor inferior para activar el audio."
+                "Tu navegador pausó el inicio automático. Toca cualquier parte de la pantalla para activar el audio."
               );
             });
           return;
@@ -408,7 +443,7 @@ class NativeDrawAudioEngine {
 
     this.emitStatus(
       "blocked",
-      "Tu navegador pausó el inicio automático. Toca el botón ▶ del reproductor inferior para activar el audio."
+      "Tu navegador pausó el inicio automático. Toca cualquier parte de la pantalla para activar el audio."
     );
   }
 

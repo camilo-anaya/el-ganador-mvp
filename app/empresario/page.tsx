@@ -517,7 +517,7 @@ function PanelEmpresarioContent() {
             <small className="brand-subtitle">{storeName}</small>
           </div>
         </div>
-        <div className="topbar-actions">
+        <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap' }}>
           <Link
             href="/"
             className="btn-compact-action"
@@ -530,10 +530,14 @@ function PanelEmpresarioContent() {
               fontWeight: 800,
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '6px',
+              gap: '4px',
+              padding: '6px 10px',
+              fontSize: '11.5px',
+              borderRadius: '8px',
+              whiteSpace: 'nowrap',
             }}
           >
-            🏛️ Ver Vitrina (Marketplace)
+            🏛️ <span>Vitrina</span>
           </Link>
           <button
             type="button"
@@ -545,17 +549,31 @@ function PanelEmpresarioContent() {
                 path: `/?tienda=${encodeURIComponent(storeName)}`,
               })
             }
+            style={{
+              padding: '6px 10px',
+              fontSize: '11.5px',
+              borderRadius: '8px',
+              whiteSpace: 'nowrap',
+            }}
           >
-            📤 Compartir Tienda
+            📤 <span>Compartir</span>
           </button>
           <button
             type="button"
             className="btn-compact-action"
             onClick={() => void performLogout()}
             aria-label="Cerrar sesión empresarial"
-            style={{ background: 'rgba(239, 68, 68, 0.12)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.35)' }}
+            style={{
+              background: 'rgba(239, 68, 68, 0.12)',
+              color: '#ef4444',
+              border: '1px solid rgba(239, 68, 68, 0.35)',
+              padding: '6px 10px',
+              fontSize: '11.5px',
+              borderRadius: '8px',
+              whiteSpace: 'nowrap',
+            }}
           >
-            🚪 Salir
+            🚪 <span>Salir</span>
           </button>
         </div>
       </header>
@@ -1580,22 +1598,22 @@ function PanelEmpresarioContent() {
                 return (
                   <div>
                     {/* Tarjetas de métricas del CRM */}
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '10px', marginBottom: '16px' }}>
-                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(244,199,82,0.2)', borderRadius: '10px', padding: '12px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase' }}>Ventas Totales</div>
-                        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#f4c752', marginTop: '4px' }}>
-                          ${totalSales.toLocaleString('es-CO')} COP
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '16px' }}>
+                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(244,199,82,0.2)', borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Ventas</div>
+                        <div style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#f4c752', marginTop: '3px', wordBreak: 'break-all' }}>
+                          ${totalSales.toLocaleString('es-CO')}
                         </div>
                       </div>
-                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '12px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase' }}>Boletas Emitidas</div>
-                        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>
+                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Boletas</div>
+                        <div style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#fff', marginTop: '3px' }}>
                           {totalTickets}
                         </div>
                       </div>
-                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '12px', textAlign: 'center' }}>
-                        <div style={{ fontSize: '11px', color: '#888', textTransform: 'uppercase' }}>Compradores</div>
-                        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>
+                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
+                        <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Clientes</div>
+                        <div style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#fff', marginTop: '3px' }}>
                           {uniqueBuyers}
                         </div>
                       </div>
@@ -1603,14 +1621,14 @@ function PanelEmpresarioContent() {
 
                     {/* SECCIÓN OFICIAL: CONTEO EN TIEMPO REAL DEL DINERO POR SORTEO / EVENTO */}
                     <div style={{ marginBottom: '24px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                        <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#f5b82e', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span>💰</span> Registro de Recaudo en Boletería por Sorteo (Evento)
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
+                        <h3 style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#f5b82e', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span>💰</span> Registro de Recaudo por Sorteo
                         </h3>
                         <small style={{ color: '#94a3b8', fontSize: '11px' }}>En tiempo real</small>
                       </div>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
                         {displayRafflesRevenue.map((dr) => (
                           <div
                             key={dr.drawId}

@@ -868,6 +868,23 @@ export default function LiveDrawDemoPage() {
       voice: voiceAudioRef.current,
     });
     drawAudio.prepareMode(mode);
+
+    // Desbloqueo pasivo en el primer toque/click del usuario para evitar restricciones de autoplay en celulares
+    const handleFirstGesture = () => {
+      drawAudio.unlockAllAudio();
+      window.removeEventListener("pointerdown", handleFirstGesture);
+      window.removeEventListener("touchstart", handleFirstGesture);
+      window.removeEventListener("click", handleFirstGesture);
+    };
+    window.addEventListener("pointerdown", handleFirstGesture, { once: true, passive: true });
+    window.addEventListener("touchstart", handleFirstGesture, { once: true, passive: true });
+    window.addEventListener("click", handleFirstGesture, { once: true, passive: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", handleFirstGesture);
+      window.removeEventListener("touchstart", handleFirstGesture);
+      window.removeEventListener("click", handleFirstGesture);
+    };
   }, [mode]);
 
   useEffect(() => {
@@ -2229,44 +2246,57 @@ export default function LiveDrawDemoPage() {
 
   return (
     <main className={`liveDemoPage ${isCinemaFullscreen ? "isCinemaStageLocked" : ""}`}>
-      {/* BANCO NATIVO DE AUDIO HTML5 PARA APPLE iOS AVPlayer (Ignora Modo Silencio en iPhone — NUNCA usar display:none) */}
+      {/* BANCO NATIVO DE AUDIO HTML5 PARA APPLE iOS AVPlayer Y ANDROID (Doble códec M4A/AAC + WAV fallback) */}
       <div className="iosHardwareAudioBank" aria-hidden="true">
         <audio
           ref={(el) => {
             balotasAudioRef.current = el;
             drawAudio.attachMediaBank({ balotas: el });
           }}
-          src="/audio/master-balotas-v6.m4a?v=fv9"
           playsInline
           preload="auto"
-        />
+          crossOrigin="anonymous"
+        >
+          <source src="/audio/master-balotas-v6.m4a?v=fv9" type="audio/mp4" />
+          <source src="/audio/master-balotas-v6.wav?v=fv9" type="audio/wav" />
+        </audio>
         <audio
           ref={(el) => {
             ruletaAudioRef.current = el;
             drawAudio.attachMediaBank({ ruleta: el });
           }}
-          src="/audio/master-ruleta-v9.m4a?v=fv12"
           playsInline
           preload="auto"
-        />
+          crossOrigin="anonymous"
+        >
+          <source src="/audio/master-ruleta-v9.m4a?v=fv12" type="audio/mp4" />
+          <source src="/audio/master-ruleta-v9.wav?v=fv12" type="audio/wav" />
+        </audio>
         <audio
           ref={(el) => {
             testAudioRef.current = el;
             drawAudio.attachMediaBank({ test: el });
           }}
-          src="/audio/test-check-v5.m4a"
           playsInline
           preload="auto"
-        />
+          crossOrigin="anonymous"
+        >
+          <source src="/audio/test-check-v5.m4a" type="audio/mp4" />
+          <source src="/audio/test-check-v5.wav" type="audio/wav" />
+        </audio>
         <audio
           ref={(el) => {
             voiceAudioRef.current = el;
             drawAudio.attachMediaBank({ voice: el });
           }}
-          src="/audio/felicidades-v5.m4a"
           playsInline
           preload="auto"
-        />
+          crossOrigin="anonymous"
+        >
+          <source src="/audio/felicidades-v5.m4a" type="audio/mp4" />
+          <source src="/audio/felicidades.mp3" type="audio/mpeg" />
+          <source src="/audio/felicidades.wav" type="audio/wav" />
+        </audio>
       </div>
 
       {/* LLUVIA DE CONFETI Y DESTELLOS CONTINUA DURANTE LA CELEBRACIÓN DEL GANADOR */}

@@ -450,7 +450,7 @@ export default function PlanesPublicitariosPage() {
     <div className="desktop-workspace-grid" style={{ minHeight: '100vh', background: isDark ? '#000000' : '#f8fafc', color: isDark ? '#f8fafc' : '#0f172a' }}>
       <BusinessSidebar activeKey="publicidad" />
 
-      <main className="app-scroll-canvas" style={{ padding: '24px 32px 70px', maxWidth: '1150px', margin: '0 auto', width: '100%' }}>
+      <main className="app-scroll-canvas" style={{ padding: '16px 14px 100px', maxWidth: '1150px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
         {/* ENCABEZADO OFICIAL UNIFICADO */}
         <header style={{ marginBottom: '24px', borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid #e2e8f0', paddingBottom: '20px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: isDark ? 'rgba(2, 132, 199, 0.2)' : '#e0f2fe', border: isDark ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid #bae6fd', borderRadius: '20px', padding: '6px 14px', marginBottom: '12px' }}>
@@ -552,7 +552,7 @@ export default function PlanesPublicitariosPage() {
           </div>
 
           {/* TARJETAS DE PLANES CON PAGO INTEGRADO */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginBottom: '30px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', marginBottom: '24px' }}>
             {PUBLICITY_PLANS.map((plan) => {
               const price = calculatePrice(plan.priceMonthly);
               const isSelected = selectedPlanId === plan.id;

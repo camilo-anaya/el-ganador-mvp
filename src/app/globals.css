@@ -21281,3 +21281,80 @@ html[data-theme='dark'] .see-all-grid-btn {
     gap: 8px !important;
   }
 }
+
+/* ==========================================================================
+   PORTAL EMPRESARIAL EN MÓVIL: RECUADROS ORDENADOS, TARJETAS ESTRUCTURADAS
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* En la superficie empresarial, el lienzo tiene márgenes y respiro profesional */
+  .desktop-workspace-grid,
+  .desktop-workspace-grid .app-scroll-canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    padding-top: 10px !important;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Los recuadros empresariales son tarjetas limpias, con esquinas redondeadas y bordes completos */
+  .desktop-workspace-grid .station-block-premium {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 18px !important;
+    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    margin: 0 0 16px 0 !important;
+    padding: 16px 14px !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08) !important;
+    background: var(--bg-card, #ffffff);
+  }
+
+  [data-theme='dark'] .desktop-workspace-grid .station-block-premium,
+  .dark .desktop-workspace-grid .station-block-premium {
+    background: #0f172a !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* Barra superior empresarial compacta y ordenada sin desbordarse */
+  .app-topbar {
+    padding: calc(env(safe-area-inset-top, 0px) + 8px) 12px 8px 12px !important;
+  }
+
+  .app-topbar .brand-title {
+    font-size: 0.92rem !important;
+  }
+
+  .app-topbar .brand-subtitle {
+    font-size: 0.76rem !important;
+  }
+
+  .app-topbar .topbar-actions {
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .app-topbar .topbar-actions .btn-compact-action {
+    padding: 5px 8px !important;
+    font-size: 11px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Tira de herramientas / chips empresariales con scroll suave */
+  .desktop-workspace-grid .category-chips {
+    width: 100% !important;
+    padding: 4px 2px 10px 2px !important;
+    margin: 0 0 14px 0 !important;
+    gap: 8px !important;
+  }
+
+  .desktop-workspace-grid .category-chips .chip-btn {
+    font-size: 0.82rem !important;
+    padding: 7px 12px !important;
+    white-space: nowrap !important;
+  }
+}
