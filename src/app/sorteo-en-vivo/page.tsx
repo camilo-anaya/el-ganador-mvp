@@ -2354,20 +2354,21 @@ export default function LiveDrawDemoPage() {
               <div
                 className="studioRevenueWidget"
                 title={`Recaudo oficial en vivo: ${activeDrawTitle}`}
+                style={{ color: '#ffffff' }}
               >
                 <span className="revenueCoinBadge">💰</span>
                 <div className="revenueDetails">
-                  <div className="revenueTopMeta">
-                    <span className="revenueLabel">RECAUDO EN VIVO</span>
-                    <span className="revenueRaffleName">· {activeDrawTitle}</span>
+                  <div className="revenueTopMeta" style={{ color: '#ffffff' }}>
+                    <span className="revenueLabel" style={{ color: '#ffffff' }}>RECAUDO EN VIVO</span>
+                    <span className="revenueRaffleName" style={{ color: '#ffffff' }}>· {activeDrawTitle}</span>
                   </div>
                   <div className="revenueNumberRow">
-                    <strong className="revenueAmount">
+                    <strong className="revenueAmount" style={{ color: '#ffffff' }}>
                       ${activeTotalRevenue.toLocaleString('es-CO')}
-                      <small className="currencyText">COP</small>
+                      <span className="currencyText" style={{ color: '#ffffff' }}> COP</span>
                     </strong>
-                    <span className="revenueProgressPill">
-                      {activeRevenuePct}% ({activeSoldTickets}/{activeTotalTickets})
+                    <span className="revenueProgressPill" style={{ color: '#ffffff' }}>
+                      ({activeSoldTickets} / {activeTotalTickets} balotas · {activeRevenuePct}%)
                     </span>
                   </div>
                 </div>
