@@ -11,7 +11,7 @@ export type BusinessNavKey = 'marketplace' | 'perfil' | 'estados' | 'rifas' | 'p
 export const BUSINESS_NAV_ITEMS: Array<{ key: BusinessNavKey; label: string; href: string; icon: string }> = [
   { key: 'marketplace', label: 'Marketplace (Vitrina)', href: '/', icon: '🏛️' },
   { key: 'perfil', label: 'Mi Tienda', href: '/empresario?tab=perfil', icon: '🏪' },
-  { key: 'rifas', label: 'Mis Rifas y Sorteos', href: '/empresario?tab=rifas', icon: '🎟️' },
+  { key: 'rifas', label: 'Publicar Rifa y Cartón', href: '/empresario?tab=rifas', icon: '🎟️' },
   { key: 'estados', label: 'Subir Estado (Story 24h)', href: '/empresario?tab=estados', icon: '📸' },
   { key: 'publicidad', label: 'Publicidad y Banner', href: '/empresario/publicidad', icon: '📢' },
   { key: 'crm', label: 'CRM Compradores', href: '/empresario?tab=crm', icon: '👥' },
