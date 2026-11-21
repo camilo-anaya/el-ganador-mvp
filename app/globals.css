@@ -21546,6 +21546,27 @@ textarea,
 }
 
 /* 9. CONTRASTE Y LEGIBILIDAD EN SALAS EN VIVO, MODAL PATROCINADOR, CHAT Y RESULTADOS */
+/* Blindaje global: Todo texto dentro de contenedores oscuros de sorteo-en-vivo nunca debe heredar el color oscuro del modo claro */
+html[data-theme='light'] .liveDemoPage strong:not(.whiteCardText),
+html[data-theme='light'] .liveDemoPage h1:not(.whiteCardText),
+html[data-theme='light'] .liveDemoPage h2:not(.whiteCardText),
+html[data-theme='light'] .liveDemoPage h3:not(.whiteCardText),
+html[data-theme='light'] .liveDemoPage h4:not(.whiteCardText),
+[data-theme='light'] .liveDemoPage strong:not(.whiteCardText),
+[data-theme='light'] .liveDemoPage h1:not(.whiteCardText),
+[data-theme='light'] .liveDemoPage h2:not(.whiteCardText),
+[data-theme='light'] .liveDemoPage h3:not(.whiteCardText),
+[data-theme='light'] .liveDemoPage h4:not(.whiteCardText),
+.liveDemoHero h1,
+.tvSponsorBrand,
+.liveChannelsBar strong,
+.liveChannelsBar span,
+.liveChannelsLabel,
+.liveRatingHud span {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
 html[data-theme='light'] .liveChannelPill strong,
 html[data-theme='light'] .liveChannelPill .channelTitle,
 html[data-theme='light'] .channelTitle,
@@ -21598,5 +21619,26 @@ html[data-theme='light'] .winnerChatModalContainer .winnerChatSecurityBanner str
   background: #ffffff !important;
   color: #0f172a !important;
   border: 2px solid #007AFF !important;
+}
+
+.epicWinnerCard strong,
+.epicWinnerCard .winnerNumberLarge,
+.epicWinnerCard .winnerNameRow strong {
+  color: #007AFF !important;
+  -webkit-text-fill-color: #007AFF !important;
+  text-shadow: none !important;
+}
+
+.epicWinnerCard .phoneticWinnerSpan {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+.epicWinnerCard small,
+.epicWinnerCard .winnerHighlightSubtitle {
+  color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
+  text-shadow: none !important;
 }
 

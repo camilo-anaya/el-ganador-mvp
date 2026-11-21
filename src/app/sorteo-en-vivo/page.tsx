@@ -2947,7 +2947,7 @@ export default function LiveDrawDemoPage() {
                   >
                     <div className="tvSponsorLogoBadge">{sponsorBumper.logo}</div>
                     <div className="tvSponsorInfo">
-                      <strong className="tvSponsorBrand">{sponsorBumper.brand} ↗</strong>
+                      <strong className="tvSponsorBrand" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>{sponsorBumper.brand} ↗</strong>
                       <span className="tvSponsorSub">{sponsorBumper.subtitle}</span>
                       <small style={{ color: '#f5b82e', fontSize: '9.5px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
                         👥 {sponsorFollowers.toLocaleString()} pendientes · Ver Vitrina
