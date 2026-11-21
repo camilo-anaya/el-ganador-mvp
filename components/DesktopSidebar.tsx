@@ -107,6 +107,25 @@ export default function DesktopSidebar() {
         </nav>
       </div>
 
+      {/* Bloque 3: Normatividad y Transparencia Legal */}
+      <div className="toc-section">
+        <span className="toc-heading">⚖️ TRANSPARENCIA Y LEY</span>
+        <nav className="toc-nav-list">
+          <Link
+            href="/empresario/marco-legal"
+            className={`toc-link ${pathname === '/empresario/marco-legal' ? 'active' : ''}`}
+          >
+            <span>📜</span> Marco Legal &amp; Coljuegos
+          </Link>
+          <Link
+            href="/terminos"
+            className={`toc-link ${pathname === '/terminos' ? 'active' : ''}`}
+          >
+            <span>📄</span> Términos y Condiciones
+          </Link>
+        </nav>
+      </div>
+
       <div className="toc-pro-summary">
         <strong>⚡ Modo Escritorio Activo</strong>
         <p>Explora sorteos, sigue tiendas y gestiona tus boletas con vista extendida en PC/Tablet.</p>

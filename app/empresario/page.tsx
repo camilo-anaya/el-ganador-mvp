@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import BusinessSidebar from '@/components/business/BusinessSidebar';
 import BusinessBottomNav from '@/components/business/BusinessBottomNav';
 import BusinessAdBanner from '@/components/business/BusinessAdBanner';
+import ColjuegosLegalGuide from '@/components/ColjuegosLegalGuide';
 import { performLogout } from '@/lib/logout';
 import RegionalPermitSelectorWithTime, { LegalScope } from '@/components/RegionalPermitSelectorWithTime';
 import { fileToDataUrl, shareRaffleLink } from '@/lib/nativeActions';
@@ -178,6 +179,7 @@ function PanelEmpresarioContent() {
   const [coverage, setCoverage] = useState('nacional');
   const [rafflePhotos, setRafflePhotos] = useState<string[]>([]);
   const [createdRaffleSlug, setCreatedRaffleSlug] = useState<string | null>(null);
+  const [showColjuegosGuide, setShowColjuegosGuide] = useState<boolean>(false);
 
   // 3.1 Soporte Legal Obligatorio (Ley 643 de 2001)
   const [legalScope, setLegalScope] = useState<LegalScope>('nacional');
@@ -662,6 +664,22 @@ function PanelEmpresarioContent() {
             >
               🏢 Validación KYB (Supabase Storage)
             </button>
+            <Link
+              href="/empresario/marco-legal"
+              className="chip-btn"
+              style={{
+                textDecoration: 'none',
+                borderColor: 'rgba(212, 175, 55, 0.45)',
+                color: '#f5b82e',
+                fontWeight: 800,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+              title="Consultar requisitos oficiales de Coljuegos y normatividad legal colombiana"
+            >
+              📜 Marco Legal (Coljuegos)
+            </Link>
           </nav>
 
           {/* =========================================================
@@ -1260,6 +1278,93 @@ function PanelEmpresarioContent() {
             <section className="station-block-premium">
               <div className="compact-section-title">
                 <h2>🎟️ Publicar Nueva Rifa y Configurar Cartón</h2>
+              </div>
+
+              {/* GUÍA INFORMATIVA OBLIGATORIA COLJUEGOS */}
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, rgba(6, 38, 21, 0.95) 0%, rgba(3, 21, 12, 0.98) 100%)',
+                  border: '1.5px solid rgba(220, 185, 80, 0.6)',
+                  borderRadius: '16px',
+                  padding: '16px 18px',
+                  marginBottom: '20px',
+                  color: '#ffffff',
+                  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.25)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{ fontSize: '28px' }}>📜</span>
+                    <div>
+                      <strong style={{ fontSize: '0.98rem', color: '#f5b82e', display: 'block' }}>
+                        Requisitos Oficiales Coljuegos para Publicar Rifas en Colombia
+                      </strong>
+                      <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
+                        Conforme a la Ley 643/2001 y Decreto 1968/2001: 14% para salud pública, póliza del 100% y radicado legal obligatorio.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    <button
+                      type="button"
+                      onClick={() => setShowColjuegosGuide((v) => !v)}
+                      style={{
+                        padding: '7px 14px',
+                        borderRadius: '8px',
+                        background: showColjuegosGuide ? '#0284c7' : 'rgba(255, 255, 255, 0.12)',
+                        border: '1px solid rgba(255, 255, 255, 0.25)',
+                        color: '#ffffff',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {showColjuegosGuide ? '▲ Ocultar 11 Requisitos' : '▼ Ver los 11 Requisitos'}
+                    </button>
+
+                    <a
+                      href="/docs/requisitos-coljuegos-rifas-nacionales.pdf"
+                      download="Requisitos-Coljuegos-Rifas-Nacionales.pdf"
+                      style={{
+                        padding: '7px 14px',
+                        borderRadius: '8px',
+                        background: '#d4af37',
+                        color: '#07180d',
+                        fontSize: '0.82rem',
+                        fontWeight: 800,
+                        textDecoration: 'none',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                      }}
+                    >
+                      <span>📥</span> Descargar PDF
+                    </a>
+
+                    <Link
+                      href="/empresario/marco-legal"
+                      style={{
+                        padding: '7px 14px',
+                        borderRadius: '8px',
+                        background: 'transparent',
+                        border: '1px solid rgba(56, 189, 248, 0.45)',
+                        color: '#38bdf8',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                      }}
+                    >
+                      Marco Legal Completo →
+                    </Link>
+                  </div>
+                </div>
+
+                {showColjuegosGuide && (
+                  <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.15)' }}>
+                    <ColjuegosLegalGuide embeddedMode onClose={() => setShowColjuegosGuide(false)} />
+                  </div>
+                )}
               </div>
 
               <form onSubmit={handlePublishRaffle} className="auth-form">

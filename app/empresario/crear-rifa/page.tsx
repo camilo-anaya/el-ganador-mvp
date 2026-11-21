@@ -106,6 +106,70 @@ export default function CrearRifaEmpresarioPage() {
         <h2 style={{ fontSize: '20px', margin: 0, fontWeight: 800 }}>Crear y Publicar Sorteo Oficial</h2>
       </header>
 
+      {/* BANNER GUÍA COLJUEGOS */}
+      <div
+        style={{
+          background: 'linear-gradient(135deg, rgba(6, 38, 21, 0.95) 0%, rgba(3, 21, 12, 0.98) 100%)',
+          border: '1.5px solid rgba(220, 185, 80, 0.6)',
+          borderRadius: '16px',
+          padding: '14px 16px',
+          marginBottom: '20px',
+          color: '#ffffff',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '10px',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <span style={{ fontSize: '24px' }}>📜</span>
+          <div>
+            <strong style={{ fontSize: '0.92rem', color: '#f5b82e', display: 'block' }}>
+              Requisitos Legales Coljuegos (Ley 643/2001)
+            </strong>
+            <span style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
+              Antes de publicar, verifica los 11 requisitos oficiales y las notas legales.
+            </span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <a
+            href="/docs/requisitos-coljuegos-rifas-nacionales.pdf"
+            download="Requisitos-Coljuegos-Rifas-Nacionales.pdf"
+            style={{
+              padding: '6px 12px',
+              borderRadius: '8px',
+              background: '#d4af37',
+              color: '#07180d',
+              fontSize: '0.8rem',
+              fontWeight: 800,
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+            }}
+          >
+            <span>📥</span> Descargar PDF
+          </a>
+          <Link
+            href="/empresario/marco-legal"
+            style={{
+              padding: '6px 12px',
+              borderRadius: '8px',
+              background: 'transparent',
+              border: '1px solid rgba(56, 189, 248, 0.45)',
+              color: '#38bdf8',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              textDecoration: 'none',
+            }}
+          >
+            Ver Marco Legal →
+          </Link>
+        </div>
+      </div>
+
       <form onSubmit={handlePublish} className="auth-form" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         
         <div>

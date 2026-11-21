@@ -1766,6 +1766,9 @@ export default function CompactWhiteMarketplacePage() {
               <Link href="/perfil" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: 'inherit', fontWeight: 600 }}>
                 <span>👤</span> Mi Perfil
               </Link>
+              <Link href="/empresario/marco-legal" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: '#f5b82e', fontWeight: 700 }}>
+                <span>📜</span> Marco Legal &amp; Coljuegos
+              </Link>
             </nav>
 
             {/* Botón Cerrar Sesión en el menú móvil */}

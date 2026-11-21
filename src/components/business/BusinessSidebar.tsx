@@ -6,7 +6,7 @@ import React from 'react';
 import Link from 'next/link';
 import { performLogout } from '@/lib/logout';
 
-export type BusinessNavKey = 'marketplace' | 'perfil' | 'estados' | 'rifas' | 'publicidad' | 'crm' | 'kyb' | 'envivo';
+export type BusinessNavKey = 'marketplace' | 'perfil' | 'estados' | 'rifas' | 'publicidad' | 'crm' | 'kyb' | 'legal' | 'envivo';
 
 export const BUSINESS_NAV_ITEMS: Array<{ key: BusinessNavKey; label: string; href: string; icon: string }> = [
   { key: 'marketplace', label: 'Marketplace (Vitrina)', href: '/', icon: '🏛️' },
@@ -16,6 +16,7 @@ export const BUSINESS_NAV_ITEMS: Array<{ key: BusinessNavKey; label: string; hre
   { key: 'publicidad', label: 'Publicidad y Banner', href: '/empresario/publicidad', icon: '📢' },
   { key: 'crm', label: 'CRM Compradores', href: '/empresario?tab=crm', icon: '👥' },
   { key: 'kyb', label: 'Validación KYB', href: '/empresario?tab=kyb', icon: '🏢' },
+  { key: 'legal', label: 'Marco Legal & Coljuegos', href: '/empresario/marco-legal', icon: '📜' },
   { key: 'envivo', label: 'Sorteo en Vivo', href: '/sorteo-en-vivo', icon: '🎱' },
 ];
 
