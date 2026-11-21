@@ -1,4 +1,4 @@
-.liveDemoPage { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; padding: env(safe-area-inset-top, 0px) clamp(18px, 5vw, 78px) calc(36px + env(safe-area-inset-bottom, 0px)); color: #f5f5ea; background: radial-gradient(ellipse at 50% 18%, #145338 0, #0a2e20 37%, #061a12 85%); font-family: Arial, Helvetica, sans-serif; position: relative; -webkit-tap-highlight-color: transparent; }
+.liveDemoPage { min-height: 100vh; min-height: 100dvh; overflow-x: hidden; padding: env(safe-area-inset-top, 0px) clamp(18px, 5vw, 78px) calc(36px + env(safe-area-inset-bottom, 0px)); color: #f8fafc; background: radial-gradient(ellipse at 50% 18%, #0f172a 0%, #090d16 45%, #020617 100%); font-family: Arial, Helvetica, sans-serif; position: relative; -webkit-tap-highlight-color: transparent; }
 .liveDemoHeader { max-width: 1440px; min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 15px; margin: 0 auto; border-bottom: 1px solid #ffffff16; }
 .liveDemoBrand { display: inline-flex; align-items: center; gap: 10px; color: #f9f5e9; font-size: 13px; font-weight: 900; letter-spacing: 1.3px; text-decoration: none; }
 .liveDemoBrandMark { width: 36px; height: 36px; display: grid; place-items: center; border: 1px solid #d8b550; border-radius: 11px; color: #f0ce71; background: #d8b55014; font-size: 12px; letter-spacing: 0; }
@@ -41,10 +41,10 @@
 }
 
 /* ETAPA PRINCIPAL DEL SORTEO */
-.liveDemoStage { max-width: 1180px; margin: 0 auto; overflow: hidden; border: 1px solid #d4b04c55; border-radius: 24px; background: linear-gradient(155deg, #0e3020fa, #071c14fe); box-shadow: 0 30px 100px #0008, inset 0 1px #ffffff15; }
-.liveDemoStageTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 22px; border-bottom: 1px solid #ffffff12; }
+.liveDemoStage { max-width: 1180px; margin: 0 auto; overflow: hidden; border: 1.5px solid #1e293b; border-radius: 24px; background: linear-gradient(155deg, #0f172a 0%, #020617 100%); box-shadow: 0 30px 100px #0008, inset 0 1px #ffffff15; }
+.liveDemoStageTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 22px; border-bottom: 1px solid #ffffff12; background: rgba(15, 23, 42, 0.9); }
 .liveDemoStageTop > div { display: flex; align-items: center; gap: 10px; }
-.liveDemoDemoTag { color: #8ee3b0; font-size: 10px; font-weight: 700; background: #0c3d26; padding: 3px 8px; border-radius: 6px; border: 1px solid #1f6e4a; }
+.liveDemoDemoTag { color: #ffffff; font-size: 10px; font-weight: 800; background: #007AFF; padding: 3px 8px; border-radius: 6px; border: 1px solid #38bdf8; }
 .liveDemoOnAir { color: #e4d9bd; border-color: #e1c36340; background: #b68e2720; }
 .liveDemoOnAir i { background: #f4c641; animation: demoPulse 1.6s infinite; }
 .liveDemoDrawId { color: #acbcae; font-size: 10px; font-weight: 800; letter-spacing: 1px; }
@@ -183,7 +183,7 @@
   width: min(98%, 500px);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 45%, #19693b 0%, #104828 70%, #0a351d 100%);
+  background: radial-gradient(circle at 50% 45%, #1e293b 0%, #0f172a 70%, #020617 100%);
   display: block;
   margin: 0 auto;
   box-sizing: border-box;
@@ -217,15 +217,15 @@
   /* Cristal acrílico volumétrico: fondo de estudio con oclusión esférica profunda */
   background: radial-gradient(
     circle at 50% 46%,
-    rgba(22, 68, 46, 0.5) 0%,
-    rgba(10, 36, 24, 0.8) 48%,
-    rgba(4, 18, 11, 0.96) 78%,
-    #020805 100%
+    rgba(30, 41, 59, 0.6) 0%,
+    rgba(15, 23, 42, 0.85) 48%,
+    rgba(2, 6, 23, 0.96) 78%,
+    #020617 100%
   );
   box-shadow:
     inset 0 0 55px rgba(0, 0, 0, 0.95),
     inset 0 0 18px rgba(255, 255, 255, 0.22),
-    0 0 35px rgba(229, 196, 104, 0.25);
+    0 0 35px rgba(0, 122, 255, 0.25);
 }
 
 /* 1. Iluminación volumétrica interna de cámara de sorteo */
@@ -630,7 +630,7 @@
 }
 
 .heroBallNumber {
-  color: #0a1f13;
+  color: #0f172a;
   font-size: clamp(28px, 7.5vw, 48px);
   font-weight: 950;
   font-family: 'JetBrains Mono', monospace;
@@ -645,7 +645,7 @@
   display: block;
   width: 34px;
   height: 3.5px;
-  background: #0a1f13;
+  background: #007AFF;
   border-radius: 99px;
   margin-top: 3px;
 }
@@ -1367,21 +1367,21 @@
 .phaseSteps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; width: 100%; box-sizing: border-box; }
 .pStep { padding: 6px 2px; text-align: center; font-size: clamp(7.5px, 1.1vw, 9px); font-weight: 800; border-radius: 6px; background: #0003; border: 1px solid #ffffff14; color: #889a8c; transition: all .3s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box; }
 .pStep.active { border-color: #f2cf68; color: #fff; background: #e0b74933; box-shadow: 0 0 8px #e0b74944; }
-.pStep.done { border-color: #38ef7d66; color: #8ee3b0; background: #123e2840; }
+.pStep.done { border-color: #0284c7; color: #38bdf8; background: rgba(0, 122, 255, 0.15); }
 
 .liveDemoDrawActions { display: grid; gap: 11px; margin-top: 14px; }
-.liveDemoStart { min-height: 52px; padding: 0 18px; border: 0; border-radius: 12px; color: #102416; background: linear-gradient(105deg, #f4d778, #d9a836); box-shadow: 0 8px 24px #d2a33928; font-size: 13.5px; font-weight: 900; cursor: pointer; transition: transform .2s, filter .2s; }
+.liveDemoStart { min-height: 52px; padding: 0 18px; border: 0; border-radius: 12px; color: #ffffff; background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%); box-shadow: 0 8px 24px rgba(0, 122, 255, 0.35); font-size: 13.5px; font-weight: 900; cursor: pointer; transition: transform .2s, filter .2s; }
 .liveDemoStart:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-2px); }
 .liveDemoStart:disabled { cursor: wait; opacity: .88; }
-.liveDemoMarketLink { justify-self: center; color: #dfd4ad; font-size: 11px; font-weight: 750; text-decoration: none; }
+.liveDemoMarketLink { justify-self: center; color: #38bdf8; font-size: 11px; font-weight: 750; text-decoration: none; }
 
 /* BANDEJA DE HISTORIAL DE BALOTAS */
-.drawHistoryTray { margin-top: 16px; padding: 12px; border: 1px solid #ffffff18; border-radius: 12px; background: #0004; }
-.historyTitle { display: block; color: #d4b04c; font-size: 10px; font-weight: 800; margin-bottom: 8px; }
+.drawHistoryTray { margin-top: 16px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 12px; background: rgba(15, 23, 42, 0.6); }
+.historyTitle { display: block; color: #38bdf8; font-size: 10px; font-weight: 800; margin-bottom: 8px; }
 .historyChips { display: flex; gap: 8px; flex-wrap: wrap; }
-.historyChip { display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: #ffffff0a; border: 1px solid #ffffff15; border-radius: 20px; }
-.chipBall { width: 22px; height: 22px; border-radius: 50%; background: #f0ce71; color: #102416; font-size: 10px; font-weight: 900; display: grid; place-items: center; font-family: monospace; }
-.historyChip small { color: #a4b5a6; font-size: 8.5px; }
+.historyChip { display: flex; align-items: center; gap: 6px; padding: 4px 8px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; }
+.chipBall { width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%); color: #ffffff; font-size: 10px; font-weight: 900; display: grid; place-items: center; font-family: monospace; }
+.historyChip small { color: #cbd5e1; font-size: 8.5px; }
 
 /* TARJETA DEL GANADOR ÉPICA Y RESPONSIVA (FONDO BLANCO Y AZUL BRAND DE ALTO CONTRASTE) */
 .epicWinnerCard {
@@ -1453,41 +1453,41 @@
 .liveDemoAuditIntro h2 { margin: 0; color: #f5f2e6; font-size: 19px; }
 .liveDemoAuditIntro p:last-child { margin: 5px 0 0; color: #b7c5b9; font-size: 10.5px; line-height: 1.5; }
 .liveDemoAuditItems { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
-.liveDemoAuditItems > div { display: grid; grid-template-columns: 26px 1fr; gap: 4px 8px; padding: 13px; border: 1px solid #ffffff12; border-radius: 12px; background: #03140e40; }
-.liveDemoAuditItems > div > span { grid-row: span 2; color: #d7b451; font-size: 11px; font-weight: 900; }
-.liveDemoAuditItems b { color: #e8ecdf; font-size: 10.5px; }
-.liveDemoAuditItems small { color: #a9baad; font-size: 9.5px; line-height: 1.4; }
-.auditHowButton { display: flex; align-items: center; gap: 8px; margin: 14px auto 0; padding: 7px; border: 0; color: #e3cb7d; background: transparent; font-size: 10.5px; font-weight: 800; cursor: pointer; }
+.liveDemoAuditItems > div { display: grid; grid-template-columns: 26px 1fr; gap: 4px 8px; padding: 13px; border: 1px solid #ffffff12; border-radius: 12px; background: rgba(15, 23, 42, 0.4); }
+.liveDemoAuditItems > div > span { grid-row: span 2; color: #38bdf8; font-size: 11px; font-weight: 900; }
+.liveDemoAuditItems b { color: #ffffff; font-size: 10.5px; }
+.liveDemoAuditItems small { color: #cbd5e1; font-size: 9.5px; line-height: 1.4; }
+.auditHowButton { display: flex; align-items: center; gap: 8px; margin: 14px auto 0; padding: 7px; border: 0; color: #38bdf8; background: transparent; font-size: 10.5px; font-weight: 800; cursor: pointer; }
 .liveDemoHow { max-width: 920px; margin: 16px auto 0; padding: 20px 24px; border: 1px solid #e2e8f0; border-radius: 18px; color: #000000; background: #f8fafc; font-size: 13.5px; line-height: 1.7; }
 .liveDemoHow p + p { margin-top: 10px; color: #000000; }
-.liveDemoFooter { max-width: 1180px; display: flex; justify-content: space-between; gap: 12px; margin: 24px auto 0; color: #879b8c; font-size: 9.5px; }
-.liveDemoFooter a { color: #e2cf87; font-weight: 900; letter-spacing: 1px; text-decoration: none; }
+.liveDemoFooter { max-width: 1180px; display: flex; justify-content: space-between; gap: 12px; margin: 24px auto 0; color: #94a3b8; font-size: 9.5px; }
+.liveDemoFooter a { color: #38bdf8; font-weight: 900; letter-spacing: 1px; text-decoration: none; }
 
 /* PANEL CIENTÍFICO: ESTADÍSTICA, CÁLCULO Y GEOMETRÍA */
-.scientificPanel { margin-top: 16px; padding: 12px 14px; border: 1px solid rgba(240, 206, 113, 0.35); border-radius: 14px; background: linear-gradient(145deg, rgba(8, 30, 20, 0.8), rgba(4, 16, 10, 0.95)); box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 1px rgba(255,255,255,0.08); width: 100%; box-sizing: border-box; }
+.scientificPanel { margin-top: 16px; padding: 12px 14px; border: 1.5px solid #007AFF; border-radius: 14px; background: linear-gradient(145deg, rgba(15, 23, 42, 0.85), rgba(2, 6, 23, 0.95)); box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 1px rgba(255,255,255,0.08); width: 100%; box-sizing: border-box; }
 .sciHeader { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
 .sciIcon { font-size: 18px; }
-.sciHeader strong { display: block; color: #f0ce71; font-size: 10px; font-weight: 900; letter-spacing: 0.8px; }
-.sciHeader small { color: #a4b8a6; font-size: 8.5px; }
+.sciHeader strong { display: block; color: #38bdf8; font-size: 10px; font-weight: 900; letter-spacing: 0.8px; }
+.sciHeader small { color: #cbd5e1; font-size: 8.5px; }
 
 .sciGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; width: 100%; box-sizing: border-box; }
 .sciCard { padding: 8px; border: 1px solid rgba(255,255,255,0.12); border-radius: 9px; background: rgba(0,0,0,0.35); display: flex; flex-direction: column; justify-content: space-between; min-width: 0; overflow: hidden; box-sizing: border-box; }
-.sciTag { font-size: 7.5px; font-weight: 800; color: #8ee3b0; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.sciFormula { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #ffd700; background: rgba(0,0,0,0.45); padding: 3px 4px; border-radius: 4px; margin-bottom: 4px; text-align: center; white-space: nowrap; overflow-x: auto; scrollbar-width: none; max-width: 100%; box-sizing: border-box; }
+.sciTag { font-size: 7.5px; font-weight: 800; color: #38bdf8; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sciFormula { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #ffffff; background: rgba(0,0,0,0.45); padding: 3px 4px; border-radius: 4px; margin-bottom: 4px; text-align: center; white-space: nowrap; overflow-x: auto; scrollbar-width: none; max-width: 100%; box-sizing: border-box; }
 .sciFormula::-webkit-scrollbar { display: none; }
 .sciValue { display: flex; align-items: baseline; gap: 4px; margin-bottom: 4px; flex-wrap: wrap; }
 .sciValue b { font-size: 13px; font-family: 'JetBrains Mono', monospace; color: #fff; }
-.sciValue b.textGreen { color: #38ef7d; }
-.sciValue span { font-size: 7.5px; color: #a4b8a6; }
-.sciMeta { display: flex; justify-content: space-between; align-items: center; font-size: 7.5px; color: #7f9482; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 4px; flex-wrap: wrap; gap: 2px; }
-.sciMeta code { color: #f0ce71; font-family: monospace; font-size: 7.5px; word-break: break-all; }
+.sciValue b.textGreen { color: #38bdf8; }
+.sciValue span { font-size: 7.5px; color: #cbd5e1; }
+.sciMeta { display: flex; justify-content: space-between; align-items: center; font-size: 7.5px; color: #94a3b8; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 4px; flex-wrap: wrap; gap: 2px; }
+.sciMeta code { color: #38bdf8; font-family: monospace; font-size: 7.5px; word-break: break-all; }
 
 .chiSquareLive { margin-top: 10px; padding: 8px 10px; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); }
-.chiTitle { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 9.5px; color: #cad7cb; font-weight: 700; }
-.chiBadge { font-size: 8px; font-weight: 800; color: #38ef7d; background: rgba(56, 239, 125, 0.15); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(56, 239, 125, 0.3); }
+.chiTitle { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 9.5px; color: #f8fafc; font-weight: 700; }
+.chiBadge { font-size: 8px; font-weight: 800; color: #ffffff; background: #007AFF; padding: 2px 6px; border-radius: 4px; border: 1px solid #38bdf8; }
 .chiBarTrack { height: 5px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; }
-.chiBarFill { height: 100%; background: linear-gradient(90deg, #1f6e4a, #38ef7d, #f0ce71); border-radius: inherit; }
-.chiLabels { display: flex; justify-content: space-between; font-size: 8px; color: #889e8a; margin-top: 4px; }
+.chiBarFill { height: 100%; background: linear-gradient(90deg, #0284c7, #007AFF, #38bdf8); border-radius: inherit; }
+.chiLabels { display: flex; justify-content: space-between; font-size: 8px; color: #cbd5e1; margin-top: 4px; }
 
 @media (max-width: 560px) {
   .sciGrid { grid-template-columns: 1fr; gap: 6px; }
@@ -1495,28 +1495,28 @@
 
 /* CONFIGURACIÓN RULETA */
 .wheelSetup { display: grid; gap: 8px; margin: 16px 0 13px; padding: 12px; border: 1px solid #ffffff1a; border-radius: 12px; background: #ffffff08; }
-.wheelSetup label { display: grid; gap: 5px; color: #d8e2d8; font-size: 9px; font-weight: 800; }
-.wheelSetup select, .wheelSetup textarea { width: 100%; padding: 8px 9px; border: 1px solid #ffffff24; border-radius: 8px; color: #f2f3e8; background: #0b2418; font: inherit; font-size: 10px; }
+.wheelSetup label { display: grid; gap: 5px; color: #f8fafc; font-size: 9px; font-weight: 800; }
+.wheelSetup select, .wheelSetup textarea { width: 100%; padding: 8px 9px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: #ffffff; background: #0f172a; font: inherit; font-size: 10px; }
 .wheelSetup select { min-height: 35px; }
 .wheelSetup textarea { max-height: 96px; min-height: 65px; resize: vertical; line-height: 1.5; }
-.wheelSetup small { color: #bbcaaf; font-size: 8px; }
+.wheelSetup small { color: #94a3b8; font-size: 8px; }
 .wheelDemoError { margin: 8px 0 0; color: #ffb8b8; font-size: 10px; }
 
 /* BOTÓN RÁPIDO DE ACTA EN TARJETA DEL GANADOR */
 .winnerQuickDownloadBtn {
   margin-left: 8px;
   padding: 8px 12px;
-  background: linear-gradient(135deg, #f0ce71, #d4a838);
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%);
   border: none;
   border-radius: 8px;
-  color: #0b2215;
+  color: #ffffff;
   font-size: 10px;
   font-weight: 900;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  box-shadow: 0 4px 12px rgba(224, 183, 73, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
   transition: all .2s;
   flex-shrink: 0;
 }
@@ -1536,9 +1536,9 @@
   transition: all .3s ease;
 }
 .officialActCard.ready {
-  border: 1.5px solid #d4b04c;
-  background: linear-gradient(145deg, rgba(16, 52, 34, 0.95), rgba(7, 24, 16, 0.98));
-  box-shadow: 0 8px 28px rgba(212, 176, 76, 0.25);
+  border: 1.5px solid #007AFF;
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.98));
+  box-shadow: 0 8px 28px rgba(0, 122, 255, 0.25);
   animation: actCardGlow 2s infinite alternate ease-in-out;
 }
 @keyframes actCardGlow {
@@ -4254,12 +4254,12 @@
   font-family: Arial, Helvetica, sans-serif;
   position: relative;
   -webkit-tap-highlight-color: transparent;
-  background-color: #0a331f !important;
+  background-color: #020617 !important;
   background-image:
-    radial-gradient(ellipse at 50% 20%, rgba(36, 136, 79, 0.92) 0%, rgba(18, 68, 41, 0.95) 50%, #0a351d 95%),
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.048) 0px, rgba(255, 255, 255, 0.048) 1px, transparent 1px, transparent 16px),
-    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.048) 0px, rgba(255, 255, 255, 0.048) 1px, transparent 1px, transparent 16px),
-    radial-gradient(circle at 16px 16px, rgba(245, 215, 120, 0.09) 1.2px, transparent 1.2px) !important;
+    radial-gradient(ellipse at 50% 20%, #0f172a 0%, #090d16 50%, #020617 95%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 16px),
+    radial-gradient(circle at 16px 16px, rgba(0, 122, 255, 0.08) 1.2px, transparent 1.2px) !important;
   background-size: 100% 100%, 32px 32px, 32px 32px, 32px 32px !important;
   background-attachment: fixed !important;
 }
@@ -4269,8 +4269,8 @@
 }
 
 .confetti_2 {
-  background: #38ef7d;
-  box-shadow: 0 0 6px rgba(56, 239, 125, 0.7);
+  background: #38bdf8;
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.7);
 }
 
 .liveDemoHero {
@@ -4287,7 +4287,7 @@
 
 .liveDemoHero .liveDemoEyebrow,
 .liveDemoEyebrow {
-  color: #d4af37 !important;
+  color: #38bdf8 !important;
   font-size: 12px !important;
   font-weight: 900 !important;
   letter-spacing: 2.6px !important;
@@ -4306,12 +4306,12 @@
 }
 
 .liveDemoHero h1 span {
-  background: linear-gradient(135deg, #f5d47a 0%, #d4af37 100%) !important;
+  background: linear-gradient(135deg, #38bdf8 0%, #007AFF 100%) !important;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
-  color: #f5d47a !important;
+  color: #38bdf8 !important;
   text-shadow: none !important;
-  filter: drop-shadow(0 2px 10px rgba(212, 175, 55, 0.45)) !important;
+  filter: drop-shadow(0 2px 10px rgba(0, 122, 255, 0.45)) !important;
 }
 
 .liveDemoHero > p:last-child {
@@ -4324,27 +4324,27 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
 }
 
-/* ETAPA PRINCIPAL DEL SORTEO EN VERDE ESMERALDA DE LUJO */
+/* ETAPA PRINCIPAL DEL SORTEO EN OBSIDIAN Y AZUL BRAND */
 .liveDemoStage {
-  background-color: #061e12 !important;
+  background-color: #020617 !important;
   background-image:
     repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 24px),
     repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 0px, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 24px),
-    linear-gradient(155deg, #0e3020 0%, #071c14 60%, #03100a 100%) !important;
+    linear-gradient(155deg, #0f172a 0%, #090d16 60%, #020617 100%) !important;
   background-size: 32px 32px, 32px 32px, 100% 100% !important;
-  border: 1.5px solid #dbc070 !important;
+  border: 1.5px solid #007AFF !important;
   box-shadow: 0 30px 100px rgba(0, 0, 0, 0.75), inset 0 1px rgba(255, 255, 255, 0.12) !important;
 }
 
 .liveDemoStageTop {
-  background: rgba(4, 18, 11, 0.9) !important;
+  background: rgba(15, 23, 42, 0.95) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 .liveDemoDemoTag {
-  color: #8ee3b0 !important;
-  background: #0c3d26 !important;
-  border: 1px solid #1f6e4a !important;
+  color: #ffffff !important;
+  background: #007AFF !important;
+  border: 1px solid #38bdf8 !important;
 }
 
 .liveDemoOnAir {
@@ -4354,53 +4354,53 @@
 }
 
 .liveDemoDrawId {
-  color: #a3b8a9 !important;
+  color: #cbd5e1 !important;
 }
 
 .liveGameModes button {
-  color: #d2e0d7 !important;
-  background: #0b2216 !important;
+  color: #f8fafc !important;
+  background: #1e293b !important;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 .liveGameModes button:hover {
-  border-color: #d4ab3e !important;
-  background: #133925 !important;
+  border-color: #007AFF !important;
+  background: #0f172a !important;
   color: #ffffff !important;
 }
 
 .liveGameModes button.isSelected {
-  color: #0a2718 !important;
-  border-color: #cfa02c !important;
-  background: linear-gradient(110deg, #f7da7c, #dca52c) !important;
-  box-shadow: 0 6px 18px rgba(212, 166, 52, 0.25) !important;
+  color: #ffffff !important;
+  border-color: #38bdf8 !important;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  box-shadow: 0 6px 18px rgba(0, 122, 255, 0.35) !important;
 }
 
 .liveGameModes small {
-  color: #8fa696 !important;
+  color: #cbd5e1 !important;
 }
 
 .cartonSelectorLabel {
-  color: #e4d9bd !important;
+  color: #f8fafc !important;
 }
 
 .cartonBtn {
-  background: #0b2216 !important;
+  background: #1e293b !important;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  color: #d2e0d7 !important;
+  color: #f8fafc !important;
 }
 
 .cartonBtn:hover:not(:disabled) {
-  border-color: #cfa02c !important;
+  border-color: #007AFF !important;
   color: #ffffff !important;
-  background: #133925 !important;
+  background: #0f172a !important;
 }
 
 .cartonBtn.active {
-  border-color: #bc8a18 !important;
-  background: linear-gradient(105deg, #f7da7c, #dca52c) !important;
-  color: #092214 !important;
-  box-shadow: 0 4px 14px rgba(212, 166, 52, 0.3) !important;
+  border-color: #38bdf8 !important;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35) !important;
 }
 
 /* ==========================================================================
@@ -4888,19 +4888,19 @@
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6) !important;
 }
 
-/* DETALLES LATERALES SOBRE VERDE ESMERALDA DE LUJO */
+/* DETALLES LATERALES SOBRE OBSIDIAN Y AZUL BRAND */
 .liveDemoPrizeIcon {
-  background: linear-gradient(145deg, #18422d, #0b2518) !important;
-  border: 1px solid #d4b04c88 !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+  background: linear-gradient(145deg, #0f172a, #020617) !important;
+  border: 1.5px solid #007AFF !important;
+  box-shadow: 0 6px 18px rgba(0, 122, 255, 0.25) !important;
 }
 
 .liveDemoDetails h2 {
-  color: #f5f2e6 !important;
+  color: #ffffff !important;
 }
 
 .liveDemoPrizeDesc {
-  color: #b7c8bc !important;
+  color: #cbd5e1 !important;
 }
 
 .liveDemoPrizeStats div {
@@ -4909,34 +4909,34 @@
 }
 
 .liveDemoPrizeStats b {
-  color: #e5b338 !important;
+  color: #38bdf8 !important;
 }
 
 .liveDemoPrizeStats span {
-  color: #a4b7a9 !important;
+  color: #94a3b8 !important;
 }
 
 .pStep {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  color: #8ea394 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #cbd5e1 !important;
 }
 
 .pStep.active {
-  border-color: #c99924 !important;
-  color: #092315 !important;
-  background: linear-gradient(105deg, #ffe694, #e5b33b) !important;
-  box-shadow: 0 4px 12px rgba(212, 166, 52, 0.28) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.35) !important;
 }
 
 .pStep.done {
-  border-color: #79cf9f !important;
-  color: #8ee3b0 !important;
-  background: #0c3d26 !important;
+  border-color: #0284c7 !important;
+  color: #38bdf8 !important;
+  background: rgba(0, 122, 255, 0.15) !important;
 }
 
 .liveDemoMarketLink {
-  color: #8ee3b0 !important;
+  color: #38bdf8 !important;
 }
 
 .wheelSetup {
@@ -4945,18 +4945,18 @@
 }
 
 .wheelSetup label {
-  color: #e4d9bd !important;
+  color: #f8fafc !important;
 }
 
 .wheelSetup select,
 .wheelSetup textarea {
-  background: #092014 !important;
+  background: #0f172a !important;
   border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  color: #f5f2e6 !important;
+  color: #ffffff !important;
 }
 
 .wheelSetup small {
-  color: #8fa696 !important;
+  color: #94a3b8 !important;
 }
 
 .wheelDemoError {
@@ -4964,12 +4964,12 @@
 }
 
 .drawHistoryTray {
-  background: rgba(0, 0, 0, 0.35) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 .historyTitle {
-  color: #d4b04c !important;
+  color: #38bdf8 !important;
 }
 
 .historyChip {
@@ -4978,19 +4978,19 @@
 }
 
 .historyChip small {
-  color: #a4b5a6 !important;
+  color: #cbd5e1 !important;
 }
 
 .chipBall {
-  background: radial-gradient(circle at 35% 28%, #ffffff 0%, #fae8a5 35%, #e2b947 100%) !important;
-  color: #102416 !important;
-  border: 1px solid #d4a838 !important;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #38bdf8 !important;
 }
 
 .liveDemoStageFoot {
-  background: rgba(4, 18, 11, 0.9) !important;
+  background: rgba(15, 23, 42, 0.95) !important;
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: #9cae9f !important;
+  color: #cbd5e1 !important;
 }
 
 /* ============================================================================
@@ -7518,18 +7518,18 @@
 
 .coljuegosShieldPill {
   font-size: 0.65rem;
-  background: #004d25;
-  color: #ffe082;
+  background: #007AFF;
+  color: #ffffff;
   padding: 2px 7px;
   border-radius: 999px;
-  border: 1px solid #10b981;
+  border: 1px solid #38bdf8;
 }
 
 .winnerShaCode {
   display: block;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.72rem;
-  color: #6ee7b7;
+  color: #0284c7;
   word-break: break-all;
   user-select: all;
   letter-spacing: 0.03em;
@@ -7546,13 +7546,13 @@
   width: 100%;
   padding: 14px 20px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #004d25 0%, #007038 50%, #008744 100%);
-  border: 1.5px solid #e2b04a;
-  color: #ffe082;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%);
+  border: 1.5px solid #38bdf8;
+  color: #ffffff;
   font-size: 0.95rem;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 77, 37, 0.5), 0 0 16px rgba(226, 176, 74, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
   transition: transform 0.15s, box-shadow 0.15s;
   display: flex;
   align-items: center;
@@ -7562,7 +7562,7 @@
 
 .btnManualSaveAndHome:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(0, 77, 37, 0.7), 0 0 20px rgba(226, 176, 74, 0.5);
+  box-shadow: 0 10px 28px rgba(0, 122, 255, 0.6);
 }
 
 .winnerSubActionsRow {
@@ -7712,8 +7712,8 @@
 }
 
 .winnerChatMerchantBadge {
-  background: linear-gradient(105deg, #d4a737, #f7d879);
-  color: #092415;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%);
+  color: #ffffff;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 0.6px;
@@ -7725,7 +7725,7 @@
 .winnerChatVerifiedPill {
   font-size: 10.5px;
   font-weight: 800;
-  color: #34d399;
+  color: #38bdf8;
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -7864,8 +7864,8 @@
 }
 
 .winnerChatMessageItem.isClient .winnerChatMessageBubble {
-  background: linear-gradient(135deg, #d4a737, #f7d879);
-  color: #092415;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
   border-top-right-radius: 4px;
 }
 
@@ -7903,7 +7903,7 @@
 .winnerChatQuickSuggestions .suggestionsLabel {
   font-size: 10px;
   font-weight: 900;
-  color: #d4af37;
+  color: #38bdf8;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -7922,9 +7922,9 @@
 }
 
 .winnerChatQuickSuggestions button:hover {
-  background: rgba(212, 175, 55, 0.2);
-  border-color: #d4af37;
-  color: #f5d47a;
+  background: rgba(0, 122, 255, 0.25);
+  border-color: #007AFF;
+  color: #ffffff;
 }
 
 /* Formulario de Input */
@@ -7932,8 +7932,8 @@
   display: flex;
   gap: 8px;
   padding: 12px 16px;
-  background: #04120a;
-  border-top: 1px solid rgba(212, 175, 55, 0.25);
+  background: #0f172a;
+  border-top: 1px solid rgba(0, 122, 255, 0.25);
 }
 
 .winnerChatInputField {
@@ -7949,7 +7949,7 @@
 }
 
 .winnerChatInputField:focus {
-  border-color: #d4af37;
+  border-color: #007AFF;
   background: rgba(255, 255, 255, 0.12);
 }
 
@@ -7958,8 +7958,8 @@
 }
 
 .winnerChatSendBtn {
-  background: linear-gradient(105deg, #d4a737, #f7d879);
-  color: #092415;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%);
+  color: #ffffff;
   border: none;
   border-radius: 10px;
   padding: 0 18px;
@@ -7972,7 +7972,7 @@
 
 .winnerChatSendBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(212, 167, 55, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
 }
 
 /* Footer con WhatsApp y Certificado */
@@ -7980,8 +7980,8 @@
   padding: 10px 16px 14px;
   display: flex;
   gap: 10px;
-  background: #04120a;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: #0f172a;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .winnerChatWhatsAppBtn {

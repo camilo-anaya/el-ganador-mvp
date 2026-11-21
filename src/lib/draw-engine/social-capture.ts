@@ -407,7 +407,7 @@ function drawPhotorealisticBalotera(
       : winText.length === 3
         ? Math.round(heroR * 0.54)
         : Math.round(heroR * 0.42);
-  ctx.fillStyle = "#0a1f13";
+  ctx.fillStyle = "#0f172a";
   ctx.font = `900 ${fontSize}px "JetBrains Mono", monospace, Arial`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -417,7 +417,7 @@ function drawPhotorealisticBalotera(
   if (opts.mode === "balotas" && hasAmbiguityRisk(opts.winner)) {
     const barW = heroR * 0.36;
     drawRoundedRect(ctx, cx - barW / 2, cy + heroR * 0.28, barW, 6, 3);
-    ctx.fillStyle = "#0a1f13";
+    ctx.fillStyle = "#007AFF";
     ctx.fill();
   }
 

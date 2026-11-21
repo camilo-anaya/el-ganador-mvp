@@ -160,13 +160,13 @@ export default function PaymentConfirmation({ reference }: { reference: string }
                   <span
                     key={num}
                     style={{
-                      background: "linear-gradient(105deg, #d4a737, #f7d879)",
-                      color: "#092415",
+                      background: "linear-gradient(135deg, #007AFF 0%, #0284c7 100%)",
+                      color: "#ffffff",
                       fontWeight: "900",
                       fontSize: "16px",
                       padding: "6px 14px",
                       borderRadius: "999px",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+                      boxShadow: "0 2px 8px rgba(0, 122, 255, 0.35)",
                     }}
                   >
                     #{num}
@@ -211,14 +211,14 @@ export default function PaymentConfirmation({ reference }: { reference: string }
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "8px",
-                  background: "linear-gradient(105deg, #d4a737, #f7d879)",
-                  color: "#092415",
+                  background: "linear-gradient(135deg, #007AFF 0%, #0284c7 100%)",
+                  color: "#ffffff",
                   padding: "12px 20px",
                   borderRadius: "12px",
                   fontWeight: "900",
                   fontSize: "14px",
                   textDecoration: "none",
-                  boxShadow: "0 3px 12px rgba(212, 167, 55, 0.35)",
+                  boxShadow: "0 3px 12px rgba(0, 122, 255, 0.35)",
                 }}
               >
                 <span>🎱</span> Ir a la Sala de Sorteo en Vivo
