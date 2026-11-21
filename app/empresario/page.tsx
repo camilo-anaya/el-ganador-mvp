@@ -390,6 +390,48 @@ function PanelEmpresarioContent() {
     setRafflePhotos([]);
   };
 
+  const handleUploadVoucherForRaffle = async (raffleId: string, file: File) => {
+    try {
+      const receiptUrl = await uploadLegalDocument(file, 'pagos');
+      const updateList = (prevList: any[]) =>
+        prevList.map((r) => {
+          if (r.id === raffleId) {
+            return {
+              ...r,
+              status: 'en_tramite_coljuegos',
+              payment_receipt_url: receiptUrl,
+              legalReceiptUrl: receiptUrl,
+            };
+          }
+          return r;
+        });
+
+      setMyRaffles((prev) => updateList(prev));
+
+      const raw1 = localStorage.getItem('elganador_raffles_list');
+      if (raw1) {
+        localStorage.setItem('elganador_raffles_list', JSON.stringify(updateList(JSON.parse(raw1))));
+      }
+      const raw2 = localStorage.getItem('elganador_custom_raffles');
+      if (raw2) {
+        localStorage.setItem('elganador_custom_raffles', JSON.stringify(updateList(JSON.parse(raw2))));
+      }
+
+      addBusinessNotification({
+        type: 'legal_approval',
+        title: '✅ Voucher de Pago Recibido - Expediente Radicado',
+        message: 'Tu comprobante bancario fue adjuntado exitosamente. La rifa ahora se encuentra en: [⏳ En Espera de Resolución Coljuegos (15-30 Días Hábiles)].',
+        badge: 'Trámite 15-30 Días',
+        link: '/empresario?tab=rifas',
+      });
+
+      alert('✅ ¡Voucher de pago cargado exitosamente! Tu rifa ha pasado a estado [⏳ En Espera de Resolución Coljuegos (15-30 Días)].');
+    } catch (err) {
+      console.error('Error cargando voucher:', err);
+      alert('Hubo un inconveniente al cargar el voucher. Por favor intenta de nuevo.');
+    }
+  };
+
   const handlePublishRaffle = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -398,17 +440,8 @@ function PanelEmpresarioContent() {
       return;
     }
 
-    if (legalMode === 'ai_secretary' && !mandatoAccepted) {
-      alert('Debes aceptar el Mandato Digital para que la Secretaria Legal IA radique el trámite ante Coljuegos.');
-      return;
-    }
-
-    if (legalMode === 'manual' && (!legalRadicado.trim() || !legalReceiptFile)) {
-      setLegalValidationError(true);
-      alert(
-        '⛔ BLOQUEO LEGAL OBLIGATORIO (Ley 643 de 2001)\n\n' +
-        'En modo manual debes ingresar el Número de Radicado Oficial y adjuntar el Comprobante Oficial de Pago de derechos de explotación.'
-      );
+    if (!mandatoAccepted) {
+      alert('Debes aceptar el Mandato Digital para que la Secretaria Legal IA estructure el Formulario 8 y radique el trámite ante Coljuegos.');
       return;
     }
 
@@ -416,18 +449,20 @@ function PanelEmpresarioContent() {
     setIsPublishingRaffle(true);
 
     try {
-      const isAiSecretary = legalMode === 'ai_secretary';
-      const radicadoFinal = isAiSecretary
-        ? `SOL-COLJ-2026-${Math.floor(100000 + Math.random() * 900000)}`
-        : legalRadicado.trim();
+      const radicadoFinal = `SOL-COLJ-2026-${Math.floor(100000 + Math.random() * 900000)}`;
 
       let receiptUrl = legalReceiptUrl;
       if (legalReceiptFile && !receiptUrl) {
-        receiptUrl = await uploadLegalDocument(legalReceiptFile, 'pagos');
-        setLegalReceiptUrl(receiptUrl);
-      } else if (isAiSecretary) {
-        receiptUrl = `https://el-ganador-mvp.vercel.app/docs/formulario-8-radicacion-${radicadoFinal}.pdf`;
+        try {
+          receiptUrl = await uploadLegalDocument(legalReceiptFile, 'pagos');
+          setLegalReceiptUrl(receiptUrl);
+        } catch (err) {
+          console.warn('Error uploading receipt to Supabase:', err);
+        }
       }
+
+      const hasVoucher = Boolean(legalReceiptFile || receiptUrl);
+      const raffleStatus = hasVoucher ? 'en_tramite_coljuegos' : 'pendiente_voucher';
 
       const slug = (raffleTitle || 'sorteo-oficial')
         .toLowerCase()
@@ -444,7 +479,7 @@ function PanelEmpresarioContent() {
         ticket_price: numTicketPrice,
         total_tickets: numTotalTickets,
         soldPercent: 0,
-        timeLabel: drawDateTime ? `🗓️ ${drawDateTime}` : '⏳ Trámite Coljuegos (15-30 Días)',
+        timeLabel: drawDateTime ? `🗓️ ${drawDateTime}` : (hasVoucher ? '⏳ Trámite Coljuegos (15-30 Días)' : '⚠️ Pendiente Voucher'),
         category: 'vehiculos',
         image: rafflePhotos[0] || '/galeria-premios-el-ganador-realista.jpg',
         stage: 'upcoming',
@@ -459,7 +494,7 @@ function PanelEmpresarioContent() {
         legalRadicado: radicadoFinal,
         radicado_number: radicadoFinal,
         payment_receipt_url: receiptUrl,
-        status: isAiSecretary ? 'en_tramite_coljuegos' : 'active',
+        status: raffleStatus,
         legalVerified: true,
       };
 
@@ -495,11 +530,11 @@ function PanelEmpresarioContent() {
       setMyRaffles((prev) => [newRaffle, ...prev]);
 
       // Notificación legal
-      if (isAiSecretary) {
+      if (hasVoucher) {
         addBusinessNotification({
           type: 'legal_approval',
           title: '📋 Expediente Radicado ante Coljuegos (15-30 días hábiles)',
-          message: `La Secretaria Legal IA radicó tu Formulario 8 ante Coljuegos con el Radicado de Entrada ${radicadoFinal}. Conforme al Decreto 1968/2001, la entidad tiene entre 15 y 30 días hábiles para emitir la Resolución Oficial de Autorización. Tu sorteo se encuentra montado en vitrina en modo Expectativa/Preventa. Te notificaremos aquí en cuanto la resolución sea emitida.`,
+          message: `La Secretaria Legal IA radicó tu Formulario 8 ante Coljuegos con el Radicado de Entrada ${radicadoFinal} y voucher de pago adjunto. Conforme al Decreto 1968/2001, la entidad tiene entre 15 y 30 días hábiles para emitir la Resolución Oficial de Autorización. Tu sorteo se encuentra montado en vitrina en modo Expectativa/Preventa.`,
           radicado: radicadoFinal,
           raffleTitle: raffleTitle || 'Gran Sorteo Oficial',
           badge: 'Trámite 15-30 Días',
@@ -508,11 +543,11 @@ function PanelEmpresarioContent() {
       } else {
         addBusinessNotification({
           type: 'legal_approval',
-          title: '🎉 ¡Rifa Verificada con Resolución Previa!',
-          message: `Tu rifa "${raffleTitle}" con resolución aprobada ${radicadoFinal} ha sido ratificada y ya está activa para recibir compras en la vitrina pública.`,
+          title: '⚠️ Rifa Montada: En Confirmación por Subir Voucher',
+          message: `Tu sorteo "${raffleTitle || 'Gran Sorteo Oficial'}" quedó montado con pre-radicado ${radicadoFinal}. Para que Coljuegos inicie formalmente el estudio de 15 a 30 días hábiles, recuerda subir el voucher de pago bancario de los derechos de explotación ($${coljuegosTax14.toLocaleString('es-CO')} COP).`,
           radicado: radicadoFinal,
           raffleTitle: raffleTitle || 'Gran Sorteo Oficial',
-          badge: 'Resolución Aprobada',
+          badge: 'Pendiente Voucher',
           link: '/empresario?tab=rifas',
         });
       }
@@ -1945,11 +1980,11 @@ function PanelEmpresarioContent() {
                   </div>
                 </div>
 
-                {/* PASO 3: SECRETARIA LEGAL IA O PERMISO MANUAL */}
+                {/* PASO 3: RADICACIÓN OFICIAL ANTE COLJUEGOS Y VOUCHER DE PAGO */}
                 <div
                   style={{
                     background: isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff',
-                    border: '1px solid rgba(148, 163, 184, 0.22)',
+                    border: '1.5px solid #007AFF',
                     borderRadius: '16px',
                     padding: '20px',
                     marginBottom: '20px',
@@ -1959,97 +1994,136 @@ function PanelEmpresarioContent() {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <span style={{ fontSize: '20px' }}>⚖️</span>
-                      <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a' }}>
-                        3. Gestión Legal y Radicado Coljuegos
-                      </h3>
-                    </div>
-                  </div>
-
-                  {/* Selector de modo Legal */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '16px' }}>
-                    <button
-                      type="button"
-                      onClick={() => setLegalMode('ai_secretary')}
-                      style={{
-                        padding: '10px 14px',
-                        borderRadius: '10px',
-                        border: legalMode === 'ai_secretary' ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
-                        background: legalMode === 'ai_secretary' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : 'transparent',
-                        color: legalMode === 'ai_secretary' ? '#007AFF' : 'inherit',
-                        fontSize: '12.5px',
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        textAlign: 'center',
-                      }}
-                    >
-                      ⚡ Secretaria Legal IA (Recomendado)
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setLegalMode('manual')}
-                      style={{
-                        padding: '10px 14px',
-                        borderRadius: '10px',
-                        border: legalMode === 'manual' ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
-                        background: legalMode === 'manual' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : 'transparent',
-                        color: legalMode === 'manual' ? '#007AFF' : 'inherit',
-                        fontSize: '12.5px',
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        textAlign: 'center',
-                      }}
-                    >
-                      📑 Cargar Resolución Existente
-                    </button>
-                  </div>
-
-                  {legalMode === 'ai_secretary' ? (
-                    <div
-                      style={{
-                        padding: '16px',
-                        borderRadius: '12px',
-                        background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff',
-                        border: '1.5px solid #007AFF',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                        <span style={{ fontSize: '18px' }}>🏛️</span>
-                        <strong style={{ fontSize: '13px', color: '#007AFF' }}>
-                          Trámite de Radicación Oficial ante Coljuegos (15-30 Días Hábiles)
-                        </strong>
+                      <div>
+                        <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a' }}>
+                          3. Radicación Oficial ante Coljuegos (Secretaria Legal IA)
+                        </h3>
+                        <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.85 }}>
+                          Trámite unificado: Mandato Digital, Liquidación del 14% de Salud y Carga de Voucher Bancario.
+                        </p>
                       </div>
-                      <p style={{ margin: '0 0 10px', fontSize: '12px', lineHeight: 1.5, opacity: 0.9 }}>
-                        Conforme al <strong>Decreto 1968 de 2001</strong> y la <strong>Ley 527 de 1999</strong>, la Secretaria Legal IA estructurará el Formulario 8 y tramitará tu radicado de entrada bajo el código <strong>SOL-COLJ-2026-XXXXXX</strong>. Tu sorteo quedará montado de inmediato en vitrina en <strong>Modo Expectativa / Preventa</strong> mientras Coljuegos culmina su estudio de 15 a 30 días hábiles.
-                      </p>
-
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 700 }}>
-                        <input
-                          type="checkbox"
-                          checked={mandatoAccepted}
-                          onChange={(e) => setMandatoAccepted(e.target.checked)}
-                          style={{ width: '16px', height: '16px', accentColor: '#007AFF' }}
-                        />
-                        <span>Otorgo Mandato Digital a El Ganador para estructurar y radicar el Formulario 8 ante Coljuegos.</span>
-                      </label>
                     </div>
-                  ) : (
-                    <RegionalPermitSelectorWithTime
-                      scope={legalScope}
-                      region={legalRegion}
-                      customCity={legalCustomCity}
-                      radicado={legalRadicado}
-                      receiptFile={legalReceiptFile}
-                      onScopeChange={(s) => setLegalScope(s)}
-                      onRegionChange={(r) => setLegalRegion(r)}
-                      onCustomCityChange={(c) => setLegalCustomCity(c)}
-                      onRadicadoChange={(rad) => setLegalRadicado(rad)}
-                      onFileChange={(f) => {
-                        setLegalReceiptFile(f);
-                        if (f) setLegalValidationError(false);
-                      }}
-                      validationError={legalValidationError}
-                    />
-                  )}
+                    <span style={{ fontSize: '11px', fontWeight: 800, padding: '3px 8px', borderRadius: '6px', background: 'rgba(0, 122, 255, 0.15)', color: '#007AFF' }}>
+                      VENTANILLA ÚNICA
+                    </span>
+                  </div>
+
+                  {/* BLOQUE A: MANDATO DIGITAL Y PLAZO DE LEY */}
+                  <div
+                    style={{
+                      padding: '14px 16px',
+                      borderRadius: '12px',
+                      background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff',
+                      border: '1px solid rgba(0, 122, 255, 0.25)',
+                      marginBottom: '14px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                      <span style={{ fontSize: '16px' }}>🏛️</span>
+                      <strong style={{ fontSize: '13px', color: '#007AFF' }}>
+                        Mandato Digital y Radicación (Decreto 1968/2001 &amp; Ley 527/1999)
+                      </strong>
+                    </div>
+                    <p style={{ margin: '0 0 10px', fontSize: '12px', lineHeight: 1.5, opacity: 0.9 }}>
+                      La Secretaria Legal IA estructura el <strong>Formulario 8 Oficial</strong> con los datos de tu empresa y genera el radicado preliminar de trámite <strong>SOL-COLJ-2026-XXXXXX</strong>. Conforme a la ley, Coljuegos cuenta con un término de <strong>15 a 30 días hábiles</strong> para emitir la Resolución Oficial de Autorización. Durante este periodo tu sorteo se activa en vitrina en <strong>Modo Expectativa / Preventa</strong>.
+                    </p>
+
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 700 }}>
+                      <input
+                        type="checkbox"
+                        checked={mandatoAccepted}
+                        onChange={(e) => setMandatoAccepted(e.target.checked)}
+                        style={{ width: '16px', height: '16px', accentColor: '#007AFF' }}
+                      />
+                      <span>Otorgo Mandato Digital a El Ganador para estructurar y radicar el Formulario 8 ante Coljuegos.</span>
+                    </label>
+                  </div>
+
+                  {/* BLOQUE B: VOUCHER DE PAGO DERECHOS DE EXPLOTACIÓN (14% SALUD) */}
+                  <div
+                    style={{
+                      padding: '16px',
+                      borderRadius: '12px',
+                      background: isDark ? '#0b1622' : '#f8fafc',
+                      border: '1px solid rgba(148, 163, 184, 0.3)',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '10px' }}>
+                      <div>
+                        <strong style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span>🧾</span> Voucher de Pago de Derechos de Explotación (14% Salud)
+                        </strong>
+                        <p style={{ margin: '2px 0 0', fontSize: '11.5px', color: isDark ? '#94a3b8' : '#64748b' }}>
+                          Para radicar formalmente ante Coljuegos, la ley exige el comprobante de pago o consignación bancaria del 14% de salud pública.
+                        </p>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: '11px', color: isDark ? '#94a3b8' : '#64748b' }}>Liquidación 14% Salud:</span>
+                        <div style={{ fontSize: '14px', fontWeight: 900, color: '#ef4444' }}>
+                          ${coljuegosTax14.toLocaleString('es-CO')} COP
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Selector de archivo de Voucher con opción de carga en vivo */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <label
+                        style={{
+                          padding: '14px',
+                          borderRadius: '10px',
+                          border: legalReceiptFile ? '1.5px solid #10b981' : '1.5px dashed #007AFF',
+                          background: legalReceiptFile ? (isDark ? 'rgba(16, 185, 129, 0.1)' : '#ecfdf5') : (isDark ? 'rgba(0, 122, 255, 0.05)' : '#eff6ff'),
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '10px',
+                          textAlign: 'center',
+                          fontSize: '13px',
+                          fontWeight: 700,
+                          color: legalReceiptFile ? '#10b981' : '#007AFF',
+                        }}
+                      >
+                        <span>{legalReceiptFile ? '✅' : '📤'}</span>
+                        <span>
+                          {legalReceiptFile
+                            ? `Voucher cargado: ${legalReceiptFile.name} (${(legalReceiptFile.size / 1024).toFixed(0)} KB)`
+                            : 'Subir Voucher de Pago Bancario (PDF, PNG o JPG)'}
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*,application/pdf"
+                          hidden
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null;
+                            setLegalReceiptFile(file);
+                          }}
+                        />
+                      </label>
+
+                      {/* Estado condicional de la rifa */}
+                      <div
+                        style={{
+                          fontSize: '11.5px',
+                          padding: '8px 12px',
+                          borderRadius: '8px',
+                          background: legalReceiptFile ? (isDark ? 'rgba(16, 185, 129, 0.15)' : '#f0fdf4') : (isDark ? 'rgba(245, 158, 11, 0.15)' : '#fffbeb'),
+                          border: `1px solid ${legalReceiptFile ? '#10b981' : '#f59e0b'}`,
+                          color: legalReceiptFile ? '#10b981' : '#b45309',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                        }}
+                      >
+                        <span>{legalReceiptFile ? '🚀' : 'ℹ️'}</span>
+                        <span>
+                          {legalReceiptFile
+                            ? 'Voucher listo. Al montar la rifa se radicará formalmente y quedará en: [⏳ En Espera de Resolución Coljuegos (15-30 Días)].'
+                            : 'Si aún no has realizado el pago bancario, puedes montar la rifa ahora y quedará en: [⚠️ En Confirmación por Subir Voucher]. Una vez subido el voucher, pasará a [⏳ En Espera Coljuegos].'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* BOTÓN PRINCIPAL DE MONTAJE DE RIFA */}
@@ -2106,7 +2180,9 @@ function PanelEmpresarioContent() {
                 ) : (
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
                     {myRaffles.map((raf: any, idx: number) => {
-                      const isPendingColjuegos = raf.status === 'en_tramite_coljuegos' || (raf.radicado_number && raf.radicado_number.startsWith('SOL-'));
+                      const isPendingVoucher = raf.status === 'pendiente_voucher';
+                      const isPendingColjuegos = raf.status === 'en_tramite_coljuegos' || (!isPendingVoucher && raf.radicado_number && raf.radicado_number.startsWith('SOL-'));
+                      const isApproved = raf.status === 'active';
                       return (
                         <div
                           key={raf.id || idx}
@@ -2114,7 +2190,7 @@ function PanelEmpresarioContent() {
                             background: isDark ? '#1e293b' : '#ffffff',
                             borderRadius: '14px',
                             padding: '16px',
-                            border: isPendingColjuegos ? '1.5px solid #0284c7' : '1.5px solid #007AFF',
+                            border: isPendingVoucher ? '1.5px solid #f59e0b' : isPendingColjuegos ? '1.5px solid #0284c7' : '1.5px solid #10b981',
                             boxShadow: '0 4px 14px rgba(0,0,0,0.05)',
                           }}
                         >
@@ -2126,13 +2202,13 @@ function PanelEmpresarioContent() {
                                 padding: '3px 8px',
                                 borderRadius: '999px',
                                 textTransform: 'uppercase',
-                                background: isPendingColjuegos ? '#0284c7' : '#007AFF',
+                                background: isPendingVoucher ? '#f59e0b' : isPendingColjuegos ? '#0284c7' : '#10b981',
                                 color: '#ffffff',
                               }}
                             >
-                              {isPendingColjuegos ? '⏳ Trámite Coljuegos (15-30 Días)' : '✅ Activa en Vitrina'}
+                              {isPendingVoucher ? '⚠️ En Confirmación (Subir Voucher)' : isPendingColjuegos ? '⏳ Espera Coljuegos (15-30 Días)' : '✅ Activa en Vitrina'}
                             </span>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#007AFF' }}>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: isPendingVoucher ? '#f59e0b' : '#007AFF' }}>
                               {raf.radicado_number || raf.legalRadicado || 'En Trámite'}
                             </span>
                           </div>
@@ -2149,6 +2225,39 @@ function PanelEmpresarioContent() {
                             <span>Boletas: <strong>{raf.total_tickets || raf.ballotGrid || 1000}</strong></span>
                             <span>Valor: <strong>${(raf.ticket_price || 25000).toLocaleString()} COP</strong></span>
                           </div>
+
+                          {/* BOTÓN PARA SUBIR VOUCHER SI ESTÁ EN CONFIRMACIÓN */}
+                          {isPendingVoucher && (
+                            <label
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '6px',
+                                padding: '8px 12px',
+                                borderRadius: '8px',
+                                background: isDark ? 'rgba(245, 158, 11, 0.15)' : '#fffbeb',
+                                border: '1.5px dashed #f59e0b',
+                                color: '#d97706',
+                                fontSize: '0.8rem',
+                                fontWeight: 800,
+                                cursor: 'pointer',
+                                marginBottom: '10px',
+                                textAlign: 'center',
+                              }}
+                            >
+                              <span>📤</span> Subir Voucher de Pago (14% Salud)
+                              <input
+                                type="file"
+                                accept="image/*,application/pdf"
+                                hidden
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) handleUploadVoucherForRaffle(raf.id || `raffle-${idx}`, file);
+                                }}
+                              />
+                            </label>
+                          )}
 
                           <div style={{ display: 'flex', gap: '8px' }}>
                             <Link
@@ -2234,6 +2343,12 @@ function PanelEmpresarioContent() {
                                   <span style={{ color: '#16a34a', fontWeight: 700 }}>✓ Firmado Electrónicamente</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span>• Voucher de Pago (14% Salud):</span>
+                                  <span style={{ color: (raf.payment_receipt_url || raf.legalReceiptUrl) ? '#16a34a' : '#f59e0b', fontWeight: 700 }}>
+                                    {(raf.payment_receipt_url || raf.legalReceiptUrl) ? '✓ Verificado en Bóveda' : '⚠️ Pendiente por Cargar'}
+                                  </span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                   <span>• Factura / Adquisición del Premio:</span>
                                   <span style={{ color: '#0284c7', fontWeight: 700 }}>✓ Encriptado en Bóveda</span>
                                 </div>
@@ -2248,8 +2363,8 @@ function PanelEmpresarioContent() {
                               </strong>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', opacity: 0.9 }}>
                                 <div>• <strong>Radicado de Entrada:</strong> {raf.radicado_number || 'SOL-COLJ-2026-XXXXXX'}</div>
-                                <div>• <strong>Etapa Actual:</strong> Auditoría de Coljuegos (Plazo de Ley: 15-30 días hábiles).</div>
-                                <div>• <strong>Seguimiento:</strong> La Secretaria IA monitorea el expediente y te notificará por la campana 🔔 cuando la resolución sea ratificada.</div>
+                                <div>• <strong>Etapa Actual:</strong> {raf.status === 'pendiente_voucher' ? '⚠️ En confirmación por subir voucher bancario del 14% de salud.' : '⏳ Auditoría de Coljuegos (Plazo de Ley: 15-30 días hábiles).'}</div>
+                                <div>• <strong>Seguimiento:</strong> {raf.status === 'pendiente_voucher' ? 'Sube el voucher bancario para que Coljuegos inicie la revisión.' : 'La Secretaria IA monitorea el expediente y te notificará por la campana 🔔 cuando la resolución sea ratificada.'}</div>
                               </div>
                             </div>
                           )}
