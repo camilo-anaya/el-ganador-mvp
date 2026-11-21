@@ -13,10 +13,13 @@ import RegionalPermitSelectorWithTime, { LegalScope } from '@/components/Regiona
 import { fileToDataUrl, shareRaffleLink } from '@/lib/nativeActions';
 import { uploadStoryToSupabase, uploadKybDocumentToSupabase, uploadLegalDocument } from '@/lib/supabase';
 import { getBusinessNotifications, markBusinessNotificationsAsRead, BusinessNotification } from '@/lib/notifications';
+import { useTheme } from '@/context/ThemeContext';
 
 function PanelEmpresarioContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
   const [kybApproved, setKybApproved] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'perfil' | 'rifas' | 'estados' | 'crm' | 'kyb'>('perfil');
@@ -192,6 +195,26 @@ function PanelEmpresarioContent() {
   const [rafflePhotos, setRafflePhotos] = useState<string[]>([]);
   const [createdRaffleSlug, setCreatedRaffleSlug] = useState<string | null>(null);
   const [showColjuegosGuide, setShowColjuegosGuide] = useState<boolean>(false);
+  const [myRaffles, setMyRaffles] = useState<any[]>([]);
+
+  // Carga reactiva de rifas del empresario (Secretaria IA + manuales)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const loadMyRaffles = () => {
+      try {
+        const raw1 = localStorage.getItem('elganador_raffles_list');
+        const raw2 = localStorage.getItem('elganador_custom_raffles');
+        const l1 = raw1 ? JSON.parse(raw1) : [];
+        const l2 = raw2 ? JSON.parse(raw2) : [];
+        setMyRaffles([...l1, ...l2]);
+      } catch (err) {
+        console.warn('Error loading my raffles:', err);
+      }
+    };
+    loadMyRaffles();
+    window.addEventListener('elganador_raffles_updated', loadMyRaffles);
+    return () => window.removeEventListener('elganador_raffles_updated', loadMyRaffles);
+  }, []);
 
   // 3.1 Soporte Legal Obligatorio (Ley 643 de 2001)
   const [legalScope, setLegalScope] = useState<LegalScope>('nacional');
@@ -761,7 +784,7 @@ function PanelEmpresarioContent() {
               onClick={() => setActiveTab('rifas')}
               className={`chip-btn ${activeTab === 'rifas' ? 'chip-active' : ''}`}
             >
-              🎟️ Publicar Rifa y Cartón
+              🎟️ Mis Rifas y Sorteos
             </button>
             <Link
               href="/empresario/publicidad"
@@ -1396,35 +1419,65 @@ function PanelEmpresarioContent() {
               ========================================================= */}
           {activeTab === 'rifas' && (
             <section className="station-block-premium">
-              <div className="compact-section-title">
-                <h2>🎟️ Publicar Nueva Rifa y Configurar Cartón</h2>
+              <div className="compact-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                <div>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 900, margin: 0 }}>🎟️ Mis Rifas y Sorteos Oficiales</h2>
+                  <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: isDark ? '#94a3b8' : '#64748b' }}>
+                    Panel central: Monitorea tus radicados ante Coljuegos y crea nuevos sorteos con la Secretaria Legal IA.
+                  </p>
+                </div>
+                <Link
+                  href="/empresario/crear-rifa"
+                  style={{
+                    background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                    color: '#ffffff',
+                    padding: '10px 18px',
+                    borderRadius: '10px',
+                    fontWeight: 800,
+                    fontSize: '0.88rem',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: '0 4px 14px rgba(0, 122, 255, 0.35)',
+                  }}
+                >
+                  <span>🚀</span> + Crear Nueva Rifa con IA
+                </Link>
               </div>
 
-              {/* ACCESO DIRECTO AL ASISTENTE INTELIGENTE CON CALCULADORA Y SECRETARIA IA */}
+              {/* BANNER ASISTENTE CON SECRETARIA LEGAL IA Y CALCULADORA */}
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(0, 122, 255, 0.12) 0%, rgba(2, 132, 199, 0.05) 100%)',
+                  background: isDark
+                    ? 'linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(2, 132, 199, 0.08) 100%)'
+                    : 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
                   border: '2px solid #007AFF',
                   borderRadius: '16px',
                   padding: '18px 20px',
-                  marginBottom: '20px',
+                  marginBottom: '22px',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   flexWrap: 'wrap',
                   gap: '14px',
-                  boxShadow: '0 6px 20px rgba(0, 122, 255, 0.15)',
+                  boxShadow: '0 6px 20px rgba(0, 122, 255, 0.12)',
                 }}
               >
                 <div style={{ flex: '1 1 320px' }}>
-                  <span style={{ background: '#007AFF', color: '#ffffff', fontSize: '10.5px', fontWeight: 900, padding: '3px 10px', borderRadius: '999px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                    NUEVO · ASISTENTE PASO A PASO
-                  </span>
-                  <h3 style={{ margin: '8px 0 4px', fontSize: '1.18rem', fontWeight: 900, color: '#007AFF' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                    <span style={{ background: '#007AFF', color: '#ffffff', fontSize: '10px', fontWeight: 900, padding: '2px 8px', borderRadius: '999px', textTransform: 'uppercase' }}>
+                      ASISTENTE UNIFICADO EN 4 PASOS
+                    </span>
+                    <span style={{ fontSize: '0.78rem', color: '#0284c7', fontWeight: 700 }}>
+                      ⏱️ Trámite 15-30 Días Coljuegos
+                    </span>
+                  </div>
+                  <h3 style={{ margin: '4px 0', fontSize: '1.18rem', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a' }}>
                     🧮 Calculadora Digital &amp; Secretaria Legal IA
                   </h3>
-                  <p style={{ margin: 0, fontSize: '0.84rem', opacity: 0.9, lineHeight: 1.5 }}>
-                    Calcula el precio de tu boleta descontando el 14% de salud de Coljuegos, simula tu ganancia neta en COP y tramita tu radicado oficial en 1 solo clic sin papeleo.
+                  <p style={{ margin: 0, fontSize: '0.84rem', color: isDark ? '#cbd5e1' : '#475569', lineHeight: 1.5 }}>
+                    Calcula tu ganancia neta descontando el 14% de salud de Coljuegos y pasarela Wompi. La Secretaria IA arma el Formulario 8 y radica tu expediente en 1 solo clic.
                   </p>
                 </div>
 
@@ -1449,250 +1502,131 @@ function PanelEmpresarioContent() {
                 </Link>
               </div>
 
-              {/* GUÍA INFORMATIVA OBLIGATORIA COLJUEGOS */}
-              <div
-                style={{
-                  background: 'linear-gradient(135deg, #0f172a 0%, #020617 100%)',
-                  border: '1.5px solid #007AFF',
-                  borderRadius: '16px',
-                  padding: '16px 18px',
-                  marginBottom: '20px',
-                  color: '#ffffff',
-                  boxShadow: '0 8px 30px rgba(0, 122, 255, 0.2)',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontSize: '28px' }}>📜</span>
-                    <div>
-                      <strong className="coljuegos-panel-title" style={{ fontSize: '0.98rem', color: '#38bdf8', WebkitTextFillColor: '#38bdf8', display: 'block' }}>
-                        Requisitos Oficiales Coljuegos para Publicar Rifas en Colombia
-                      </strong>
-                      <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
-                        Conforme a la Ley 643/2001 y Decreto 1968/2001: 14% para salud pública, póliza del 100% y radicado legal obligatorio.
-                      </span>
-                    </div>
-                  </div>
+              {/* LISTADO DE RIFAS REGISTRADAS / EN TRÁMITE */}
+              <div style={{ marginBottom: '24px' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>📋</span> Mis Sorteos Registrados
+                </h3>
 
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    <button
-                      type="button"
-                      onClick={() => setShowColjuegosGuide((v) => !v)}
-                      style={{
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        background: showColjuegosGuide ? '#007AFF' : 'rgba(255, 255, 255, 0.12)',
-                        border: '1px solid rgba(0, 122, 255, 0.4)',
-                        color: '#ffffff',
-                        fontSize: '0.82rem',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {showColjuegosGuide ? '▲ Ocultar 11 Requisitos' : '▼ Ver los 11 Requisitos'}
-                    </button>
-
-                    <a
-                      href="/docs/requisitos-coljuegos-rifas-nacionales.pdf"
-                      download="Requisitos-Coljuegos-Rifas-Nacionales.pdf"
-                      style={{
-                        padding: '8px 16px',
-                        borderRadius: '8px',
-                        background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
-                        color: '#ffffff',
-                        WebkitTextFillColor: '#ffffff',
-                        fontSize: '0.82rem',
-                        fontWeight: 800,
-                        textDecoration: 'none',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        boxShadow: '0 4px 12px rgba(0, 122, 255, 0.35)',
-                      }}
-                    >
-                      <span>📥</span> Descargar PDF
-                    </a>
-
+                {myRaffles.length === 0 ? (
+                  <div
+                    style={{
+                      padding: '24px',
+                      borderRadius: '14px',
+                      border: '1.5px dashed rgba(148, 163, 184, 0.4)',
+                      background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#f8fafc',
+                      textAlign: 'center',
+                    }}
+                  >
+                    <span style={{ fontSize: '32px' }}>🎁</span>
+                    <h4 style={{ margin: '8px 0 4px', fontSize: '1rem', fontWeight: 800 }}>Aún no tienes rifas creadas</h4>
+                    <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: isDark ? '#94a3b8' : '#64748b', maxWidth: '420px', marginLeft: 'auto', marginRight: 'auto' }}>
+                      Crea tu primer sorteo con la Secretaria Legal IA. Calcula precios, cumple la Ley 643 y empieza a vender boletas en línea.
+                    </p>
                     <Link
-                      href="/empresario/marco-legal"
+                      href="/empresario/crear-rifa"
                       style={{
-                        padding: '7px 14px',
-                        borderRadius: '8px',
-                        background: 'transparent',
-                        border: '1px solid rgba(56, 189, 248, 0.45)',
-                        color: '#38bdf8',
-                        fontSize: '0.82rem',
-                        fontWeight: 700,
+                        display: 'inline-block',
+                        background: '#007AFF',
+                        color: '#ffffff',
+                        padding: '10px 18px',
+                        borderRadius: '10px',
+                        fontWeight: 800,
+                        fontSize: '0.86rem',
                         textDecoration: 'none',
                       }}
                     >
-                      Marco Legal Completo →
+                      🚀 Crear Mi Primera Rifa
                     </Link>
                   </div>
-                </div>
+                ) : (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
+                    {myRaffles.map((raf: any, idx: number) => {
+                      const isPendingColjuegos = raf.status === 'en_tramite_coljuegos' || (raf.radicado_number && raf.radicado_number.startsWith('SOL-'));
+                      return (
+                        <div
+                          key={raf.id || idx}
+                          style={{
+                            background: isDark ? '#1e293b' : '#ffffff',
+                            borderRadius: '14px',
+                            padding: '16px',
+                            border: isPendingColjuegos ? '1.5px solid #0284c7' : '1.5px solid #007AFF',
+                            boxShadow: '0 4px 14px rgba(0,0,0,0.05)',
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px', gap: '8px' }}>
+                            <span
+                              style={{
+                                fontSize: '10px',
+                                fontWeight: 900,
+                                padding: '3px 8px',
+                                borderRadius: '999px',
+                                textTransform: 'uppercase',
+                                background: isPendingColjuegos ? '#0284c7' : '#007AFF',
+                                color: '#ffffff',
+                              }}
+                            >
+                              {isPendingColjuegos ? '⏳ Trámite Coljuegos (15-30 Días)' : '✅ Activa en Vitrina'}
+                            </span>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#007AFF' }}>
+                              {raf.radicado_number || raf.legalRadicado || 'En Trámite'}
+                            </span>
+                          </div>
 
-                {showColjuegosGuide && (
-                  <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.15)' }}>
-                    <ColjuegosLegalGuide embeddedMode onClose={() => setShowColjuegosGuide(false)} />
+                          <h4 style={{ margin: '0 0 6px', fontSize: '0.98rem', fontWeight: 800 }}>
+                            {raf.title}
+                          </h4>
+
+                          <p style={{ margin: '0 0 10px', fontSize: '0.8rem', opacity: 0.8, lineHeight: 1.4, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                            {raf.description || 'Sorteo oficial certificado por El Ganador.'}
+                          </p>
+
+                          <div style={{ fontSize: '0.8rem', display: 'flex', justifyContent: 'space-between', marginBottom: '12px', borderTop: '1px solid rgba(148, 163, 184, 0.2)', paddingTop: '8px' }}>
+                            <span>Boletas: <strong>{raf.total_tickets || raf.ballotGrid || 1000}</strong></span>
+                            <span>Valor: <strong>${(raf.ticket_price || 25000).toLocaleString()} COP</strong></span>
+                          </div>
+
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <Link
+                              href="/"
+                              style={{
+                                flex: 1,
+                                textAlign: 'center',
+                                padding: '8px',
+                                borderRadius: '8px',
+                                background: isDark ? 'rgba(0, 122, 255, 0.15)' : '#f0f9ff',
+                                color: '#007AFF',
+                                fontSize: '0.78rem',
+                                fontWeight: 700,
+                                textDecoration: 'none',
+                                border: '1px solid rgba(0, 122, 255, 0.3)',
+                              }}
+                            >
+                              👁️ Ver en Vitrina
+                            </Link>
+                            <Link
+                              href="/sorteo-en-vivo"
+                              style={{
+                                flex: 1,
+                                textAlign: 'center',
+                                padding: '8px',
+                                borderRadius: '8px',
+                                background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                                color: '#ffffff',
+                                fontSize: '0.78rem',
+                                fontWeight: 800,
+                                textDecoration: 'none',
+                              }}
+                            >
+                              🎱 Sala 3D
+                            </Link>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
-
-              <form onSubmit={handlePublishRaffle} className="auth-form">
-                <div className="input-group">
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                    <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>Fotos del Premio (Cámara o Galería)</span>
-                    {rafflePhotos.length > 0 && (
-                      <button
-                        type="button"
-                        onClick={handleClearAllRafflePhotos}
-                        className="btn-clear-photos"
-                        title="Eliminar todas las fotos"
-                      >
-                        🗑️ Eliminar todas ({rafflePhotos.length})
-                      </button>
-                    )}
-                  </div>
-                  <div className="media-picker-row">
-                    <label className="media-native-btn">
-                      📷 Tomar Foto del Premio
-                      <input type="file" accept="image/*" capture="environment" hidden onChange={handleRafflePhotosPick} />
-                    </label>
-                    <label className="media-native-btn">
-                      🖼️ Subir Galería del Premio
-                      <input type="file" accept="image/*" multiple hidden onChange={handleRafflePhotosPick} />
-                    </label>
-                  </div>
-                  <div className="raffle-photo-preview-strip">
-                    {rafflePhotos.length === 0 ? (
-                      <div className="raffle-photo-empty-box">
-                        <span style={{ fontSize: '2rem' }}>📸</span>
-                        <p style={{ margin: '6px 0 2px', fontSize: '0.9rem', fontWeight: 600 }}>
-                          Sin fotos seleccionadas aún
-                        </p>
-                        <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                          Sube fotos reales de tu producto o premio para inspirar confianza en los compradores.
-                        </p>
-                      </div>
-                    ) : (
-                      rafflePhotos.map((src, i) => (
-                        <div key={i} className="raffle-photo-thumb-container">
-                          <img src={src} alt={`Foto premio ${i + 1}`} className="raffle-photo-thumb" />
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveRafflePhoto(i)}
-                            className="raffle-photo-delete-btn"
-                            title="Eliminar esta foto"
-                            aria-label={`Eliminar foto ${i + 1}`}
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-
-                <label className="input-group">
-                  <span>Título Oficial del Sorteo</span>
-                  <input type="text" placeholder="Ej. Toyota Hilux 4x4 Diésel 2026 0 km" value={raffleTitle} onChange={(e) => setRaffleTitle(e.target.value)} required />
-                </label>
-
-                <label className="input-group">
-                  <span>Descripción y Beneficios Incluidos</span>
-                  <textarea rows={3} placeholder="Detalles de la matrícula, póliza, flete incluido, notaría..." value={raffleDesc} onChange={(e) => setRaffleDesc(e.target.value)} required />
-                </label>
-
-                <div className="b2b-two-cols">
-                  <label className="input-group">
-                    <span>Precio por Boleta (COP)</span>
-                    <input type="number" value={ticketPrice} onChange={(e) => setTicketPrice(e.target.value)} required />
-                  </label>
-                  <label className="input-group">
-                    <span>Fecha y Hora de la Transmisión 3D</span>
-                    <input type="datetime-local" value={drawDateTime} onChange={(e) => setDrawDateTime(e.target.value)} required />
-                  </label>
-                </div>
-
-                <div className="b2b-two-cols">
-                  <label className="input-group">
-                    <span>Tamaño del Cartón (Balotas)</span>
-                    <select value={ballotGrid} onChange={(e) => setBallotGrid(e.target.value)}>
-                      <option value="100">100 Números (00 - 99)</option>
-                      <option value="200">200 Números (000 - 199)</option>
-                      <option value="500">500 Números (000 - 499)</option>
-                      <option value="1000">1.000 Números (000 - 999)</option>
-                    </select>
-                  </label>
-                  <label className="input-group">
-                    <span>Cobertura del Sorteo</span>
-                    <select value={coverage} onChange={(e) => setCoverage(e.target.value)}>
-                      <option value="nacional">🇨🇴 Toda Colombia (Envío asegurado)</option>
-                      <option value="regional">📍 Regional / Entrega en Concesionario</option>
-                    </select>
-                  </label>
-                </div>
-
-                {/* AUTORIZACIÓN LEGAL Y RADICADO (LEY 643 DE 2001) */}
-                <RegionalPermitSelectorWithTime
-                  scope={legalScope}
-                  region={legalRegion}
-                  customCity={legalCustomCity}
-                  radicado={legalRadicado}
-                  receiptFile={legalReceiptFile}
-                  onScopeChange={(s) => setLegalScope(s)}
-                  onRegionChange={(r) => setLegalRegion(r)}
-                  onCustomCityChange={(c) => setLegalCustomCity(c)}
-                  onRadicadoChange={(rad) => setLegalRadicado(rad)}
-                  onFileChange={(f) => {
-                    setLegalReceiptFile(f);
-                    setLegalReceiptUrl(null);
-                  }}
-                  validationError={legalValidationError}
-                />
-
-                <button
-                  type="submit"
-                  disabled={isPublishingRaffle}
-                  className="btn-submit-gold"
-                  style={{
-                    opacity: (!legalRadicado.trim() || !legalReceiptFile) ? 0.8 : 1,
-                    filter: (!legalRadicado.trim() || !legalReceiptFile) ? 'grayscale(0.2)' : 'none',
-                    cursor: isPublishingRaffle ? 'wait' : 'pointer',
-                  }}
-                >
-                  {isPublishingRaffle
-                    ? '⏳ Subiendo Soportes a Supabase...'
-                    : (!legalRadicado.trim() || !legalReceiptFile)
-                    ? '🔒 Adjunta Comprobante y Radicado para Publicar'
-                    : '✅ Publicar Rifa Oficial y Habilitar Balotera 3D'}
-                </button>
-              </form>
-
-              {createdRaffleSlug && (
-                <div className="raffle-created-success-card">
-                  <h3>🎉 ¡Sorteo Creado Exitosamente!</h3>
-                  <p>Tu cartón de {ballotGrid} números ya está sincronizado con la Balotera 3D.</p>
-                  <div className="created-raffle-links">
-                    <Link className="btn-compact-action" href={`/sorteo-en-vivo?sorteo=${createdRaffleSlug}`}>
-                      🎱 Probar Sala 3D en Vivo →
-                    </Link>
-                    <button
-                      type="button"
-                      className="btn-compact-action"
-                      onClick={() =>
-                        shareRaffleLink({
-                          title: raffleTitle,
-                          text: `Aparta tu número para ${raffleTitle}`,
-                          path: `/?sorteo=${createdRaffleSlug}`,
-                        })
-                      }
-                    >
-                      📤 Compartir Cartón por WhatsApp
-                    </button>
-                  </div>
-                </div>
-              )}
 
               {/* RESUMEN DE RECAUDO EN BOLETERÍA POR SORTEO */}
               <div style={{ marginTop: '28px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
