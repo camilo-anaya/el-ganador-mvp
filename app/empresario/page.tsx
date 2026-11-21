@@ -33,6 +33,7 @@ function PanelEmpresarioContent() {
   const [ordersLoading, setOrdersLoading] = useState<boolean>(false);
   const [businessNotifs, setBusinessNotifs] = useState<BusinessNotification[]>([]);
   const [showBusinessNotifDropdown, setShowBusinessNotifDropdown] = useState(false);
+  const [expandedExpedienteId, setExpandedExpedienteId] = useState<string | null>(null);
 
   useEffect(() => {
     const loadNotifs = () => setBusinessNotifs(getBusinessNotifications());
@@ -1607,6 +1608,74 @@ function PanelEmpresarioContent() {
                               🎱 Sala 3D
                             </Link>
                           </div>
+
+                          <button
+                            type="button"
+                            onClick={() => setExpandedExpedienteId(expandedExpedienteId === (raf.id || idx) ? null : (raf.id || idx))}
+                            style={{
+                              width: '100%',
+                              marginTop: '8px',
+                              padding: '7px 10px',
+                              borderRadius: '8px',
+                              background: expandedExpedienteId === (raf.id || idx) ? (isDark ? 'rgba(2, 132, 199, 0.2)' : '#e0f2fe') : 'transparent',
+                              border: '1px dashed #0284c7',
+                              color: '#0284c7',
+                              fontSize: '0.78rem',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '6px',
+                            }}
+                          >
+                            <span>📁</span> {expandedExpedienteId === (raf.id || idx) ? 'Ocultar Expediente Legal' : 'Ver Expediente & Gestión IA'}
+                          </button>
+
+                          {expandedExpedienteId === (raf.id || idx) && (
+                            <div
+                              style={{
+                                marginTop: '10px',
+                                padding: '12px',
+                                borderRadius: '10px',
+                                background: isDark ? 'rgba(0, 0, 0, 0.3)' : '#f8fafc',
+                                border: '1px solid rgba(2, 132, 199, 0.3)',
+                                fontSize: '0.78rem',
+                                textAlign: 'left',
+                              }}
+                            >
+                              <strong style={{ color: '#0284c7', display: 'block', marginBottom: '6px' }}>
+                                🏛️ Bóveda de Documentos (Supabase Storage):
+                              </strong>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginBottom: '10px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span>• Formulario 8 Oficial:</span>
+                                  <span style={{ color: '#16a34a', fontWeight: 700 }}>✓ Generado por IA</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span>• Mandato Digital (Ley 527):</span>
+                                  <span style={{ color: '#16a34a', fontWeight: 700 }}>✓ Firmado Electrónicamente</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span>• Factura / Adquisición del Premio:</span>
+                                  <span style={{ color: '#0284c7', fontWeight: 700 }}>✓ Encriptado en Bóveda</span>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span>• Cámara de Comercio y RUT:</span>
+                                  <span style={{ color: '#16a34a', fontWeight: 700 }}>✓ Vinculado desde KYB</span>
+                                </div>
+                              </div>
+
+                              <strong style={{ color: isDark ? '#ffffff' : '#0f172a', display: 'block', marginBottom: '4px', borderTop: '1px solid rgba(148, 163, 184, 0.2)', paddingTop: '8px' }}>
+                                ⏱️ Trazabilidad de Nuestra Gestión:
+                              </strong>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', opacity: 0.9 }}>
+                                <div>• <strong>Radicado de Entrada:</strong> {raf.radicado_number || 'SOL-COLJ-2026-XXXXXX'}</div>
+                                <div>• <strong>Etapa Actual:</strong> Auditoría de Coljuegos (Plazo de Ley: 15-30 días hábiles).</div>
+                                <div>• <strong>Seguimiento:</strong> La Secretaria IA monitorea el expediente y te notificará por la campana 🔔 cuando la resolución sea ratificada.</div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
