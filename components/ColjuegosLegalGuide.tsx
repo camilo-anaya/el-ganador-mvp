@@ -4,6 +4,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useTheme } from '@/context/ThemeContext';
 
 export const COLJUEGOS_REQUIREMENTS = [
   {
@@ -94,6 +95,23 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
   const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>({});
   const [activeTab, setActiveTab] = useState<'coljuegos' | 'servicios' | 'ley' | 'porcentajes' | 'auditoria'>('coljuegos');
   const [searchFilter, setSearchFilter] = useState('');
+
+  // Sincronización robusta con el tema actual
+  let isDark = false;
+  try {
+    const themeContext = useTheme();
+    isDark = themeContext?.theme === 'dark';
+  } catch {
+    isDark = false;
+  }
+
+  const LEGAL_TABS = [
+    { id: 'coljuegos', label: '📄 11 Requisitos Coljuegos (PDF)' },
+    { id: 'servicios', label: '⚡ Servicios de El Ganador' },
+    { id: 'ley', label: '⚖️ Marco Legal y Operación' },
+    { id: 'porcentajes', label: '💰 Porcentajes y Salud (14%)' },
+    { id: 'auditoria', label: '🏛️ Auditoría Laboratorio (Lean Lab / ISO 17025)' },
+  ] as const;
 
   // Estados para Auditoría de Laboratorio (Lean Lab / ISO 17025)
   const [auditLoading, setAuditLoading] = useState(false);
@@ -292,104 +310,56 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
 
       {/* PESTAÑAS NAVEGABLES DEL MARCO LEGAL */}
       <nav
+        className="coljuegos-nav-tabs"
         style={{
           display: 'flex',
-          gap: '8px',
+          gap: '10px',
           overflowX: 'auto',
-          paddingBottom: '8px',
-          marginBottom: '16px',
+          paddingBottom: '10px',
+          marginBottom: '18px',
+          WebkitOverflowScrolling: 'touch',
         }}
         aria-label="Pestañas de información legal"
       >
-        <button
-          type="button"
-          onClick={() => setActiveTab('coljuegos')}
-          style={{
-            padding: '8px 14px',
-            borderRadius: '999px',
-            border: activeTab === 'coljuegos' ? '1.5px solid #0284c7' : '1px solid rgba(148, 163, 184, 0.3)',
-            background: activeTab === 'coljuegos' ? '#0284c7' : 'transparent',
-            color: activeTab === 'coljuegos' ? '#ffffff' : 'inherit',
-            fontWeight: 800,
-            fontSize: '0.84rem',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          📄 11 Requisitos Coljuegos (PDF)
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('servicios')}
-          style={{
-            padding: '8px 14px',
-            borderRadius: '999px',
-            border: activeTab === 'servicios' ? '1.5px solid #0284c7' : '1px solid rgba(148, 163, 184, 0.3)',
-            background: activeTab === 'servicios' ? '#0284c7' : 'transparent',
-            color: activeTab === 'servicios' ? '#ffffff' : 'inherit',
-            fontWeight: 800,
-            fontSize: '0.84rem',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          ⚡ Servicios de El Ganador
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('ley')}
-          style={{
-            padding: '8px 14px',
-            borderRadius: '999px',
-            border: activeTab === 'ley' ? '1.5px solid #0284c7' : '1px solid rgba(148, 163, 184, 0.3)',
-            background: activeTab === 'ley' ? '#0284c7' : 'transparent',
-            color: activeTab === 'ley' ? '#ffffff' : 'inherit',
-            fontWeight: 800,
-            fontSize: '0.84rem',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          ⚖️ Marco Legal y Operación
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('porcentajes')}
-          style={{
-            padding: '8px 14px',
-            borderRadius: '999px',
-            border: activeTab === 'porcentajes' ? '1.5px solid #0284c7' : '1px solid rgba(148, 163, 184, 0.3)',
-            background: activeTab === 'porcentajes' ? '#0284c7' : 'transparent',
-            color: activeTab === 'porcentajes' ? '#ffffff' : 'inherit',
-            fontWeight: 800,
-            fontSize: '0.84rem',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          💰 Porcentajes y Salud (14%)
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('auditoria')}
-          style={{
-            padding: '8px 14px',
-            borderRadius: '999px',
-            border: activeTab === 'auditoria' ? '1.5px solid #10b981' : '1.5px solid rgba(16, 185, 129, 0.4)',
-            background: activeTab === 'auditoria' ? '#10b981' : 'rgba(16, 185, 129, 0.08)',
-            color: activeTab === 'auditoria' ? '#ffffff' : '#10b981',
-            fontWeight: 800,
-            fontSize: '0.84rem',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          🏛️ Auditoría Laboratorio (Lean Lab / ISO 17025)
-        </button>
+        {LEGAL_TABS.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id as typeof activeTab)}
+              className={`coljuegos-nav-tab-btn ${isActive ? 'active' : ''}`}
+              style={{
+                padding: '9px 16px',
+                borderRadius: '999px',
+                border: isActive
+                  ? '1.5px solid #007AFF'
+                  : isDark
+                    ? '1.5px solid rgba(255, 255, 255, 0.22)'
+                    : '1.5px solid #cbd5e1',
+                background: isActive
+                  ? 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)'
+                  : isDark
+                    ? 'rgba(255, 255, 255, 0.08)'
+                    : '#f1f5f9',
+                color: isActive ? '#ffffff' : isDark ? '#f8fafc' : '#0f172a',
+                WebkitTextFillColor: isActive ? '#ffffff' : isDark ? '#f8fafc' : '#0f172a',
+                fontWeight: 800,
+                fontSize: '0.84rem',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                boxShadow: isActive
+                  ? '0 4px 14px rgba(0, 122, 255, 0.35)'
+                  : isDark
+                    ? 'none'
+                    : '0 1px 3px rgba(0, 0, 0, 0.05)',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </nav>
 
       {/* CONTENIDO 1: LOS 11 REQUISITOS DEL PDF DE COLJUEGOS */}
@@ -415,11 +385,11 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
 
             {/* BARRA DE PROGRESO */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '0.82rem', fontWeight: 800, color: progressPct === 100 ? '#10b981' : '#f59e0b' }}>
+              <span style={{ fontSize: '0.82rem', fontWeight: 800, color: progressPct === 100 ? '#007AFF' : '#f59e0b' }}>
                 {completedCount} / {COLJUEGOS_REQUIREMENTS.length} Listos ({progressPct}%)
               </span>
               <div style={{ width: '100px', height: '8px', background: 'rgba(148, 163, 184, 0.3)', borderRadius: '99px', overflow: 'hidden' }}>
-                <div style={{ width: `${progressPct}%`, height: '100%', background: progressPct === 100 ? '#10b981' : '#f59e0b', transition: 'width 0.3s ease' }} />
+                <div style={{ width: `${progressPct}%`, height: '100%', background: progressPct === 100 ? 'linear-gradient(90deg, #007AFF, #38bdf8)' : '#f59e0b', transition: 'width 0.3s ease' }} />
               </div>
             </div>
           </div>
@@ -436,8 +406,9 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                 padding: '9px 14px',
                 borderRadius: '10px',
                 border: '1px solid rgba(148, 163, 184, 0.4)',
-                background: 'var(--surface-subtle, #f8fafc)',
-                color: 'inherit',
+                background: isDark ? '#1e293b' : '#f8fafc',
+                color: isDark ? '#f8fafc' : '#0f172a',
+                WebkitTextFillColor: isDark ? '#f8fafc' : '#0f172a',
                 fontSize: '0.88rem',
               }}
             />
@@ -455,8 +426,14 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                   gap: '14px',
                   padding: '14px',
                   borderRadius: '12px',
-                  border: checkedItems[req.no] ? '1.5px solid #10b981' : '1px solid rgba(148, 163, 184, 0.25)',
-                  background: checkedItems[req.no] ? 'rgba(16, 185, 129, 0.06)' : 'rgba(148, 163, 184, 0.03)',
+                  border: checkedItems[req.no] ? '1.5px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.25)',
+                  background: checkedItems[req.no]
+                    ? isDark
+                      ? 'rgba(0, 122, 255, 0.15)'
+                      : 'rgba(0, 122, 255, 0.06)'
+                    : isDark
+                      ? 'rgba(255, 255, 255, 0.03)'
+                      : 'rgba(148, 163, 184, 0.04)',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                 }}
@@ -619,7 +596,7 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
               </p>
             </div>
 
-            <div style={{ padding: '12px 14px', borderRadius: '10px', background: 'rgba(148, 163, 184, 0.05)', borderLeft: '4px solid #10b981' }}>
+            <div style={{ padding: '12px 14px', borderRadius: '10px', background: 'rgba(148, 163, 184, 0.05)', borderLeft: '4px solid #007AFF' }}>
               <strong>2. Decreto 1486 de 2024 (Comercio Electrónico y Protección al Consumidor):</strong>
               <p style={{ margin: '4px 0 0' }}>
                 Garantiza a los compradores total transparencia en el precio de la boleta, la identidad comprobada del comercio emisor (KYB), términos claros de entrega del premio y mecanismos directos de soporte y reclamación.
@@ -664,8 +641,8 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
-            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #10b981', background: 'rgba(16, 185, 129, 0.06)' }}>
-              <div style={{ fontSize: '28px', fontWeight: 900, color: '#10b981' }}>14%</div>
+            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #007AFF', background: 'rgba(0, 122, 255, 0.06)' }}>
+              <div style={{ fontSize: '28px', fontWeight: 900, color: '#007AFF' }}>14%</div>
               <strong style={{ fontSize: '0.95rem', display: 'block', margin: '4px 0 2px' }}>
                 Derechos de Explotación (Salud Pública)
               </strong>
@@ -704,7 +681,7 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
             background: 'var(--surface-card, #ffffff)',
             borderRadius: '16px',
             padding: '24px',
-            border: '1.5px solid rgba(16, 185, 129, 0.5)',
+            border: '1.5px solid rgba(0, 122, 255, 0.35)',
             display: 'flex',
             flexDirection: 'column',
             gap: '20px',
@@ -752,11 +729,11 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginTop: '14px' }}>
               <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Norma de Ensayo (RNG / Juegos)</div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#6ee7b7' }}>ISO/IEC 17025:2017 No 025</div>
+                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#38bdf8' }}>ISO/IEC 17025:2017 No 025</div>
               </div>
               <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Norma de Inspección de Sistemas</div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#6ee7b7' }}>ISO/IEC 17020:2012 No 110</div>
+                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#38bdf8' }}>ISO/IEC 17020:2012 No 110</div>
               </div>
               <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Marco Técnico Obligatorio</div>
@@ -870,16 +847,16 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                   background: 'var(--surface-card, #ffffff)',
                   borderRadius: '12px',
                   padding: '16px',
-                  border: '1.5px solid #10b981',
+                  border: '1.5px solid #007AFF',
                   marginTop: '12px',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', borderBottom: '1px solid #e2e8f0', paddingBottom: '10px', marginBottom: '12px' }}>
                   <div>
-                    <span style={{ fontSize: '0.78rem', color: '#10b981', fontWeight: 800, textTransform: 'uppercase' }}>
+                    <span style={{ fontSize: '0.78rem', color: '#007AFF', fontWeight: 800, textTransform: 'uppercase' }}>
                       DICTAMEN OFICIAL DEL ENSAYO
                     </span>
-                    <h5 style={{ margin: '2px 0 0', fontSize: '1.1rem', fontWeight: 900, color: auditResult?.statisticalResults?.passedUniformity ? '#059669' : '#dc2626' }}>
+                    <h5 style={{ margin: '2px 0 0', fontSize: '1.1rem', fontWeight: 900, color: auditResult?.statisticalResults?.passedUniformity ? '#0284c7' : '#dc2626' }}>
                       {auditResult?.statisticalResults?.passedUniformity ? '✓ CUMPLE: HIPÓTESIS NULA DE UNIFORMIDAD ACEPTADA (H0)' : '✕ NO CONFORME'}
                     </h5>
                   </div>
@@ -890,15 +867,15 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '12px' }}>
                   {/* Chi2 */}
-                  <div style={{ background: 'rgba(16, 185, 129, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                  <div style={{ background: 'rgba(0, 122, 255, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(0, 122, 255, 0.2)' }}>
                     <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Chi-Cuadrado (&chi;&sup2;) Goodness-of-Fit</div>
-                    <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#059669', margin: '2px 0' }}>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0284c7', margin: '2px 0' }}>
                       {auditResult?.statisticalResults?.chiSquareStatistic?.toFixed(2)}
                     </div>
                     <div style={{ fontSize: '0.74rem', opacity: 0.85 }}>
                       p-value: <strong>{auditResult?.statisticalResults?.pValue?.toFixed(4)}</strong> ({auditResult?.testParameters?.degreesOfFreedom} gl)
                     </div>
-                    <div style={{ fontSize: '0.7rem', color: '#059669', fontWeight: 800, marginTop: '4px' }}>
+                    <div style={{ fontSize: '0.7rem', color: '#0284c7', fontWeight: 800, marginTop: '4px' }}>
                       {auditResult?.statisticalResults?.passedUniformity ? '✓ Uniformidad Aprobada' : '✕ Sesgo Detectado'}
                     </div>
                   </div>
@@ -988,9 +965,9 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
-              <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #10b981', background: 'rgba(16, 185, 129, 0.05)' }}>
+              <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #007AFF', background: 'rgba(0, 122, 255, 0.05)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ background: '#10b981', color: '#fff', borderRadius: '50%', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 900 }}>1</span>
+                  <span style={{ background: '#007AFF', color: '#fff', borderRadius: '50%', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 900 }}>1</span>
                   <strong style={{ fontSize: '0.92rem' }}>Fase 1: Pre-Compromiso Criptográfico</strong>
                 </div>
                 <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>

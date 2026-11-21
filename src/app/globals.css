@@ -21678,12 +21678,80 @@ html[data-theme='light'] .todos-los-sorteos-page h3,
   -webkit-text-fill-color: #ffffff !important;
 }
 
-/* Inmunidad para la etapa de sorteo cuando hay ganador (fondo blanco limpio) */
-.liveDemoMachine.hasWinner {
-  background-color: #ffffff !important;
-  background-image: radial-gradient(circle at 50% 0%, rgba(0, 122, 255, 0.05) 0%, #ffffff 85%) !important;
-  border: 2px solid #007AFF !important;
-  box-shadow: 0 24px 64px rgba(0, 122, 255, 0.15), 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+/* ============================================================================
+   PROTECCIÓN DE CONTRASTE: PESTAÑAS NAVEGABLES GUÍA LEGAL COLJUEGOS
+   ============================================================================ */
+.coljuegos-legal-card nav button.coljuegos-nav-tab-btn,
+.coljuegos-nav-tab-btn {
+  font-weight: 800 !important;
+  font-size: 0.84rem !important;
+  border-radius: 999px !important;
+  padding: 9px 16px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Estado Inactivo - Modo Claro */
+html[data-theme='light'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active),
+[data-theme='light'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active),
+.coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active) {
+  background-color: #f1f5f9 !important;
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  border: 1.5px solid #cbd5e1 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+html[data-theme='light'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active):hover,
+[data-theme='light'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active):hover {
+  background-color: #e2e8f0 !important;
+  background: #e2e8f0 !important;
+  color: #007AFF !important;
+  -webkit-text-fill-color: #007AFF !important;
+  border-color: #007AFF !important;
+}
+
+/* Estado Inactivo - Modo Oscuro */
+html[data-theme='dark'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active),
+[data-theme='dark'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active),
+.dark .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme='dark'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active):hover,
+[data-theme='dark'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active):hover,
+.dark .coljuegos-legal-card nav button.coljuegos-nav-tab-btn:not(.active):hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #38bdf8 !important;
+  -webkit-text-fill-color: #38bdf8 !important;
+  border-color: #38bdf8 !important;
+}
+
+/* Estado Activo - Ambos Modos (Marca Azul Institucional) */
+.coljuegos-legal-card nav button.coljuegos-nav-tab-btn.active,
+html[data-theme='light'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn.active,
+[data-theme='light'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn.active,
+html[data-theme='dark'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn.active,
+[data-theme='dark'] .coljuegos-legal-card nav button.coljuegos-nav-tab-btn.active,
+.dark .coljuegos-legal-card nav button.coljuegos-nav-tab-btn.active {
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  background-color: #007AFF !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: 1.5px solid #007AFF !important;
+  box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35) !important;
 }
 
 /* ============================================================================
