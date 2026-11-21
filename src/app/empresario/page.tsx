@@ -212,6 +212,24 @@ function PanelEmpresarioContent() {
   const netProfit = totalRevenue - coljuegosTax14 - platformFee10 - wompiFee - numericPrizeCost;
   const profitMargin = numericPrizeCost > 0 ? Math.round((netProfit / numericPrizeCost) * 100) : 0;
 
+  // 🪙 Formateador de moneda con sistema decimal/separador de miles en COP
+  const formatCopDisplay = (val: string | number) => {
+    if (val === '' || val === null || val === undefined) return '';
+    const clean = String(val).replace(/\D/g, '');
+    if (!clean) return '';
+    return `$ ${parseInt(clean, 10).toLocaleString('es-CO')}`;
+  };
+
+  const handlePrizeCostInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawDigits = e.target.value.replace(/\D/g, '');
+    setPrizeCost(rawDigits);
+  };
+
+  const handleTicketPriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawDigits = e.target.value.replace(/\D/g, '');
+    setTicketPrice(rawDigits);
+  };
+
   // Carga reactiva de rifas del empresario (Secretaria IA + manuales)
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -1813,10 +1831,11 @@ function PanelEmpresarioContent() {
                     <label style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                       <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Costo Comercial del Premio (COP)</span>
                       <input
-                        type="number"
-                        placeholder="Ej. 15000000"
-                        value={prizeCost}
-                        onChange={(e) => setPrizeCost(e.target.value)}
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="$ 15.000.000"
+                        value={formatCopDisplay(prizeCost)}
+                        onChange={handlePrizeCostInput}
                         style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '13.5px', fontWeight: 700 }}
                       />
                     </label>
@@ -1824,12 +1843,13 @@ function PanelEmpresarioContent() {
                     <label style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                       <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Precio por Boleta (COP) *</span>
                       <input
-                        type="number"
-                        placeholder="Ej. 25000"
-                        value={ticketPrice}
-                        onChange={(e) => setTicketPrice(e.target.value)}
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="$ 25.000"
+                        value={formatCopDisplay(ticketPrice)}
+                        onChange={handleTicketPriceInput}
                         required
-                        style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid #007AFF', fontSize: '13.5px', fontWeight: 800, color: '#007AFF' }}
+                        style={{ padding: '10px 12px', borderRadius: '10px', border: '1.5px solid #007AFF', fontSize: '13.5px', fontWeight: 800, color: '#007AFF' }}
                       />
                     </label>
                   </div>

@@ -510,10 +510,11 @@ export default function CrearRifaEmpresarioPage() {
                   ¿Cuánto te cuesta este premio a ti? (COP): *
                 </label>
                 <input
-                  type="number"
-                  placeholder="Ej: 15000000"
-                  value={prizeCost}
-                  onChange={(e) => setPrizeCost(e.target.value)}
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="Ej: $ 15.000.000"
+                  value={prizeCost ? `$ ${parseInt(String(prizeCost).replace(/\D/g, '') || '0', 10).toLocaleString('es-CO')}` : ''}
+                  onChange={(e) => setPrizeCost(e.target.value.replace(/\D/g, ''))}
                   style={{
                     width: '100%',
                     padding: '10px 14px',
