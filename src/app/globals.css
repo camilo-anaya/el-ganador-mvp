@@ -15798,11 +15798,11 @@ html {
 
   .desktop-workspace-grid {
     width: 100% !important;
-    max-width: 100% !important;
+    max-width: 1600px !important;
     margin: 0 !important;
     padding: 20px 24px 48px 16px !important;
     display: grid !important;
-    grid-template-columns: 280px minmax(0, 1fr) !important;
+    grid-template-columns: 245px minmax(0, 1fr) !important;
     gap: 24px !important;
     align-items: start !important;
   }
@@ -16220,10 +16220,11 @@ body {
 @media (min-width: 1024px) {
   .desktop-workspace-grid {
     display: grid !important;
-    grid-template-columns: 275px minmax(0, 1fr) !important;
-    gap: 28px !important;
-    padding: 20px 32px 48px !important;
+    grid-template-columns: 245px minmax(0, 1fr) !important;
+    gap: 24px !important;
+    padding: 20px 24px 48px !important;
     margin: 0 auto !important;
+    max-width: 1600px !important;
   }
 
   .desktop-workspace-grid .app-scroll-canvas {
@@ -18448,12 +18449,12 @@ div[class*='grid-scroll'] {
   /* Grid que aprovecha TODO el ancho lateral del monitor */
   .desktop-workspace-grid {
     display: grid !important;
-    grid-template-columns: 280px minmax(0, 1fr) !important;
+    grid-template-columns: 245px minmax(0, 1fr) !important;
     gap: 24px !important;
     width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 20px 24px 60px 16px !important; /* Barra pegada a la izquierda */
+    max-width: 1600px !important;
+    margin: 0 auto !important;
+    padding: 20px 28px 60px 16px !important; /* Barra pegada a la izquierda */
     box-sizing: border-box !important;
     align-items: start !important;
   }
@@ -18463,8 +18464,8 @@ div[class*='grid-scroll'] {
     display: flex !important;
     flex-direction: column !important;
     gap: 14px !important;
-    width: 280px !important;
-    min-width: 280px !important;
+    width: 245px !important;
+    min-width: 245px !important;
     position: sticky !important;
     top: 84px !important;
     align-self: start !important;
@@ -18525,23 +18526,30 @@ div[class*='grid-scroll'] {
     gap: 16px !important;
   }
 
-  /* Recuadros proporcionados para monitores de escritorio: fluidos y sin compresión */
+  /* Recuadros proporcionados para monitores de escritorio: fluidos, generosos y sin compresión */
   .compact-raffle-card {
-    min-width: 270px !important;
+    min-width: 295px !important;
     max-width: none !important;
-    flex: 0 0 290px !important;
+    flex: 0 0 320px !important;
+  }
+
+  .mini-live-card,
+  .mini-live-card.live-dark-luxury {
+    min-width: 265px !important;
+    max-width: none !important;
+    flex: 0 0 285px !important;
   }
 
   .live-stage-card {
-    min-width: 280px !important;
+    min-width: 300px !important;
     max-width: none !important;
-    flex: 0 0 310px !important;
+    flex: 0 0 330px !important;
   }
 
   .promo-brand-card {
-    min-width: 340px !important;
+    min-width: 360px !important;
     max-width: none !important;
-    flex: 0 0 380px !important;
+    flex: 0 0 400px !important;
   }
 
   /* Banner de patrocinador destacado extendido */
@@ -18611,6 +18619,42 @@ div[class*='grid-scroll'] {
   /* Ocultar barra inferior móvil en PC */
   .native-bottom-tabbar {
     display: none !important;
+  }
+}
+
+/* 5. Adaptación para Pantallas Ultra-Anchas y Monitores Grandes (>= 1440px) */
+@media (min-width: 1440px) {
+  .desktop-workspace-grid {
+    grid-template-columns: 260px minmax(0, 1fr) !important;
+    gap: 32px !important;
+    max-width: 1720px !important;
+    padding: 24px 36px 64px 20px !important;
+  }
+
+  .desktop-toc-sidebar {
+    width: 260px !important;
+    min-width: 260px !important;
+  }
+
+  .compact-raffle-card {
+    min-width: 325px !important;
+    flex: 0 0 350px !important;
+  }
+
+  .mini-live-card,
+  .mini-live-card.live-dark-luxury {
+    min-width: 285px !important;
+    flex: 0 0 310px !important;
+  }
+
+  .live-stage-card {
+    min-width: 330px !important;
+    flex: 0 0 360px !important;
+  }
+
+  .promo-brand-card {
+    min-width: 390px !important;
+    flex: 0 0 430px !important;
   }
 }
 
