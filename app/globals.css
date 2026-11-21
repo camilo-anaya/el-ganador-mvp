@@ -21686,4 +21686,147 @@ html[data-theme='light'] .todos-los-sorteos-page h3,
   box-shadow: 0 24px 64px rgba(0, 122, 255, 0.15), 0 4px 20px rgba(0, 0, 0, 0.08) !important;
 }
 
+/* ============================================================================
+   ESTILOS ADAPTATIVOS DE ALTO CONTRASTE PARA EL PANEL EMPRESARIAL (KYB & CRM)
+   ============================================================================ */
+
+/* 1. Tarjetas de Expediente Mercantil KYB */
+.kyb-doc-card {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.kyb-doc-card .kyb-doc-title,
+html[data-theme='light'] .kyb-doc-card .kyb-doc-title,
+[data-theme='light'] .kyb-doc-card .kyb-doc-title {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin: 0 0 6px;
+}
+
+.kyb-doc-card .kyb-doc-desc,
+html[data-theme='light'] .kyb-doc-card .kyb-doc-desc,
+[data-theme='light'] .kyb-doc-card .kyb-doc-desc {
+  color: #64748b !important;
+  font-size: 0.82rem;
+  margin: 0 0 12px;
+}
+
+.kyb-doc-card .kyb-upload-btn {
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  border: none !important;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.25);
+  cursor: pointer;
+}
+
+.kyb-status-box {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+}
+
+.kyb-status-box .kyb-status-title,
+html[data-theme='light'] .kyb-status-box .kyb-status-title,
+[data-theme='light'] .kyb-status-box .kyb-status-title {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+.kyb-ratify-btn {
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
+}
+
+/* Modo oscuro para KYB */
+html[data-theme='dark'] .kyb-doc-card,
+[data-theme='dark'] .kyb-doc-card,
+.dark .kyb-doc-card {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+html[data-theme='dark'] .kyb-doc-card .kyb-doc-title,
+[data-theme='dark'] .kyb-doc-card .kyb-doc-title,
+.dark .kyb-doc-card .kyb-doc-title {
+  color: #f5b82e !important;
+  -webkit-text-fill-color: #f5b82e !important;
+}
+
+html[data-theme='dark'] .kyb-doc-card .kyb-doc-desc,
+[data-theme='dark'] .kyb-doc-card .kyb-doc-desc,
+.dark .kyb-doc-card .kyb-doc-desc {
+  color: #94a3b8 !important;
+}
+
+html[data-theme='dark'] .kyb-status-box,
+[data-theme='dark'] .kyb-status-box,
+.dark .kyb-status-box {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme='dark'] .kyb-status-box .kyb-status-title,
+[data-theme='dark'] .kyb-status-box .kyb-status-title,
+.dark .kyb-status-box .kyb-status-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* 2. Subtarjetas de Recaudo y Métricas CRM */
+html[data-theme='light'] .revenue-stat-card,
+[data-theme='light'] .revenue-stat-card,
+html[data-theme='light'] .business-metric-subcard,
+[data-theme='light'] .business-metric-subcard {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html[data-theme='light'] .revenue-stat-card .card-title,
+[data-theme='light'] .revenue-stat-card .card-title,
+html[data-theme='light'] .business-metric-subcard .metric-val,
+[data-theme='light'] .business-metric-subcard .metric-val {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+html[data-theme='light'] .crm-section-title,
+[data-theme='light'] .crm-section-title {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+html[data-theme='dark'] .revenue-stat-card,
+[data-theme='dark'] .revenue-stat-card,
+html[data-theme='dark'] .business-metric-subcard,
+[data-theme='dark'] .business-metric-subcard {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(245, 184, 46, 0.25) !important;
+  color: #ffffff !important;
+}
+
+html[data-theme='dark'] .revenue-stat-card .card-title,
+[data-theme='dark'] .revenue-stat-card .card-title,
+html[data-theme='dark'] .business-metric-subcard .metric-val,
+[data-theme='dark'] .business-metric-subcard .metric-val {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme='dark'] .crm-section-title,
+[data-theme='dark'] .crm-section-title {
+  color: #f5b82e !important;
+  -webkit-text-fill-color: #f5b82e !important;
+}
+
+
 

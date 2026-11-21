@@ -1543,8 +1543,8 @@ function PanelEmpresarioContent() {
                     { drawId: 'RIF-2026-000185', title: 'PlayStation 5 Pro', unitPrice: 25000, soldTickets: 168, totalTickets: 200, totalRevenue: 4200000, progressPct: 84 },
                     { drawId: 'RIF-2026-000186', title: 'Moto Yamaha NMAX 155', unitPrice: 15000, soldTickets: 390, totalTickets: 500, totalRevenue: 5850000, progressPct: 78 },
                   ]).map((dr: any) => (
-                    <div key={dr.drawId} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(245,184,46,0.2)', borderRadius: '10px', padding: '12px' }}>
-                      <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#fff', marginBottom: '4px' }}>{dr.title}</div>
+                    <div key={dr.drawId} className="revenue-stat-card" style={{ borderRadius: '10px', padding: '12px' }}>
+                      <div className="card-title" style={{ fontSize: '13px', fontWeight: 'bold', marginBottom: '4px' }}>{dr.title}</div>
                       <div style={{ fontSize: '15px', fontWeight: 900, color: '#f5b82e' }}>
                         ${Number(dr.totalRevenue).toLocaleString('es-CO')} COP
                       </div>
@@ -1553,7 +1553,7 @@ function PanelEmpresarioContent() {
                       </div>
                       <Link
                         href={`/sorteo-en-vivo?draw=${dr.drawId}`}
-                        style={{ display: 'inline-block', marginTop: '8px', fontSize: '11px', color: '#38bdf8', fontWeight: 700, textDecoration: 'none' }}
+                        style={{ display: 'inline-block', marginTop: '8px', fontSize: '11px', color: '#0284c7', fontWeight: 700, textDecoration: 'none' }}
                       >
                         🎱 Sintonizar Sorteo en Vivo →
                       </Link>
@@ -1704,21 +1704,21 @@ function PanelEmpresarioContent() {
                   <div>
                     {/* Tarjetas de métricas del CRM */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '16px' }}>
-                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(244,199,82,0.2)', borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
+                      <div className="business-metric-subcard" style={{ borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
                         <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Ventas</div>
                         <div style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#f4c752', marginTop: '3px', wordBreak: 'break-all' }}>
                           ${totalSales.toLocaleString('es-CO')}
                         </div>
                       </div>
-                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
+                      <div className="business-metric-subcard" style={{ borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
                         <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Boletas</div>
-                        <div style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#fff', marginTop: '3px' }}>
+                        <div className="metric-val" style={{ fontSize: '13.5px', fontWeight: 'bold', marginTop: '3px' }}>
                           {totalTickets}
                         </div>
                       </div>
-                      <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
+                      <div className="business-metric-subcard" style={{ borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
                         <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Clientes</div>
-                        <div style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#fff', marginTop: '3px' }}>
+                        <div className="metric-val" style={{ fontSize: '13.5px', fontWeight: 'bold', marginTop: '3px' }}>
                           {uniqueBuyers}
                         </div>
                       </div>
@@ -1727,7 +1727,7 @@ function PanelEmpresarioContent() {
                     {/* SECCIÓN OFICIAL: CONTEO EN TIEMPO REAL DEL DINERO POR SORTEO / EVENTO */}
                     <div style={{ marginBottom: '24px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
-                        <h3 style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#f5b82e', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <h3 className="crm-section-title" style={{ fontSize: '13.5px', fontWeight: 'bold', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <span>💰</span> Registro de Recaudo por Sorteo
                         </h3>
                         <small style={{ color: '#94a3b8', fontSize: '11px' }}>En tiempo real</small>
@@ -1737,9 +1737,8 @@ function PanelEmpresarioContent() {
                         {displayRafflesRevenue.map((dr) => (
                           <div
                             key={dr.drawId}
+                            className="revenue-stat-card"
                             style={{
-                              background: 'rgba(255, 255, 255, 0.03)',
-                              border: '1px solid rgba(244, 199, 82, 0.25)',
                               borderRadius: '12px',
                               padding: '14px',
                               display: 'flex',
@@ -1749,7 +1748,7 @@ function PanelEmpresarioContent() {
                           >
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                               <div>
-                                <strong style={{ fontSize: '14px', color: '#ffffff' }}>{dr.title}</strong>
+                                <strong className="card-title" style={{ fontSize: '14px' }}>{dr.title}</strong>
                                 <div style={{ fontSize: '11px', color: '#94a3b8' }}>
                                   {dr.drawId} · ${Number(dr.unitPrice).toLocaleString('es-CO')} COP / boleta
                                 </div>
@@ -1938,68 +1937,68 @@ function PanelEmpresarioContent() {
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginTop: '16px' }}>
                 {/* 1. RUT */}
-                <div style={{ background: '#1c1c1e', padding: '16px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <h4 style={{ margin: '0 0 6px', color: '#f5b82e' }}>📄 1. RUT Actualizado (DIAN)</h4>
-                  <p style={{ margin: '0 0 12px', fontSize: '0.8rem', color: '#94a3b8' }}>
+                <div className="kyb-doc-card">
+                  <h4 className="kyb-doc-title">📄 1. RUT Actualizado (DIAN)</h4>
+                  <p className="kyb-doc-desc">
                     Registro Único Tributario con actividad económica autorizada para el comercio.
                   </p>
                   {kybDocs['rut'] ? (
-                    <div style={{ padding: '8px 12px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', color: '#86efac', fontSize: '0.8rem', marginBottom: '10px' }}>
+                    <div style={{ padding: '8px 12px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', color: '#16a34a', fontSize: '0.8rem', marginBottom: '10px' }}>
                       ✅ Subido a Supabase: <strong>{kybDocs['rut'].name}</strong> ({kybDocs['rut'].uploadedAt})
                     </div>
                   ) : null}
-                  <label className="media-native-btn dark" style={{ width: '100%', justifyContent: 'center' }}>
+                  <label className="media-native-btn kyb-upload-btn" style={{ width: '100%', justifyContent: 'center' }}>
                     {kybUploading === 'rut' ? '⏳ Subiendo a Supabase Storage...' : '📎 Seleccionar RUT (PDF/Img)'}
                     <input type="file" accept="application/pdf,image/*" hidden onChange={(e) => handleKybFileUpload(e, 'rut')} />
                   </label>
                 </div>
 
                 {/* 2. CÁMARA DE COMERCIO */}
-                <div style={{ background: '#1c1c1e', padding: '16px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <h4 style={{ margin: '0 0 6px', color: '#f5b82e' }}>🏢 2. Certificado Cámara de Comercio</h4>
-                  <p style={{ margin: '0 0 12px', fontSize: '0.8rem', color: '#94a3b8' }}>
+                <div className="kyb-doc-card">
+                  <h4 className="kyb-doc-title">🏢 2. Certificado Cámara de Comercio</h4>
+                  <p className="kyb-doc-desc">
                     Certificado de Existencia y Representación Legal (vigencia inferior a 30 días).
                   </p>
                   {kybDocs['camara_comercio'] ? (
-                    <div style={{ padding: '8px 12px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', color: '#86efac', fontSize: '0.8rem', marginBottom: '10px' }}>
+                    <div style={{ padding: '8px 12px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', color: '#16a34a', fontSize: '0.8rem', marginBottom: '10px' }}>
                       ✅ Subido a Supabase: <strong>{kybDocs['camara_comercio'].name}</strong> ({kybDocs['camara_comercio'].uploadedAt})
                     </div>
                   ) : null}
-                  <label className="media-native-btn dark" style={{ width: '100%', justifyContent: 'center' }}>
+                  <label className="media-native-btn kyb-upload-btn" style={{ width: '100%', justifyContent: 'center' }}>
                     {kybUploading === 'camara_comercio' ? '⏳ Subiendo a Supabase Storage...' : '📎 Seleccionar Cámara (PDF/Img)'}
                     <input type="file" accept="application/pdf,image/*" hidden onChange={(e) => handleKybFileUpload(e, 'camara_comercio')} />
                   </label>
                 </div>
 
                 {/* 3. CÉDULA REPRESENTANTE LEGAL */}
-                <div style={{ background: '#1c1c1e', padding: '16px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  <h4 style={{ margin: '0 0 6px', color: '#f5b82e' }}>🪪 3. Cédula del Representante Legal</h4>
-                  <p style={{ margin: '0 0 12px', fontSize: '0.8rem', color: '#94a3b8' }}>
+                <div className="kyb-doc-card">
+                  <h4 className="kyb-doc-title">🪪 3. Cédula del Representante Legal</h4>
+                  <p className="kyb-doc-desc">
                     Documento de identidad al 150% de la persona natural o representante mercantil.
                   </p>
                   {kybDocs['cedula'] ? (
-                    <div style={{ padding: '8px 12px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', color: '#86efac', fontSize: '0.8rem', marginBottom: '10px' }}>
+                    <div style={{ padding: '8px 12px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', color: '#16a34a', fontSize: '0.8rem', marginBottom: '10px' }}>
                       ✅ Subido a Supabase: <strong>{kybDocs['cedula'].name}</strong> ({kybDocs['cedula'].uploadedAt})
                     </div>
                   ) : null}
-                  <label className="media-native-btn dark" style={{ width: '100%', justifyContent: 'center' }}>
+                  <label className="media-native-btn kyb-upload-btn" style={{ width: '100%', justifyContent: 'center' }}>
                     {kybUploading === 'cedula' ? '⏳ Subiendo a Supabase Storage...' : '📎 Seleccionar Cédula (PDF/Img)'}
                     <input type="file" accept="application/pdf,image/*" hidden onChange={(e) => handleKybFileUpload(e, 'cedula')} />
                   </label>
                 </div>
               </div>
 
-              <div style={{ marginTop: '20px', padding: '16px', background: 'rgba(255,255,255,0.05)', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.12)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+              <div className="kyb-status-box" style={{ marginTop: '20px', padding: '16px', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                 <div>
-                  <h4 style={{ margin: 0 }}>Estado del Expediente KYB</h4>
-                  <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: kybApproved ? '#86efac' : '#fde047' }}>
+                  <h4 className="kyb-status-title" style={{ margin: 0 }}>Estado del Expediente KYB</h4>
+                  <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: kybApproved ? '#16a34a' : '#d97706', fontWeight: 700 }}>
                     {kybApproved ? '✅ Verificación Empresarial Ratificada y Vigente' : '⏳ En proceso de revisión de expedientes'}
                   </p>
                 </div>
                 <button
                   type="button"
-                  className="btn-submit-gold"
-                  style={{ width: 'auto', padding: '10px 24px' }}
+                  className="kyb-ratify-btn"
+                  style={{ width: 'auto', padding: '10px 24px', borderRadius: '10px', fontWeight: 800, cursor: 'pointer', border: 'none' }}
                   onClick={handleApproveKyb}
                 >
                   Ratificar Aprobación KYB

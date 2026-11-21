@@ -181,9 +181,15 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
               alignItems: 'center',
               justifyContent: 'center',
               boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
+              overflow: 'hidden',
             }}
+            title="Bandera de Colombia · República de Colombia"
           >
-            <span style={{ fontSize: '28px' }}>🇨🇴</span>
+            <svg width="40" height="28" viewBox="0 0 36 24" fill="none" style={{ borderRadius: '4px', boxShadow: '0 2px 6px rgba(0,0,0,0.25)', display: 'block' }}>
+              <rect width="36" height="12" fill="#FCD116" />
+              <rect y="12" width="36" height="6" fill="#003893" />
+              <rect y="18" width="36" height="6" fill="#CE1126" />
+            </svg>
           </div>
 
           <div style={{ flex: '1 1 300px' }}>
@@ -208,14 +214,15 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              background: 'linear-gradient(135deg, #d4af37 0%, #aa8420 100%)',
-              color: '#0a1a0f',
-              padding: '9px 16px',
+              background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+              color: '#ffffff',
+              WebkitTextFillColor: '#ffffff',
+              padding: '10px 18px',
               borderRadius: '10px',
               fontWeight: 800,
               fontSize: '0.86rem',
               textDecoration: 'none',
-              boxShadow: '0 4px 14px rgba(212, 175, 55, 0.4)',
+              boxShadow: '0 4px 14px rgba(0, 122, 255, 0.4)',
               cursor: 'pointer',
             }}
           >
