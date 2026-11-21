@@ -21660,8 +21660,8 @@ html[data-theme='light'] .coljuegos-legal-card .leanlab-banner-title,
 .coljuegos-panel-title,
 html[data-theme='light'] .coljuegos-panel-title,
 [data-theme='light'] .coljuegos-panel-title {
-  color: #f5b82e !important;
-  -webkit-text-fill-color: #f5b82e !important;
+  color: #38bdf8 !important;
+  -webkit-text-fill-color: #38bdf8 !important;
 }
 
 .todos-los-sorteos-page h1,
@@ -21827,6 +21827,117 @@ html[data-theme='dark'] .crm-section-title,
   color: #f5b82e !important;
   -webkit-text-fill-color: #f5b82e !important;
 }
+
+/* ============================================================================
+   CAJA INTERNA DE RECAUDO Y META DE SORTEO (ALTO CONTRASTE ADAPTATIVO)
+   ============================================================================ */
+.revenue-progress-box {
+  padding: 12px;
+  border-radius: 10px;
+  margin: 6px 0;
+}
+
+/* MODO CLARO */
+html[data-theme='light'] .revenue-progress-box,
+[data-theme='light'] .revenue-progress-box {
+  background: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+html[data-theme='light'] .revenue-box-label,
+[data-theme='light'] .revenue-box-label {
+  font-size: 11px;
+  color: #475569 !important;
+  -webkit-text-fill-color: #475569 !important;
+  font-weight: 700;
+}
+
+html[data-theme='light'] .revenue-box-amount,
+[data-theme='light'] .revenue-box-amount {
+  font-size: 16px;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  font-weight: 900;
+}
+
+html[data-theme='light'] .revenue-box-meta,
+[data-theme='light'] .revenue-box-meta,
+html[data-theme='light'] .revenue-box-meta span,
+[data-theme='light'] .revenue-box-meta span {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
+  font-weight: 600;
+}
+
+html[data-theme='light'] .revenue-progress-track,
+[data-theme='light'] .revenue-progress-track {
+  width: 100%;
+  height: 6px;
+  background: #cbd5e1 !important;
+  border-radius: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+/* MODO OSCURO */
+html[data-theme='dark'] .revenue-progress-box,
+[data-theme='dark'] .revenue-progress-box,
+.dark .revenue-progress-box {
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme='dark'] .revenue-box-label,
+[data-theme='dark'] .revenue-box-label,
+.dark .revenue-box-label {
+  font-size: 11px;
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+  font-weight: 700;
+}
+
+html[data-theme='dark'] .revenue-box-amount,
+[data-theme='dark'] .revenue-box-amount,
+.dark .revenue-box-amount {
+  font-size: 16px;
+  color: #f5b82e !important;
+  -webkit-text-fill-color: #f5b82e !important;
+  font-weight: 900;
+}
+
+html[data-theme='dark'] .revenue-box-meta,
+[data-theme='dark'] .revenue-box-meta,
+html[data-theme='dark'] .revenue-box-meta span,
+[data-theme='dark'] .revenue-box-meta span,
+.dark .revenue-box-meta span {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+  font-weight: 600;
+}
+
+html[data-theme='dark'] .revenue-progress-track,
+[data-theme='dark'] .revenue-progress-track,
+.dark .revenue-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.revenue-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f5b82e, #10b981);
+  border-radius: 3px;
+}
+
 
 
 

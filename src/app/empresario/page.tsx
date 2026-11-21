@@ -735,7 +735,7 @@ function PanelEmpresarioContent() {
                     fontWeight: 700,
                     fontSize: '13px',
                     cursor: 'pointer',
-                    background: profileViewMode === 'client' ? '#046a38' : 'transparent',
+                    background: profileViewMode === 'client' ? '#007AFF' : 'transparent',
                     color: profileViewMode === 'client' ? '#ffffff' : 'inherit',
                     transition: 'all 0.2s ease',
                   }}
@@ -958,9 +958,9 @@ function PanelEmpresarioContent() {
                         fontSize: '13.5px',
                         cursor: 'pointer',
                         background: isFollowingPreview
-                          ? 'rgba(16, 185, 129, 0.18)'
-                          : 'linear-gradient(135deg, #046a38 0%, #024a26 100%)',
-                        color: isFollowingPreview ? '#059669' : '#ffffff',
+                          ? 'rgba(0, 122, 255, 0.15)'
+                          : 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                        color: isFollowingPreview ? '#007AFF' : '#ffffff',
                       }}
                     >
                       {isFollowingPreview ? '✓ Siguiendo Tienda' : '🔔 Seguir Tienda'}
@@ -1283,20 +1283,20 @@ function PanelEmpresarioContent() {
               {/* GUÍA INFORMATIVA OBLIGATORIA COLJUEGOS */}
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(6, 38, 21, 0.95) 0%, rgba(3, 21, 12, 0.98) 100%)',
-                  border: '1.5px solid rgba(220, 185, 80, 0.6)',
+                  background: 'linear-gradient(135deg, #0f172a 0%, #020617 100%)',
+                  border: '1.5px solid #007AFF',
                   borderRadius: '16px',
                   padding: '16px 18px',
                   marginBottom: '20px',
                   color: '#ffffff',
-                  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.25)',
+                  boxShadow: '0 8px 30px rgba(0, 122, 255, 0.2)',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <span style={{ fontSize: '28px' }}>📜</span>
                     <div>
-                      <strong className="coljuegos-panel-title" style={{ fontSize: '0.98rem', color: '#f5b82e', WebkitTextFillColor: '#f5b82e', display: 'block' }}>
+                      <strong className="coljuegos-panel-title" style={{ fontSize: '0.98rem', color: '#38bdf8', WebkitTextFillColor: '#38bdf8', display: 'block' }}>
                         Requisitos Oficiales Coljuegos para Publicar Rifas en Colombia
                       </strong>
                       <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>
@@ -1310,10 +1310,10 @@ function PanelEmpresarioContent() {
                       type="button"
                       onClick={() => setShowColjuegosGuide((v) => !v)}
                       style={{
-                        padding: '7px 14px',
+                        padding: '8px 16px',
                         borderRadius: '8px',
-                        background: showColjuegosGuide ? '#0284c7' : 'rgba(255, 255, 255, 0.12)',
-                        border: '1px solid rgba(255, 255, 255, 0.25)',
+                        background: showColjuegosGuide ? '#007AFF' : 'rgba(255, 255, 255, 0.12)',
+                        border: '1px solid rgba(0, 122, 255, 0.4)',
                         color: '#ffffff',
                         fontSize: '0.82rem',
                         fontWeight: 700,
@@ -1327,16 +1327,18 @@ function PanelEmpresarioContent() {
                       href="/docs/requisitos-coljuegos-rifas-nacionales.pdf"
                       download="Requisitos-Coljuegos-Rifas-Nacionales.pdf"
                       style={{
-                        padding: '7px 14px',
+                        padding: '8px 16px',
                         borderRadius: '8px',
-                        background: '#d4af37',
-                        color: '#07180d',
+                        background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                        color: '#ffffff',
+                        WebkitTextFillColor: '#ffffff',
                         fontSize: '0.82rem',
                         fontWeight: 800,
                         textDecoration: 'none',
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '6px',
+                        boxShadow: '0 4px 12px rgba(0, 122, 255, 0.35)',
                       }}
                     >
                       <span>📥</span> Descargar PDF
@@ -1768,24 +1770,22 @@ function PanelEmpresarioContent() {
                               </span>
                             </div>
 
-                            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '10px', borderRadius: '8px' }}>
+                            <div className="revenue-progress-box">
                               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '4px' }}>
-                                <span style={{ fontSize: '11px', color: '#cbd5e1' }}>Venta Recogida:</span>
-                                <strong style={{ fontSize: '16px', color: '#f5b82e', fontWeight: 900 }}>
+                                <span className="revenue-box-label">Venta Recogida:</span>
+                                <strong className="revenue-box-amount">
                                   ${Number(dr.totalRevenue).toLocaleString('es-CO')} COP
                                 </strong>
                               </div>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#94a3b8' }}>
+                              <div className="revenue-box-meta">
                                 <span>{dr.soldTickets} de {dr.totalTickets} balotas vendidas</span>
                                 <span>Meta: ${Number(dr.revenueGoal).toLocaleString('es-CO')} COP</span>
                               </div>
-                              <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', marginTop: '6px', overflow: 'hidden' }}>
+                              <div className="revenue-progress-track">
                                 <div
+                                  className="revenue-progress-fill"
                                   style={{
                                     width: `${dr.progressPct}%`,
-                                    height: '100%',
-                                    background: 'linear-gradient(90deg, #f5b82e, #10b981)',
-                                    borderRadius: '3px',
                                   }}
                                 />
                               </div>

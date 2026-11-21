@@ -133,12 +133,12 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
       {/* CABECERA PRINCIPAL CON ESCUDO Y SELLOS OFICIALES */}
       <div
         style={{
-          background: 'linear-gradient(135deg, #062615 0%, #03150c 100%)',
+          background: 'linear-gradient(135deg, #0f172a 0%, #020617 100%)',
           color: '#ffffff',
           borderRadius: embeddedMode ? '16px' : '20px',
           padding: '24px 20px',
-          border: '1.5px solid rgba(220, 185, 80, 0.55)',
-          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.35)',
+          border: '1.5px solid #007AFF',
+          boxShadow: '0 8px 30px rgba(0, 122, 255, 0.25)',
           marginBottom: '20px',
           position: 'relative',
         }}
@@ -714,11 +714,12 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
           {/* BANNER ACREDITACIÓN OFICIAL */}
           <div
             style={{
-              background: 'linear-gradient(135deg, #052e16 0%, #021a0c 100%)',
+              background: 'linear-gradient(135deg, #0f172a 0%, #020617 100%)',
               color: '#ffffff',
               borderRadius: '14px',
               padding: '20px',
-              border: '1px solid #10b981',
+              border: '1.5px solid #0284c7',
+              boxShadow: '0 8px 30px rgba(0, 122, 255, 0.2)',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '10px' }}>
@@ -726,8 +727,8 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
               <div>
                 <span
                   style={{
-                    background: '#10b981',
-                    color: '#062615',
+                    background: '#007AFF',
+                    color: '#ffffff',
                     fontSize: '0.72rem',
                     fontWeight: 900,
                     padding: '2px 8px',
@@ -739,7 +740,7 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                 >
                   Resolución Coljuegos No. 20260019624
                 </span>
-                <span style={{ fontSize: '0.78rem', color: '#86efac' }}>
+                <span style={{ fontSize: '0.78rem', color: '#93c5fd' }}>
                   Acreditación de Laboratorios de Ensayos y Certificación
                 </span>
                 <h3 className="leanlab-banner-title" style={{ margin: '4px 0 0', fontSize: '1.25rem', fontWeight: 900, color: '#fef08a', WebkitTextFillColor: '#fef08a' }}>
@@ -835,7 +836,7 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                   onClick={runStatisticalAudit}
                   disabled={auditLoading}
                   style={{
-                    background: auditLoading ? '#94a3b8' : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    background: auditLoading ? '#94a3b8' : 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
                     color: '#ffffff',
                     border: 'none',
                     padding: '8px 18px',
@@ -843,7 +844,7 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                     fontWeight: 800,
                     fontSize: '0.85rem',
                     cursor: auditLoading ? 'not-allowed' : 'pointer',
-                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.35)',
+                    boxShadow: '0 4px 12px rgba(0, 122, 255, 0.35)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',

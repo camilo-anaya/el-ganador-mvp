@@ -109,12 +109,13 @@ export default function CrearRifaEmpresarioPage() {
       {/* BANNER GUÍA COLJUEGOS */}
       <div
         style={{
-          background: 'linear-gradient(135deg, rgba(6, 38, 21, 0.95) 0%, rgba(3, 21, 12, 0.98) 100%)',
-          border: '1.5px solid rgba(220, 185, 80, 0.6)',
+          background: 'linear-gradient(135deg, #0f172a 0%, #020617 100%)',
+          border: '1.5px solid #007AFF',
           borderRadius: '16px',
           padding: '14px 16px',
           marginBottom: '20px',
           color: '#ffffff',
+          boxShadow: '0 8px 30px rgba(0, 122, 255, 0.2)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -125,7 +126,7 @@ export default function CrearRifaEmpresarioPage() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span style={{ fontSize: '24px' }}>📜</span>
           <div>
-            <strong style={{ fontSize: '0.92rem', color: '#f5b82e', display: 'block' }}>
+            <strong style={{ fontSize: '0.92rem', color: '#38bdf8', WebkitTextFillColor: '#38bdf8', display: 'block' }}>
               Requisitos Legales Coljuegos (Ley 643/2001)
             </strong>
             <span style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
@@ -138,16 +139,18 @@ export default function CrearRifaEmpresarioPage() {
             href="/docs/requisitos-coljuegos-rifas-nacionales.pdf"
             download="Requisitos-Coljuegos-Rifas-Nacionales.pdf"
             style={{
-              padding: '6px 12px',
+              padding: '8px 14px',
               borderRadius: '8px',
-              background: '#d4af37',
-              color: '#07180d',
+              background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+              color: '#ffffff',
+              WebkitTextFillColor: '#ffffff',
               fontSize: '0.8rem',
               fontWeight: 800,
               textDecoration: 'none',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '4px',
+              boxShadow: '0 4px 12px rgba(0, 122, 255, 0.35)',
             }}
           >
             <span>📥</span> Descargar PDF

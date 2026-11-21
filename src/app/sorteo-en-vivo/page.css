@@ -4414,19 +4414,19 @@
 
 .liveDemoMachine {
   position: relative !important;
-  background-color: #0f4627 !important;
+  background-color: #030712 !important;
   background-image:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
-    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
-    radial-gradient(circle at 50% 50%, rgba(245, 215, 120, 0.12) 1.2px, transparent 1.2px),
-    radial-gradient(ellipse at 50% 42%, #24884f 0%, #19693b 45%, #104828 78%, #0a351d 100%) !important;
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 16px),
+    radial-gradient(circle at 50% 50%, rgba(0, 122, 255, 0.12) 1.2px, transparent 1.2px),
+    radial-gradient(ellipse at 50% 42%, #0f172a 0%, #090d16 55%, #030712 100%) !important;
   background-size: 24px 24px, 24px 24px, 18px 18px, 100% 100% !important;
-  border: 1.5px solid rgba(212, 175, 55, 0.45) !important;
+  border: 1.5px solid rgba(0, 122, 255, 0.45) !important;
   border-radius: 28px !important;
   box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.8),
-    0 10px 25px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    0 32px 80px rgba(0, 0, 0, 0.9),
+    0 10px 25px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
   padding: 56px 20px 24px !important;
   display: flex !important;
   flex-direction: column !important;
@@ -5416,12 +5416,12 @@
   padding: calc(44px + env(safe-area-inset-top, 0px)) 12px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
   border-radius: 0 !important;
   border: none !important;
-  background-color: #0f4627 !important;
+  background-color: #030712 !important;
   background-image:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
-    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
-    radial-gradient(circle at 50% 50%, rgba(245, 215, 120, 0.12) 1.2px, transparent 1.2px),
-    radial-gradient(ellipse at 50% 45%, #24884f 0%, #19693b 45%, #104828 78%, #0a351d 100%) !important;
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 16px),
+    radial-gradient(circle at 50% 50%, rgba(0, 122, 255, 0.12) 1.2px, transparent 1.2px),
+    radial-gradient(ellipse at 50% 45%, #0f172a 0%, #090d16 55%, #030712 100%) !important;
   background-size: 24px 24px, 24px 24px, 18px 18px, 100% 100% !important;
   display: flex !important;
   flex-direction: column !important;
@@ -7672,10 +7672,10 @@
   max-width: 520px;
   width: 100%;
   margin: auto;
-  background: linear-gradient(145deg, #071f14 0%, #04140c 100%);
-  border: 1.5px solid #d4af37;
+  background: linear-gradient(145deg, #0f172a 0%, #020617 100%) !important;
+  border: 1.5px solid #007AFF !important;
   border-radius: 20px;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 24px rgba(212, 175, 55, 0.25);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7), 0 0 24px rgba(0, 122, 255, 0.35);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -7777,8 +7777,8 @@
 
 /* Banner de Seguridad */
 .winnerChatSecurityBanner {
-  background: rgba(16, 185, 129, 0.12);
-  border-bottom: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(0, 122, 255, 0.12) !important;
+  border-bottom: 1px solid rgba(0, 122, 255, 0.25) !important;
   padding: 8px 16px;
   display: flex;
   align-items: center;
@@ -7796,7 +7796,8 @@
 
 .winnerChatSecurityBanner strong {
   font-size: 11px;
-  color: #a7f3d0;
+  color: #38bdf8 !important;
+  -webkit-text-fill-color: #38bdf8 !important;
   font-weight: 800;
 }
 
@@ -7839,11 +7840,11 @@
 
 .winnerChatMessageItem.isClient .winnerChatSenderLabel {
   text-align: right;
-  color: #f5d47a;
+  color: #38bdf8;
 }
 
 .winnerChatMessageItem.isMerchant .winnerChatSenderLabel {
-  color: #6ee7b7;
+  color: #60a5fa;
 }
 
 .winnerChatMessageBubble {
@@ -7856,9 +7857,9 @@
 }
 
 .winnerChatMessageItem.isMerchant .winnerChatMessageBubble {
-  background: #0f2c1d;
-  border: 1px solid #1e4a33;
-  color: #f1f5f9;
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #f8fafc !important;
   border-top-left-radius: 4px;
 }
 
