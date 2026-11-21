@@ -564,12 +564,7 @@ export default function LiveDrawDemoPage() {
         ]);
       }
 
-      // Despliega automáticamente la ventana de chat tras 2.2 segundos de celebración
-      const chatTimer = window.setTimeout(() => {
-        setShowWinnerChatModal(true);
-      }, 2200);
-
-      return () => window.clearTimeout(chatTimer);
+      // Los mensajes iniciales quedan listos; el chat se abre a demanda mediante el botón "Chatear con el Comercio" en el Tiquete Ganador o en la tarjeta
     }
   }, [phase, winner, activeDrawId, activeDrawTitle, activeDraw?.admin, sponsorBumper.brand, mode]);
 
@@ -2781,9 +2776,9 @@ export default function LiveDrawDemoPage() {
                     onClick={() => switchLiveDraw(d)}
                     title={`Sintonizar Sala ${index + 1}: ${d.title} · Venta total: $${dRev.toLocaleString("es-CO")} COP`}
                   >
-                    <span className="channelRoomIndex">SALA {index + 1}</span>
+                    <span className="channelRoomIndex" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>SALA {index + 1}</span>
                     <span className="channelEmoji">{d.emoji}</span>
-                    <strong className="channelTitle">{d.title}</strong>
+                    <strong className="channelTitle" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>{d.title}</strong>
                     <span style={{ fontSize: "10px", color: "#f5b82e", fontWeight: 700, padding: "1px 6px", borderRadius: "4px", background: "rgba(245, 184, 46, 0.15)" }}>
                       💰 ${(dRev / 1000000).toFixed(1)}M
                     </span>
@@ -2994,28 +2989,29 @@ export default function LiveDrawDemoPage() {
                 onClick={() => setShowSponsorModal(false)}
               >
                 <div
+                  className="sponsorModalCard"
                   style={{
-                    background: '#121212',
+                    background: '#0d1527',
                     color: '#ffffff',
-                    border: '1.5px solid #d4af37',
+                    border: '1.5px solid #0284c7',
                     borderRadius: '20px',
                     maxWidth: '460px',
                     width: '100%',
                     padding: '24px',
-                    boxShadow: '0 20px 50px rgba(0,0,0,0.8)'
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.85)'
                   }}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '14px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span style={{ fontSize: '28px', background: 'rgba(212,175,55,0.15)', padding: '6px', borderRadius: '12px', border: '1px solid #d4af37' }}>
+                      <span style={{ fontSize: '28px', background: 'rgba(2, 132, 199, 0.18)', padding: '6px', borderRadius: '12px', border: '1px solid #0284c7' }}>
                         {sponsorBumper.logo}
                       </span>
                       <div>
-                        <span style={{ background: '#d4af37', color: '#000', fontSize: '10px', fontWeight: 900, padding: '2px 6px', borderRadius: '4px' }}>
+                        <span style={{ background: '#0284c7', color: '#ffffff', fontSize: '10px', fontWeight: 900, padding: '2px 7px', borderRadius: '4px', letterSpacing: '0.5px' }}>
                           PATROCINADOR OFICIAL
                         </span>
-                        <h3 style={{ margin: '4px 0 0', fontSize: '18px', fontWeight: 900, color: '#ffffff' }}>
+                        <h3 className="sponsorModalBrandTitle" style={{ margin: '4px 0 0', fontSize: '19px', fontWeight: 900, color: '#ffffff' }}>
                           {sponsorBumper.brand}
                         </h3>
                       </div>
@@ -3023,20 +3019,20 @@ export default function LiveDrawDemoPage() {
                     <button
                       type="button"
                       onClick={() => setShowSponsorModal(false)}
-                      style={{ background: 'transparent', border: 'none', color: '#aaa', fontSize: '20px', cursor: 'pointer', padding: '4px' }}
+                      style={{ background: 'transparent', border: 'none', color: '#cbd5e1', fontSize: '20px', cursor: 'pointer', padding: '4px' }}
                     >
                       ✕
                     </button>
                   </div>
 
-                  <p style={{ fontSize: '13px', color: '#ccc', lineHeight: 1.5, margin: '0 0 16px' }}>
+                  <p className="sponsorModalSubtitle" style={{ fontSize: '13px', color: '#f1f5f9', lineHeight: 1.5, margin: '0 0 16px' }}>
                     {sponsorBumper.subtitle}. Conéctate con las mejores ofertas, garantías certificadas y beneficios directos para compradores de boletas en El Ganador.
                   </p>
 
                   {/* Medición de personas pendientes y botón Seguir Negocio */}
                   <div style={{
                     background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.12)',
+                    border: '1px solid rgba(255,255,255,0.15)',
                     borderRadius: '12px',
                     padding: '12px 16px',
                     marginBottom: '16px',
@@ -3046,8 +3042,8 @@ export default function LiveDrawDemoPage() {
                     gap: '10px'
                   }}>
                     <div>
-                      <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>AUDIENCIA PENDIENTE:</span>
-                      <strong style={{ fontSize: '15px', color: '#f5b82e' }}>
+                      <span style={{ fontSize: '11px', color: '#cbd5e1', display: 'block', fontWeight: 700 }}>AUDIENCIA PENDIENTE:</span>
+                      <strong className="sponsorAudienceNumber" style={{ fontSize: '16px', color: '#ffffff', fontWeight: 900 }}>
                         👥 {sponsorFollowers.toLocaleString()} personas
                       </strong>
                     </div>
@@ -3055,14 +3051,15 @@ export default function LiveDrawDemoPage() {
                       type="button"
                       onClick={handleToggleFollowSponsor}
                       style={{
-                        padding: '8px 14px',
+                        padding: '9px 16px',
                         borderRadius: '10px',
                         border: 'none',
                         background: isFollowingSponsor ? '#10b981' : 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
                         color: '#ffffff',
                         fontWeight: 800,
                         fontSize: '12px',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 12px rgba(2, 132, 199, 0.4)'
                       }}
                     >
                       {isFollowingSponsor ? '✓ Siguiendo (+1)' : '🔔 Seguir Negocio'}
@@ -3071,8 +3068,8 @@ export default function LiveDrawDemoPage() {
 
                   {/* Beneficio exclusivo */}
                   <div style={{
-                    background: 'rgba(212,175,55,0.1)',
-                    border: '1.5px dashed #d4af37',
+                    background: 'rgba(2, 132, 199, 0.12)',
+                    border: '1.5px dashed #0284c7',
                     borderRadius: '10px',
                     padding: '10px 14px',
                     marginBottom: '16px',
@@ -3081,8 +3078,8 @@ export default function LiveDrawDemoPage() {
                     alignItems: 'center'
                   }}>
                     <div>
-                      <span style={{ fontSize: '10px', color: '#d4af37', fontWeight: 800 }}>CUPÓN DE BIENVENIDA:</span>
-                      <div style={{ fontWeight: 800, fontSize: '14px' }}>ELGANADOR</div>
+                      <span style={{ fontSize: '10px', color: '#38bdf8', fontWeight: 800 }}>CUPÓN DE BIENVENIDA:</span>
+                      <div className="sponsorCouponCode" style={{ fontWeight: 900, fontSize: '15px', color: '#ffffff' }}>ELGANADOR</div>
                     </div>
                     <button
                       type="button"
@@ -3090,7 +3087,7 @@ export default function LiveDrawDemoPage() {
                         navigator.clipboard?.writeText('ELGANADOR');
                         alert('¡Cupón ELGANADOR copiado!');
                       }}
-                      style={{ padding: '6px 12px', background: '#d4af37', color: '#000', fontWeight: 800, border: 'none', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                      style={{ padding: '6px 14px', background: '#0284c7', color: '#ffffff', fontWeight: 800, border: 'none', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
                     >
                       Copiar
                     </button>
@@ -3100,15 +3097,18 @@ export default function LiveDrawDemoPage() {
                     <Link
                       href="/"
                       onClick={() => setShowSponsorModal(false)}
+                      className="btnSponsorVitrina"
                       style={{
                         textAlign: 'center',
-                        padding: '12px',
-                        background: 'linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%)',
-                        color: '#000',
-                        fontWeight: 800,
-                        fontSize: '13px',
+                        padding: '13px',
+                        background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                        color: '#ffffff',
+                        fontWeight: 900,
+                        fontSize: '13.5px',
                         borderRadius: '10px',
-                        textDecoration: 'none'
+                        textDecoration: 'none',
+                        boxShadow: '0 4px 16px rgba(0, 122, 255, 0.45)',
+                        border: '1px solid rgba(255, 255, 255, 0.25)'
                       }}
                     >
                       🏪 Ver Vitrina Comercial en el Marketplace →
@@ -4279,12 +4279,19 @@ export default function LiveDrawDemoPage() {
 
             {demoError && <p className="wheelDemoError" role="alert">{demoError}</p>}
 
-            {/* TARJETA DEL RESULTADO: EXCEPCIÓN TOTAL PARA EL GANADOR / CIERRE EN 8S PARA ESPECTADOR */}
+            {/* TARJETA DEL RESULTADO: FONDO BLANCO Y ALTO CONTRASTE */}
             {phase === "winner" && winner && (
               <div
                 className={`liveDemoWinner epicWinnerCard ${
                   isUserWinner ? "isRealWinnerCard" : "isSpectatorResultCard"
                 }`}
+                style={{
+                  background: '#ffffff',
+                  color: '#0f172a',
+                  border: '2px solid #007AFF',
+                  boxShadow: '0 16px 48px rgba(0, 122, 255, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08)',
+                  borderRadius: '16px',
+                }}
                 role="status"
               >
                 {/* 1. CASO GANADOR OFICIAL (DESACTIVA CIERRE AUTOMÁTICO, MUESTRA BANNER DORADO) */}
@@ -4401,42 +4408,44 @@ export default function LiveDrawDemoPage() {
                     </div>
                   </div>
                 ) : (
-                  /* 2. CASO ESPECTADOR O PARTICIPANTE NO GANADOR (CIERRE EN 8 SEGUNDOS) */
+                  /* 2. CASO ESPECTADOR O PARTICIPANTE NO GANADOR (FONDO BLANCO Y ALTO CONTRASTE) */
                   <div className="spectatorResultBlock">
-                    <div className="ganasteRevealRibbon spectatorRibbon">
-                      <span>🎱 NÚMERO GANADOR OFICIAL</span>
-                      <small>Certificado mediante acta criptográfica</small>
+                    <div className="ganasteRevealRibbon spectatorRibbon" style={{ background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)', color: '#ffffff', borderRadius: '10px', padding: '8px 14px' }}>
+                      <span style={{ color: '#ffffff', fontWeight: 900 }}>🎱 NÚMERO GANADOR OFICIAL</span>
+                      <small style={{ color: '#e0f2fe' }}>Certificado mediante acta criptográfica</small>
                     </div>
 
                     <div className="winnerCardTopRow">
                       <div className="winnerMainContent">
                         <RealisticBalotaIcon size={64} number={mode === "balotas" ? winner : rouletteWinnerNum} />
                         <div className="winnerCardInfo">
-                          <small>{mode === "balotas" ? "NÚMERO GANADOR DEL SORTEO" : "CASILLA GANADORA"}</small>
+                          <small style={{ color: '#64748b', fontWeight: 800, textTransform: 'uppercase' }}>
+                            {mode === "balotas" ? "NÚMERO GANADOR DEL SORTEO" : "CASILLA GANADORA"}
+                          </small>
                           <div className="winnerNameRow">
-                            <strong>
+                            <strong style={{ color: '#007AFF', fontWeight: 900, textShadow: 'none' }}>
                               {mode === "balotas"
                                 ? `#${winner}`
                                 : `#${rouletteWinnerNum}${rouletteWinnerCustomName ? ` · ${rouletteWinnerCustomName}` : ""}`}
                             </strong>
-                            <span className="phoneticWinnerSpan">
+                            <span className="phoneticWinnerSpan" style={{ color: '#0f172a', fontWeight: 800, textShadow: 'none' }}>
                               · {numberToSpanishWords(mode === "balotas" ? winner : rouletteWinnerNum)}
                             </span>
                           </div>
                         </div>
                       </div>
                       <div className="verifiedBadge">
-                        <span>✓ ACTA SHA-256</span>
-                        <small>OFICIAL</small>
+                        <span style={{ background: '#ecfdf5', color: '#059669', border: '1px solid #10b981' }}>✓ ACTA SHA-256</span>
+                        <small style={{ color: '#047857' }}>OFICIAL</small>
                       </div>
                     </div>
 
                     {/* Sello SHA-256 para el espectador */}
-                    <div className="winnerSha256Section compact">
+                    <div className="winnerSha256Section compact" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px' }}>
                       <div className="sha256LabelRow">
-                        <span>🔒 Hash Notarial Verificable:</span>
+                        <span style={{ color: '#475569', fontWeight: 800 }}>🔒 Hash Notarial Verificable:</span>
                       </div>
-                      <code className="winnerShaCode">
+                      <code className="winnerShaCode" style={{ color: '#0284c7', background: '#f1f5f9' }}>
                         {auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
                       </code>
                     </div>
@@ -4454,9 +4463,9 @@ export default function LiveDrawDemoPage() {
                           width: '100%',
                           padding: '12px 18px',
                           borderRadius: '12px',
-                          background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(185, 28, 28, 0.35) 100%)',
-                          border: '1.5px solid #ef4444',
-                          color: '#ffffff',
+                          background: '#fff1f2',
+                          border: '1.5px solid #f87171',
+                          color: '#dc2626',
                           fontWeight: 800,
                           fontSize: '14px',
                           cursor: 'pointer',
@@ -4464,7 +4473,7 @@ export default function LiveDrawDemoPage() {
                           alignItems: 'center',
                           justifyContent: 'center',
                           gap: '8px',
-                          boxShadow: '0 4px 14px rgba(239, 68, 68, 0.3)',
+                          boxShadow: '0 4px 14px rgba(239, 68, 68, 0.15)',
                           transition: 'all 0.2s ease',
                         }}
                         title="Quitar tiquete y resultado del ganador"
@@ -4478,6 +4487,16 @@ export default function LiveDrawDemoPage() {
                         className="winnerChatButton"
                         onClick={() => setShowWinnerChatModal(true)}
                         type="button"
+                        style={{
+                          background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                          color: '#ffffff',
+                          border: 'none',
+                          fontWeight: 800,
+                          padding: '10px 16px',
+                          borderRadius: '10px',
+                          boxShadow: '0 4px 12px rgba(0, 122, 255, 0.35)',
+                          cursor: 'pointer',
+                        }}
                         title="Abrir ventana de chat con el comercio"
                       >
                         💬 Chat Comercio
@@ -4486,6 +4505,15 @@ export default function LiveDrawDemoPage() {
                         className="winnerSocialShareButton"
                         onClick={handleDirectShareWinner}
                         type="button"
+                        style={{
+                          background: '#f1f5f9',
+                          color: '#0f172a',
+                          border: '1px solid #cbd5e1',
+                          fontWeight: 800,
+                          padding: '10px 16px',
+                          borderRadius: '10px',
+                          cursor: 'pointer',
+                        }}
                       >
                         📤 Compartir
                       </button>
@@ -4497,6 +4525,16 @@ export default function LiveDrawDemoPage() {
                             setShowTicketModal(true);
                           }}
                           type="button"
+                          style={{
+                            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                            color: '#ffffff',
+                            border: 'none',
+                            fontWeight: 800,
+                            padding: '10px 16px',
+                            borderRadius: '10px',
+                            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.35)',
+                            cursor: 'pointer',
+                          }}
                         >
                           🎟️ Ver Acta Notarial
                         </button>
@@ -4978,13 +5016,14 @@ export default function LiveDrawDemoPage() {
                     setShowWinnerChatModal(true);
                   }}
                   style={{
-                    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                    background: "linear-gradient(135deg, #007AFF 0%, #0284c7 100%)",
                     color: "#ffffff",
-                    borderColor: "#34d399",
+                    borderColor: "#38bdf8",
+                    fontWeight: 900,
                   }}
-                  title="Abrir chat para coordinar la entrega del premio"
+                  title="Abrir chat en vivo con el comercio para coordinar y reclamar el premio"
                 >
-                  💬 Coordinar Entrega
+                  💬 Reclamar Premio (Chat Comercio)
                 </button>
                 <button
                   type="button"
@@ -5005,6 +5044,37 @@ export default function LiveDrawDemoPage() {
 
             <div className="ticketGanasteHeroBanner">
               ★ ¡GANASTE! · BOLETA GANADORA OFICIAL ADJUDICADA ★
+            </div>
+
+            {/* BOTÓN PROMINENTE DE CHAT CON EL COMERCIO PARA RECLAMAR EL PREMIO */}
+            <div style={{ margin: "14px 0 10px", width: "100%" }}>
+              <button
+                type="button"
+                className="btnTicketChatClaim"
+                onClick={() => {
+                  setShowTicketModal(false);
+                  setShowWinnerChatModal(true);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "15px 22px",
+                  borderRadius: "14px",
+                  background: "linear-gradient(135deg, #007AFF 0%, #0284c7 100%)",
+                  color: "#ffffff",
+                  border: "none",
+                  fontSize: "16px",
+                  fontWeight: 900,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
+                  boxShadow: "0 6px 20px rgba(0, 122, 255, 0.45)",
+                }}
+                title="Abrir chat en vivo con el comercio para coordinar y reclamar tu premio"
+              >
+                <span>💬</span> Chatear con el Comercio para Reclamar Premio →
+              </button>
             </div>
 
             <div className="ticketVoiceBar ticketVoiceAndSocialBar">
@@ -5173,6 +5243,35 @@ export default function LiveDrawDemoPage() {
                   </p>
                 </div>
 
+                {/* BOTÓN PROMINENTE DE CHAT DENTRO DEL COMPROBANTE PARA RECLAMAR */}
+                <div style={{ margin: "16px 0 12px", textAlign: "center" }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowTicketModal(false);
+                      setShowWinnerChatModal(true);
+                    }}
+                    style={{
+                      width: "100%",
+                      padding: "13px 20px",
+                      borderRadius: "12px",
+                      background: "linear-gradient(135deg, #007AFF 0%, #0284c7 100%)",
+                      color: "#ffffff",
+                      border: "none",
+                      fontSize: "14.5px",
+                      fontWeight: 900,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      boxShadow: "0 4px 16px rgba(0, 122, 255, 0.35)",
+                    }}
+                  >
+                    <span>💬</span> Chatear con el Comercio para Reclamar Este Premio
+                  </button>
+                </div>
+
                 {/* CÓDIGO DE BARRAS VECTORIAL 100% CENTRADO */}
                 <div className="ticketBarcodeBox">
                   <div
@@ -5215,11 +5314,11 @@ export default function LiveDrawDemoPage() {
                   <span className="winnerChatMerchantBadge">🏪 COMERCIO OFICIAL</span>
                   <span className="winnerChatVerifiedPill">✓ Conectado</span>
                 </div>
-                <h3 id="winnerChatTitle">
+                <h3 id="winnerChatTitle" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>
                   {activeDraw?.admin || sponsorBumper.brand || "Motos Caribe Oficial"}
                 </h3>
-                <p className="winnerChatMeta">
-                  Sorteo: <strong>{activeDrawTitle}</strong> · Balota Ganadora:{" "}
+                <p className="winnerChatMeta" style={{ color: "#cbd5e1" }}>
+                  Sorteo: <strong style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>{activeDrawTitle}</strong> · Balota Ganadora:{" "}
                   <span className="winnerChatNumberTag">#{winner || rouletteWinnerNum}</span>
                 </p>
               </div>
@@ -5238,8 +5337,8 @@ export default function LiveDrawDemoPage() {
             <div className="winnerChatSecurityBanner">
               <span className="securityIcon">🛡️</span>
               <div className="securityText">
-                <strong>Canal Oficial de Coordinación y Entrega de Premios</strong>
-                <small>Supervisado por El Ganador · Sello Criptográfico SHA-256 Verificado</small>
+                <strong style={{ color: "#34d399", WebkitTextFillColor: "#34d399" }}>Canal Oficial de Coordinación y Entrega de Premios</strong>
+                <small style={{ color: "#93c5fd", WebkitTextFillColor: "#93c5fd" }}>Supervisado por El Ganador · Sello Criptográfico SHA-256 Verificado</small>
               </div>
             </div>
 
@@ -5295,7 +5394,16 @@ export default function LiveDrawDemoPage() {
                 onChange={(e) => setWinnerChatInput(e.target.value)}
                 className="winnerChatInputField"
               />
-              <button type="submit" className="winnerChatSendBtn">
+              <button
+                type="submit"
+                className="winnerChatSendBtn"
+                style={{
+                  background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                  color: '#ffffff',
+                  fontWeight: 900,
+                  boxShadow: '0 4px 14px rgba(0, 122, 255, 0.4)',
+                }}
+              >
                 Enviar 📨
               </button>
             </form>

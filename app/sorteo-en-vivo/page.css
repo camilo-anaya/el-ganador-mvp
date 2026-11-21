@@ -1383,17 +1383,18 @@
 .chipBall { width: 22px; height: 22px; border-radius: 50%; background: #f0ce71; color: #102416; font-size: 10px; font-weight: 900; display: grid; place-items: center; font-family: monospace; }
 .historyChip small { color: #a4b5a6; font-size: 8.5px; }
 
-/* TARJETA DEL GANADOR ÉPICA Y RESPONSIVA (VERDE ESMERALDA INTENSO Y ORO DE LUJO) */
+/* TARJETA DEL GANADOR ÉPICA Y RESPONSIVA (FONDO BLANCO Y AZUL BRAND DE ALTO CONTRASTE) */
 .epicWinnerCard {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-top: 16px;
   padding: 16px 18px;
-  border: 2px solid #e0b84c;
+  border: 2px solid #007AFF !important;
   border-radius: 16px;
-  background: linear-gradient(140deg, #0e3d25 0%, #082818 55%, #04170e 100%) !important;
-  box-shadow: 0 14px 36px rgba(8, 38, 22, 0.32), 0 0 0 1px rgba(224, 184, 76, 0.4);
+  background: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 16px 48px rgba(0, 122, 255, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08) !important;
   box-sizing: border-box;
   width: 100%;
   animation: winnerSlide .5s cubic-bezier(0.18, 0.9, 0.28, 1.2) both;
@@ -7463,27 +7464,21 @@
    CIERRE POST-SORTEO: EXCEPCIÓN TOTAL GANADOR VS ESPECTADOR 8 SEGUNDOS
    ========================================================================== */
 .epicWinnerCard.isRealWinnerCard {
-  border: 2.5px solid #e2b04a !important;
-  box-shadow: 0 0 35px rgba(226, 176, 74, 0.4), 0 20px 50px rgba(0, 0, 0, 0.85) !important;
-  background: linear-gradient(180deg, rgba(226, 176, 74, 0.15) 0%, rgba(10, 20, 15, 0.95) 100%) !important;
+  border: 2.5px solid #007AFF !important;
+  box-shadow: 0 16px 48px rgba(0, 122, 255, 0.22), 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
 }
 
 .winnerGoldHeroRibbon {
-  background: linear-gradient(90deg, #b48316, #e2b04a, #ffe082, #e2b04a, #b48316) !important;
-  color: #1a1202 !important;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
   font-weight: 900 !important;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
-  animation: goldShimmerRibbon 3s infinite linear;
-}
-
-@keyframes goldShimmerRibbon {
-  0% { filter: brightness(1); }
-  50% { filter: brightness(1.2); }
-  100% { filter: brightness(1); }
+  text-shadow: none !important;
 }
 
 .winnerHighlightSubtitle {
-  color: #ffe082 !important;
+  color: #64748b !important;
   font-weight: 800 !important;
   letter-spacing: 0.05em;
   font-size: 0.75rem !important;
@@ -7491,22 +7486,25 @@
 
 .winnerNumberLarge {
   font-size: clamp(1.4rem, 4vw, 2rem) !important;
-  color: #ffffff !important;
-  text-shadow: 0 0 14px rgba(245, 206, 102, 0.6) !important;
+  color: #007AFF !important;
+  text-shadow: none !important;
 }
 
 .winnerSha256Section {
   margin: 12px 0 16px;
   padding: 10px 14px;
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(226, 176, 74, 0.3);
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
   text-align: left;
 }
 
 .winnerSha256Section.compact {
   margin: 8px 0 12px;
   padding: 8px 12px;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+}
 }
 
 .sha256LabelRow {
@@ -8039,35 +8037,35 @@
   gap: 8px;
   padding: 14px 20px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  border: 1.5px solid #34d399;
-  color: #ffffff;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  border: 1.5px solid #38bdf8 !important;
+  color: #ffffff !important;
   font-size: 15px;
   font-weight: 900;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.45);
+  box-shadow: 0 4px 18px rgba(0, 122, 255, 0.45);
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   margin-bottom: 10px;
   animation: pulseWinnerChat 2s infinite;
 }
 
 @keyframes pulseWinnerChat {
-  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
-  70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 122, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 122, 255, 0); }
 }
 
 .btnWinnerChatCoordination:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(16, 185, 129, 0.6);
+  box-shadow: 0 6px 22px rgba(0, 122, 255, 0.6);
 }
 
 .winnerChatButton {
   padding: 10px 16px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  border: 1px solid #34d399;
-  color: #ffffff;
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  border: 1px solid #38bdf8 !important;
+  color: #ffffff !important;
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
@@ -8078,6 +8076,89 @@
 }
 
 .winnerChatButton:hover {
-  background: #059669;
+  background: #0284c7 !important;
   transform: translateY(-1px);
+}
+
+/* REGLAS CRÍTICAS DE CONTRASTE: TÍTULOS DE SALAS, MODAL PATROCINADOR Y MODAL DE CHAT */
+.liveChannelPill strong,
+.liveChannelPill .channelTitle,
+.channelTitle,
+.liveChannelPill .channelRoomIndex {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.sponsorModalCard h3,
+.sponsorModalCard .sponsorModalBrandTitle,
+.sponsorModalBrandTitle {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.sponsorModalCard .sponsorAudienceNumber,
+.sponsorAudienceNumber {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.btnSponsorVitrina {
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.winnerChatModalContainer h3,
+.winnerChatModalContainer #winnerChatTitle,
+.winnerChatHeaderLeft h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.winnerChatModalContainer .winnerChatMeta,
+.winnerChatModalContainer .winnerChatMeta strong {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.winnerChatModalContainer .winnerChatSecurityBanner strong {
+  color: #34d399 !important;
+  -webkit-text-fill-color: #34d399 !important;
+}
+
+.winnerChatModalContainer .winnerChatSecurityBanner small {
+  color: #93c5fd !important;
+  -webkit-text-fill-color: #93c5fd !important;
+}
+
+.winnerChatSendBtn {
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* CONTRASTE ALTO DE TARJETA BLANCA DE GANADOR */
+.epicWinnerCard,
+.epicWinnerCard.isRealWinnerCard,
+.epicWinnerCard.isSpectatorResultCard {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 2px solid #007AFF !important;
+}
+
+.epicWinnerCard .winnerNameRow strong,
+.epicWinnerCard .winnerNumberLarge {
+  color: #007AFF !important;
+  text-shadow: none !important;
+}
+
+.epicWinnerCard .phoneticWinnerSpan {
+  color: #0f172a !important;
+  text-shadow: none !important;
+}
+
+.epicWinnerCard .winnerCardInfo small,
+.epicWinnerCard .winnerHighlightSubtitle {
+  color: #64748b !important;
+  text-shadow: none !important;
 }

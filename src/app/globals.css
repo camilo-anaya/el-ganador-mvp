@@ -21544,3 +21544,59 @@ textarea,
 .notif-fb-dropdown {
   transition: opacity 0.22s cubic-bezier(0.32, 0.72, 0, 1), transform 0.22s cubic-bezier(0.32, 0.72, 0, 1) !important;
 }
+
+/* 9. CONTRASTE Y LEGIBILIDAD EN SALAS EN VIVO, MODAL PATROCINADOR, CHAT Y RESULTADOS */
+html[data-theme='light'] .liveChannelPill strong,
+html[data-theme='light'] .liveChannelPill .channelTitle,
+html[data-theme='light'] .channelTitle,
+[data-theme='light'] .liveChannelPill strong,
+[data-theme='light'] .liveChannelPill .channelTitle,
+[data-theme='light'] .channelTitle,
+.liveChannelPill strong,
+.channelTitle {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme='light'] .sponsorModalCard h3,
+[data-theme='light'] .sponsorModalCard h3,
+.sponsorModalBrandTitle {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme='light'] .sponsorModalCard strong,
+[data-theme='light'] .sponsorModalCard strong,
+.sponsorAudienceNumber {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme='light'] .winnerChatModalContainer h3,
+[data-theme='light'] .winnerChatModalContainer h3,
+#winnerChatTitle {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme='light'] .winnerChatModalContainer .winnerChatMeta strong,
+[data-theme='light'] .winnerChatModalContainer .winnerChatMeta strong {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-theme='light'] .winnerChatModalContainer .winnerChatSecurityBanner strong,
+[data-theme='light'] .winnerChatModalContainer .winnerChatSecurityBanner strong {
+  color: #34d399 !important;
+  -webkit-text-fill-color: #34d399 !important;
+}
+
+/* Tarjeta de Ganador Blanca */
+.epicWinnerCard,
+.epicWinnerCard.isRealWinnerCard,
+.epicWinnerCard.isSpectatorResultCard {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border: 2px solid #007AFF !important;
+}
+
