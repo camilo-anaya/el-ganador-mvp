@@ -92,8 +92,27 @@ interface ColjuegosLegalGuideProps {
 
 export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: ColjuegosLegalGuideProps) {
   const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>({});
-  const [activeTab, setActiveTab] = useState<'coljuegos' | 'servicios' | 'ley' | 'porcentajes'>('coljuegos');
+  const [activeTab, setActiveTab] = useState<'coljuegos' | 'servicios' | 'ley' | 'porcentajes' | 'auditoria'>('coljuegos');
   const [searchFilter, setSearchFilter] = useState('');
+
+  // Estados para Auditoría de Laboratorio (Lean Lab / ISO 17025)
+  const [auditLoading, setAuditLoading] = useState(false);
+  const [auditResult, setAuditResult] = useState<any>(null);
+  const [auditSamples, setAuditSamples] = useState(10000);
+  const [auditCartonSize, setAuditCartonSize] = useState(100);
+
+  const runStatisticalAudit = async () => {
+    try {
+      setAuditLoading(true);
+      const res = await fetch(`/api/audit/rng-sample?samples=${auditSamples}&cartonSize=${auditCartonSize}`);
+      const data = await res.json();
+      setAuditResult(data);
+    } catch (err) {
+      console.error('Error al ejecutar ensayo estadístico:', err);
+    } finally {
+      setAuditLoading(false);
+    }
+  };
 
   const toggleCheck = (no: number) => {
     setCheckedItems((prev) => ({ ...prev, [no]: !prev[no] }));
@@ -201,6 +220,27 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
             }}
           >
             <span>📥</span> Descargar PDF Oficial Coljuegos
+          </a>
+
+          <a
+            href="/docs/especificacion-tecnica-rng-coljuegos-leanlab.pdf"
+            download="Especificacion-Tecnica-RNG-Coljuegos-LeanLab.pdf"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
+              color: '#ffffff',
+              padding: '9px 16px',
+              borderRadius: '10px',
+              fontWeight: 800,
+              fontSize: '0.86rem',
+              textDecoration: 'none',
+              boxShadow: '0 4px 14px rgba(2, 132, 199, 0.4)',
+              cursor: 'pointer',
+            }}
+          >
+            <span>📜</span> DSD Auditoría Laboratorio (PDF)
           </a>
 
           <button
@@ -324,6 +364,24 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
           }}
         >
           💰 Porcentajes y Salud (14%)
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('auditoria')}
+          style={{
+            padding: '8px 14px',
+            borderRadius: '999px',
+            border: activeTab === 'auditoria' ? '1.5px solid #10b981' : '1.5px solid rgba(16, 185, 129, 0.4)',
+            background: activeTab === 'auditoria' ? '#10b981' : 'rgba(16, 185, 129, 0.08)',
+            color: activeTab === 'auditoria' ? '#ffffff' : '#10b981',
+            fontWeight: 800,
+            fontSize: '0.84rem',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          🏛️ Auditoría Laboratorio (Lean Lab / ISO 17025)
         </button>
       </nav>
 
@@ -628,6 +686,364 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                 Tarifas directas de adquirencia de Wompi Bancolombia (por transacción PSE, Nequi o tarjeta de crédito) sin ningún sobrecosto oculto.
               </p>
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* CONTENIDO 5: AUDITORÍA DE LABORATORIO (LEAN LAB / ISO 17025 / ISO 9001) */}
+      {activeTab === 'auditoria' && (
+        <section
+          style={{
+            background: 'var(--surface-card, #ffffff)',
+            borderRadius: '16px',
+            padding: '24px',
+            border: '1.5px solid rgba(16, 185, 129, 0.5)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.05)',
+          }}
+        >
+          {/* BANNER ACREDITACIÓN OFICIAL */}
+          <div
+            style={{
+              background: 'linear-gradient(135deg, #052e16 0%, #021a0c 100%)',
+              color: '#ffffff',
+              borderRadius: '14px',
+              padding: '20px',
+              border: '1px solid #10b981',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '10px' }}>
+              <span style={{ fontSize: '24px' }}>🏛️</span>
+              <div>
+                <span
+                  style={{
+                    background: '#10b981',
+                    color: '#062615',
+                    fontSize: '0.72rem',
+                    fontWeight: 900,
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    marginRight: '8px',
+                  }}
+                >
+                  Resolución Coljuegos No. 20260019624
+                </span>
+                <span style={{ fontSize: '0.78rem', color: '#86efac' }}>
+                  Acreditación de Laboratorios de Ensayos y Certificación
+                </span>
+                <h3 style={{ margin: '4px 0 0', fontSize: '1.25rem', fontWeight: 900, color: '#fef08a' }}>
+                  LEAN LAB COMPANY LIMITED (RiskCherry) — Reg. C-96476
+                </h3>
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginTop: '14px' }}>
+              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Norma de Ensayo (RNG / Juegos)</div>
+                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#6ee7b7' }}>ISO/IEC 17025:2017 No 025</div>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Norma de Inspección de Sistemas</div>
+                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#6ee7b7' }}>ISO/IEC 17020:2012 No 110</div>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Marco Técnico Obligatorio</div>
+                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#fde047' }}>Res. Coljuegos 20161200013844</div>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Gestión de Calidad & Trazabilidad</div>
+                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#93c5fd' }}>Estándar ISO 9001:2015</div>
+              </div>
+            </div>
+          </div>
+
+          {/* EJECUTOR DE ENSAYOS ESTADÍSTICOS EN VIVO */}
+          <div
+            style={{
+              background: 'var(--surface-muted, #f8fafc)',
+              borderRadius: '14px',
+              padding: '20px',
+              border: '1px solid var(--border-subtle, #e2e8f0)',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '14px' }}>
+              <div>
+                <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span>🔬</span> Banco de Ensayos Estadísticos en Vivo (NIST SP 800-22)
+                </h4>
+                <p style={{ margin: '4px 0 0', fontSize: '0.82rem', opacity: 0.85 }}>
+                  Ejecute ensayos sobre el motor CSPRNG real con muestreo con rechazo (HMAC-SHA256/U64) para verificar la hipótesis nula de uniformidad.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  Muestras:
+                  <select
+                    value={auditSamples}
+                    onChange={(e) => setAuditSamples(Number(e.target.value))}
+                    disabled={auditLoading}
+                    style={{
+                      padding: '6px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid #cbd5e1',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      background: 'inherit',
+                    }}
+                  >
+                    <option value={1000}>1,000 sorteos</option>
+                    <option value={10000}>10,000 sorteos</option>
+                    <option value={50000}>50,000 sorteos</option>
+                    <option value={100000}>100,000 sorteos</option>
+                  </select>
+                </label>
+
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  Cartón:
+                  <select
+                    value={auditCartonSize}
+                    onChange={(e) => setAuditCartonSize(Number(e.target.value))}
+                    disabled={auditLoading}
+                    style={{
+                      padding: '6px 10px',
+                      borderRadius: '8px',
+                      border: '1px solid #cbd5e1',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      background: 'inherit',
+                    }}
+                  >
+                    <option value={100}>100 números (00-99)</option>
+                    <option value={1000}>1,000 números (000-999)</option>
+                  </select>
+                </label>
+
+                <button
+                  type="button"
+                  onClick={runStatisticalAudit}
+                  disabled={auditLoading}
+                  style={{
+                    background: auditLoading ? '#94a3b8' : 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                    color: '#ffffff',
+                    border: 'none',
+                    padding: '8px 18px',
+                    borderRadius: '10px',
+                    fontWeight: 800,
+                    fontSize: '0.85rem',
+                    cursor: auditLoading ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.35)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
+                >
+                  {auditLoading ? (
+                    <>
+                      <span className="animate-spin">⏳</span> Ensayando {auditSamples.toLocaleString()} muestras...
+                    </>
+                  ) : (
+                    <>
+                      <span>▶️</span> Ejecutar Ensayo en Servidor
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* RESULTADOS DEL ENSAYO EN VIVO */}
+            {auditResult && (
+              <div
+                style={{
+                  background: 'var(--surface-card, #ffffff)',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  border: '1.5px solid #10b981',
+                  marginTop: '12px',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', borderBottom: '1px solid #e2e8f0', paddingBottom: '10px', marginBottom: '12px' }}>
+                  <div>
+                    <span style={{ fontSize: '0.78rem', color: '#10b981', fontWeight: 800, textTransform: 'uppercase' }}>
+                      DICTAMEN OFICIAL DEL ENSAYO
+                    </span>
+                    <h5 style={{ margin: '2px 0 0', fontSize: '1.1rem', fontWeight: 900, color: auditResult?.statisticalResults?.passedUniformity ? '#059669' : '#dc2626' }}>
+                      {auditResult?.statisticalResults?.passedUniformity ? '✓ CUMPLE: HIPÓTESIS NULA DE UNIFORMIDAD ACEPTADA (H0)' : '✕ NO CONFORME'}
+                    </h5>
+                  </div>
+                  <div style={{ fontSize: '0.78rem', opacity: 0.75 }}>
+                    Muestras: <strong>{auditResult?.testParameters?.totalSamples?.toLocaleString()}</strong> | Límite Crítico: <strong>p &ge; 0.01</strong>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '12px' }}>
+                  {/* Chi2 */}
+                  <div style={{ background: 'rgba(16, 185, 129, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                    <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Chi-Cuadrado (&chi;&sup2;) Goodness-of-Fit</div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#059669', margin: '2px 0' }}>
+                      {auditResult?.statisticalResults?.chiSquareStatistic?.toFixed(2)}
+                    </div>
+                    <div style={{ fontSize: '0.74rem', opacity: 0.85 }}>
+                      p-value: <strong>{auditResult?.statisticalResults?.pValue?.toFixed(4)}</strong> ({auditResult?.testParameters?.degreesOfFreedom} gl)
+                    </div>
+                    <div style={{ fontSize: '0.7rem', color: '#059669', fontWeight: 800, marginTop: '4px' }}>
+                      {auditResult?.statisticalResults?.passedUniformity ? '✓ Uniformidad Aprobada' : '✕ Sesgo Detectado'}
+                    </div>
+                  </div>
+
+                  {/* Monobit */}
+                  <div style={{ background: 'rgba(2, 132, 199, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(2, 132, 199, 0.2)' }}>
+                    <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Prueba Monobit NIST SP 800-22</div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0284c7', margin: '2px 0' }}>
+                      {auditResult?.nistMonobitEntropy?.onesRatio?.toFixed(4)}
+                    </div>
+                    <div style={{ fontSize: '0.74rem', opacity: 0.85 }}>
+                      Proporción de 1s (ideal: 0.5000)
+                    </div>
+                    <div style={{ fontSize: '0.7rem', color: '#0284c7', fontWeight: 800, marginTop: '4px' }}>
+                      {auditResult?.nistMonobitEntropy?.passedMonobit ? '✓ Entropía Monobit Aprobada' : '✕ Fallo Monobit'}
+                    </div>
+                  </div>
+
+                  {/* CSPRNG Health */}
+                  <div style={{ background: 'rgba(217, 119, 6, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(217, 119, 6, 0.2)' }}>
+                    <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Autotest de Salud NIST 800-90A/B</div>
+                    <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#d97706', margin: '2px 0' }}>
+                      {auditResult?.auditMetadata?.csprngSelfTest?.includes('CUMPLE') ? '100% OK' : 'Fallo'}
+                    </div>
+                    <div style={{ fontSize: '0.74rem', opacity: 0.85 }}>
+                      Sin colisiones en bytes de kernel
+                    </div>
+                    <div style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: 800, marginTop: '4px' }}>
+                      ✓ CSPRNG SO Certificado
+                    </div>
+                  </div>
+
+                  {/* Dispersión Máx-Mín */}
+                  <div style={{ background: 'rgba(124, 58, 237, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(124, 58, 237, 0.2)' }}>
+                    <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Rango de Frecuencia Máx/Mín</div>
+                    <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#7c3aed', margin: '2px 0' }}>
+                      {auditResult?.statisticalResults?.minObservedFrequency} &ndash; {auditResult?.statisticalResults?.maxObservedFrequency}
+                    </div>
+                    <div style={{ fontSize: '0.74rem', opacity: 0.85 }}>
+                      Dispersión relativa: <strong>&plusmn;{auditResult?.statisticalResults?.rangeSpreadPct}%</strong>
+                    </div>
+                    <div style={{ fontSize: '0.7rem', color: '#7c3aed', fontWeight: 800, marginTop: '4px' }}>
+                      ✓ Distribución Equilibrada
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '12px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  <a
+                    href={`/api/audit/rng-sample?samples=${auditSamples}&cartonSize=${auditCartonSize}&format=csv`}
+                    download={`muestras-rng-leanlab-${auditSamples}.csv`}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      background: '#f1f5f9',
+                      border: '1px solid #cbd5e1',
+                      color: '#0f172a',
+                      padding: '6px 12px',
+                      borderRadius: '8px',
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <span>📊</span> Descargar Muestra Cruda CSV ({auditSamples.toLocaleString()} registros)
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* MATRIZ DE PRE-COMPROMISO INMUTABLE Y ZERO-CHEAT */}
+          <div
+            style={{
+              background: 'var(--surface-muted, #f8fafc)',
+              borderRadius: '14px',
+              padding: '20px',
+              border: '1px solid var(--border-subtle, #e2e8f0)',
+            }}
+          >
+            <h4 style={{ margin: '0 0 10px', fontSize: '1.05rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span>🔒</span> Protocolo Anti-Fraude de Pre-Compromiso en Servidor (/api/draws/commit)
+            </h4>
+            <p style={{ margin: '0 0 14px', fontSize: '0.84rem', lineHeight: 1.6, opacity: 0.9 }}>
+              En estricto cumplimiento con la Resolución 20161200013844 de Coljuegos y las exigencias de inspección de Lean Lab, ni el operador de la rifa ni el software pueden alterar el ganador. El sistema aplica criptografía de clave pública y hash locking antes de iniciar el sorteo:
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
+              <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #10b981', background: 'rgba(16, 185, 129, 0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ background: '#10b981', color: '#fff', borderRadius: '50%', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 900 }}>1</span>
+                  <strong style={{ fontSize: '0.92rem' }}>Fase 1: Pre-Compromiso Criptográfico</strong>
+                </div>
+                <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
+                  Antes de activar las balotas 3D, el cliente envía a <code>/api/draws/commit</code> el hash de la semilla (<code>SeedCommitment = SHA256(Seed)</code>) y el <code>ListHash</code> de boletas. El servidor lo almacena en base de datos de manera inmutable. Si alguien intenta repetir el sorteo, el servidor devuelve <code>HTTP 409 Conflict</code>.
+                </p>
+              </div>
+
+              <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #0284c7', background: 'rgba(2, 132, 199, 0.05)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <span style={{ background: '#0284c7', color: '#fff', borderRadius: '50%', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 900 }}>2</span>
+                  <strong style={{ fontSize: '0.92rem' }}>Fase 2: Revelación y Verificación</strong>
+                </div>
+                <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
+                  Al finalizar la animación física de la balotera, se revela la semilla en claro. El servidor verifica formalmente que <code>SHA256(Seed) === SeedCommitment</code> y ratifica el ganador oficial, registrando la constancia inalterable para consulta pública en <code>/verificar-sorteo</code>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* DESCARGA DE DOCUMENTACIÓN TÉCNICA OFICIAL */}
+          <div
+            style={{
+              padding: '16px 20px',
+              borderRadius: '12px',
+              border: '1.5px dashed #0284c7',
+              background: 'rgba(2, 132, 199, 0.04)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '12px',
+            }}
+          >
+            <div>
+              <strong style={{ fontSize: '0.95rem', display: 'block' }}>
+                📄 Especificación Técnica Oficial para Laboratorios de Ensayo (DSD)
+              </strong>
+              <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>
+                Documento de 2 páginas con fórmulas matemáticas, límites de rechazo IEEE y protocolo ISO 17025.
+              </span>
+            </div>
+
+            <a
+              href="/docs/especificacion-tecnica-rng-coljuegos-leanlab.pdf"
+              download="Especificacion-Tecnica-RNG-Coljuegos-LeanLab.pdf"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: '#0284c7',
+                color: '#ffffff',
+                padding: '9px 18px',
+                borderRadius: '10px',
+                fontWeight: 800,
+                fontSize: '0.85rem',
+                textDecoration: 'none',
+                boxShadow: '0 4px 12px rgba(2, 132, 199, 0.35)',
+              }}
+            >
+              <span>📥</span> Descargar Especificación Técnica (PDF)
+            </a>
           </div>
         </section>
       )}

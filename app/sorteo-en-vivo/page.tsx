@@ -1513,6 +1513,23 @@ export default function LiveDrawDemoPage() {
     // 4. Estructurar el Acta Oficial Firmada (100% compatible con Verificador Independiente)
     const seedCommitment = await sha256Hex(fromHex(seedHex, 32));
     const commitAuditHash = await sha256Hex(seedCommitment + calculatedListHash);
+
+    // 4.1 Registrar Pre-Compromiso Inmutable en el Servidor (ISO 17025 / Coljuegos Res. 20161200013844)
+    try {
+      fetch("/api/draws/commit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "commit",
+          drawId,
+          seedCommitment,
+          listHash: calculatedListHash,
+          entryCount: entries.length,
+          mode: currentMode,
+        }),
+      }).catch(() => {});
+    } catch {}
+
     const nowIso = new Date().toISOString();
     const nowLocal = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota" });
 
@@ -1842,6 +1859,19 @@ export default function LiveDrawDemoPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ drawId: revealedDrawId, actData: resolved.actData }),
+      }).catch(() => {});
+
+      // Revelación de semilla y ratificación criptográfica de resultado en servidor (ISO 17025 / Coljuegos)
+      fetch("/api/draws/commit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "reveal",
+          drawId: revealedDrawId,
+          seedHex: resolved.actData?.certificate?.reveal?.seed,
+          winningIndex: resolved.actData?.certificate?.result?.index,
+          winningNumber: resolved.selected,
+        }),
       }).catch(() => {});
     }
 

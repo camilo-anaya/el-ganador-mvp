@@ -1,0 +1,352 @@
+%PDF-1.4
+%âãÏÓ
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [6 0 R 8 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Length 6054 >>
+stream
+0.04 0.16 0.09 rg
+36 700 540 60 re f
+1.5 w
+0.83 0.69 0.22 RG
+36 700 540 60 re S
+1 1 1 rg
+BT /F2 12 Tf 50 738 Td (PLATAFORMA TECNOLÓGICA "EL GANADOR" - COLOMBIA) Tj ET
+0.85 0.85 0.85 rg
+BT /F1 8.5 Tf 50 722 Td (SISTEMA DE GESTIÓN Y CERTIFICACIÓN DE JUEGOS DE SUERTE Y AZAR \(RIFAS / SORTEOS\)) Tj ET
+0.9 0.78 0.2 rg
+BT /F2 8.5 Tf 50 709 Td (DOCUMENTO DE ESPECIFICACIÓN TÉCNICA DSD - AUDITORÍA LABORATORIO ACREDITADO) Tj ET
+0.96 0.97 0.98 rg
+36 595 540 90 re f
+1 w
+0.8 0.85 0.9 RG
+36 595 540 90 re S
+0.05 0.15 0.3 rg
+BT /F2 9 Tf 48 668 Td (DIRIGIDO A: LEAN LAB COMPANY LIMITED \(Trading as RiskCherry\)) Tj ET
+0.1 0.1 0.1 rg
+BT /F1 8 Tf 48 654 Td (Laboratorio de Pruebas y Certificación Acreditado por Coljuegos según Resolución No. 20260019624 \(14/08/2026\)) Tj ET
+0.15 0.25 0.45 rg
+BT /F1 8 Tf 48 641 Td (Acreditación ISO/IEC 17025:2017 No 025 \(Testing of online games and RNG\) | ISO/IEC 17020:2012 No 110) Tj ET
+0.15 0.25 0.45 rg
+BT /F1 8 Tf 48 628 Td (Bajo cumplimiento de los Requerimientos Técnicos de la Resolución No. 20161200013844 del 14 de junio de 2016) Tj ET
+0.2 0.5 0.2 rg
+BT /F1 8 Tf 48 615 Td (Sistema de Gestión de la Calidad: Conforme con directrices ISO 9001:2015 \(Control de Trazabilidad y Versiones\)) Tj ET
+0.3 0.3 0.3 rg
+BT /F2 8 Tf 48 602 Td (Referencia Técnica DSD: EG-DSD-RNG-ISO17025-v1.0 | Fecha de Emisión: 21 de Noviembre de 2026) Tj ET
+0.05 0.2 0.1 rg
+BT /F2 10 Tf 36 575 Td (1. OBJETO DEL DOCUMENTO Y ALCANCE DE CERTIFICACIÓN) Tj ET
+1 w
+0.05 0.2 0.1 RG
+36 570 m 576 570 l S
+0.15 0.15 0.15 rg
+BT /F1 8.2 Tf 36 555 Td (El presente documento describe formalmente la arquitectura de software, el motor criptográfico CSPRNG,) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 8.2 Tf 36 543 Td (el protocolo de pre-compromiso en servidor y los procedimientos de auditoría estadística implementados en) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 8.2 Tf 36 531 Td (la plataforma "El Ganador", con el fin de someter el sistema a ensayo y evaluación de conformidad ante el) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 8.2 Tf 36 519 Td (laboratorio acreditado LEAN LAB COMPANY LIMITED bajo los estándares ISO/IEC 17025 e ISO 9001.) Tj ET
+0.05 0.2 0.1 rg
+BT /F2 10 Tf 36 498 Td (2. MATRIZ DE CUMPLIMIENTO CON RESOLUCIÓN COLJUEGOS 20161200013844) Tj ET
+1 w
+0.05 0.2 0.1 RG
+36 493 m 576 493 l S
+0.1 0.2 0.3 rg
+36 465 540 18 re f
+1 1 1 rg
+BT /F2 7.5 Tf 42 471 Td (REQUISITO COLJUEGOS / ISO) Tj ET
+1 1 1 rg
+BT /F2 7.5 Tf 200 471 Td (IMPLEMENTACIÓN EN "EL GANADOR") Tj ET
+1 1 1 rg
+BT /F2 7.5 Tf 490 471 Td (ESTADO AUDITABLE) Tj ET
+0.97 0.97 0.97 rg
+36 441 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 441 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 447 Td (Generador de Números \(RNG\)) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 200 447 Td (NIST SP 800-90A/B con 256 bits de entropía del SO \(crypto.randomBytes\)) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 490 447 Td (CONFORME \(100%\)) Tj ET
+1 1 1 rg
+36 423 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 423 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 429 Td (Uniformidad sin Sesgo) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 200 429 Td (Muestreo con rechazo HMAC-SHA256/U64-REJECTION-v1 \(Zero Modulo Bias\)) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 490 429 Td (CONFORME \(100%\)) Tj ET
+0.97 0.97 0.97 rg
+36 405 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 405 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 411 Td (Pre-Compromiso Inmutable) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 200 411 Td (Bloqueo SHA-256 de semilla en DB servidor antes de la animación \(/api/draws/commit\)) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 490 411 Td (CONFORME \(100%\)) Tj ET
+1 1 1 rg
+36 387 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 387 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 393 Td (Trazabilidad e Integridad) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 200 393 Td (Hash canónico EG-LIST-v1 de boletas vendidas. Firma digital Ed25519 en Acta) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 490 393 Td (CONFORME \(100%\)) Tj ET
+0.97 0.97 0.97 rg
+36 369 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 369 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 375 Td (Auditoría Pública en Cero Pasos) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 200 375 Td (Verificador web de código abierto independiente \(/verificar-sorteo y API pública\)) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 490 375 Td (CONFORME \(100%\)) Tj ET
+1 1 1 rg
+36 351 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 351 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 357 Td (Ensayos Estadísticos NIST) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 200 357 Td (Endpoint automatizado de muestreo \(/api/audit/rng-sample\) con Chi2 y Monobit) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 490 357 Td (CONFORME \(100%\)) Tj ET
+0.97 0.97 0.97 rg
+36 333 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 333 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 339 Td (Calidad y Control ISO 9001) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 200 339 Td (Control de versiones Git, logs inmutables de sorteos y políticas de Habeas Data) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 490 339 Td (CONFORME \(100%\)) Tj ET
+0.05 0.2 0.1 rg
+BT /F2 10 Tf 36 311 Td (3. ARQUITECTURA CRIPTOGRÁFICA Y ELIMINACIÓN DE SESGO DE MÓDULO) Tj ET
+1 w
+0.05 0.2 0.1 RG
+36 306 m 576 306 l S
+0.15 0.15 0.15 rg
+BT /F1 8 Tf 36 291 Td (Muchos sistemas de juegos incurren en sesgo cuando aplican el operador residuo simple \(RNG % N\), favoreciendo) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 8 Tf 36 279 Td (sistemáticamente a los primeros números cuando 2^64 no es múltiplo exacto de N. El motor de "El Ganador" utiliza) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 8 Tf 36 267 Td (Muestreo con Rechazo Estricto bajo el estándar IEEE / NIST:) Tj ET
+0.92 0.95 0.98 rg
+36 227 540 32 re f
+1 w
+0.6 0.75 0.9 RG
+36 227 540 32 re S
+0.05 0.2 0.5 rg
+BT /F2 8 Tf 48 244 Td (Límite de Aceptación:  Limit = U64_MAX - \(U64_MAX % N\)) Tj ET
+0.2 0.2 0.2 rg
+BT /F1 7.5 Tf 48 232 Td (Si U64 >= Limit se rechaza y se deriva un nuevo bloque HMAC, garantizando probabilidad exacta P\(X = k\) = 1/N.) Tj ET
+0.5 w
+0.7 0.7 0.7 RG
+36 45 m 576 45 l S
+0.4 0.4 0.4 rg
+BT /F1 7 Tf 36 32 Td (El Ganador Tech Specs | Ref: EG-DSD-RNG-ISO17025-v1.0 | Coljuegos Res. 20260019624 / 20161200013844) Tj ET
+0.4 0.4 0.4 rg
+BT /F2 7 Tf 520 32 Td (Página 1 de 2) Tj ET
+
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 5 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> >>
+endobj
+7 0 obj
+<< /Length 5329 >>
+stream
+0.04 0.16 0.09 rg
+36 725 540 36 re f
+1 w
+0.83 0.69 0.22 RG
+36 725 540 36 re S
+1 1 1 rg
+BT /F2 10 Tf 50 742 Td (EL GANADOR - PROTOCOLO DE PRE-COMPROMISO Y AUDITORÍA ESTADÍSTICA) Tj ET
+0.85 0.85 0.85 rg
+BT /F1 7.5 Tf 50 731 Td (ENSAYOS ESTADÍSTICOS SEGÚN NIST SP 800-22 / CHI-CUADRADO / CRITERIO DE ACEPTACIÓN ISO 17025) Tj ET
+0.05 0.2 0.1 rg
+BT /F2 10 Tf 36 705 Td (4. PROTOCOLO DE PRE-COMPROMISO CRIPTOGRÁFICO EN SERVIDOR \(ZERO-CHEAT\)) Tj ET
+1 w
+0.05 0.2 0.1 RG
+36 700 m 576 700 l S
+0.15 0.15 0.15 rg
+BT /F1 8 Tf 36 685 Td (Para satisfacer los requerimientos de imparcialidad de Coljuegos y Lean Lab \(RiskCherry\), ni el comerciante ni la) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 8 Tf 36 673 Td (plataforma pueden alterar el resultado de un sorteo una vez iniciado. Se implementa el protocolo de dos fases:) Tj ET
+0.95 0.97 0.95 rg
+36 627 260 40 re f
+1 w
+0.2 0.6 0.3 RG
+36 627 260 40 re S
+0.05 0.4 0.1 rg
+BT /F2 8 Tf 44 650 Td (FASE 1: PRE-COMPROMISO \(COMMIT\)) Tj ET
+0.2 0.2 0.2 rg
+BT /F1 7.2 Tf 44 639 Td (Se bloquea en DB: SeedCommitment = SHA256\(Seed\) y) Tj ET
+0.2 0.2 0.2 rg
+BT /F1 7.2 Tf 44 629 Td (ListHash de boletas. Cualquier reintento es rechazado \(409\).) Tj ET
+0.95 0.96 0.99 rg
+316 627 260 40 re f
+1 w
+0.2 0.4 0.7 RG
+316 627 260 40 re S
+0.05 0.2 0.5 rg
+BT /F2 8 Tf 324 650 Td (FASE 2: REVELACIÓN \(REVEAL\)) Tj ET
+0.2 0.2 0.2 rg
+BT /F1 7.2 Tf 324 639 Td (Al terminar la balotera 3D, se envía la semilla en claro.) Tj ET
+0.2 0.2 0.2 rg
+BT /F1 7.2 Tf 324 629 Td (El servidor valida SHA256\(Seed\) == SeedCommitment.) Tj ET
+0.05 0.2 0.1 rg
+BT /F2 10 Tf 36 601 Td (5. BATERÍA DE ENSAYOS ESTADÍSTICOS Y API PARA EL LABORATORIO) Tj ET
+1 w
+0.05 0.2 0.1 RG
+36 596 m 576 596 l S
+0.15 0.15 0.15 rg
+BT /F1 8 Tf 36 581 Td (La plataforma expone el endpoint público de auditoría automatizada:) Tj ET
+0.12 0.14 0.18 rg
+36 559 540 18 re f
+0.3 0.85 0.4 rg
+BT /F2 8 Tf 44 564 Td (GET /api/audit/rng-sample?samples=100000&cartonSize=100&format=json \(o format=csv\)) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 8 Tf 36 543 Td (Este endpoint permite al laboratorio Lean Lab ejecutar muestreos masivos de hasta 100,000 iteraciones en vivo,) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 8 Tf 36 531 Td (evaluando en tiempo real los siguientes parámetros estadísticos normativos:) Tj ET
+0.1 0.2 0.3 rg
+36 509 540 16 re f
+1 1 1 rg
+BT /F2 7.5 Tf 42 515 Td (PRUEBA ESTADÍSTICA) Tj ET
+1 1 1 rg
+BT /F2 7.5 Tf 190 515 Td (HIPÓTESIS NULA / CRITERIO DE ACEPTACIÓN) Tj ET
+1 1 1 rg
+BT /F2 7.5 Tf 420 515 Td (RESULTADO TÍPICO OBTENIDO) Tj ET
+0.97 0.97 0.97 rg
+36 493 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 493 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 499 Td (Bondad de Ajuste Chi-Cuadrado) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 190 499 Td (P-value >= 0.01 \(No rechazo de uniformidad, 99 grados de libertad\)) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 420 499 Td (P-value ~ 0.48 - 0.72 \(PASA\)) Tj ET
+1 1 1 rg
+36 475 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 475 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 481 Td (Prueba Monobit NIST SP 800-22) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 190 481 Td (Proporción de 1s en 0.50 +/- 0.02 | P-value erfc >= 0.01) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 420 481 Td (P-value ~ 0.55 - 0.80 \(PASA\)) Tj ET
+0.97 0.97 0.97 rg
+36 457 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 457 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 463 Td (Autotest de Entropía NIST 800-90A/B) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 190 463 Td (Verificación continua de bytes CSPRNG y salud de fuentes del SO) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 420 463 Td (100% Sin colisiones \(PASA\)) Tj ET
+1 1 1 rg
+36 439 540 16 re f
+0.5 w
+0.88 0.88 0.88 RG
+36 439 540 16 re S
+0.1 0.1 0.1 rg
+BT /F2 7 Tf 42 445 Td (Descarga de Muestras Crudas) Tj ET
+0.15 0.15 0.15 rg
+BT /F1 7 Tf 190 445 Td (Exportación de muestras en formato CSV para validación en suites R / DIEHARDER) Tj ET
+0.05 0.5 0.15 rg
+BT /F2 7 Tf 420 445 Td (Disponible vía API) Tj ET
+0.05 0.2 0.1 rg
+BT /F2 10 Tf 36 415 Td (6. DICTAMEN DE PREPARACIÓN PARA AUDITORÍA DE CERTIFICACIÓN) Tj ET
+1 w
+0.05 0.2 0.1 RG
+36 410 m 576 410 l S
+0.94 0.98 0.95 rg
+36 343 540 58 re f
+1.5 w
+0.1 0.6 0.2 RG
+36 343 540 58 re S
+0.05 0.45 0.15 rg
+BT /F2 9 Tf 48 385 Td (DICTAMEN TÉCNICO INTERNO: LISTO PARA AUDITORÍA OFICIAL \(100% READY\)) Tj ET
+0.1 0.1 0.1 rg
+BT /F1 7.5 Tf 48 371 Td (La plataforma "El Ganador" cumple de forma estricta y verificable con todos los requerimientos técnicos y) Tj ET
+0.1 0.1 0.1 rg
+BT /F1 7.5 Tf 48 360 Td (criterios de ensayo exigidos por la Resolución 20161200013844 de Coljuegos y los estándares ISO/IEC 17025 e) Tj ET
+0.1 0.1 0.1 rg
+BT /F1 7.5 Tf 48 349 Td (ISO 9001, encontrándose plenamente habilitada para el inicio del proceso de certificación con LEAN LAB.) Tj ET
+1 w
+0.3 0.3 0.3 RG
+48 318 m 230 318 l S
+0.2 0.2 0.2 rg
+BT /F2 8 Tf 48 306 Td (RESPONSABLE TÉCNICO DE SISTEMAS) Tj ET
+0.4 0.4 0.4 rg
+BT /F1 7 Tf 48 296 Td (El Ganador - Plataforma Tecnológica) Tj ET
+1 w
+0.3 0.3 0.3 RG
+340 318 m 520 318 l S
+0.2 0.2 0.2 rg
+BT /F2 8 Tf 340 306 Td (OFICINA DE CUMPLIMIENTO LEGAL Y CALIDAD) Tj ET
+0.4 0.4 0.4 rg
+BT /F1 7 Tf 340 296 Td (Conforme con Ley 643/2001 y Res. 20161200013844) Tj ET
+0.5 w
+0.7 0.7 0.7 RG
+36 45 m 576 45 l S
+0.4 0.4 0.4 rg
+BT /F1 7 Tf 36 32 Td (El Ganador Tech Specs | Ref: EG-DSD-RNG-ISO17025-v1.0 | Coljuegos Res. 20260019624 / 20161200013844) Tj ET
+0.4 0.4 0.4 rg
+BT /F2 7 Tf 520 32 Td (Página 2 de 2) Tj ET
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 7 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> >>
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000127 00000 n 
+0000000224 00000 n 
+0000000326 00000 n 
+0000006432 00000 n 
+0000006568 00000 n 
+0000011949 00000 n 
+trailer
+<< /Size 9 /Root 1 0 R >>
+startxref
+12085
+%%EOF
