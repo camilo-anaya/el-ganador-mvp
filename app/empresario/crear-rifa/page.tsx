@@ -90,10 +90,10 @@ export default function CrearRifaEmpresarioPage() {
     setValidationError('');
 
     try {
-      const radicadoFinal =
-        legalMode === 'ai_secretary'
-          ? `COLJ-2026-${Math.floor(100000 + Math.random() * 900000)}`
-          : manualRadicado.trim();
+      const isAiSecretary = legalMode === 'ai_secretary';
+      const radicadoFinal = isAiSecretary
+        ? `SOL-COLJ-2026-${Math.floor(100000 + Math.random() * 900000)}`
+        : manualRadicado.trim();
 
       let receiptUrl = '';
       if (manualReceiptFile) {
@@ -125,8 +125,8 @@ export default function CrearRifaEmpresarioPage() {
             : 'Nacional',
         radicado_number: radicadoFinal,
         payment_receipt_url: receiptUrl,
-        draw_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-        status: legalMode === 'ai_secretary' ? 'active' : 'pending_approval',
+        draw_date: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(),
+        status: isAiSecretary ? 'en_tramite_coljuegos' : 'active',
       };
 
       // Guardar en Supabase
@@ -142,15 +142,27 @@ export default function CrearRifaEmpresarioPage() {
       localStorage.setItem('elganador_raffles_list', JSON.stringify(localRaffles));
 
       // 🔔 DISPARAR NOTIFICACIÓN INTERNA DE LA SECRETARIA IA AL PANEL EMPRESARIAL
-      addBusinessNotification({
-        type: 'legal_approval',
-        title: '🎉 ¡Radicado Oficial Asignado por Secretaria IA!',
-        message: `La Secretaria Legal IA auditó tu rifa "${title}" y emitió el Radicado Oficial ${radicadoFinal}. Tu sorteo ya está disponible para ventas en la vitrina pública.`,
-        radicado: radicadoFinal,
-        raffleTitle: title,
-        badge: 'Legal 100% OK',
-        link: '/empresario?tab=rifas',
-      });
+      if (isAiSecretary) {
+        addBusinessNotification({
+          type: 'legal_approval',
+          title: '📋 Expediente Radicado ante Coljuegos (15-30 días hábiles)',
+          message: `La Secretaria Legal IA radicó tu Formulario 8 ante Coljuegos con el Radicado de Entrada ${radicadoFinal}. Conforme al Decreto 1968/2001, la entidad tiene entre 15 y 30 días hábiles para emitir la Resolución Oficial de Autorización. Tu sorteo se muestra en vitrina en modo Expectativa/Preventa. Te notificaremos aquí de inmediato en cuanto la resolución quede ratificada para abrir la venta de boletas.`,
+          radicado: radicadoFinal,
+          raffleTitle: title,
+          badge: 'Trámite 15-30 Días',
+          link: '/empresario?tab=rifas',
+        });
+      } else {
+        addBusinessNotification({
+          type: 'legal_approval',
+          title: '🎉 ¡Rifa Verificada con Resolución Previa!',
+          message: `Tu rifa "${title}" con resolución aprobada ${radicadoFinal} ha sido ratificada y ya está activa para recibir compras en la vitrina pública.`,
+          radicado: radicadoFinal,
+          raffleTitle: title,
+          badge: 'Legal 100% OK',
+          link: '/empresario?tab=rifas',
+        });
+      }
 
       setPublishSuccess({
         title,
@@ -160,6 +172,7 @@ export default function CrearRifaEmpresarioPage() {
         coljuegosTax14,
         totalTickets,
         ticketPrice,
+        isPendingColjuegos: isAiSecretary,
       });
     } catch (err: any) {
       console.error('Error al publicar rifa:', err);
@@ -172,6 +185,7 @@ export default function CrearRifaEmpresarioPage() {
 
   // PANTALLA DE ÉXITO FINAL
   if (publishSuccess) {
+    const isPending = publishSuccess.isPendingColjuegos;
     return (
       <div className="app-shell" style={{ padding: '24px 16px', maxWidth: '640px', margin: '0 auto', textAlign: 'center' }}>
         <div
@@ -179,14 +193,14 @@ export default function CrearRifaEmpresarioPage() {
             background: isDark ? '#1e293b' : '#ffffff',
             borderRadius: '20px',
             padding: '32px 24px',
-            border: '2px solid #007AFF',
-            boxShadow: '0 12px 40px rgba(0, 122, 255, 0.25)',
+            border: isPending ? '2px solid #0284c7' : '2px solid #007AFF',
+            boxShadow: isPending ? '0 12px 40px rgba(2, 132, 199, 0.25)' : '0 12px 40px rgba(0, 122, 255, 0.25)',
           }}
         >
-          <div style={{ fontSize: '48px', marginBottom: '12px' }}>🎉</div>
+          <div style={{ fontSize: '48px', marginBottom: '12px' }}>{isPending ? '📋' : '🎉'}</div>
           <span
             style={{
-              background: '#007AFF',
+              background: isPending ? '#0284c7' : '#007AFF',
               color: '#ffffff',
               fontSize: '11px',
               fontWeight: 900,
@@ -196,21 +210,51 @@ export default function CrearRifaEmpresarioPage() {
               letterSpacing: '0.06em',
             }}
           >
-            Sorteo Verificado · Ley 643/2001
+            {isPending ? 'EXPEDIENTE RADICADO ANTE COLJUEGOS · LEY 643/2001' : 'SORTEO VERIFICADO Y ACTIVO'}
           </span>
 
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 900, margin: '14px 0 6px', color: isDark ? '#ffffff' : '#0f172a' }}>
-            ¡Tu Rifa está Oficialmente en Vivo!
+          <h2 style={{ fontSize: '1.45rem', fontWeight: 900, margin: '14px 0 6px', color: isDark ? '#ffffff' : '#0f172a' }}>
+            {isPending ? '¡Expediente Radicado Oficialmente!' : '¡Tu Rifa está Oficialmente en Vivo!'}
           </h2>
 
-          <p style={{ fontSize: '0.9rem', color: isDark ? '#cbd5e1' : '#475569', margin: '0 0 20px' }}>
-            La <strong>Secretaria Legal IA</strong> tramitó el Formulario 8 y selló tu radicado legal ante Coljuegos.
+          <p style={{ fontSize: '0.88rem', color: isDark ? '#cbd5e1' : '#475569', margin: '0 0 16px', lineHeight: 1.5 }}>
+            {isPending ? (
+              <>
+                La <strong>Secretaria Legal IA</strong> tramitó tu Formulario 8 y generó tu <strong>Radicado de Entrada</strong>. Conforme al Decreto 1968 de 2001, Coljuegos cuenta con entre <strong>15 y 30 días hábiles</strong> para emitir la Resolución Oficial de Autorización para la venta de boletas.
+              </>
+            ) : (
+              <>Tu resolución ha sido validada y tu sorteo ya está disponible para ventas en todo el país.</>
+            )}
           </p>
+
+          {/* CRONOGRAMA DE TRÁMITE DE 15 A 30 DÍAS */}
+          {isPending && (
+            <div
+              style={{
+                background: isDark ? 'rgba(2, 132, 199, 0.15)' : '#eff6ff',
+                border: '1.5px solid #0284c7',
+                borderRadius: '12px',
+                padding: '12px 14px',
+                textAlign: 'left',
+                marginBottom: '18px',
+                fontSize: '0.82rem',
+                lineHeight: 1.5,
+              }}
+            >
+              <strong style={{ color: '#0284c7', display: 'block', marginBottom: '4px' }}>
+                ⏳ Cronograma del Trámite Oficial:
+              </strong>
+              <div>• <strong>Radicado de Entrada:</strong> Asignado hoy ({publishSuccess.radicado}).</div>
+              <div>• <strong>Plazo de Respuesta de Coljuegos:</strong> 15 a 30 días hábiles (estudio jurídico, póliza y 14%).</div>
+              <div>• <strong>Estado en Vitrina:</strong> Modo Preventa / Expectativa (los usuarios pueden ver tu premio).</div>
+              <div>• <strong>Apertura de Ventas:</strong> La Secretaria IA te enviará una notificación a la campana 🔔 en cuanto Coljuegos emita la Resolución Definitiva para habilitar el recaudo.</div>
+            </div>
+          )}
 
           <div
             style={{
-              background: isDark ? 'rgba(0, 122, 255, 0.12)' : '#f0f9ff',
-              border: '1.5px solid #0284c7',
+              background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f8fafc',
+              border: '1px solid #cbd5e1',
               borderRadius: '14px',
               padding: '16px',
               textAlign: 'left',
@@ -219,7 +263,7 @@ export default function CrearRifaEmpresarioPage() {
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-              <span style={{ opacity: 0.8 }}>Radicado Oficial:</span>
+              <span style={{ opacity: 0.8 }}>Radicado:</span>
               <strong style={{ color: '#007AFF' }}>{publishSuccess.radicado}</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
@@ -235,7 +279,7 @@ export default function CrearRifaEmpresarioPage() {
               <strong style={{ color: '#0284c7' }}>${publishSuccess.coljuegosTax14.toLocaleString()} COP</strong>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid rgba(0, 122, 255, 0.2)', paddingTop: '8px', marginTop: '6px' }}>
-              <span style={{ fontWeight: 800 }}>Tu Ganancia Neta Limpia:</span>
+              <span style={{ fontWeight: 800 }}>Ganancia Neta Proyectada:</span>
               <strong style={{ color: '#007AFF', fontSize: '1.05rem' }}>${publishSuccess.netProfit.toLocaleString()} COP</strong>
             </div>
           </div>
@@ -255,7 +299,7 @@ export default function CrearRifaEmpresarioPage() {
                 boxShadow: '0 4px 14px rgba(0, 122, 255, 0.4)',
               }}
             >
-              🏛️ Ver Rifa en la Vitrina Pública
+              🏛️ Ver Rifa en Vitrina (Modo Expectativa)
             </Link>
 
             <Link
@@ -797,15 +841,15 @@ export default function CrearRifaEmpresarioPage() {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <span style={{ fontSize: '0.72rem', background: '#007AFF', color: '#fff', padding: '2px 8px', borderRadius: '99px', fontWeight: 900 }}>
-                  RECOMENDADO · 1 CLIC
+                  RECOMENDADO · 15 A 30 DÍAS HÁBILES
                 </span>
                 <input type="radio" checked={legalMode === 'ai_secretary'} onChange={() => setLegalMode('ai_secretary')} />
               </div>
               <strong style={{ fontSize: '0.96rem', display: 'block', color: '#007AFF', marginBottom: '4px' }}>
-                🚀 Tramitar con Secretaria Legal IA
+                🚀 Radicar con Secretaria Legal IA (1 Clic)
               </strong>
               <p style={{ fontSize: '0.8rem', opacity: 0.85, lineHeight: 1.5, margin: 0 }}>
-                Nuestra IA toma los datos exactos que calculaste, arma el Formulario 8 oficial y gestiona tu radicado legal automáticamente. Cero filas ni enredos.
+                La IA arma tu Formulario 8 y radica tu expediente ante Coljuegos. Genera tu <strong>Radicado de Entrada</strong> hoy mismo. Coljuegos tiene por ley entre <strong>15 y 30 días hábiles</strong> para emitir la Resolución Oficial. La IA hace el seguimiento continuo y te avisa por la campana 🔔 en cuanto quede autorizada para abrir las compras.
               </p>
             </div>
 
