@@ -9,7 +9,7 @@ import BusinessBottomNav from '@/components/business/BusinessBottomNav';
 import BusinessAdBanner from '@/components/business/BusinessAdBanner';
 import ColjuegosLegalGuide from '@/components/ColjuegosLegalGuide';
 import { performLogout } from '@/lib/logout';
-import RegionalPermitSelectorWithTime, { LegalScope } from '@/components/RegionalPermitSelectorWithTime';
+import RegionalPermitSelectorWithTime, { LegalScope, REGIONAL_DEPARTMENTS } from '@/components/RegionalPermitSelectorWithTime';
 import { fileToDataUrl, shareRaffleLink } from '@/lib/nativeActions';
 import { supabase, uploadStoryToSupabase, uploadKybDocumentToSupabase, uploadLegalDocument } from '@/lib/supabase';
 import { getBusinessNotifications, markBusinessNotificationsAsRead, addBusinessNotification, BusinessNotification } from '@/lib/notifications';
@@ -258,6 +258,8 @@ function PanelEmpresarioContent() {
   const [legalReceiptUrl, setLegalReceiptUrl] = useState<string | null>(null);
   const [legalValidationError, setLegalValidationError] = useState<boolean>(false);
   const [isPublishingRaffle, setIsPublishingRaffle] = useState<boolean>(false);
+  const [showFullDirectory, setShowFullDirectory] = useState<boolean>(false);
+  const currentDept = REGIONAL_DEPARTMENTS[legalRegion] || REGIONAL_DEPARTMENTS.antioquia;
 
   // 4. Estado de Pauta Publicitaria en Vitrina
   const [adHeadline, setAdHeadline] = useState('20% OFF en accesorios + Matrícula Gratis');
@@ -449,7 +451,17 @@ function PanelEmpresarioContent() {
     setIsPublishingRaffle(true);
 
     try {
-      const radicadoFinal = `SOL-COLJ-2026-${Math.floor(100000 + Math.random() * 900000)}`;
+      const radicadoFinal = legalScope === 'nacional'
+        ? `SOL-COLJ-2026-${Math.floor(100000 + Math.random() * 900000)}`
+        : legalScope === 'distrital'
+        ? `RAD-BOG-2026-${Math.floor(100000 + Math.random() * 900000)}`
+        : `RAD-${(REGIONAL_DEPARTMENTS[legalRegion]?.department || 'DEP').toUpperCase().slice(0, 3)}-2026-${Math.floor(100000 + Math.random() * 900000)}`;
+
+      const entityNameDisplay = legalScope === 'nacional'
+        ? 'Coljuegos (Nacional)'
+        : legalScope === 'distrital'
+        ? 'Alcaldía Mayor / Lotería de Bogotá'
+        : (REGIONAL_DEPARTMENTS[legalRegion]?.name || 'Entidad Departamental');
 
       let receiptUrl = legalReceiptUrl;
       if (legalReceiptFile && !receiptUrl) {
@@ -469,17 +481,27 @@ function PanelEmpresarioContent() {
         .replace(/[^a-z0-9]+/g, '-');
       setCreatedRaffleSlug(slug);
 
+      const timeLabelDisplay = drawDateTime
+        ? `🗓️ ${drawDateTime}`
+        : (hasVoucher
+            ? (legalScope === 'nacional'
+                ? '⏳ Trámite Coljuegos (15-30 Días)'
+                : legalScope === 'distrital'
+                ? '⏳ Trámite Distrital Bogotá (5-15 Días)'
+                : `⏳ Trámite ${REGIONAL_DEPARTMENTS[legalRegion]?.name || 'Departamental'}`)
+            : '⚠️ Pendiente Voucher');
+
       const now = Date.now();
       const newRaffle = {
         id: `raffle-${slug}-${now}`,
         title: raffleTitle || 'Gran Sorteo Oficial',
         merchant: storeName,
-        city: legalScope === 'distrital' ? 'Bogotá D.C.' : legalScope === 'departamental' ? (legalCustomCity || 'Regional') : 'Colombia',
+        city: legalScope === 'distrital' ? 'Bogotá D.C.' : legalScope === 'departamental' ? (REGIONAL_DEPARTMENTS[legalRegion]?.city || legalCustomCity || 'Regional') : 'Colombia',
         priceCop: `$ ${numTicketPrice.toLocaleString('es-CO')}`,
         ticket_price: numTicketPrice,
         total_tickets: numTotalTickets,
         soldPercent: 0,
-        timeLabel: drawDateTime ? `🗓️ ${drawDateTime}` : (hasVoucher ? '⏳ Trámite Coljuegos (15-30 Días)' : '⚠️ Pendiente Voucher'),
+        timeLabel: timeLabelDisplay,
         category: 'vehiculos',
         image: rafflePhotos[0] || '/galeria-premios-el-ganador-realista.jpg',
         stage: 'upcoming',
@@ -533,18 +555,18 @@ function PanelEmpresarioContent() {
       if (hasVoucher) {
         addBusinessNotification({
           type: 'legal_approval',
-          title: '📋 Expediente Radicado ante Coljuegos (15-30 días hábiles)',
-          message: `La Secretaria Legal IA radicó tu Formulario 8 ante Coljuegos con el Radicado de Entrada ${radicadoFinal} y voucher de pago adjunto. Conforme al Decreto 1968/2001, la entidad tiene entre 15 y 30 días hábiles para emitir la Resolución Oficial de Autorización. Tu sorteo se encuentra montado en vitrina en modo Expectativa/Preventa.`,
+          title: `📋 Expediente Radicado ante ${entityNameDisplay}`,
+          message: `La Secretaria Legal IA estructuró y radicó el trámite ante ${entityNameDisplay} bajo el Radicado de Entrada ${radicadoFinal} y comprobante de pago bancario adjunto. Tu sorteo se encuentra montado en vitrina en modo Expectativa/Preventa.`,
           radicado: radicadoFinal,
           raffleTitle: raffleTitle || 'Gran Sorteo Oficial',
-          badge: 'Trámite 15-30 Días',
+          badge: legalScope === 'nacional' ? 'Trámite 15-30 Días' : 'Trámite Radicado',
           link: '/empresario?tab=rifas',
         });
       } else {
         addBusinessNotification({
           type: 'legal_approval',
           title: '⚠️ Rifa Montada: En Confirmación por Subir Voucher',
-          message: `Tu sorteo "${raffleTitle || 'Gran Sorteo Oficial'}" quedó montado con pre-radicado ${radicadoFinal}. Para que Coljuegos inicie formalmente el estudio de 15 a 30 días hábiles, recuerda subir el voucher de pago bancario de los derechos de explotación ($${coljuegosTax14.toLocaleString('es-CO')} COP).`,
+          message: `Tu sorteo "${raffleTitle || 'Gran Sorteo Oficial'}" quedó montado con pre-radicado ${radicadoFinal} ante ${entityNameDisplay}. Para formalizar el radicado, recuerda ingresar al enlace oficial de pago y subir el comprobante de los derechos de explotación ($${coljuegosTax14.toLocaleString('es-CO')} COP).`,
           radicado: radicadoFinal,
           raffleTitle: raffleTitle || 'Gran Sorteo Oficial',
           badge: 'Pendiente Voucher',
@@ -1980,7 +2002,7 @@ function PanelEmpresarioContent() {
                   </div>
                 </div>
 
-                {/* PASO 3: RADICACIÓN OFICIAL ANTE COLJUEGOS Y VOUCHER DE PAGO */}
+                {/* PASO 3: JURISDICCIÓN, ENLACES OFICIALES DIRECTOS Y VOUCHER DE PAGO */}
                 <div
                   style={{
                     background: isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff',
@@ -1996,16 +2018,435 @@ function PanelEmpresarioContent() {
                       <span style={{ fontSize: '20px' }}>⚖️</span>
                       <div>
                         <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a' }}>
-                          3. Radicación Oficial ante Coljuegos (Secretaria Legal IA)
+                          3. Jurisdicción y Radicación Oficial (Coljuegos / Distrital / Regional)
                         </h3>
                         <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.85 }}>
-                          Trámite unificado: Mandato Digital, Liquidación del 14% de Salud y Carga de Voucher Bancario.
+                          Escoge tu entidad reguladora, ingresa al portal oficial de pago PSE y adjunta tu comprobante.
                         </p>
                       </div>
                     </div>
                     <span style={{ fontSize: '11px', fontWeight: 800, padding: '3px 8px', borderRadius: '6px', background: 'rgba(0, 122, 255, 0.15)', color: '#007AFF' }}>
-                      VENTANILLA ÚNICA
+                      VENTANILLA ÚNICA OFICIAL
                     </span>
+                  </div>
+
+                  {/* SELECTOR DE ENTIDAD REGULADORA: COLJUEGOS vs DISTRITAL BOGOTÁ vs DEPARTAMENTAL */}
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 800, marginBottom: '8px', color: isDark ? '#94a3b8' : '#475569' }}>
+                      SELECCIONA LA ENTIDAD REGULADORA DE TU SORTEO:
+                    </label>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+                      {/* Opción 1: Nacional Coljuegos */}
+                      <button
+                        type="button"
+                        onClick={() => setLegalScope('nacional')}
+                        style={{
+                          padding: '12px 14px',
+                          borderRadius: '12px',
+                          border: legalScope === 'nacional' ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
+                          background: legalScope === 'nacional' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? '#0b1622' : '#f8fafc'),
+                          color: legalScope === 'nacional' ? '#007AFF' : (isDark ? '#cbd5e1' : '#334155'),
+                          fontWeight: 800,
+                          fontSize: '0.88rem',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          gap: '4px',
+                          textAlign: 'left',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span>🇨🇴</span> Nacional (Coljuegos)
+                        </span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 500, opacity: 0.85 }}>
+                          Válido en todo el país · 15 a 30 días hábiles
+                        </span>
+                      </button>
+
+                      {/* Opción 2: Distrital Bogotá D.C. */}
+                      <button
+                        type="button"
+                        onClick={() => setLegalScope('distrital')}
+                        style={{
+                          padding: '12px 14px',
+                          borderRadius: '12px',
+                          border: legalScope === 'distrital' ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
+                          background: legalScope === 'distrital' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? '#0b1622' : '#f8fafc'),
+                          color: legalScope === 'distrital' ? '#007AFF' : (isDark ? '#cbd5e1' : '#334155'),
+                          fontWeight: 800,
+                          fontSize: '0.88rem',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          gap: '4px',
+                          textAlign: 'left',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span>🏛️</span> Distrital (Bogotá D.C.)
+                        </span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 500, opacity: 0.85 }}>
+                          Lotería de Bogotá / Alcaldía Mayor · 5 a 15 días
+                        </span>
+                      </button>
+
+                      {/* Opción 3: Departamental / Regional */}
+                      <button
+                        type="button"
+                        onClick={() => setLegalScope('departamental')}
+                        style={{
+                          padding: '12px 14px',
+                          borderRadius: '12px',
+                          border: legalScope === 'departamental' ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
+                          background: legalScope === 'departamental' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? '#0b1622' : '#f8fafc'),
+                          color: legalScope === 'departamental' ? '#007AFF' : (isDark ? '#cbd5e1' : '#334155'),
+                          fontWeight: 800,
+                          fontSize: '0.88rem',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          gap: '4px',
+                          textAlign: 'left',
+                          transition: 'all 0.2s',
+                        }}
+                      >
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <span>📍</span> Departamental (32 Dptos)
+                        </span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 500, opacity: 0.85 }}>
+                          Loterías Departamentales · 3 a 10 días
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* ENLACES DIRECTOS OFICIALES PARA PAGO PSE Y RADICACIÓN */}
+                  <div
+                    style={{
+                      padding: '16px',
+                      borderRadius: '12px',
+                      background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff',
+                      border: '1px solid rgba(0, 122, 255, 0.25)',
+                      marginBottom: '16px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '18px' }}>⚡</span>
+                        <strong style={{ fontSize: '13px', color: '#007AFF' }}>
+                          {legalScope === 'nacional'
+                            ? 'Enlaces Oficiales Directos: Coljuegos Nacional'
+                            : legalScope === 'distrital'
+                            ? 'Enlaces Oficiales Directos: Bogotá D.C. (Distrital)'
+                            : `Enlaces Oficiales Directos: ${currentDept?.name || 'Lotería Departamental'}`}
+                        </strong>
+                      </div>
+                      <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: '#007AFF', color: '#fff' }}>
+                        PORTAL GUBERNAMENTAL
+                      </span>
+                    </div>
+
+                    {/* Si es Departamental, mostrar el selector de departamento */}
+                    {legalScope === 'departamental' && (
+                      <div style={{ marginBottom: '12px' }}>
+                        <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, marginBottom: '4px' }}>
+                          Selecciona tu Departamento:
+                        </label>
+                        <select
+                          value={legalRegion}
+                          onChange={(e) => setLegalRegion(e.target.value)}
+                          style={{
+                            width: '100%',
+                            padding: '10px 12px',
+                            borderRadius: '8px',
+                            border: '1.5px solid #007AFF',
+                            background: isDark ? '#0f172a' : '#ffffff',
+                            color: isDark ? '#ffffff' : '#0f172a',
+                            fontSize: '0.85rem',
+                            fontWeight: 700,
+                          }}
+                        >
+                          {Object.entries(REGIONAL_DEPARTMENTS).map(([key, dept]) => (
+                            <option key={key} value={key}>
+                              {dept.name} — {dept.entityName}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* Botones de acción directa a los portales gubernamentales */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {legalScope === 'nacional' && (
+                        <>
+                          <a
+                            href="https://portaloperador.coljuegos.gov.co/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '12px 16px',
+                              borderRadius: '10px',
+                              background: '#007AFF',
+                              color: '#ffffff',
+                              textDecoration: 'none',
+                              fontWeight: 800,
+                              fontSize: '0.85rem',
+                              boxShadow: '0 2px 8px rgba(0, 122, 255, 0.25)',
+                              transition: 'transform 0.15s',
+                            }}
+                          >
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span>💳</span> Portal de Operador y Pago PSE Coljuegos (Oficial)
+                            </span>
+                            <span style={{ fontSize: '11px', background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '4px' }}>
+                              Pagar PSE ↗
+                            </span>
+                          </a>
+
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
+                            <a
+                              href="https://www.coljuegos.gov.co/publicaciones/301297/tramite-de-rifas/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '9px 12px',
+                                borderRadius: '8px',
+                                background: isDark ? 'rgba(255,255,255,0.06)' : '#ffffff',
+                                border: '1px solid rgba(0, 122, 255, 0.3)',
+                                color: isDark ? '#93c5fd' : '#0369a1',
+                                textDecoration: 'none',
+                                fontSize: '0.78rem',
+                                fontWeight: 700,
+                              }}
+                            >
+                              <span>📄</span> Guía Oficial de Rifas Coljuegos ↗
+                            </a>
+                            <a
+                              href="https://www.gov.co/servicios-y-tramites/T6612"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '9px 12px',
+                                borderRadius: '8px',
+                                background: isDark ? 'rgba(255,255,255,0.06)' : '#ffffff',
+                                border: '1px solid rgba(0, 122, 255, 0.3)',
+                                color: isDark ? '#93c5fd' : '#0369a1',
+                                textDecoration: 'none',
+                                fontSize: '0.78rem',
+                                fontWeight: 700,
+                              }}
+                            >
+                              <span>🏛️</span> Ventanilla Única GOV.CO (Trámite T6612) ↗
+                            </a>
+                          </div>
+                        </>
+                      )}
+
+                      {legalScope === 'distrital' && (
+                        <>
+                          <a
+                            href="https://oficinavirtual.shd.gov.co/OficinaVirtual/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '12px 16px',
+                              borderRadius: '10px',
+                              background: '#007AFF',
+                              color: '#ffffff',
+                              textDecoration: 'none',
+                              fontWeight: 800,
+                              fontSize: '0.85rem',
+                              boxShadow: '0 2px 8px rgba(0, 122, 255, 0.25)',
+                            }}
+                          >
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span>💳</span> Oficina Virtual Hacienda Bogotá (Pago PSE Derechos de Explotación)
+                            </span>
+                            <span style={{ fontSize: '11px', background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '4px' }}>
+                              Pagar PSE ↗
+                            </span>
+                          </a>
+
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
+                            <a
+                              href="https://bogota.gov.co/servicios/guia-de-tramites-y-servicios/autorizacion-para-la-realizacion-de-rifas"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '9px 12px',
+                                borderRadius: '8px',
+                                background: isDark ? 'rgba(255,255,255,0.06)' : '#ffffff',
+                                border: '1px solid rgba(0, 122, 255, 0.3)',
+                                color: isDark ? '#93c5fd' : '#0369a1',
+                                textDecoration: 'none',
+                                fontSize: '0.78rem',
+                                fontWeight: 700,
+                              }}
+                            >
+                              <span>🏛️</span> Trámite Oficial Alcaldía Mayor de Bogotá ↗
+                            </a>
+                            <a
+                              href="https://www.loteriadebogota.com/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '9px 12px',
+                                borderRadius: '8px',
+                                background: isDark ? 'rgba(255,255,255,0.06)' : '#ffffff',
+                                border: '1px solid rgba(0, 122, 255, 0.3)',
+                                color: isDark ? '#93c5fd' : '#0369a1',
+                                textDecoration: 'none',
+                                fontSize: '0.78rem',
+                                fontWeight: 700,
+                              }}
+                            >
+                              <span>🎲</span> Portal Lotería de Bogotá ↗
+                            </a>
+                          </div>
+                        </>
+                      )}
+
+                      {legalScope === 'departamental' && (
+                        <>
+                          <a
+                            href={currentDept?.primaryUrl || 'https://www.benedan.gov.co/'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              padding: '12px 16px',
+                              borderRadius: '10px',
+                              background: '#007AFF',
+                              color: '#ffffff',
+                              textDecoration: 'none',
+                              fontWeight: 800,
+                              fontSize: '0.85rem',
+                              boxShadow: '0 2px 8px rgba(0, 122, 255, 0.25)',
+                            }}
+                          >
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span>💳</span> {currentDept?.primaryLabel || 'Portal Oficial de Trámite y Pago ↗'}
+                            </span>
+                            <span style={{ fontSize: '11px', background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '4px' }}>
+                              Abrir Portal ↗
+                            </span>
+                          </a>
+
+                          {currentDept?.secondaryUrl && (
+                            <a
+                              href={currentDept.secondaryUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '9px 12px',
+                                borderRadius: '8px',
+                                background: isDark ? 'rgba(255,255,255,0.06)' : '#ffffff',
+                                border: '1px solid rgba(0, 122, 255, 0.3)',
+                                color: isDark ? '#93c5fd' : '#0369a1',
+                                textDecoration: 'none',
+                                fontSize: '0.78rem',
+                                fontWeight: 700,
+                              }}
+                            >
+                              <span>🏛️</span> {currentDept.secondaryLabel || 'Portal Secundario de Trámites ↗'}
+                            </a>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => setShowFullDirectory(!showFullDirectory)}
+                            style={{
+                              background: 'transparent',
+                              border: '1px dashed rgba(0, 122, 255, 0.5)',
+                              color: '#007AFF',
+                              padding: '8px 12px',
+                              borderRadius: '8px',
+                              fontSize: '0.78rem',
+                              fontWeight: 800,
+                              cursor: 'pointer',
+                              marginTop: '4px',
+                            }}
+                          >
+                            {showFullDirectory ? '▲ Ocultar Directorio de los 32 Departamentos' : '📖 Ver Directorio Completo de Loterías de los 32 Departamentos ▼'}
+                          </button>
+
+                          {showFullDirectory && (
+                            <div
+                              style={{
+                                marginTop: '8px',
+                                maxHeight: '240px',
+                                overflowY: 'auto',
+                                padding: '10px',
+                                borderRadius: '8px',
+                                background: isDark ? '#0b1622' : '#ffffff',
+                                border: '1px solid rgba(148, 163, 184, 0.25)',
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+                                gap: '6px',
+                                fontSize: '0.74rem',
+                              }}
+                            >
+                              {Object.entries(REGIONAL_DEPARTMENTS).map(([key, d]) => (
+                                <div
+                                  key={key}
+                                  style={{
+                                    padding: '6px 8px',
+                                    borderRadius: '6px',
+                                    background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc',
+                                    border: '1px solid rgba(148, 163, 184, 0.2)',
+                                  }}
+                                >
+                                  <strong style={{ display: 'block', color: '#007AFF' }}>{d.name}</strong>
+                                  <span style={{ fontSize: '0.7rem', opacity: 0.8 }}>{d.entityName}</span>
+                                  <div style={{ marginTop: '4px' }}>
+                                    <a
+                                      href={d.primaryUrl}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{ color: '#0284c7', textDecoration: 'none', fontWeight: 700 }}
+                                    >
+                                      Pagar / Trámite ↗
+                                    </a>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+
+                    <p style={{ margin: '10px 0 0', fontSize: '11.5px', color: isDark ? '#94a3b8' : '#475569', lineHeight: 1.4 }}>
+                      💡 <strong>Instrucciones:</strong> Da clic en el enlace oficial de arriba, liquida y paga mediante PSE o genera el comprobante bancario por el valor del 14% de salud pública (${coljuegosTax14.toLocaleString('es-CO')} COP). Luego guarda el comprobante en PDF o foto y súbelo en la casilla de abajo.
+                    </p>
                   </div>
 
                   {/* BLOQUE A: MANDATO DIGITAL Y PLAZO DE LEY */}
@@ -2025,7 +2466,19 @@ function PanelEmpresarioContent() {
                       </strong>
                     </div>
                     <p style={{ margin: '0 0 10px', fontSize: '12px', lineHeight: 1.5, opacity: 0.9 }}>
-                      La Secretaria Legal IA estructura el <strong>Formulario 8 Oficial</strong> con los datos de tu empresa y genera el radicado preliminar de trámite <strong>SOL-COLJ-2026-XXXXXX</strong>. Conforme a la ley, Coljuegos cuenta con un término de <strong>15 a 30 días hábiles</strong> para emitir la Resolución Oficial de Autorización. Durante este periodo tu sorteo se activa en vitrina en <strong>Modo Expectativa / Preventa</strong>.
+                      {legalScope === 'nacional' ? (
+                        <>
+                          La Secretaria Legal IA estructura el <strong>Formulario 8 Oficial</strong> con los datos de tu empresa y genera el radicado preliminar de trámite <strong>SOL-COLJ-2026-XXXXXX</strong>. Conforme a la ley, Coljuegos cuenta con un término de <strong>15 a 30 días hábiles</strong> para emitir la Resolución Oficial de Autorización. Durante este periodo tu sorteo se activa en vitrina en <strong>Modo Expectativa / Preventa</strong>.
+                        </>
+                      ) : legalScope === 'distrital' ? (
+                        <>
+                          La Secretaria Legal IA estructura el expediente distrital para la <strong>Alcaldía Mayor de Bogotá y Lotería de Bogotá</strong> bajo el radicado preliminar <strong>RAD-BOG-2026-XXXXXX</strong>. El término reglamentario distrital es de <strong>5 a 15 días hábiles</strong>. Tu sorteo se activa en vitrina en <strong>Modo Expectativa / Preventa</strong>.
+                        </>
+                      ) : (
+                        <>
+                          La Secretaria Legal IA estructura la solicitud formal para <strong>{currentDept?.entityName || 'la entidad departamental'}</strong> bajo radicado departamental. El término reglamentario estimado es de <strong>{currentDept?.timeframe || '3 a 10 días hábiles'}</strong>.
+                        </>
+                      )}
                     </p>
 
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 700 }}>
@@ -2035,7 +2488,9 @@ function PanelEmpresarioContent() {
                         onChange={(e) => setMandatoAccepted(e.target.checked)}
                         style={{ width: '16px', height: '16px', accentColor: '#007AFF' }}
                       />
-                      <span>Otorgo Mandato Digital a El Ganador para estructurar y radicar el Formulario 8 ante Coljuegos.</span>
+                      <span>
+                        Otorgo Mandato Digital a El Ganador para estructurar y radicar ante {legalScope === 'nacional' ? 'Coljuegos' : legalScope === 'distrital' ? 'la Alcaldía Mayor de Bogotá / Lotería de Bogotá' : (currentDept?.entityName || 'la Lotería Departamental')}.
+                      </span>
                     </label>
                   </div>
 
@@ -2054,7 +2509,7 @@ function PanelEmpresarioContent() {
                           <span>🧾</span> Voucher de Pago de Derechos de Explotación (14% Salud)
                         </strong>
                         <p style={{ margin: '2px 0 0', fontSize: '11.5px', color: isDark ? '#94a3b8' : '#64748b' }}>
-                          Para radicar formalmente ante Coljuegos, la ley exige el comprobante de pago o consignación bancaria del 14% de salud pública.
+                          Para radicar formalmente ante {legalScope === 'nacional' ? 'Coljuegos' : legalScope === 'distrital' ? 'la Alcaldía / Lotería de Bogotá' : (currentDept?.entityName || 'la entidad')}, la ley exige el comprobante de pago o consignación bancaria del 14% de salud pública.
                         </p>
                       </div>
                       <div style={{ textAlign: 'right' }}>
@@ -2118,8 +2573,8 @@ function PanelEmpresarioContent() {
                         <span>{legalReceiptFile ? '🚀' : 'ℹ️'}</span>
                         <span>
                           {legalReceiptFile
-                            ? 'Voucher listo. Al montar la rifa se radicará formalmente y quedará en: [⏳ En Espera de Resolución Coljuegos (15-30 Días)].'
-                            : 'Si aún no has realizado el pago bancario, puedes montar la rifa ahora y quedará en: [⚠️ En Confirmación por Subir Voucher]. Una vez subido el voucher, pasará a [⏳ En Espera Coljuegos].'}
+                            ? `Voucher listo. Al montar la rifa quedará formalmente radicada en: [⏳ En Espera de Resolución ${legalScope === 'nacional' ? 'Coljuegos (15-30 Días)' : legalScope === 'distrital' ? 'Distrital Bogotá (5-15 Días)' : (currentDept?.name || 'Entidad Departamental')}].`
+                            : 'Si aún no has realizado el pago en los enlaces oficiales de PSE o banco, puedes montar la rifa ahora y quedará en: [⚠️ En Confirmación por Subir Voucher]. Una vez subido el voucher desde tu panel, pasará automáticamente a [⏳ En Espera].'}
                         </span>
                       </div>
                     </div>
