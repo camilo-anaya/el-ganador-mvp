@@ -12,6 +12,7 @@ import { performLogout } from '@/lib/logout';
 import RegionalPermitSelectorWithTime, { LegalScope } from '@/components/RegionalPermitSelectorWithTime';
 import { fileToDataUrl, shareRaffleLink } from '@/lib/nativeActions';
 import { uploadStoryToSupabase, uploadKybDocumentToSupabase, uploadLegalDocument } from '@/lib/supabase';
+import { getBusinessNotifications, markBusinessNotificationsAsRead, BusinessNotification } from '@/lib/notifications';
 
 function PanelEmpresarioContent() {
   const router = useRouter();
@@ -27,6 +28,17 @@ function PanelEmpresarioContent() {
   const [apiOrders, setApiOrders] = useState<any[]>([]);
   const [drawsRevenue, setDrawsRevenue] = useState<any[]>([]);
   const [ordersLoading, setOrdersLoading] = useState<boolean>(false);
+  const [businessNotifs, setBusinessNotifs] = useState<BusinessNotification[]>([]);
+  const [showBusinessNotifDropdown, setShowBusinessNotifDropdown] = useState(false);
+
+  useEffect(() => {
+    const loadNotifs = () => setBusinessNotifs(getBusinessNotifications());
+    loadNotifs();
+    window.addEventListener('elganador_notification_update', loadNotifs);
+    return () => window.removeEventListener('elganador_notification_update', loadNotifs);
+  }, []);
+
+  const unreadBusinessNotifsCount = businessNotifs.filter((n) => !n.read).length;
 
   // Consulta de órdenes, clientes y recaudo por sorteo/evento desde la API B2B
   useEffect(() => {
@@ -520,6 +532,114 @@ function PanelEmpresarioContent() {
           </div>
         </div>
         <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap' }}>
+          {/* CAMPANA DE NOTIFICACIONES DE LA SECRETARIA IA */}
+          <div style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="btn-compact-action"
+              onClick={() => {
+                setShowBusinessNotifDropdown((prev) => !prev);
+                if (!showBusinessNotifDropdown && unreadBusinessNotifsCount > 0) {
+                  markBusinessNotificationsAsRead();
+                }
+              }}
+              title="Notificaciones de Secretaria IA y Ventas"
+              aria-label="Notificaciones empresariales"
+              style={{
+                position: 'relative',
+                padding: '6px 10px',
+                fontSize: '11.5px',
+                borderRadius: '8px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: unreadBusinessNotifsCount > 0 ? 'rgba(0, 122, 255, 0.2)' : undefined,
+                borderColor: unreadBusinessNotifsCount > 0 ? '#007AFF' : undefined,
+              }}
+            >
+              🔔 <span>Alertas</span>
+              {unreadBusinessNotifsCount > 0 && (
+                <span
+                  style={{
+                    background: '#ef4444',
+                    color: '#ffffff',
+                    fontSize: '10px',
+                    fontWeight: 900,
+                    borderRadius: '999px',
+                    padding: '1px 5px',
+                  }}
+                >
+                  {unreadBusinessNotifsCount}
+                </span>
+              )}
+            </button>
+
+            {/* BANDEJA FLOTANTE DE NOTIFICACIONES EMPRESARIALES */}
+            {showBusinessNotifDropdown && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  right: 0,
+                  marginTop: '8px',
+                  width: '320px',
+                  maxWidth: '90vw',
+                  background: 'var(--surface-card, #ffffff)',
+                  border: '1.5px solid #007AFF',
+                  borderRadius: '14px',
+                  boxShadow: '0 12px 36px rgba(0,0,0,0.3)',
+                  zIndex: 9999,
+                  overflow: 'hidden',
+                  textAlign: 'left',
+                }}
+              >
+                <div style={{ padding: '12px 14px', background: 'linear-gradient(135deg, #0f172a 0%, #020617 100%)', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <strong style={{ fontSize: '0.86rem' }}>🔔 Secretaria Legal IA &amp; Alertas</strong>
+                  <button
+                    type="button"
+                    onClick={() => setShowBusinessNotifDropdown(false)}
+                    style={{ background: 'transparent', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '14px' }}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div style={{ maxHeight: '320px', overflowY: 'auto', padding: '8px' }}>
+                  {businessNotifs.length === 0 ? (
+                    <div style={{ padding: '24px 12px', textAlign: 'center', opacity: 0.8, fontSize: '0.82rem' }}>
+                      <span style={{ fontSize: '28px', display: 'block', marginBottom: '6px' }}>🤖</span>
+                      No tienes notificaciones pendientes. La <strong>Secretaria Legal IA</strong> te avisará aquí en cuanto radique tus sorteos.
+                    </div>
+                  ) : (
+                    businessNotifs.map((n) => (
+                      <div
+                        key={n.id}
+                        style={{
+                          padding: '10px',
+                          borderRadius: '10px',
+                          borderBottom: '1px solid rgba(148, 163, 184, 0.15)',
+                          marginBottom: '4px',
+                          background: n.read ? 'transparent' : 'rgba(0, 122, 255, 0.08)',
+                          fontSize: '0.8rem',
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                          <strong style={{ color: '#007AFF' }}>{n.title}</strong>
+                          <small style={{ fontSize: '0.68rem', opacity: 0.7 }}>{n.dateStr}</small>
+                        </div>
+                        <p style={{ margin: 0, lineHeight: 1.4, opacity: 0.9 }}>{n.message}</p>
+                        {n.radicado && (
+                          <div style={{ marginTop: '4px', fontSize: '0.74rem', color: '#0284c7', fontWeight: 800 }}>
+                            Radicado: {n.radicado}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
           <Link
             href="/"
             className="btn-compact-action"
@@ -1278,6 +1398,55 @@ function PanelEmpresarioContent() {
             <section className="station-block-premium">
               <div className="compact-section-title">
                 <h2>🎟️ Publicar Nueva Rifa y Configurar Cartón</h2>
+              </div>
+
+              {/* ACCESO DIRECTO AL ASISTENTE INTELIGENTE CON CALCULADORA Y SECRETARIA IA */}
+              <div
+                style={{
+                  background: 'linear-gradient(135deg, rgba(0, 122, 255, 0.12) 0%, rgba(2, 132, 199, 0.05) 100%)',
+                  border: '2px solid #007AFF',
+                  borderRadius: '16px',
+                  padding: '18px 20px',
+                  marginBottom: '20px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '14px',
+                  boxShadow: '0 6px 20px rgba(0, 122, 255, 0.15)',
+                }}
+              >
+                <div style={{ flex: '1 1 320px' }}>
+                  <span style={{ background: '#007AFF', color: '#ffffff', fontSize: '10.5px', fontWeight: 900, padding: '3px 10px', borderRadius: '999px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    NUEVO · ASISTENTE PASO A PASO
+                  </span>
+                  <h3 style={{ margin: '8px 0 4px', fontSize: '1.18rem', fontWeight: 900, color: '#007AFF' }}>
+                    🧮 Calculadora Digital &amp; Secretaria Legal IA
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '0.84rem', opacity: 0.9, lineHeight: 1.5 }}>
+                    Calcula el precio de tu boleta descontando el 14% de salud de Coljuegos, simula tu ganancia neta en COP y tramita tu radicado oficial en 1 solo clic sin papeleo.
+                  </p>
+                </div>
+
+                <Link
+                  href="/empresario/crear-rifa"
+                  style={{
+                    background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                    color: '#ffffff',
+                    padding: '12px 22px',
+                    borderRadius: '12px',
+                    fontWeight: 800,
+                    fontSize: '0.92rem',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    boxShadow: '0 4px 14px rgba(0, 122, 255, 0.4)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <span>🚀</span> Abrir Asistente Paso a Paso →
+                </Link>
               </div>
 
               {/* GUÍA INFORMATIVA OBLIGATORIA COLJUEGOS */}

@@ -58,3 +58,71 @@ export function buildWhatsAppReminderUrl(drawTitle: string, liveUrl: string = "h
 
   return `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
 }
+
+/**
+ * ============================================================================
+ * SISTEMA DE NOTIFICACIONES INTERNAS EMPRESARIALES (SECRETARIA LEGAL IA & VENTAS)
+ * ============================================================================
+ */
+export interface BusinessNotification {
+  id: string;
+  type: 'legal_approval' | 'ticket_sale' | 'kyb_verified' | 'draw_ready';
+  title: string;
+  message: string;
+  timestamp: number;
+  dateStr: string;
+  read: boolean;
+  radicado?: string;
+  raffleTitle?: string;
+  badge?: string;
+  link?: string;
+}
+
+export function getBusinessNotifications(): BusinessNotification[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem('elganador_business_notifications');
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+}
+
+export function addBusinessNotification(
+  notif: Omit<BusinessNotification, 'id' | 'timestamp' | 'dateStr' | 'read'>
+): BusinessNotification {
+  const newItem: BusinessNotification = {
+    ...notif,
+    id: `notif_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    timestamp: Date.now(),
+    dateStr: new Date().toLocaleDateString('es-CO', {
+      day: '2-digit',
+      month: 'short',
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+    read: false,
+  };
+
+  if (typeof window !== 'undefined') {
+    try {
+      const current = getBusinessNotifications();
+      const updated = [newItem, ...current].slice(0, 50);
+      localStorage.setItem('elganador_business_notifications', JSON.stringify(updated));
+      window.dispatchEvent(new Event('elganador_notification_update'));
+    } catch (e) {
+      console.warn('Error al guardar notificación empresarial:', e);
+    }
+  }
+
+  return newItem;
+}
+
+export function markBusinessNotificationsAsRead(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getBusinessNotifications();
+    const updated = current.map((n) => ({ ...n, read: true }));
+    localStorage.setItem('elganador_business_notifications', JSON.stringify(updated));
+    window.dispatchEvent(new Event('elganador_notification_update'));
+  } catch {}
+}
