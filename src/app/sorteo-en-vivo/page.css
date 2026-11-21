@@ -183,7 +183,7 @@
   width: min(98%, 500px);
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 45%, #1e293b 0%, #0f172a 70%, #020617 100%);
+  background: radial-gradient(circle at 50% 45%, #19693b 0%, #104828 70%, #0a351d 100%) !important;
   display: block;
   margin: 0 auto;
   box-sizing: border-box;
@@ -214,18 +214,18 @@
   justify-content: center;
   overflow: hidden;
   border-radius: 50%;
-  /* Cristal acrílico volumétrico: fondo de estudio con oclusión esférica profunda */
+  /* Cristal acrílico volumétrico: fondo de estudio con oclusión esférica profunda tipo casino */
   background: radial-gradient(
     circle at 50% 46%,
-    rgba(30, 41, 59, 0.6) 0%,
-    rgba(15, 23, 42, 0.85) 48%,
-    rgba(2, 6, 23, 0.96) 78%,
-    #020617 100%
-  );
+    rgba(22, 68, 46, 0.55) 0%,
+    rgba(10, 36, 24, 0.82) 48%,
+    rgba(4, 18, 11, 0.96) 78%,
+    #020805 100%
+  ) !important;
   box-shadow:
     inset 0 0 55px rgba(0, 0, 0, 0.95),
     inset 0 0 18px rgba(255, 255, 255, 0.22),
-    0 0 35px rgba(0, 122, 255, 0.25);
+    0 0 35px rgba(245, 215, 120, 0.25) !important;
 }
 
 /* 1. Iluminación volumétrica interna de cámara de sorteo */
@@ -4414,19 +4414,19 @@
 
 .liveDemoMachine {
   position: relative !important;
-  background-color: #030712 !important;
+  background-color: #0f4627 !important;
   background-image:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 16px),
-    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 16px),
-    radial-gradient(circle at 50% 50%, rgba(0, 122, 255, 0.12) 1.2px, transparent 1.2px),
-    radial-gradient(ellipse at 50% 42%, #0f172a 0%, #090d16 55%, #030712 100%) !important;
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
+    radial-gradient(circle at 50% 50%, rgba(245, 215, 120, 0.12) 1.2px, transparent 1.2px),
+    radial-gradient(ellipse at 50% 42%, #24884f 0%, #19693b 45%, #104828 78%, #0a351d 100%) !important;
   background-size: 24px 24px, 24px 24px, 18px 18px, 100% 100% !important;
-  border: 1.5px solid rgba(0, 122, 255, 0.45) !important;
+  border: 1.5px solid rgba(212, 175, 55, 0.5) !important;
   border-radius: 28px !important;
   box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.9),
-    0 10px 25px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+    0 32px 80px rgba(0, 0, 0, 0.8),
+    0 10px 25px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
   padding: 56px 20px 24px !important;
   display: flex !important;
   flex-direction: column !important;
@@ -5416,12 +5416,12 @@
   padding: calc(44px + env(safe-area-inset-top, 0px)) 12px calc(24px + env(safe-area-inset-bottom, 0px)) !important;
   border-radius: 0 !important;
   border: none !important;
-  background-color: #030712 !important;
+  background-color: #0f4627 !important;
   background-image:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 16px),
-    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 16px),
-    radial-gradient(circle at 50% 50%, rgba(0, 122, 255, 0.12) 1.2px, transparent 1.2px),
-    radial-gradient(ellipse at 50% 45%, #0f172a 0%, #090d16 55%, #030712 100%) !important;
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
+    radial-gradient(circle at 50% 50%, rgba(245, 215, 120, 0.12) 1.2px, transparent 1.2px),
+    radial-gradient(ellipse at 50% 45%, #24884f 0%, #19693b 45%, #104828 78%, #0a351d 100%) !important;
   background-size: 24px 24px, 24px 24px, 18px 18px, 100% 100% !important;
   display: flex !important;
   flex-direction: column !important;
@@ -8167,10 +8167,14 @@
    RECUADRO DE GANADOR CON FONDO BLANCO Y ALTO CONTRASTE (SOLUCIÓN AUDITORÍA)
    ============================================================================ */
 .liveDemoMachine.hasWinner {
-  background-color: #ffffff !important;
-  background-image: radial-gradient(circle at 50% 0%, rgba(0, 122, 255, 0.05) 0%, #ffffff 85%) !important;
-  border: 2px solid #007AFF !important;
-  box-shadow: 0 24px 64px rgba(0, 122, 255, 0.15), 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  background-color: #0f4627 !important;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.055) 0px, rgba(255, 255, 255, 0.055) 2px, transparent 2px, transparent 16px),
+    radial-gradient(circle at 50% 50%, rgba(245, 215, 120, 0.12) 1.2px, transparent 1.2px),
+    radial-gradient(ellipse at 50% 42%, #24884f 0%, #19693b 45%, #104828 78%, #0a351d 100%) !important;
+  border: 1.5px solid rgba(212, 175, 55, 0.5) !important;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8), 0 10px 25px rgba(0, 0, 0, 0.5) !important;
 }
 
 .liveDemoMachine.hasWinner .pStep {
