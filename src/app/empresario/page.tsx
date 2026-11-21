@@ -1423,123 +1423,109 @@ function PanelEmpresarioContent() {
                 <div>
                   <h2 style={{ fontSize: '1.25rem', fontWeight: 900, margin: 0 }}>🎟️ Mis Rifas y Sorteos Oficiales</h2>
                   <p style={{ margin: '4px 0 0', fontSize: '0.82rem', color: isDark ? '#94a3b8' : '#64748b' }}>
-                    Panel central: Monitorea tus radicados ante Coljuegos y crea nuevos sorteos con la Secretaria Legal IA.
+                    Panel central: Monitorea tus radicados ante Coljuegos y administra tus ventas de boletas.
                   </p>
                 </div>
-                <Link
-                  href="/empresario/crear-rifa"
-                  style={{
-                    background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
-                    color: '#ffffff',
-                    padding: '10px 18px',
-                    borderRadius: '10px',
-                    fontWeight: 800,
-                    fontSize: '0.88rem',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    boxShadow: '0 4px 14px rgba(0, 122, 255, 0.35)',
-                  }}
-                >
-                  <span>🚀</span> + Crear Nueva Rifa con IA
-                </Link>
-              </div>
-
-              {/* BANNER ASISTENTE CON SECRETARIA LEGAL IA Y CALCULADORA */}
-              <div
-                style={{
-                  background: isDark
-                    ? 'linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(2, 132, 199, 0.08) 100%)'
-                    : 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
-                  border: '2px solid #007AFF',
-                  borderRadius: '16px',
-                  padding: '18px 20px',
-                  marginBottom: '22px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  flexWrap: 'wrap',
-                  gap: '14px',
-                  boxShadow: '0 6px 20px rgba(0, 122, 255, 0.12)',
-                }}
-              >
-                <div style={{ flex: '1 1 320px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <span style={{ background: '#007AFF', color: '#ffffff', fontSize: '10px', fontWeight: 900, padding: '2px 8px', borderRadius: '999px', textTransform: 'uppercase' }}>
-                      ASISTENTE UNIFICADO EN 4 PASOS
-                    </span>
-                    <span style={{ fontSize: '0.78rem', color: '#0284c7', fontWeight: 700 }}>
-                      ⏱️ Trámite 15-30 Días Coljuegos
-                    </span>
-                  </div>
-                  <h3 style={{ margin: '4px 0', fontSize: '1.18rem', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a' }}>
-                    🧮 Calculadora Digital &amp; Secretaria Legal IA
-                  </h3>
-                  <p style={{ margin: 0, fontSize: '0.84rem', color: isDark ? '#cbd5e1' : '#475569', lineHeight: 1.5 }}>
-                    Calcula tu ganancia neta descontando el 14% de salud de Coljuegos y pasarela Wompi. La Secretaria IA arma el Formulario 8 y radica tu expediente en 1 solo clic.
-                  </p>
-                </div>
-
-                <Link
-                  href="/empresario/crear-rifa"
-                  style={{
-                    background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
-                    color: '#ffffff',
-                    padding: '12px 22px',
-                    borderRadius: '12px',
-                    fontWeight: 800,
-                    fontSize: '0.92rem',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    boxShadow: '0 4px 14px rgba(0, 122, 255, 0.4)',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  <span>🚀</span> Abrir Asistente Paso a Paso →
-                </Link>
-              </div>
-
-              {/* LISTADO DE RIFAS REGISTRADAS / EN TRÁMITE */}
-              <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span>📋</span> Mis Sorteos Registrados
-                </h3>
-
-                {myRaffles.length === 0 ? (
-                  <div
+                {myRaffles.length > 0 && (
+                  <Link
+                    href="/empresario/crear-rifa"
                     style={{
-                      padding: '24px',
-                      borderRadius: '14px',
-                      border: '1.5px dashed rgba(148, 163, 184, 0.4)',
-                      background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#f8fafc',
-                      textAlign: 'center',
+                      background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                      color: '#ffffff',
+                      padding: '10px 18px',
+                      borderRadius: '10px',
+                      fontWeight: 800,
+                      fontSize: '0.88rem',
+                      textDecoration: 'none',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      boxShadow: '0 4px 14px rgba(0, 122, 255, 0.35)',
                     }}
                   >
-                    <span style={{ fontSize: '32px' }}>🎁</span>
-                    <h4 style={{ margin: '8px 0 4px', fontSize: '1rem', fontWeight: 800 }}>Aún no tienes rifas creadas</h4>
-                    <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: isDark ? '#94a3b8' : '#64748b', maxWidth: '420px', marginLeft: 'auto', marginRight: 'auto' }}>
-                      Crea tu primer sorteo con la Secretaria Legal IA. Calcula precios, cumple la Ley 643 y empieza a vender boletas en línea.
-                    </p>
-                    <Link
-                      href="/empresario/crear-rifa"
-                      style={{
-                        display: 'inline-block',
-                        background: '#007AFF',
-                        color: '#ffffff',
-                        padding: '10px 18px',
-                        borderRadius: '10px',
-                        fontWeight: 800,
-                        fontSize: '0.86rem',
-                        textDecoration: 'none',
-                      }}
-                    >
-                      🚀 Crear Mi Primera Rifa
-                    </Link>
+                    <span>🚀</span> + Crear Nueva Rifa con IA
+                  </Link>
+                )}
+              </div>
+
+              {/* ESTADO VACÍO (ONBOARDING ÚNICO): EXACTAMENTE 1 TARJETA Y 1 BOTÓN */}
+              {myRaffles.length === 0 ? (
+                <div
+                  style={{
+                    background: isDark
+                      ? 'linear-gradient(135deg, rgba(0, 122, 255, 0.14) 0%, rgba(2, 132, 199, 0.06) 100%)'
+                      : 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
+                    border: '2px solid #007AFF',
+                    borderRadius: '20px',
+                    padding: '36px 24px',
+                    textAlign: 'center',
+                    boxShadow: '0 8px 30px rgba(0, 122, 255, 0.12)',
+                    marginBottom: '28px',
+                  }}
+                >
+                  <div style={{ fontSize: '44px', marginBottom: '12px' }}>🎁</div>
+                  <span
+                    style={{
+                      background: '#007AFF',
+                      color: '#ffffff',
+                      fontSize: '11px',
+                      fontWeight: 900,
+                      padding: '4px 12px',
+                      borderRadius: '999px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.04em',
+                    }}
+                  >
+                    Asistente en 4 Pasos · Conforme a Ley 643
+                  </span>
+                  <h3 style={{ margin: '14px 0 8px', fontSize: '1.35rem', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a' }}>
+                    Crea tu Primer Sorteo con la Secretaria Legal IA
+                  </h3>
+                  <p style={{ margin: '0 auto 20px', fontSize: '0.88rem', color: isDark ? '#cbd5e1' : '#475569', maxWidth: '520px', lineHeight: 1.6 }}>
+                    Nuestra Calculadora Digital descuenta el 14% de salud de Coljuegos y costos de pasarela para proyectar tu ganancia neta. La Secretaria IA arma el Formulario 8 y radica tu expediente en 1 solo clic.
+                  </p>
+
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '24px' }}>
+                    <span style={{ fontSize: '0.78rem', padding: '6px 12px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.08)' : '#ffffff', border: '1px solid rgba(0,122,255,0.2)', fontWeight: 700 }}>
+                      1️⃣ Tu Premio
+                    </span>
+                    <span style={{ fontSize: '0.78rem', padding: '6px 12px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.08)' : '#ffffff', border: '1px solid rgba(0,122,255,0.2)', fontWeight: 700 }}>
+                      2️⃣ Calculadora Digital
+                    </span>
+                    <span style={{ fontSize: '0.78rem', padding: '6px 12px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.08)' : '#ffffff', border: '1px solid rgba(0,122,255,0.2)', fontWeight: 700 }}>
+                      3️⃣ Radicación IA (1 Clic)
+                    </span>
+                    <span style={{ fontSize: '0.78rem', padding: '6px 12px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.08)' : '#ffffff', border: '1px solid rgba(0,122,255,0.2)', fontWeight: 700 }}>
+                      4️⃣ Publicar
+                    </span>
                   </div>
-                ) : (
+
+                  <Link
+                    href="/empresario/crear-rifa"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                      color: '#ffffff',
+                      padding: '14px 28px',
+                      borderRadius: '12px',
+                      fontWeight: 900,
+                      fontSize: '0.98rem',
+                      textDecoration: 'none',
+                      boxShadow: '0 6px 20px rgba(0, 122, 255, 0.45)',
+                    }}
+                  >
+                    <span>🚀</span> Iniciar Asistente de Creación →
+                  </Link>
+                </div>
+              ) : (
+                /* CUANDO YA HAY RIFAS: LISTA LIMPIA DIRECTA SIN CARTELES REPETIDOS */
+                <div style={{ marginBottom: '24px' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>📋</span> Mis Sorteos Registrados ({myRaffles.length})
+                  </h3>
+
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
                     {myRaffles.map((raf: any, idx: number) => {
                       const isPendingColjuegos = raf.status === 'en_tramite_coljuegos' || (raf.radicado_number && raf.radicado_number.startsWith('SOL-'));
@@ -1625,8 +1611,8 @@ function PanelEmpresarioContent() {
                       );
                     })}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* RESUMEN DE RECAUDO EN BOLETERÍA POR SORTEO */}
               <div style={{ marginTop: '28px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
