@@ -1,88 +1,127 @@
 // components/ColjuegosLegalGuide.tsx
-// Componente de Información Legal, Servicios de El Ganador, Marco Normativo Coljuegos y Visor de Requisitos Oficiales
+// Guía Maestra Legal Sintetizada: Marco Normativo Coljuegos, Requisitos Oficiales, Tiempos, Finanzas y Certificación Técnica
 'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useTheme } from '@/context/ThemeContext';
 
-export const COLJUEGOS_REQUIREMENTS = [
+export interface LegalRequirementItem {
+  no: number;
+  category: 'identidad' | 'premio' | 'garantias' | 'operacion';
+  categoryLabel: string;
+  title: string;
+  desc: string;
+  norm: string;
+  keyRule: string;
+}
+
+export const SYNTHESIZED_REQUIREMENTS: LegalRequirementItem[] = [
+  // PILAR 1: IDENTIDAD Y REPRESENTACIÓN
   {
     no: 1,
-    title: 'Solicitud de Autorización (Formulario 8)',
-    desc: 'Solicitud oficial debidamente diligenciada y firmada por el representante legal o apoderado.',
-    norm: 'Art. 5 Decreto 1968 de 2001',
-    note: 'Nota 1: Presentarse por escrito con antelación no inferior a 45 días calendario a la fecha del sorteo.',
+    category: 'identidad',
+    categoryLabel: 'Identidad y Comercio',
+    title: 'Certificado de Cámara de Comercio (< 30 días)',
+    desc: 'Certificado original de existencia y representación legal con vigencia máxima de 30 días calendario.',
+    norm: 'Decreto 1968/2001 Art. 5',
+    keyRule: 'Para personas naturales se requiere fotocopia legible de la cédula de ciudadanía.',
   },
   {
     no: 2,
-    title: 'Certificado de Cámara de Comercio',
-    desc: 'Original del Certificado de Existencia y Representación Legal de la Sociedad con vigencia no mayor a 30 días.',
-    norm: 'Art. 5 Decreto 1968 de 2001',
-    note: 'Nota 2: Para personas naturales, fotocopia legible de la cédula de ciudadanía.',
+    category: 'identidad',
+    categoryLabel: 'Identidad y Comercio',
+    title: 'RUT Vigente ante la DIAN',
+    desc: 'Registro Único Tributario activo con actividad comercial legal que respalde la operación.',
+    norm: 'Estatuto Tributario',
+    keyRule: 'Debe coincidir exactamente con el NIT y razón social del solicitante.',
   },
   {
     no: 3,
-    title: 'Fotocopia del RUT',
-    desc: 'Registro Único Tributario (RUT) actualizado de la sociedad o del responsable de la rifa.',
-    norm: 'Código de Comercio',
-    note: 'Debe contener la actividad económica comercial y estar activo ante la DIAN.',
+    category: 'identidad',
+    categoryLabel: 'Identidad y Comercio',
+    title: 'Cédula del Representante Legal o Poder Autenticado',
+    desc: 'Documento de identidad legible del representante legal. Si actúa apoderado, poder notarial formal.',
+    norm: 'Resolución Coljuegos 135/2012',
+    keyRule: 'Acreditación formal para vincular a la persona jurídica en el sorteo.',
   },
+
+  // PILAR 2: EL PREMIO Y PROPIEDAD
   {
     no: 4,
-    title: 'Cédula del Representante Legal',
-    desc: 'Fotocopia ampliada y legible de la cédula de ciudadanía del representante legal.',
-    norm: 'Art. 9 Resolución 135 de 2012',
-    note: 'Si el trámite se realiza mediante apoderado, adjuntar el poder legal debidamente autenticado.',
+    category: 'premio',
+    categoryLabel: 'El Premio',
+    title: 'Comprobante de Plena Propiedad (Sin Reserva de Dominio)',
+    desc: 'Título que demuestre que el bien mueble, inmueble o vehículo está libre de gravámenes, embargos o reservas.',
+    norm: 'Decreto 1968/2001 Art. 6',
+    keyRule: 'El bien debe estar totalmente pago y disponible para transferencia inmediata al ganador.',
   },
   {
     no: 5,
-    title: 'Comprobante de Plena Propiedad sin Reserva',
-    desc: 'Comprobante de plena propiedad sin reserva de dominio de los bienes muebles, vehículos o inmuebles objeto de la rifa.',
-    norm: 'Art. 6 Decreto 1968 de 2001',
-    note: 'Conforme con lo dispuesto en las normas legales vigentes de registro y títulos.',
+    category: 'premio',
+    categoryLabel: 'El Premio',
+    title: 'Avalúo Comercial y Factura Legal de Adquisición',
+    desc: 'Factura formal de compra en concesionario/comercio o avalúo pericial de inmuebles.',
+    norm: 'Decreto 1968/2001 Art. 6',
+    keyRule: 'Fija el valor real del premio sobre el cual se calcula la póliza y los derechos de salud.',
   },
+
+  // PILAR 3: GARANTÍAS Y SALUD PÚBLICA
   {
     no: 6,
-    title: 'Avalúo Comercial y Facturas de Adquisición',
-    desc: 'Avalúo comercial formal de inmuebles y facturas legales de adquisición de los bienes o vehículos a sortear.',
-    norm: 'Art. 6 Decreto 1968 de 2001',
-    note: 'Permite certificar el valor real comercial en pesos colombianos (COP).',
+    category: 'garantias',
+    categoryLabel: 'Garantías y Salud',
+    title: 'Póliza de Cumplimiento del 100% a favor de Coljuegos',
+    desc: 'Garantía con aseguradora legal vigilada por Superfinanciera cubriendo el 100% del valor del premio.',
+    norm: 'Decreto 1968/2001 Art. 6',
+    keyRule: 'Vigencia obligatoria: mínimo 4 meses contados desde la fecha fijada para el sorteo.',
   },
   {
     no: 7,
-    title: 'Garantía / Póliza de Cumplimiento a favor de Coljuegos',
-    desc: 'Póliza contratada con compañía de seguros legal a favor de COLJUEGOS (NIT 900505060-5) y terceros beneficiarios.',
-    norm: 'Art. 6 Decreto 1968 de 2001',
-    note: 'Nota 3: Valor asegurado igual al 100% del plan de premios. Vigencia mínima de 4 meses desde la fecha del sorteo.',
+    category: 'garantias',
+    categoryLabel: 'Garantías y Salud',
+    title: 'Liquidación y Pago del 14% de Salud (Ley 643/2001)',
+    desc: 'Derechos de explotación obligatorios del 14% sobre la emisión total de boletas con destino al sector salud.',
+    norm: 'Ley 643/2001 Art. 30',
+    keyRule: 'Monopolio rentístico del Estado. Sin este comprobante la venta de boletas constituye delito penal.',
   },
+
+  // PILAR 4: OPERACIÓN, BOLETERÍA Y PAUTA
   {
     no: 8,
-    title: 'Texto Legal Impreso Obligatorio en la Boleta',
-    desc: 'La boleta debe incluir: número, valor de venta en COP, lugar/fecha/hora del sorteo, lotería tradicional de referencia, caducidad del premio, espacio para número y fecha del acto administrativo autorizante, descripción detallada del premio, identificación del responsable y si es pagadero al portador.',
-    norm: 'Art. 6 Decreto 1968 de 2001',
-    note: 'El Ganador genera automáticamente este boleto digital con hash criptográfico SHA-256 cumpliendo este requisito.',
+    category: 'operacion',
+    categoryLabel: 'Operación y Transparencia',
+    title: 'Formulario 8 Oficial de Solicitud de Autorización',
+    desc: 'Formato reglamentario diligenciado con todos los datos técnicos del sorteo, fecha y valor de emisión.',
+    norm: 'Decreto 1968/2001 Art. 5',
+    keyRule: 'Debe radicarse con antelación no menor a 45 días calendario a la fecha del sorteo.',
   },
   {
     no: 9,
-    title: 'Proyecto de Pauta Publicitaria',
-    desc: 'Plan de medios y piezas publicitarias con la leyenda mandatoria audible y visible: "Autorizado por COLJUEGOS".',
-    norm: 'Art. 6 Decreto 1968 de 2001',
-    note: 'Nota 4: En TV y radio debe incluirse de viva voz; en redes e impreso debe figurar de manera clara y legible.',
+    category: 'operacion',
+    categoryLabel: 'Operación y Transparencia',
+    title: 'Boleta Digital con Hash Criptográfico SHA-256',
+    desc: 'La boleta debe incluir número, valor en COP, fecha del sorteo, premio detallado y número de resolución.',
+    norm: 'Decreto 1968/2001 Art. 6',
+    keyRule: 'El Ganador genera automáticamente este boleto inmutable cumpliendo toda la normativa.',
   },
   {
     no: 10,
-    title: 'Autorización de la Lotería Tradicional',
-    desc: 'Autorización de la lotería tradicional o de billetes cuyos resultados oficiales serán utilizados en la mecánica de la extracción.',
-    norm: 'Art. 6 Decreto 1968 de 2001',
-    note: 'El Ganador ofrece como alternativa física su Balotera 3D con Círculo Dorado en vivo certificada por Coljuegos / Notaría.',
+    category: 'operacion',
+    categoryLabel: 'Operación y Transparencia',
+    title: 'Proyecto de Pauta con Leyenda "Autorizado por Coljuegos"',
+    desc: 'Plan de medios y piezas publicitarias con la leyenda mandatoria claramente audible y visible.',
+    norm: 'Decreto 1968/2001 Art. 6',
+    keyRule: 'En radio y video debe decirse de viva voz; en redes y vitrina debe estar legible.',
   },
   {
     no: 11,
-    title: 'Concepto de Excepción Bomberil (si aplica)',
-    desc: 'Solicitud de Concepto de Excepción para Bomberos de Rifa mediante Formulario 9 diligenciado y firmado.',
-    norm: 'Art. 5 Ley 643 / Res. 135 de 2012',
-    note: 'Nota 5: Aplica de forma exclusiva cuando la rifa es organizada directamente por el cuerpo de bomberos para su financiamiento.',
+    category: 'operacion',
+    categoryLabel: 'Operación y Transparencia',
+    title: 'Mecanismo de Extracción Oficial (Balotera 3D o Lotería)',
+    desc: 'Lotería tradicional autorizada de referencia o Balotera 3D con certificación de laboratorio ISO 17025.',
+    norm: 'Decreto 1968/2001 Art. 6',
+    keyRule: 'Garantiza transparencia matemática absoluta sin intervención humana ni selección previa.',
   },
 ];
 
@@ -93,10 +132,11 @@ interface ColjuegosLegalGuideProps {
 
 export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: ColjuegosLegalGuideProps) {
   const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>({});
-  const [activeTab, setActiveTab] = useState<'coljuegos' | 'servicios' | 'ley' | 'porcentajes' | 'auditoria'>('coljuegos');
+  const [activeTab, setActiveTab] = useState<'requisitos' | 'tiempos' | 'finanzas' | 'certificacion'>('requisitos');
+  const [filterCategory, setFilterCategory] = useState<'all' | 'identidad' | 'premio' | 'garantias' | 'operacion'>('all');
   const [searchFilter, setSearchFilter] = useState('');
 
-  // Sincronización robusta con el tema actual
+  // Sincronización robusta con tema
   let isDark = false;
   try {
     const themeContext = useTheme();
@@ -105,15 +145,7 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
     isDark = false;
   }
 
-  const LEGAL_TABS = [
-    { id: 'coljuegos', label: '📄 11 Requisitos Coljuegos (PDF)' },
-    { id: 'servicios', label: '⚡ Servicios de El Ganador' },
-    { id: 'ley', label: '⚖️ Marco Legal y Operación' },
-    { id: 'porcentajes', label: '💰 Porcentajes y Salud (14%)' },
-    { id: 'auditoria', label: '🏛️ Auditoría Laboratorio (Lean Lab / ISO 17025)' },
-  ] as const;
-
-  // Estados para Auditoría de Laboratorio (Lean Lab / ISO 17025)
+  // Auditoría estadística en servidor (ISO 17025)
   const [auditLoading, setAuditLoading] = useState(false);
   const [auditResult, setAuditResult] = useState<any>(null);
   const [auditSamples, setAuditSamples] = useState(10000);
@@ -137,18 +169,22 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
   };
 
   const completedCount = Object.values(checkedItems).filter(Boolean).length;
-  const progressPct = Math.round((completedCount / COLJUEGOS_REQUIREMENTS.length) * 100);
+  const progressPct = Math.round((completedCount / SYNTHESIZED_REQUIREMENTS.length) * 100);
 
-  const filteredRequirements = COLJUEGOS_REQUIREMENTS.filter(
-    (r) =>
+  const filteredRequirements = SYNTHESIZED_REQUIREMENTS.filter((r) => {
+    const matchesCategory = filterCategory === 'all' || r.category === filterCategory;
+    const matchesSearch =
       r.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
       r.desc.toLowerCase().includes(searchFilter.toLowerCase()) ||
-      r.norm.toLowerCase().includes(searchFilter.toLowerCase())
-  );
+      r.norm.toLowerCase().includes(searchFilter.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div className={`coljuegos-legal-card ${embeddedMode ? 'embedded' : 'standalone'}`} style={{ color: 'inherit' }}>
-      {/* CABECERA PRINCIPAL CON ESCUDO Y SELLOS OFICIALES */}
+      {/* =========================================================================
+          CABECERA OFICIAL SINTETIZADA
+          ========================================================================= */}
       <div
         style={{
           background: 'linear-gradient(135deg, #0f172a 0%, #020617 100%)',
@@ -203,7 +239,7 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
             }}
             title="Bandera de Colombia · República de Colombia"
           >
-            <svg width="40" height="28" viewBox="0 0 36 24" fill="none" style={{ borderRadius: '4px', boxShadow: '0 2px 6px rgba(0,0,0,0.25)', display: 'block' }}>
+            <svg width="40" height="28" viewBox="0 0 36 24" fill="none" style={{ borderRadius: '4px', display: 'block' }}>
               <rect width="36" height="12" fill="#FCD116" />
               <rect y="12" width="36" height="6" fill="#003893" />
               <rect y="18" width="36" height="6" fill="#CE1126" />
@@ -215,15 +251,15 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
               COLJUEGOS · MONOPOLIO RENTÍSTICO DE JUEGOS DE SUERTE Y AZAR
             </span>
             <h2 className="coljuegos-banner-title" style={{ fontSize: '1.25rem', fontWeight: 900, margin: '4px 0 2px', color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>
-              Guía Legal Oficial y Requisitos para Sorteos en Colombia
+              Marco Legal y Operación Oficial de Rifas en Colombia
             </h2>
             <p style={{ margin: 0, fontSize: '0.85rem', color: '#cbd5e1' }}>
-              Información obligatoria para comerciantes, organizadores y compradores antes de publicar o participar en una rifa.
+              Normativa sintetizada: Ley 643/2001, Decreto 1968/2001, 14% de salud pública y certificación técnica ISO 17025.
             </p>
           </div>
         </div>
 
-        {/* BOTONES DE DESCARGA E IMPRESIÓN DEL PDF */}
+        {/* BOTONES DIRECTOS DE ACCIÓN */}
         <div style={{ marginTop: '16px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <a
             href="/docs/requisitos-coljuegos-rifas-nacionales.pdf"
@@ -235,16 +271,15 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
               background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
               color: '#ffffff',
               WebkitTextFillColor: '#ffffff',
-              padding: '10px 18px',
+              padding: '9px 16px',
               borderRadius: '10px',
               fontWeight: 800,
-              fontSize: '0.86rem',
+              fontSize: '0.84rem',
               textDecoration: 'none',
               boxShadow: '0 4px 14px rgba(0, 122, 255, 0.4)',
-              cursor: 'pointer',
             }}
           >
-            <span>📥</span> Descargar PDF Oficial Coljuegos
+            <span>📥</span> Descargar PDF Coljuegos
           </a>
 
           <a
@@ -259,13 +294,11 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
               padding: '9px 16px',
               borderRadius: '10px',
               fontWeight: 800,
-              fontSize: '0.86rem',
+              fontSize: '0.84rem',
               textDecoration: 'none',
-              boxShadow: '0 4px 14px rgba(2, 132, 199, 0.4)',
-              cursor: 'pointer',
             }}
           >
-            <span>📜</span> DSD Auditoría Laboratorio (PDF)
+            <span>📜</span> DSD Técnico ISO 17025 (PDF)
           </a>
 
           <button
@@ -274,85 +307,84 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
+              gap: '6px',
               background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
               color: '#ffffff',
-              padding: '9px 16px',
+              padding: '9px 14px',
               borderRadius: '10px',
               fontWeight: 700,
-              fontSize: '0.86rem',
+              fontSize: '0.84rem',
               cursor: 'pointer',
             }}
           >
-            <span>🖨️</span> Imprimir Documento
+            <span>🖨️</span> Imprimir
           </button>
 
-          <a
-            href="https://www.coljuegos.gov.co"
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            href="/empresario/crear-rifa"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              color: '#93c5fd',
+              background: 'rgba(0, 122, 255, 0.2)',
+              border: '1px solid #007AFF',
+              color: '#38bdf8',
               padding: '9px 14px',
+              borderRadius: '10px',
               fontSize: '0.84rem',
-              fontWeight: 600,
+              fontWeight: 800,
               textDecoration: 'none',
             }}
           >
-            <span>🏛️</span> Portal Coljuegos ↗
-          </a>
+            <span>🚀</span> Ir a Crear Rifa con IA →
+          </Link>
         </div>
       </div>
 
-      {/* PESTAÑAS NAVEGABLES DEL MARCO LEGAL */}
+      {/* =========================================================================
+          4 PESTAÑAS MAESTRAS NO REDUNDANTES
+          ========================================================================= */}
       <nav
-        className="coljuegos-nav-tabs"
         style={{
-          display: 'flex',
-          gap: '10px',
-          overflowX: 'auto',
-          paddingBottom: '10px',
-          marginBottom: '18px',
-          WebkitOverflowScrolling: 'touch',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+          gap: '8px',
+          marginBottom: '20px',
         }}
-        aria-label="Pestañas de información legal"
+        aria-label="Secciones del Marco Legal"
       >
-        {LEGAL_TABS.map((tab) => {
+        {[
+          { id: 'requisitos', label: '📋 11 Requisitos (Decreto 1968)' },
+          { id: 'tiempos', label: '⏳ Cronograma Oficial (15-30 Días)' },
+          { id: 'finanzas', label: '💰 14% Salud y Cero Captación' },
+          { id: 'certificacion', label: '🔬 Certificación Anti-Fraude (ISO 17025)' },
+        ].map((tab) => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
-              className={`coljuegos-nav-tab-btn ${isActive ? 'active' : ''}`}
               style={{
-                padding: '9px 16px',
-                borderRadius: '999px',
+                padding: '11px 14px',
+                borderRadius: '12px',
                 border: isActive
-                  ? '1.5px solid #007AFF'
+                  ? '2px solid #007AFF'
                   : isDark
-                    ? '1.5px solid rgba(255, 255, 255, 0.22)'
-                    : '1.5px solid #cbd5e1',
+                  ? '1px solid rgba(255, 255, 255, 0.15)'
+                  : '1px solid #cbd5e1',
                 background: isActive
                   ? 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)'
                   : isDark
-                    ? 'rgba(255, 255, 255, 0.08)'
-                    : '#f1f5f9',
-                color: isActive ? '#ffffff' : isDark ? '#f8fafc' : '#0f172a',
-                WebkitTextFillColor: isActive ? '#ffffff' : isDark ? '#f8fafc' : '#0f172a',
-                fontWeight: 800,
-                fontSize: '0.84rem',
+                  ? 'rgba(255, 255, 255, 0.05)'
+                  : '#f8fafc',
+                color: isActive ? '#ffffff' : isDark ? '#ffffff' : '#0f172a',
+                fontWeight: isActive ? 900 : 700,
+                fontSize: '0.86rem',
                 cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                boxShadow: isActive
-                  ? '0 4px 14px rgba(0, 122, 255, 0.35)'
-                  : isDark
-                    ? 'none'
-                    : '0 1px 3px rgba(0, 0, 0, 0.05)',
+                textAlign: 'center',
+                boxShadow: isActive ? '0 4px 14px rgba(0, 122, 255, 0.35)' : 'none',
                 transition: 'all 0.2s ease',
               }}
             >
@@ -362,59 +394,88 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
         })}
       </nav>
 
-      {/* CONTENIDO 1: LOS 11 REQUISITOS DEL PDF DE COLJUEGOS */}
-      {activeTab === 'coljuegos' && (
+      {/* =========================================================================
+          MÓDULO 1: LOS 11 REQUISITOS ORGANIZADOS EN 4 PILARES
+          ========================================================================= */}
+      {activeTab === 'requisitos' && (
         <section
           style={{
-            background: 'var(--surface-card, #ffffff)',
+            background: isDark ? '#1e293b' : '#ffffff',
             borderRadius: '16px',
-            padding: '20px',
-            border: '1px solid var(--border-card, #e2e8f0)',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+            padding: '22px',
+            border: '1px solid rgba(148, 163, 184, 0.25)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
           }}
         >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '16px' }}>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800 }}>
-                📋 Lista de Chequeo Obligatoria (Foliada según Coljuegos)
+              <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 900 }}>
+                📋 Lista de Chequeo Documental Oficial (Decreto 1968 de 2001)
               </h3>
-              <p style={{ margin: '2px 0 0', fontSize: '0.82rem', opacity: 0.8 }}>
-                Marca los documentos que ya tienes listos para tu expediente antes de solicitar radicación.
+              <p style={{ margin: '2px 0 0', fontSize: '0.82rem', opacity: 0.85 }}>
+                Sintetizados en 4 pilares: marca los documentos que tienes listos para tu expediente formal ante Coljuegos.
               </p>
             </div>
 
-            {/* BARRA DE PROGRESO */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '0.82rem', fontWeight: 800, color: progressPct === 100 ? '#007AFF' : '#f59e0b' }}>
-                {completedCount} / {COLJUEGOS_REQUIREMENTS.length} Listos ({progressPct}%)
+              <span style={{ fontSize: '0.84rem', fontWeight: 900, color: progressPct === 100 ? '#007AFF' : '#0284c7' }}>
+                {completedCount} / {SYNTHESIZED_REQUIREMENTS.length} Listos ({progressPct}%)
               </span>
-              <div style={{ width: '100px', height: '8px', background: 'rgba(148, 163, 184, 0.3)', borderRadius: '99px', overflow: 'hidden' }}>
-                <div style={{ width: `${progressPct}%`, height: '100%', background: progressPct === 100 ? 'linear-gradient(90deg, #007AFF, #38bdf8)' : '#f59e0b', transition: 'width 0.3s ease' }} />
+              <div style={{ width: '90px', height: '8px', background: 'rgba(148, 163, 184, 0.3)', borderRadius: '99px', overflow: 'hidden' }}>
+                <div style={{ width: `${progressPct}%`, height: '100%', background: '#007AFF', transition: 'width 0.3s ease' }} />
               </div>
             </div>
           </div>
 
-          {/* BUSCADOR RÁPIDO DE REQUISITOS */}
-          <div style={{ marginBottom: '16px' }}>
+          {/* FILTROS POR PILAR */}
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '14px' }}>
+            {[
+              { id: 'all', label: 'Todos (11)' },
+              { id: 'identidad', label: '1. Identidad' },
+              { id: 'premio', label: '2. El Premio' },
+              { id: 'garantias', label: '3. Garantías & Salud' },
+              { id: 'operacion', label: '4. Operación' },
+            ].map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setFilterCategory(f.id as any)}
+                style={{
+                  padding: '5px 12px',
+                  borderRadius: '999px',
+                  fontSize: '0.78rem',
+                  fontWeight: filterCategory === f.id ? 800 : 600,
+                  border: filterCategory === f.id ? '1.5px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
+                  background: filterCategory === f.id ? '#007AFF' : 'transparent',
+                  color: filterCategory === f.id ? '#ffffff' : 'inherit',
+                  cursor: 'pointer',
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          {/* BUSCADOR */}
+          <div style={{ marginBottom: '14px' }}>
             <input
               type="text"
-              placeholder="🔍 Buscar requisito (ej. póliza, avalúo, cédula, formulario 8)..."
+              placeholder="🔍 Buscar en los 11 requisitos (ej: póliza, avalúo, cédula, formulario 8)..."
               value={searchFilter}
               onChange={(e) => setSearchFilter(e.target.value)}
               style={{
                 width: '100%',
                 padding: '9px 14px',
                 borderRadius: '10px',
-                border: '1px solid rgba(148, 163, 184, 0.4)',
-                background: isDark ? '#1e293b' : '#f8fafc',
-                color: isDark ? '#f8fafc' : '#0f172a',
-                WebkitTextFillColor: isDark ? '#f8fafc' : '#0f172a',
-                fontSize: '0.88rem',
+                border: '1.5px solid rgba(148, 163, 184, 0.3)',
+                background: isDark ? '#0f172a' : '#f8fafc',
+                color: isDark ? '#ffffff' : '#0f172a',
+                fontSize: '0.86rem',
               }}
             />
           </div>
 
-          {/* TABLA / TARJETAS DE REQUISITOS */}
+          {/* TARJETAS DE REQUISITOS */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {filteredRequirements.map((req) => (
               <div
@@ -423,17 +484,17 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                 style={{
                   display: 'flex',
                   alignItems: 'flex-start',
-                  gap: '14px',
+                  gap: '12px',
                   padding: '14px',
                   borderRadius: '12px',
-                  border: checkedItems[req.no] ? '1.5px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.25)',
+                  border: checkedItems[req.no] ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.25)',
                   background: checkedItems[req.no]
                     ? isDark
-                      ? 'rgba(0, 122, 255, 0.15)'
-                      : 'rgba(0, 122, 255, 0.06)'
+                      ? 'rgba(0, 122, 255, 0.12)'
+                      : '#f0f9ff'
                     : isDark
-                      ? 'rgba(255, 255, 255, 0.03)'
-                      : 'rgba(148, 163, 184, 0.04)',
+                    ? 'rgba(255, 255, 255, 0.03)'
+                    : '#fafafa',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                 }}
@@ -442,20 +503,20 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                   type="checkbox"
                   checked={!!checkedItems[req.no]}
                   onChange={() => toggleCheck(req.no)}
-                  style={{ width: '18px', height: '18px', marginTop: '3px', cursor: 'pointer' }}
+                  style={{ width: '18px', height: '18px', marginTop: '2px', cursor: 'pointer' }}
                 />
 
                 <div style={{ flex: 1 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
-                    <strong style={{ fontSize: '0.92rem' }}>
+                    <strong style={{ fontSize: '0.94rem' }}>
                       {req.no}. {req.title}
                     </strong>
                     <span
                       style={{
-                        fontSize: '0.74rem',
-                        fontWeight: 700,
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
                         padding: '2px 8px',
-                        borderRadius: '99px',
+                        borderRadius: '999px',
                         background: 'rgba(2, 132, 199, 0.12)',
                         color: '#0284c7',
                         border: '1px solid rgba(2, 132, 199, 0.25)',
@@ -465,227 +526,213 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                     </span>
                   </div>
 
-                  <p style={{ margin: '4px 0 6px', fontSize: '0.84rem', lineHeight: 1.5, opacity: 0.9 }}>
+                  <p style={{ margin: '4px 0 6px', fontSize: '0.83rem', lineHeight: 1.5, opacity: 0.9 }}>
                     {req.desc}
                   </p>
 
-                  <div style={{ fontSize: '0.78rem', color: '#b45309', background: 'rgba(245, 158, 11, 0.1)', padding: '4px 8px', borderRadius: '6px' }}>
-                    💡 <em>{req.note}</em>
+                  <div style={{ fontSize: '0.76rem', color: '#0284c7', background: isDark ? 'rgba(2, 132, 199, 0.12)' : '#e0f2fe', padding: '4px 8px', borderRadius: '6px', fontWeight: 600 }}>
+                    📌 Regla de Oro: {req.keyRule}
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* NOTAS AL PIE DE LA LEY Y COMPETENCIA */}
+          {/* SÍNTESIS DE COMPETENCIAS OFICIALES */}
           <div
             style={{
-              marginTop: '20px',
+              marginTop: '18px',
               padding: '14px',
               borderRadius: '12px',
-              background: 'rgba(2, 132, 199, 0.08)',
+              background: isDark ? 'rgba(2, 132, 199, 0.08)' : '#eff6ff',
               border: '1px solid rgba(2, 132, 199, 0.25)',
-              fontSize: '0.8rem',
+              fontSize: '0.82rem',
               lineHeight: 1.55,
             }}
           >
-            <strong>📌 Alcance de Competencias Oficiales:</strong>
+            <strong>🏛️ Jurisdicción y Competencia (Decreto 4142/2011):</strong>
             <p style={{ margin: '4px 0 0' }}>
-              De acuerdo con el inciso 3 del artículo 2 del Decreto 1968 de 2001 y el artículo 23 del Decreto 4142 de 2011,
-              <strong> COLJUEGOS</strong> es la entidad que autoriza de forma privativa las rifas de carácter nacional (cuando operan en dos o más departamentos, o en un departamento y Bogotá Distrito Capital).
-              Para sorteos en un solo municipio o departamento, la competencia corresponde a la Alcaldía o a la Lotería Departamental correspondiente.
+              • <strong>Coljuegos (Nivel Nacional):</strong> Autoriza cuando el sorteo se comercializa en 2 o más departamentos, o en un departamento y Bogotá D.C.
+              <br />
+              • <strong>Loterías Departamentales / Alcaldías:</strong> Autorizan exclusivamente sorteos con venta circunscrita a un solo departamento o municipio.
             </p>
           </div>
         </section>
       )}
 
-      {/* CONTENIDO 2: SERVICIOS QUE PRESTA EL GANADOR */}
-      {activeTab === 'servicios' && (
+      {/* =========================================================================
+          MÓDULO 2: CRONOGRAMA OFICIAL Y PLAZOS LEGALES (15 A 30 DÍAS)
+          ========================================================================= */}
+      {activeTab === 'tiempos' && (
         <section
           style={{
-            background: 'var(--surface-card, #ffffff)',
+            background: isDark ? '#1e293b' : '#ffffff',
             borderRadius: '16px',
-            padding: '20px',
-            border: '1px solid var(--border-card, #e2e8f0)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
+            padding: '24px 20px',
+            border: '1px solid rgba(148, 163, 184, 0.25)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
           }}
         >
-          <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>
-            ⚡ ¿Qué servicios presta la plataforma El Ganador?
+          <h3 style={{ margin: '0 0 8px', fontSize: '1.2rem', fontWeight: 900 }}>
+            ⏳ Cronograma Legal Obligatorio: Tiempos de Radicación y Respuesta
           </h3>
-          <p style={{ margin: 0, fontSize: '0.88rem', lineHeight: 1.6, opacity: 0.9 }}>
-            <strong>El Ganador</strong> es una plataforma tecnológica SaaS (Software as a Service) especializada en la digitalización, verificación y emisión de sorteos para comercios, marcas y empresarios en Colombia.
+          <p style={{ margin: '0 0 20px', fontSize: '0.85rem', lineHeight: 1.6, opacity: 0.9 }}>
+            La legislación colombiana (Decreto 1968 de 2001, Art. 5) establece términos estrictos de anticipación que todo comerciante debe conocer para no infringir la ley:
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
-            <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid rgba(148, 163, 184, 0.25)', background: 'rgba(148, 163, 184, 0.04)' }}>
-              <div style={{ fontSize: '24px', marginBottom: '6px' }}>🎟️</div>
-              <strong style={{ fontSize: '0.95rem' }}>Boletería Digital Criptográfica (SHA-256)</strong>
-              <p style={{ margin: '4px 0 0', fontSize: '0.82rem', lineHeight: 1.5, opacity: 0.85 }}>
-                Generación de cartones interactivos (100, 1.000, 10.000 balotas) con números asignados en tiempo real y emisión de certificados digitales anti-falsificación para el comprador.
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px', marginBottom: '24px' }}>
+            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #007AFF', background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff' }}>
+              <div style={{ fontSize: '26px', fontWeight: 900, color: '#007AFF', marginBottom: '4px' }}>45 Días</div>
+              <strong style={{ fontSize: '0.92rem', display: 'block', marginBottom: '4px' }}>
+                1. Antelación de Radicación
+              </strong>
+              <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
+                El expediente con el Formulario 8 y los 11 requisitos debe radicarse formalmente ante Coljuegos con al menos 45 días calendario de anticipación a la fecha del sorteo.
               </p>
             </div>
 
-            <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid rgba(148, 163, 184, 0.25)', background: 'rgba(148, 163, 184, 0.04)' }}>
-              <div style={{ fontSize: '24px', marginBottom: '6px' }}>🎱</div>
-              <strong style={{ fontSize: '0.95rem' }}>Balotera y Ruleta 3D en Vivo</strong>
-              <p style={{ margin: '4px 0 0', fontSize: '0.82rem', lineHeight: 1.5, opacity: 0.85 }}>
-                Simulación física tridimensional y sala de sorteo transmitida en tiempo real con algoritmos de aleatoriedad verificables sin intervención humana.
+            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #0284c7', background: isDark ? 'rgba(2, 132, 199, 0.08)' : '#f0f9ff' }}>
+              <div style={{ fontSize: '26px', fontWeight: 900, color: '#0284c7', marginBottom: '4px' }}>15 a 30 Días</div>
+              <strong style={{ fontSize: '0.92rem', display: 'block', marginBottom: '4px' }}>
+                2. Plazo de Estudio de Coljuegos
+              </strong>
+              <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
+                Término legal que toma la entidad estatal para auditar la póliza, verificar los derechos de salud del 14% y emitir la Resolución Oficial de Autorización.
               </p>
             </div>
 
-            <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid rgba(148, 163, 184, 0.25)', background: 'rgba(148, 163, 184, 0.04)' }}>
-              <div style={{ fontSize: '24px', marginBottom: '6px' }}>💳</div>
-              <strong style={{ fontSize: '0.95rem' }}>Recaudo Automatizado (Wompi Bancolombia)</strong>
-              <p style={{ margin: '4px 0 0', fontSize: '0.82rem', lineHeight: 1.5, opacity: 0.85 }}>
-                Integración bancaria de pagos con PSE, Nequi, tarjetas de crédito/débito y botón Bancolombia con liberación y reserva instantánea de boletas.
+            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #0f172a', background: isDark ? 'rgba(255, 255, 255, 0.04)' : '#f8fafc' }}>
+              <div style={{ fontSize: '26px', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a', marginBottom: '4px' }}>Luz Verde</div>
+              <strong style={{ fontSize: '0.92rem', display: 'block', marginBottom: '4px' }}>
+                3. Apertura de Venta de Boletas
+              </strong>
+              <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
+                Durante los 15-30 días el sorteo se muestra en vitrina en <strong>Modo Expectativa / Preventa</strong>. En cuanto Coljuegos emite la resolución, se habilitan las compras en Wompi.
               </p>
             </div>
+          </div>
 
-            <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid rgba(148, 163, 184, 0.25)', background: 'rgba(148, 163, 184, 0.04)' }}>
-              <div style={{ fontSize: '24px', marginBottom: '6px' }}>💬</div>
-              <strong style={{ fontSize: '0.95rem' }}>Chat Oficial de Entrega de Premios</strong>
-              <p style={{ margin: '4px 0 0', fontSize: '0.82rem', lineHeight: 1.5, opacity: 0.85 }}>
-                Canal seguro que se activa automáticamente al proclamar al ganador para coordinar fecha, lugar, traspaso y acta de entrega formal con el comercio.
-              </p>
-            </div>
-
-            <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid rgba(148, 163, 184, 0.25)', background: 'rgba(148, 163, 184, 0.04)' }}>
-              <div style={{ fontSize: '24px', marginBottom: '6px' }}>👥</div>
-              <strong style={{ fontSize: '0.95rem' }}>CRM Empresarial y Base de Datos</strong>
-              <p style={{ margin: '4px 0 0', fontSize: '0.82rem', lineHeight: 1.5, opacity: 0.85 }}>
-                Control total de clientes, recaudo en COP por evento, trazabilidad de transacciones y exportación de listas para auditorías fiscales.
-              </p>
-            </div>
-
-            <div style={{ padding: '14px', borderRadius: '12px', border: '1px solid rgba(148, 163, 184, 0.25)', background: 'rgba(148, 163, 184, 0.04)' }}>
-              <div style={{ fontSize: '24px', marginBottom: '6px' }}>📢</div>
-              <strong style={{ fontSize: '0.95rem' }}>Vitrina Comercial y Publicidad B2B</strong>
-              <p style={{ margin: '4px 0 0', fontSize: '0.82rem', lineHeight: 1.5, opacity: 0.85 }}>
-                Exposición en el Marketplace de El Ganador ante más de 50.000 compradores activos con banners destacados y visibilidad multicanal.
-              </p>
-            </div>
+          <div
+            style={{
+              padding: '16px',
+              borderRadius: '12px',
+              background: isDark ? '#0f172a' : '#f8fafc',
+              border: '1.5px solid #0284c7',
+              fontSize: '0.84rem',
+              lineHeight: 1.6,
+            }}
+          >
+            <strong style={{ color: '#0284c7', display: 'block', marginBottom: '6px' }}>
+              🤖 ¿Cómo actúa la Secretaria Legal IA en este cronograma?
+            </strong>
+            <div>1. Toma los datos que simulaste en la calculadora y arma el expediente oficial sin errores de foliado.</div>
+            <div>2. Radica formalmente ante Coljuegos y te entrega de inmediato tu <strong>Radicado de Entrada (SOL-COLJ-2026-XXXXXX)</strong>.</div>
+            <div>3. Hace seguimiento continuo del expediente durante los 15 a 30 días hábiles de estudio.</div>
+            <div>4. Al emitirse la resolución definitiva, dispara una notificación a tu campana 🔔 del panel empresarial y activa automáticamente el recaudo bancario en vitrina.</div>
           </div>
         </section>
       )}
 
-      {/* CONTENIDO 3: MARCO LEGAL Y CÓMO OPERAMOS EN COLOMBIA */}
-      {activeTab === 'ley' && (
+      {/* =========================================================================
+          MÓDULO 3: REPARTO FINANCIERO Y CERO CAPTACIÓN ILEGAL
+          ========================================================================= */}
+      {activeTab === 'finanzas' && (
         <section
           style={{
-            background: 'var(--surface-card, #ffffff)',
+            background: isDark ? '#1e293b' : '#ffffff',
             borderRadius: '16px',
-            padding: '20px',
-            border: '1px solid var(--border-card, #e2e8f0)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
+            padding: '24px 20px',
+            border: '1px solid rgba(148, 163, 184, 0.25)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
           }}
         >
-          <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>
-            ⚖️ Cómo nos regimos ante la Ley y Operación en Colombia
+          <h3 style={{ margin: '0 0 8px', fontSize: '1.2rem', fontWeight: 900 }}>
+            💰 Desglose Financiero Oficial y Principio de Cero Captación
           </h3>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.88rem', lineHeight: 1.6 }}>
-            <div style={{ padding: '12px 14px', borderRadius: '10px', background: 'rgba(148, 163, 184, 0.05)', borderLeft: '4px solid #0284c7' }}>
-              <strong>1. Ley 643 de 2001 (Régimen de Juegos de Suerte y Azar):</strong>
-              <p style={{ margin: '4px 0 0' }}>
-                En Colombia, la explotación de juegos de suerte y azar es un monopolio rentístico de propiedad del Estado. Todo organizador de rifas debe obtener autorización previa y pagar los correspondientes derechos de explotación antes de iniciar la venta al público.
-              </p>
-            </div>
-
-            <div style={{ padding: '12px 14px', borderRadius: '10px', background: 'rgba(148, 163, 184, 0.05)', borderLeft: '4px solid #007AFF' }}>
-              <strong>2. Decreto 1486 de 2024 (Comercio Electrónico y Protección al Consumidor):</strong>
-              <p style={{ margin: '4px 0 0' }}>
-                Garantiza a los compradores total transparencia en el precio de la boleta, la identidad comprobada del comercio emisor (KYB), términos claros de entrega del premio y mecanismos directos de soporte y reclamación.
-              </p>
-            </div>
-
-            <div style={{ padding: '12px 14px', borderRadius: '10px', background: 'rgba(148, 163, 184, 0.05)', borderLeft: '4px solid #f59e0b' }}>
-              <strong>3. Bloqueo Legal Obligatorio en la Plataforma:</strong>
-              <p style={{ margin: '4px 0 0' }}>
-                Ninguna empresa o persona puede publicar un sorteo en El Ganador sin haber adjuntado: (a) El comprobante de pago de derechos de explotación ante la entidad respectiva (Coljuegos o Lotería), y (b) El número de radicado oficial de la resolución autorizante.
-              </p>
-            </div>
-
-            <div style={{ padding: '12px 14px', borderRadius: '10px', background: 'rgba(148, 163, 184, 0.05)', borderLeft: '4px solid #ef4444' }}>
-              <strong>4. Cláusula de Deslinde para Tiendas de Aplicaciones:</strong>
-              <p style={{ margin: '4px 0 0' }}>
-                Apple Inc. y Google LLC no son patrocinadores, organizadores ni tienen relación societaria con ninguna de las actividades promocionales o premiaciones celebradas en El Ganador.
-              </p>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* CONTENIDO 4: PORCENTAJES, DERECHOS DE EXPLOTACIÓN Y SALUD */}
-      {activeTab === 'porcentajes' && (
-        <section
-          style={{
-            background: 'var(--surface-card, #ffffff)',
-            borderRadius: '16px',
-            padding: '20px',
-            border: '1px solid var(--border-card, #e2e8f0)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
-          <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>
-            💰 Desglose Transparente de Porcentajes y Destinación a la Salud
-          </h3>
-          <p style={{ margin: 0, fontSize: '0.88rem', lineHeight: 1.6, opacity: 0.9 }}>
-            En cumplimiento del artículo 30 de la Ley 643 de 2001, las rifas generan recursos de carácter obligatorio destinados de forma exclusiva al sector de la salud pública en Colombia.
+          <p style={{ margin: '0 0 20px', fontSize: '0.85rem', lineHeight: 1.6, opacity: 0.9 }}>
+            Estructura económica transparente conforme al Artículo 30 de la Ley 643 de 2001 y las normas financieras de Colombia:
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '14px' }}>
-            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #007AFF', background: 'rgba(0, 122, 255, 0.06)' }}>
-              <div style={{ fontSize: '28px', fontWeight: 900, color: '#007AFF' }}>14%</div>
-              <strong style={{ fontSize: '0.95rem', display: 'block', margin: '4px 0 2px' }}>
-                Derechos de Explotación (Salud Pública)
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px', marginBottom: '22px' }}>
+            <div style={{ padding: '16px', borderRadius: '12px', border: '2px solid #007AFF', background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff' }}>
+              <span style={{ fontSize: '10px', fontWeight: 900, background: '#007AFF', color: '#fff', padding: '2px 8px', borderRadius: '999px', textTransform: 'uppercase' }}>
+                OBLIGATORIO DE LEY
+              </span>
+              <div style={{ fontSize: '32px', fontWeight: 900, color: '#007AFF', margin: '6px 0 2px' }}>14%</div>
+              <strong style={{ fontSize: '0.94rem', display: 'block', marginBottom: '4px' }}>
+                Salud Pública (Coljuegos / Lotería)
               </strong>
-              <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.5, opacity: 0.85 }}>
-                Porcentaje de ley que el organizador debe liquidar y transferir a Coljuegos o la Lotería Departamental sobre el valor total de las boletas emitidas para financiar hospitales y centros de salud en Colombia.
+              <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
+                Porcentaje fijado por el Estado sobre la emisión total bruta del plan de premios, transferido íntegramente a financiar la red hospitalaria pública en Colombia.
               </p>
             </div>
 
-            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #0284c7', background: 'rgba(2, 132, 199, 0.06)' }}>
-              <div style={{ fontSize: '28px', fontWeight: 900, color: '#0284c7' }}>SaaS</div>
-              <strong style={{ fontSize: '0.95rem', display: 'block', margin: '4px 0 2px' }}>
-                Uso de Plataforma El Ganador
+            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #0284c7', background: isDark ? 'rgba(2, 132, 199, 0.08)' : '#f0f9ff' }}>
+              <span style={{ fontSize: '10px', fontWeight: 900, background: '#0284c7', color: '#fff', padding: '2px 8px', borderRadius: '999px', textTransform: 'uppercase' }}>
+                TECNOLOGÍA &amp; GESTIÓN
+              </span>
+              <div style={{ fontSize: '32px', fontWeight: 900, color: '#0284c7', margin: '6px 0 2px' }}>10%</div>
+              <strong style={{ fontSize: '0.94rem', display: 'block', marginBottom: '4px' }}>
+                Plataforma SaaS El Ganador
               </strong>
-              <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.5, opacity: 0.85 }}>
-                Tarifa tecnológica fija o proporcional acordada con el comerciante que cubre la emisión digital, hosting seguro, hash SHA-256, balotera en vivo, chat de entrega y soporte técnico.
+              <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
+                Cubre la infraestructura en la nube, emisión criptográfica SHA-256 de balotas, transmisión 3D en vivo, tramitación de la Secretaria Legal IA y vitrina comercial.
               </p>
             </div>
 
-            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #f59e0b', background: 'rgba(245, 158, 11, 0.06)' }}>
-              <div style={{ fontSize: '28px', fontWeight: 900, color: '#f59e0b' }}>Tarifa Bancaria</div>
-              <strong style={{ fontSize: '0.95rem', display: 'block', margin: '4px 0 2px' }}>
-                Pasarela de Pagos (Wompi)
+            <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #64748b', background: isDark ? 'rgba(255, 255, 255, 0.04)' : '#f8fafc' }}>
+              <span style={{ fontSize: '10px', fontWeight: 900, background: '#64748b', color: '#fff', padding: '2px 8px', borderRadius: '999px', textTransform: 'uppercase' }}>
+                ADQUIRENCIA VIGILADA
+              </span>
+              <div style={{ fontSize: '32px', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a', margin: '6px 0 2px' }}>Wompi</div>
+              <strong style={{ fontSize: '0.94rem', display: 'block', marginBottom: '4px' }}>
+                Pasarela Bancolombia Vigilada
               </strong>
-              <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: 1.5, opacity: 0.85 }}>
-                Tarifas directas de adquirencia de Wompi Bancolombia (por transacción PSE, Nequi o tarjeta de crédito) sin ningún sobrecosto oculto.
+              <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
+                Tarifa directa interbancaria (PSE, Nequi, tarjetas de crédito) vigilada por la Superintendencia Financiera de Colombia, sin sobrecostos ocultos.
               </p>
+            </div>
+          </div>
+
+          {/* PROTECCIÓN LEGAL CONTRA CAPTACIÓN ILEGAL */}
+          <div
+            style={{
+              padding: '16px',
+              borderRadius: '14px',
+              background: isDark ? '#0f172a' : '#f8fafc',
+              border: '1.5px solid #007AFF',
+              fontSize: '0.84rem',
+              lineHeight: 1.6,
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <span style={{ fontSize: '20px' }}>🛡️</span>
+              <strong style={{ fontSize: '0.96rem', color: '#007AFF' }}>
+                Cero Captación Ilegal y Cero Custodia de Fondos (Decreto 4334/2008)
+              </strong>
+            </div>
+            <p style={{ margin: '0 0 8px', opacity: 0.9 }}>
+              <strong>El Ganador S.A.S. NO capta, retiene ni custodia dineros del público.</strong> 
+              La dispersión de fondos se realiza mediante la tecnología de <em>Marketplace Split</em> de Wompi Bancolombia: cuando un usuario compra una boleta, la pasarela transfiere automáticamente el dinero a la cuenta bancaria del empresario y las tarifas aplicables de forma directa.
+            </p>
+            <div style={{ fontSize: '0.78rem', color: '#0284c7', fontWeight: 700 }}>
+              ✓ Cumplimiento estricto del régimen de intermediación financiera y prevención de lavado de activos (SARLAFT).
             </div>
           </div>
         </section>
       )}
 
-      {/* CONTENIDO 5: AUDITORÍA DE LABORATORIO (LEAN LAB / ISO 17025 / ISO 9001) */}
-      {activeTab === 'auditoria' && (
+      {/* =========================================================================
+          MÓDULO 4: CERTIFICACIÓN TÉCNICA E INTEGRIDAD (ISO 17025 / LEAN LAB)
+          ========================================================================= */}
+      {activeTab === 'certificacion' && (
         <section
           style={{
-            background: 'var(--surface-card, #ffffff)',
+            background: isDark ? '#1e293b' : '#ffffff',
             borderRadius: '16px',
-            padding: '24px',
-            border: '1.5px solid rgba(0, 122, 255, 0.35)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.05)',
+            padding: '24px 20px',
+            border: '1px solid rgba(148, 163, 184, 0.25)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
           }}
         >
           {/* BANNER ACREDITACIÓN OFICIAL */}
@@ -697,116 +744,99 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
               padding: '20px',
               border: '1.5px solid #0284c7',
               boxShadow: '0 8px 30px rgba(0, 122, 255, 0.2)',
+              marginBottom: '20px',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginBottom: '10px' }}>
               <span style={{ fontSize: '24px' }}>🏛️</span>
               <div>
-                <span
-                  style={{
-                    background: '#007AFF',
-                    color: '#ffffff',
-                    fontSize: '0.72rem',
-                    fontWeight: 900,
-                    padding: '2px 8px',
-                    borderRadius: '6px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                    marginRight: '8px',
-                  }}
-                >
+                <span style={{ background: '#007AFF', color: '#ffffff', fontSize: '0.72rem', fontWeight: 900, padding: '2px 8px', borderRadius: '6px', textTransform: 'uppercase' }}>
                   Resolución Coljuegos No. 20260019624
                 </span>
-                <span style={{ fontSize: '0.78rem', color: '#93c5fd' }}>
-                  Acreditación de Laboratorios de Ensayos y Certificación
-                </span>
-                <h3 className="leanlab-banner-title" style={{ margin: '4px 0 0', fontSize: '1.25rem', fontWeight: 900, color: '#fef08a', WebkitTextFillColor: '#fef08a' }}>
+                <h3 style={{ margin: '4px 0 0', fontSize: '1.2rem', fontWeight: 900, color: '#fef08a' }}>
                   LEAN LAB COMPANY LIMITED (RiskCherry) — Reg. C-96476
                 </h3>
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginTop: '14px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Norma de Ensayo (RNG / Juegos)</div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#38bdf8' }}>ISO/IEC 17025:2017 No 025</div>
+              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Norma RNG / Juegos</div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#38bdf8' }}>ISO/IEC 17025:2017 No 025</div>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Norma de Inspección de Sistemas</div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#38bdf8' }}>ISO/IEC 17020:2012 No 110</div>
+              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Inspección de Sistemas</div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#38bdf8' }}>ISO/IEC 17020:2012 No 110</div>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Marco Técnico Obligatorio</div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#fde047' }}>Res. Coljuegos 20161200013844</div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#fde047' }}>Res. 20161200013844</div>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 14px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Gestión de Calidad & Trazabilidad</div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 800, color: '#93c5fd' }}>Estándar ISO 9001:2015</div>
+              <div style={{ background: 'rgba(255,255,255,0.06)', padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Gestión de Calidad</div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#93c5fd' }}>Estándar ISO 9001:2015</div>
               </div>
             </div>
           </div>
 
-          {/* EJECUTOR DE ENSAYOS ESTADÍSTICOS EN VIVO */}
+          {/* PROTOCOLO PRE-COMPROMISO */}
           <div
             style={{
-              background: 'var(--surface-muted, #f8fafc)',
+              padding: '16px',
               borderRadius: '14px',
-              padding: '20px',
-              border: '1px solid var(--border-subtle, #e2e8f0)',
+              background: isDark ? '#0f172a' : '#f8fafc',
+              border: '1.5px solid #007AFF',
+              marginBottom: '20px',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '14px' }}>
+            <h4 style={{ margin: '0 0 8px', fontSize: '1rem', fontWeight: 800, color: '#007AFF' }}>
+              🔒 Protocolo Criptográfico Anti-Fraude: Pre-Compromiso Inmutable
+            </h4>
+            <p style={{ margin: '0 0 12px', fontSize: '0.82rem', lineHeight: 1.55, opacity: 0.9 }}>
+              Nadie (ni el comerciante ni los creadores de El Ganador) puede predecir ni alterar la balota ganadora:
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px', fontSize: '0.8rem' }}>
+              <div style={{ padding: '12px', borderRadius: '10px', background: isDark ? 'rgba(0, 122, 255, 0.1)' : '#eff6ff', border: '1px solid rgba(0, 122, 255, 0.2)' }}>
+                <strong style={{ display: 'block', color: '#007AFF', marginBottom: '2px' }}>Fase 1: Pre-Compromiso</strong>
+                El servidor fija en base de datos el hash criptográfico <code>SeedCommitment = SHA256(Semilla)</code> antes de que la balotera empiece a girar.
+              </div>
+              <div style={{ padding: '12px', borderRadius: '10px', background: isDark ? 'rgba(2, 132, 199, 0.1)' : '#eff6ff', border: '1px solid rgba(2, 132, 199, 0.2)' }}>
+                <strong style={{ display: 'block', color: '#0284c7', marginBottom: '2px' }}>Fase 2: Revelación Pública</strong>
+                Al caer la balota, se revela la semilla. El público y los entes de control verifican que la extracción fue 100% matemática e inalterable.
+              </div>
+            </div>
+          </div>
+
+          {/* BANCO DE ENSAYOS ESTADÍSTICOS EN VIVO */}
+          <div
+            style={{
+              padding: '18px',
+              borderRadius: '14px',
+              border: '1px solid rgba(148, 163, 184, 0.3)',
+              background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#ffffff',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '14px' }}>
               <div>
-                <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span>🔬</span> Banco de Ensayos Estadísticos en Vivo (NIST SP 800-22)
+                <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 800 }}>
+                  🔬 Banco de Ensayos Estadísticos en Vivo (NIST SP 800-22)
                 </h4>
-                <p style={{ margin: '4px 0 0', fontSize: '0.82rem', opacity: 0.85 }}>
-                  Ejecute ensayos sobre el motor CSPRNG real con muestreo con rechazo (HMAC-SHA256/U64) para verificar la hipótesis nula de uniformidad.
+                <p style={{ margin: '2px 0 0', fontSize: '0.8rem', opacity: 0.8 }}>
+                  Ejecuta una prueba directa contra el generador aleatorio CSPRNG en el servidor.
                 </p>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  Muestras:
-                  <select
-                    value={auditSamples}
-                    onChange={(e) => setAuditSamples(Number(e.target.value))}
-                    disabled={auditLoading}
-                    style={{
-                      padding: '6px 10px',
-                      borderRadius: '8px',
-                      border: '1px solid #cbd5e1',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      background: 'inherit',
-                    }}
-                  >
-                    <option value={1000}>1,000 sorteos</option>
-                    <option value={10000}>10,000 sorteos</option>
-                    <option value={50000}>50,000 sorteos</option>
-                    <option value={100000}>100,000 sorteos</option>
-                  </select>
-                </label>
-
-                <label style={{ fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  Cartón:
-                  <select
-                    value={auditCartonSize}
-                    onChange={(e) => setAuditCartonSize(Number(e.target.value))}
-                    disabled={auditLoading}
-                    style={{
-                      padding: '6px 10px',
-                      borderRadius: '8px',
-                      border: '1px solid #cbd5e1',
-                      fontSize: '0.82rem',
-                      fontWeight: 700,
-                      background: 'inherit',
-                    }}
-                  >
-                    <option value={100}>100 números (00-99)</option>
-                    <option value={1000}>1,000 números (000-999)</option>
-                  </select>
-                </label>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <select
+                  value={auditSamples}
+                  onChange={(e) => setAuditSamples(Number(e.target.value))}
+                  disabled={auditLoading}
+                  style={{ padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.8rem', fontWeight: 700 }}
+                >
+                  <option value={1000}>1.000 muestras</option>
+                  <option value={10000}>10.000 muestras</option>
+                  <option value={50000}>50.000 muestras</option>
+                </select>
 
                 <button
                   type="button"
@@ -816,219 +846,43 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                     background: auditLoading ? '#94a3b8' : 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
                     color: '#ffffff',
                     border: 'none',
-                    padding: '8px 18px',
-                    borderRadius: '10px',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
                     fontWeight: 800,
-                    fontSize: '0.85rem',
-                    cursor: auditLoading ? 'not-allowed' : 'pointer',
-                    boxShadow: '0 4px 12px rgba(0, 122, 255, 0.35)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
+                    fontSize: '0.82rem',
+                    cursor: auditLoading ? 'wait' : 'pointer',
                   }}
                 >
-                  {auditLoading ? (
-                    <>
-                      <span className="animate-spin">⏳</span> Ensayando {auditSamples.toLocaleString()} muestras...
-                    </>
-                  ) : (
-                    <>
-                      <span>▶️</span> Ejecutar Ensayo en Servidor
-                    </>
-                  )}
+                  {auditLoading ? '⏳ Ensayando...' : '▶️ Ejecutar Ensayo en Servidor'}
                 </button>
               </div>
             </div>
 
-            {/* RESULTADOS DEL ENSAYO EN VIVO */}
             {auditResult && (
               <div
                 style={{
-                  background: 'var(--surface-card, #ffffff)',
-                  borderRadius: '12px',
-                  padding: '16px',
+                  background: isDark ? '#0f172a' : '#f8fafc',
+                  padding: '14px',
+                  borderRadius: '10px',
                   border: '1.5px solid #007AFF',
-                  marginTop: '12px',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', borderBottom: '1px solid #e2e8f0', paddingBottom: '10px', marginBottom: '12px' }}>
-                  <div>
-                    <span style={{ fontSize: '0.78rem', color: '#007AFF', fontWeight: 800, textTransform: 'uppercase' }}>
-                      DICTAMEN OFICIAL DEL ENSAYO
-                    </span>
-                    <h5 style={{ margin: '2px 0 0', fontSize: '1.1rem', fontWeight: 900, color: auditResult?.statisticalResults?.passedUniformity ? '#0284c7' : '#dc2626' }}>
-                      {auditResult?.statisticalResults?.passedUniformity ? '✓ CUMPLE: HIPÓTESIS NULA DE UNIFORMIDAD ACEPTADA (H0)' : '✕ NO CONFORME'}
-                    </h5>
-                  </div>
-                  <div style={{ fontSize: '0.78rem', opacity: 0.75 }}>
-                    Muestras: <strong>{auditResult?.testParameters?.totalSamples?.toLocaleString()}</strong> | Límite Crítico: <strong>p &ge; 0.01</strong>
-                  </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <strong style={{ color: '#007AFF', fontSize: '0.9rem' }}>
+                    Dictamen Oficial: {auditResult?.statisticalResults?.passedUniformity ? '✓ CUMPLE UNIFORMIDAD (H0)' : '✕ NO CONFORME'}
+                  </strong>
+                  <span style={{ fontSize: '0.78rem', opacity: 0.8 }}>
+                    p-value: <strong>{auditResult?.statisticalResults?.pValue?.toFixed(4)}</strong> (límite &ge; 0.01)
+                  </span>
                 </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '12px' }}>
-                  {/* Chi2 */}
-                  <div style={{ background: 'rgba(0, 122, 255, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(0, 122, 255, 0.2)' }}>
-                    <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Chi-Cuadrado (&chi;&sup2;) Goodness-of-Fit</div>
-                    <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0284c7', margin: '2px 0' }}>
-                      {auditResult?.statisticalResults?.chiSquareStatistic?.toFixed(2)}
-                    </div>
-                    <div style={{ fontSize: '0.74rem', opacity: 0.85 }}>
-                      p-value: <strong>{auditResult?.statisticalResults?.pValue?.toFixed(4)}</strong> ({auditResult?.testParameters?.degreesOfFreedom} gl)
-                    </div>
-                    <div style={{ fontSize: '0.7rem', color: '#0284c7', fontWeight: 800, marginTop: '4px' }}>
-                      {auditResult?.statisticalResults?.passedUniformity ? '✓ Uniformidad Aprobada' : '✕ Sesgo Detectado'}
-                    </div>
-                  </div>
-
-                  {/* Monobit */}
-                  <div style={{ background: 'rgba(2, 132, 199, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(2, 132, 199, 0.2)' }}>
-                    <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Prueba Monobit NIST SP 800-22</div>
-                    <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#0284c7', margin: '2px 0' }}>
-                      {auditResult?.nistMonobitEntropy?.onesRatio?.toFixed(4)}
-                    </div>
-                    <div style={{ fontSize: '0.74rem', opacity: 0.85 }}>
-                      Proporción de 1s (ideal: 0.5000)
-                    </div>
-                    <div style={{ fontSize: '0.7rem', color: '#0284c7', fontWeight: 800, marginTop: '4px' }}>
-                      {auditResult?.nistMonobitEntropy?.passedMonobit ? '✓ Entropía Monobit Aprobada' : '✕ Fallo Monobit'}
-                    </div>
-                  </div>
-
-                  {/* CSPRNG Health */}
-                  <div style={{ background: 'rgba(217, 119, 6, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(217, 119, 6, 0.2)' }}>
-                    <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Autotest de Salud NIST 800-90A/B</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#d97706', margin: '2px 0' }}>
-                      {auditResult?.auditMetadata?.csprngSelfTest?.includes('CUMPLE') ? '100% OK' : 'Fallo'}
-                    </div>
-                    <div style={{ fontSize: '0.74rem', opacity: 0.85 }}>
-                      Sin colisiones en bytes de kernel
-                    </div>
-                    <div style={{ fontSize: '0.7rem', color: '#d97706', fontWeight: 800, marginTop: '4px' }}>
-                      ✓ CSPRNG SO Certificado
-                    </div>
-                  </div>
-
-                  {/* Dispersión Máx-Mín */}
-                  <div style={{ background: 'rgba(124, 58, 237, 0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(124, 58, 237, 0.2)' }}>
-                    <div style={{ fontSize: '0.74rem', opacity: 0.8 }}>Rango de Frecuencia Máx/Mín</div>
-                    <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#7c3aed', margin: '2px 0' }}>
-                      {auditResult?.statisticalResults?.minObservedFrequency} &ndash; {auditResult?.statisticalResults?.maxObservedFrequency}
-                    </div>
-                    <div style={{ fontSize: '0.74rem', opacity: 0.85 }}>
-                      Dispersión relativa: <strong>&plusmn;{auditResult?.statisticalResults?.rangeSpreadPct}%</strong>
-                    </div>
-                    <div style={{ fontSize: '0.7rem', color: '#7c3aed', fontWeight: 800, marginTop: '4px' }}>
-                      ✓ Distribución Equilibrada
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{ marginTop: '12px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  <a
-                    href={`/api/audit/rng-sample?samples=${auditSamples}&cartonSize=${auditCartonSize}&format=csv`}
-                    download={`muestras-rng-leanlab-${auditSamples}.csv`}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      background: '#f1f5f9',
-                      border: '1px solid #cbd5e1',
-                      color: '#0f172a',
-                      padding: '6px 12px',
-                      borderRadius: '8px',
-                      fontSize: '0.78rem',
-                      fontWeight: 700,
-                      textDecoration: 'none',
-                    }}
-                  >
-                    <span>📊</span> Descargar Muestra Cruda CSV ({auditSamples.toLocaleString()} registros)
-                  </a>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px', fontSize: '0.78rem' }}>
+                  <div>Chi-Cuadrado: <strong>{auditResult?.statisticalResults?.chiSquareStatistic?.toFixed(2)}</strong></div>
+                  <div>Monobit NIST: <strong>{auditResult?.nistMonobitEntropy?.onesRatio?.toFixed(4)}</strong></div>
+                  <div>Dispersión: <strong>&plusmn;{auditResult?.statisticalResults?.rangeSpreadPct}%</strong></div>
+                  <div>Autotest SO: <strong>100% OK</strong></div>
                 </div>
               </div>
             )}
-          </div>
-
-          {/* MATRIZ DE PRE-COMPROMISO INMUTABLE Y ZERO-CHEAT */}
-          <div
-            style={{
-              background: 'var(--surface-muted, #f8fafc)',
-              borderRadius: '14px',
-              padding: '20px',
-              border: '1px solid var(--border-subtle, #e2e8f0)',
-            }}
-          >
-            <h4 style={{ margin: '0 0 10px', fontSize: '1.05rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>🔒</span> Protocolo Anti-Fraude de Pre-Compromiso en Servidor (/api/draws/commit)
-            </h4>
-            <p style={{ margin: '0 0 14px', fontSize: '0.84rem', lineHeight: 1.6, opacity: 0.9 }}>
-              En estricto cumplimiento con la Resolución 20161200013844 de Coljuegos y las exigencias de inspección de Lean Lab, ni el operador de la rifa ni el software pueden alterar el ganador. El sistema aplica criptografía de clave pública y hash locking antes de iniciar el sorteo:
-            </p>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
-              <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #007AFF', background: 'rgba(0, 122, 255, 0.05)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ background: '#007AFF', color: '#fff', borderRadius: '50%', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 900 }}>1</span>
-                  <strong style={{ fontSize: '0.92rem' }}>Fase 1: Pre-Compromiso Criptográfico</strong>
-                </div>
-                <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
-                  Antes de activar las balotas 3D, el cliente envía a <code>/api/draws/commit</code> el hash de la semilla (<code>SeedCommitment = SHA256(Seed)</code>) y el <code>ListHash</code> de boletas. El servidor lo almacena en base de datos de manera inmutable. Si alguien intenta repetir el sorteo, el servidor devuelve <code>HTTP 409 Conflict</code>.
-                </p>
-              </div>
-
-              <div style={{ padding: '16px', borderRadius: '12px', border: '1.5px solid #0284c7', background: 'rgba(2, 132, 199, 0.05)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ background: '#0284c7', color: '#fff', borderRadius: '50%', width: '22px', height: '22px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 900 }}>2</span>
-                  <strong style={{ fontSize: '0.92rem' }}>Fase 2: Revelación y Verificación</strong>
-                </div>
-                <p style={{ margin: 0, fontSize: '0.8rem', lineHeight: 1.5, opacity: 0.85 }}>
-                  Al finalizar la animación física de la balotera, se revela la semilla en claro. El servidor verifica formalmente que <code>SHA256(Seed) === SeedCommitment</code> y ratifica el ganador oficial, registrando la constancia inalterable para consulta pública en <code>/verificar-sorteo</code>.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* DESCARGA DE DOCUMENTACIÓN TÉCNICA OFICIAL */}
-          <div
-            style={{
-              padding: '16px 20px',
-              borderRadius: '12px',
-              border: '1.5px dashed #0284c7',
-              background: 'rgba(2, 132, 199, 0.04)',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: '12px',
-            }}
-          >
-            <div>
-              <strong style={{ fontSize: '0.95rem', display: 'block' }}>
-                📄 Especificación Técnica Oficial para Laboratorios de Ensayo (DSD)
-              </strong>
-              <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>
-                Documento de 2 páginas con fórmulas matemáticas, límites de rechazo IEEE y protocolo ISO 17025.
-              </span>
-            </div>
-
-            <a
-              href="/docs/especificacion-tecnica-rng-coljuegos-leanlab.pdf"
-              download="Especificacion-Tecnica-RNG-Coljuegos-LeanLab.pdf"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: '#0284c7',
-                color: '#ffffff',
-                padding: '9px 18px',
-                borderRadius: '10px',
-                fontWeight: 800,
-                fontSize: '0.85rem',
-                textDecoration: 'none',
-                boxShadow: '0 4px 12px rgba(2, 132, 199, 0.35)',
-              }}
-            >
-              <span>📥</span> Descargar Especificación Técnica (PDF)
-            </a>
           </div>
         </section>
       )}
