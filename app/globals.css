@@ -21642,3 +21642,48 @@ html[data-theme='light'] .winnerChatModalContainer .winnerChatSecurityBanner str
   text-shadow: none !important;
 }
 
+/* Inmunidad de contraste absoluto para Guía Legal Coljuegos */
+.coljuegos-legal-card .coljuegos-banner-title,
+html[data-theme='light'] .coljuegos-legal-card .coljuegos-banner-title,
+[data-theme='light'] .coljuegos-legal-card .coljuegos-banner-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.coljuegos-legal-card .leanlab-banner-title,
+html[data-theme='light'] .coljuegos-legal-card .leanlab-banner-title,
+[data-theme='light'] .coljuegos-legal-card .leanlab-banner-title {
+  color: #fef08a !important;
+  -webkit-text-fill-color: #fef08a !important;
+}
+
+.coljuegos-panel-title,
+html[data-theme='light'] .coljuegos-panel-title,
+[data-theme='light'] .coljuegos-panel-title {
+  color: #f5b82e !important;
+  -webkit-text-fill-color: #f5b82e !important;
+}
+
+.todos-los-sorteos-page h1,
+html[data-theme='light'] .todos-los-sorteos-page h1,
+[data-theme='light'] .todos-los-sorteos-page h1 {
+  color: #d4af37 !important;
+  -webkit-text-fill-color: #d4af37 !important;
+}
+
+.todos-los-sorteos-page h3,
+html[data-theme='light'] .todos-los-sorteos-page h3,
+[data-theme='light'] .todos-los-sorteos-page h3 {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Inmunidad para la etapa de sorteo cuando hay ganador (fondo blanco limpio) */
+.liveDemoMachine.hasWinner {
+  background-color: #ffffff !important;
+  background-image: radial-gradient(circle at 50% 0%, rgba(0, 122, 255, 0.05) 0%, #ffffff 85%) !important;
+  border: 2px solid #007AFF !important;
+  box-shadow: 0 24px 64px rgba(0, 122, 255, 0.15), 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+

@@ -8161,3 +8161,63 @@
   color: #64748b !important;
   text-shadow: none !important;
 }
+
+/* ============================================================================
+   RECUADRO DE GANADOR CON FONDO BLANCO Y ALTO CONTRASTE (SOLUCIÓN AUDITORÍA)
+   ============================================================================ */
+.liveDemoMachine.hasWinner {
+  background-color: #ffffff !important;
+  background-image: radial-gradient(circle at 50% 0%, rgba(0, 122, 255, 0.05) 0%, #ffffff 85%) !important;
+  border: 2px solid #007AFF !important;
+  box-shadow: 0 24px 64px rgba(0, 122, 255, 0.15), 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.liveDemoMachine.hasWinner .pStep {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.liveDemoMachine.hasWinner .pStep.active {
+  background: #007AFF !important;
+  color: #ffffff !important;
+  border: 1px solid #007AFF !important;
+}
+
+.liveDemoMachine.hasWinner .liveDemoStart {
+  background: linear-gradient(135deg, #007AFF 0%, #0284c7 100%) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  box-shadow: 0 4px 16px rgba(0, 122, 255, 0.35) !important;
+  border: none !important;
+}
+
+.liveDemoMachine.hasWinner .liveDemoMarketLink {
+  color: #0284c7 !important;
+  font-weight: 700;
+}
+
+.liveDemoMachine.hasWinner .iosAudioStatusBanner {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.liveDemoMachine.hasWinner .btnTestWinnerToggle {
+  background: #f0fdf4 !important;
+  border: 1.5px solid #86efac !important;
+  color: #166534 !important;
+}
+
+.liveDemoMachine.hasWinner .recentBallsContainer,
+.liveDemoMachine.hasWinner .recentBallsHistory {
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+.liveDemoMachine.hasWinner .recentBallsTitle,
+.liveDemoMachine.hasWinner .trayHeaderRow {
+  color: #475569 !important;
+}
+

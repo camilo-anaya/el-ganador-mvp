@@ -190,7 +190,7 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
             <span style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '0.08em', color: '#f5b82e', textTransform: 'uppercase' }}>
               COLJUEGOS · MONOPOLIO RENTÍSTICO DE JUEGOS DE SUERTE Y AZAR
             </span>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 900, margin: '4px 0 2px', color: '#ffffff' }}>
+            <h2 className="coljuegos-banner-title" style={{ fontSize: '1.25rem', fontWeight: 900, margin: '4px 0 2px', color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>
               Guía Legal Oficial y Requisitos para Sorteos en Colombia
             </h2>
             <p style={{ margin: 0, fontSize: '0.85rem', color: '#cbd5e1' }}>
@@ -735,7 +735,7 @@ export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: C
                 <span style={{ fontSize: '0.78rem', color: '#86efac' }}>
                   Acreditación de Laboratorios de Ensayos y Certificación
                 </span>
-                <h3 style={{ margin: '4px 0 0', fontSize: '1.25rem', fontWeight: 900, color: '#fef08a' }}>
+                <h3 className="leanlab-banner-title" style={{ margin: '4px 0 0', fontSize: '1.25rem', fontWeight: 900, color: '#fef08a', WebkitTextFillColor: '#fef08a' }}>
                   LEAN LAB COMPANY LIMITED (RiskCherry) — Reg. C-96476
                 </h3>
               </div>

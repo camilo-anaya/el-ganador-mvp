@@ -3008,10 +3008,10 @@ export default function LiveDrawDemoPage() {
                         {sponsorBumper.logo}
                       </span>
                       <div>
-                        <span style={{ background: '#0284c7', color: '#ffffff', fontSize: '10px', fontWeight: 900, padding: '2px 7px', borderRadius: '4px', letterSpacing: '0.5px' }}>
+                        <span style={{ background: '#007AFF', color: '#ffffff', fontSize: '10px', fontWeight: 900, padding: '3px 8px', borderRadius: '4px', letterSpacing: '0.5px' }}>
                           PATROCINADOR OFICIAL
                         </span>
-                        <h3 className="sponsorModalBrandTitle" style={{ margin: '4px 0 0', fontSize: '19px', fontWeight: 900, color: '#ffffff' }}>
+                        <h3 className="sponsorModalBrandTitle" style={{ margin: '4px 0 0', fontSize: '19px', fontWeight: 900, color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>
                           {sponsorBumper.brand}
                         </h3>
                       </div>
@@ -3043,7 +3043,7 @@ export default function LiveDrawDemoPage() {
                   }}>
                     <div>
                       <span style={{ fontSize: '11px', color: '#cbd5e1', display: 'block', fontWeight: 700 }}>AUDIENCIA PENDIENTE:</span>
-                      <strong className="sponsorAudienceNumber" style={{ fontSize: '16px', color: '#ffffff', fontWeight: 900 }}>
+                      <strong className="sponsorAudienceNumber" style={{ fontSize: '16px', color: '#ffffff', WebkitTextFillColor: '#ffffff', fontWeight: 900 }}>
                         👥 {sponsorFollowers.toLocaleString()} personas
                       </strong>
                     </div>
@@ -3054,12 +3054,12 @@ export default function LiveDrawDemoPage() {
                         padding: '9px 16px',
                         borderRadius: '10px',
                         border: 'none',
-                        background: isFollowingSponsor ? '#10b981' : 'linear-gradient(135deg, #0284c7 0%, #2563eb 100%)',
+                        background: isFollowingSponsor ? '#10b981' : 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
                         color: '#ffffff',
                         fontWeight: 800,
                         fontSize: '12px',
                         cursor: 'pointer',
-                        boxShadow: '0 4px 12px rgba(2, 132, 199, 0.4)'
+                        boxShadow: '0 4px 12px rgba(0, 122, 255, 0.4)'
                       }}
                     >
                       {isFollowingSponsor ? '✓ Siguiendo (+1)' : '🔔 Seguir Negocio'}
@@ -3068,8 +3068,8 @@ export default function LiveDrawDemoPage() {
 
                   {/* Beneficio exclusivo */}
                   <div style={{
-                    background: 'rgba(2, 132, 199, 0.12)',
-                    border: '1.5px dashed #0284c7',
+                    background: 'rgba(0, 122, 255, 0.12)',
+                    border: '1.5px dashed #007AFF',
                     borderRadius: '10px',
                     padding: '10px 14px',
                     marginBottom: '16px',
@@ -3079,7 +3079,7 @@ export default function LiveDrawDemoPage() {
                   }}>
                     <div>
                       <span style={{ fontSize: '10px', color: '#38bdf8', fontWeight: 800 }}>CUPÓN DE BIENVENIDA:</span>
-                      <div className="sponsorCouponCode" style={{ fontWeight: 900, fontSize: '15px', color: '#ffffff' }}>ELGANADOR</div>
+                      <div className="sponsorCouponCode" style={{ fontWeight: 900, fontSize: '15px', color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>ELGANADOR</div>
                     </div>
                     <button
                       type="button"
@@ -3087,7 +3087,7 @@ export default function LiveDrawDemoPage() {
                         navigator.clipboard?.writeText('ELGANADOR');
                         alert('¡Cupón ELGANADOR copiado!');
                       }}
-                      style={{ padding: '6px 14px', background: '#0284c7', color: '#ffffff', fontWeight: 800, border: 'none', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
+                      style={{ padding: '6px 14px', background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)', color: '#ffffff', fontWeight: 800, border: 'none', borderRadius: '6px', fontSize: '11px', cursor: 'pointer' }}
                     >
                       Copiar
                     </button>
@@ -3121,6 +3121,7 @@ export default function LiveDrawDemoPage() {
                         padding: '8px',
                         background: 'transparent',
                         color: '#93c5fd',
+                        WebkitTextFillColor: '#93c5fd',
                         fontSize: '11px',
                         textDecoration: 'underline'
                       }}

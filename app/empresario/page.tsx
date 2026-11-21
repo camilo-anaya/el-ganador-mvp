@@ -1296,7 +1296,7 @@ function PanelEmpresarioContent() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <span style={{ fontSize: '28px' }}>📜</span>
                     <div>
-                      <strong style={{ fontSize: '0.98rem', color: '#f5b82e', display: 'block' }}>
+                      <strong className="coljuegos-panel-title" style={{ fontSize: '0.98rem', color: '#f5b82e', WebkitTextFillColor: '#f5b82e', display: 'block' }}>
                         Requisitos Oficiales Coljuegos para Publicar Rifas en Colombia
                       </strong>
                       <span style={{ fontSize: '0.82rem', color: '#cbd5e1' }}>

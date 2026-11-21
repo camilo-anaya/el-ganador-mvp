@@ -169,7 +169,7 @@ export default function TodosLosSorteosPage() {
   });
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0b1320', color: '#ffffff', padding: '24px 20px 100px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="todos-los-sorteos-page" style={{ minHeight: '100vh', background: '#0b1320', color: '#ffffff', padding: '24px 20px 100px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {/* Cabecera */}
       <div
         style={{
@@ -184,7 +184,7 @@ export default function TodosLosSorteosPage() {
         }}
       >
         <div>
-          <h1 style={{ fontSize: 'clamp(20px, 2.5vw, 24px)', fontWeight: 900, color: '#d4af37', margin: 0 }}>
+          <h1 style={{ fontSize: 'clamp(20px, 2.5vw, 24px)', fontWeight: 900, color: '#d4af37', WebkitTextFillColor: '#d4af37', margin: 0 }}>
             🎲 Todos los Sorteos Disponibles
           </h1>
           <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#94a3b8' }}>
@@ -332,7 +332,7 @@ export default function TodosLosSorteosPage() {
               🏪 {raffle.merchant}
             </span>
 
-            <h3 style={{ fontSize: '15.5px', fontWeight: 'bold', color: '#ffffff', margin: 0, lineHeight: 1.35 }}>
+            <h3 style={{ fontSize: '15.5px', fontWeight: 'bold', color: '#ffffff', WebkitTextFillColor: '#ffffff', margin: 0, lineHeight: 1.35 }}>
               {raffle.title}
             </h3>
 
@@ -387,7 +387,7 @@ export default function TodosLosSorteosPage() {
       {filteredRaffles.length === 0 && (
         <div style={{ textAlign: 'center', padding: '60px 20px', color: '#94a3b8' }}>
           <p style={{ fontSize: '32px', margin: '0 0 10px' }}>🔍</p>
-          <h3 style={{ margin: '0 0 6px', color: '#ffffff' }}>No se encontraron sorteos</h3>
+          <h3 style={{ margin: '0 0 6px', color: '#ffffff', WebkitTextFillColor: '#ffffff' }}>No se encontraron sorteos</h3>
           <p style={{ margin: 0, fontSize: '13px' }}>Prueba buscando con otro término o seleccionando otra categoría.</p>
         </div>
       )}
