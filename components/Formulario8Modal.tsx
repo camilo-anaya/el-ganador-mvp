@@ -1,6 +1,6 @@
 // components/Formulario8Modal.tsx
-// Visualizador e Impresor Oficial del FORMULARIO 8 de Coljuegos (Código: CMI-FR-08, Versión 7)
-// Optimizado para visualización móvil sin bordes (full-bleed display) e impresión oficial de alta precisión.
+// Visualizador, Descargador e Impresor Oficial del FORMULARIO 8 de Coljuegos (Código: CMI-FR-08, Versión 7)
+// Optimizado para visualización móvil sin bordes (full-bleed display), autoajuste fluido y descarga directa a dispositivos.
 'use client';
 
 import React from 'react';
@@ -83,6 +83,416 @@ function numberToSpanishLetters(amount: number): string {
   return (result.trim() + ' PESOS M/CTE').toUpperCase();
 }
 
+function buildStandaloneFormulario8Html(params: {
+  data: Formulario8Data;
+  radicado: string;
+  formattedDate: string;
+  ticketPrice: number;
+  totalTickets: number;
+  totalRevenue: number;
+  prizeCost: number;
+  prizeInLetters: string;
+  coljuegosTax14: number;
+  coljuegosAdmin1: number;
+  totalTaxColjuegos: number;
+  totalTaxInLetters: string;
+}): string {
+  const {
+    data,
+    radicado,
+    formattedDate,
+    ticketPrice,
+    totalTickets,
+    totalRevenue,
+    prizeCost,
+    prizeInLetters,
+    coljuegosTax14,
+    coljuegosAdmin1,
+    totalTaxColjuegos,
+    totalTaxInLetters,
+  } = params;
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario 8 Coljuegos - ${radicado}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 16px;
+      background: #f1f5f9;
+      color: #0f172a;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+    .document-page {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 6px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    }
+    .f8-box {
+      border: 1.5px solid #000000;
+      margin-bottom: 12px;
+      background: #ffffff;
+    }
+    .f8-title {
+      background: #e2e8f0;
+      padding: 5px 8px;
+      font-weight: 900;
+      font-size: 11px;
+      border-bottom: 1px solid #000000;
+      text-transform: uppercase;
+    }
+    .f8-header {
+      display: grid;
+      grid-template-columns: 180px 1fr 140px;
+      text-align: center;
+      align-items: center;
+      border: 1.5px solid #000000;
+      margin-bottom: 12px;
+    }
+    .f8-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid #000000;
+    }
+    .f8-cell {
+      padding: 5px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .f8-divider {
+      border-right: 1px solid #000000;
+    }
+    .f8-lbl {
+      font-size: 10px;
+      font-weight: 800;
+      color: #475569;
+    }
+    .f8-val {
+      font-size: 11.5px;
+      color: #0f172a;
+    }
+    .f8-val-prim {
+      font-size: 12px;
+      font-weight: 800;
+      color: #003366;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    th {
+      background: #f8fafc;
+      border-bottom: 1px solid #000000;
+      border-right: 1px solid #000000;
+      padding: 5px 7px;
+      font-size: 10px;
+      font-weight: 800;
+      text-align: left;
+    }
+    td {
+      padding: 6px 7px;
+      border-bottom: 1px solid #000000;
+      border-right: 1px solid #000000;
+    }
+    th:last-child, td:last-child {
+      border-right: none;
+    }
+    .floating-bar {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      z-index: 9999;
+    }
+    .btn-act {
+      background: #007AFF;
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    @media print {
+      body { background: #ffffff; padding: 0; font-size: 9.5pt; }
+      .document-page { box-shadow: none; padding: 0; max-width: 100%; }
+      .floating-bar { display: none !important; }
+    }
+    @media (max-width: 640px) {
+      body { padding: 4px; }
+      .document-page { padding: 8px 6px; }
+      .f8-header { display: flex; flex-direction: column; }
+      .f8-grid-2 { display: flex; flex-direction: column; }
+      .f8-divider { border-right: none; border-bottom: 1px dashed #cbd5e1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-bar">
+    <span>🏛️ Formulario 8 Oficial · ${radicado}</span>
+    <button class="btn-act" onclick="window.print()">🖨️ Imprimir / Guardar en PDF</button>
+  </div>
+
+  <div class="document-page">
+    <!-- ENCABEZADO INSTITUCIONAL -->
+    <div class="f8-header">
+      <div style="border-right: 1.5px solid #000000; padding: 10px 8px; font-weight: 900;">
+        <span style="font-size: 14px; letter-spacing: 0.5px; display: block;">COLJUEGOS</span>
+        <div style="font-size: 9px; font-weight: 500; margin-top: 2px;">Monopolio Rentístico de Juegos de Suerte y Azar</div>
+      </div>
+      <div style="padding: 10px 8px; font-weight: 900; font-size: 12.5px; text-transform: uppercase;">
+        FORMULARIO 8 - SOLICITUD DE AUTORIZACIÓN<br>DE RIFAS DE CARÁCTER NACIONAL
+      </div>
+      <div style="border-left: 1.5px solid #000000; padding: 8px; font-size: 9px; text-align: left; line-height: 1.45;">
+        <div><strong>Código:</strong> CMI-FR-08</div>
+        <div><strong>Vigencia:</strong> 1/02/2023</div>
+        <div><strong>Versión:</strong> 7</div>
+        <div><strong>Radicado:</strong> <strong style="color: #007AFF;">${radicado}</strong></div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN I: INFORMACIÓN DEL SOLICITANTE -->
+    <div class="f8-box">
+      <div class="f8-title">I. INFORMACIÓN DEL SOLICITANTE</div>
+      <div class="f8-grid-2">
+        <div class="f8-cell f8-divider">
+          <span class="f8-lbl">1. Razón Social ó Nombre Completo Responsable:</span>
+          <span class="f8-val-prim">${data.storeName || 'MOTOS CARIBE S.A.S.'}</span>
+        </div>
+        <div class="f8-cell">
+          <span class="f8-lbl">2. Nit ó Cédula de Ciudadanía:</span>
+          <span class="f8-val-prim">${data.nit || '901.834.192-5'}</span>
+        </div>
+      </div>
+      <div class="f8-grid-2">
+        <div class="f8-cell f8-divider">
+          <span class="f8-lbl">3. Departamento:</span>
+          <span class="f8-val">${data.department || 'Bogotá D.C. / Cundinamarca'}</span>
+        </div>
+        <div class="f8-cell">
+          <span class="f8-lbl">4. Ciudad:</span>
+          <span class="f8-val">${data.city || 'Bogotá D.C.'}</span>
+        </div>
+      </div>
+      <div class="f8-grid-2">
+        <div class="f8-cell f8-divider">
+          <span class="f8-lbl">5. Dirección:</span>
+          <span class="f8-val">${data.address || 'Carrera 15 # 85-30, Oficina 402'}</span>
+        </div>
+        <div class="f8-cell">
+          <span class="f8-lbl">6. Email:</span>
+          <span class="f8-val">${data.email || 'contacto@motoscaribe.com.co'}</span>
+        </div>
+      </div>
+      <div class="f8-grid-2">
+        <div class="f8-cell f8-divider">
+          <span class="f8-lbl">7. Representante Legal:</span>
+          <span class="f8-val">${data.representative || data.storeName || 'Representante Legal Autorizado'}</span>
+        </div>
+        <div class="f8-cell">
+          <span class="f8-lbl">8. Teléfonos:</span>
+          <span class="f8-val">${data.phone || '+57 300 456 7890'}</span>
+        </div>
+      </div>
+      <div class="f8-cell" style="border-bottom: 1px solid #000000;">
+        <span class="f8-lbl">9. Actividad Comercial:</span>
+        <span class="f8-val">${data.activity || 'Comercio al por menor y mayor de motocicletas, repuestos y accesorios.'}</span>
+      </div>
+      <div class="f8-grid-2">
+        <div class="f8-cell f8-divider">
+          <span class="f8-lbl">10. Nombre Contacto:</span>
+          <span class="f8-val">${data.representative || 'Área Legal y Financiera'}</span>
+        </div>
+        <div class="f8-cell">
+          <span class="f8-lbl">11. Teléfonos del Contacto:</span>
+          <span class="f8-val">${data.phone || '+57 300 456 7890'}</span>
+        </div>
+      </div>
+      <div class="f8-grid-2" style="border-bottom: none;">
+        <div class="f8-cell f8-divider">
+          <span class="f8-lbl">12. Dirección del Contacto:</span>
+          <span class="f8-val">${data.address || 'Carrera 15 # 85-30, Oficina 402'}</span>
+        </div>
+        <div class="f8-cell">
+          <span class="f8-lbl">13. Email del Contacto:</span>
+          <span class="f8-val">${data.email || 'contacto@motoscaribe.com.co'}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN II: INFORMACIÓN DE LA RIFA -->
+    <div class="f8-box">
+      <div class="f8-title">II. INFORMACIÓN DE LA RIFA A AUTORIZAR</div>
+      <div class="f8-cell" style="border-bottom: 1px solid #000000;">
+        <span class="f8-lbl">14. Nombre Oficial de la Rifa:</span>
+        <span style="font-size: 13px; font-weight: 900; color: #003366;">${data.raffleTitle}</span>
+      </div>
+      <div class="f8-cell" style="border-bottom: 1px solid #000000;">
+        <span class="f8-lbl">15. Cubrimiento de la rifa:</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+          <span class="f8-val">Rifa de carácter nacional</span>
+          <span style="color: #007AFF; font-weight: 900;">[X] SI (Nacional) &nbsp;&nbsp; [ ] NO</span>
+        </div>
+      </div>
+      <div class="f8-grid-2">
+        <div class="f8-cell f8-divider">
+          <span class="f8-lbl">16. Valor Venta de Cada Boleta:</span>
+          <span style="font-size: 12px; font-weight: 800;">$ ${ticketPrice.toLocaleString('es-CO')} COP</span>
+        </div>
+        <div class="f8-cell">
+          <span class="f8-lbl">17. Número Total de Boletas Emitidas:</span>
+          <span style="font-size: 12px; font-weight: 800;">${totalTickets.toLocaleString('es-CO')} Boletas</span>
+        </div>
+      </div>
+      <div class="f8-grid-2">
+        <div class="f8-cell f8-divider">
+          <span class="f8-lbl">18. Boletas con Derecho a Participar:</span>
+          <span style="font-size: 12px; font-weight: 800;">${totalTickets.toLocaleString('es-CO')}</span>
+        </div>
+        <div class="f8-cell">
+          <span class="f8-lbl">19. Emisión Bruta (Valor Total Publicación):</span>
+          <span style="font-size: 13px; font-weight: 900; color: #003366;">$ ${totalRevenue.toLocaleString('es-CO')} COP</span>
+        </div>
+      </div>
+      <div class="f8-grid-2">
+        <div class="f8-cell f8-divider">
+          <span class="f8-lbl">20. Vigencia de la Rifa:</span>
+          <span class="f8-val">Inicio: <strong>${new Date().toLocaleDateString('es-CO')}</strong> &nbsp;|&nbsp; Cierre: <strong>${formattedDate}</strong></span>
+        </div>
+        <div class="f8-cell">
+          <span class="f8-lbl">21. Lotería Oficial de Validación:</span>
+          <span class="f8-val"><strong>${data.lotteryName || 'Lotería de Medellín (o Lotería Oficial Vigilada)'}</strong></span>
+        </div>
+      </div>
+      <div class="f8-cell" style="border-bottom: none;">
+        <span class="f8-lbl">22. Datos del Sorteo de la Lotería:</span>
+        <span class="f8-val">Hora: <strong>22:30</strong> &nbsp;|&nbsp; Fecha: <strong>${formattedDate}</strong> &nbsp;|&nbsp; Lugar: <strong>Colombia</strong></span>
+      </div>
+    </div>
+
+    <!-- NUMERAL 23: PLAN DE PREMIOS -->
+    <div class="f8-box">
+      <div class="f8-title" style="display: flex; justify-content: space-between;">
+        <span>23. PLAN DE PREMIOS PRIMARIOS Y SECUNDARIOS</span>
+        <span>Ganancia Ocasional: [X] Asumida por Empresa</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 40px; text-align: center;">Ítem</th>
+            <th>Descripción Detallada del Premio</th>
+            <th style="width: 60px; text-align: center;">Cant.</th>
+            <th style="width: 130px; text-align: right;">Costo Unitario</th>
+            <th style="width: 130px; text-align: right;">Costo Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align: center;">1</td>
+            <td><strong>${data.raffleTitle}</strong> - ${data.prizeDescription || 'Vehículo / Motocicleta 0 km con matrícula y SOAT vigente.'}</td>
+            <td style="text-align: center;">1</td>
+            <td style="text-align: right;">$ ${prizeCost.toLocaleString('es-CO')}</td>
+            <td style="text-align: right; font-weight: 800;">$ ${prizeCost.toLocaleString('es-CO')}</td>
+          </tr>
+          <tr style="background: #f8fafc; font-weight: 900;">
+            <td colspan="4" style="text-align: right;">TOTAL PLAN DE PREMIOS:</td>
+            <td style="text-align: right; color: #003366; font-size: 12px;">$ ${prizeCost.toLocaleString('es-CO')} COP</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="padding: 6px 8px; font-style: italic; font-size: 10px; background: #fafafa;">
+        <strong>En letras:</strong> ${prizeInLetters}
+      </div>
+    </div>
+
+    <!-- NUMERAL 24: PAGO PARA LA AUTORIZACIÓN -->
+    <div class="f8-box">
+      <div class="f8-title">24. PAGO PARA LA AUTORIZACIÓN (Liquidación Oficial de Ley)</div>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <strong>Derechos de Explotación (14% Salud Pública)</strong>
+              <div style="font-size: 9.5px; color: #64748b;">Sobre el 100% de boletas emitidas ($${totalRevenue.toLocaleString('es-CO')} COP × 14%)</div>
+            </td>
+            <td style="text-align: right; font-weight: 800; font-size: 12px; width: 160px;">$ ${coljuegosTax14.toLocaleString('es-CO')} COP</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Gastos de Administración (1% de Derechos de Explotación)</strong>
+              <div style="font-size: 9.5px; color: #64748b;">Reglamentario Coljuegos ($ ${coljuegosTax14.toLocaleString('es-CO')} × 1%)</div>
+            </td>
+            <td style="text-align: right; font-weight: 800; font-size: 12px; width: 160px;">$ ${coljuegosAdmin1.toLocaleString('es-CO')} COP</td>
+          </tr>
+          <tr style="background: #f1f5f9; font-weight: 900;">
+            <td style="text-align: right;">TOTAL A PAGAR PREVIO A LA AUTORIZACIÓN:</td>
+            <td style="text-align: right; color: #b91c1c; font-size: 13.5px; font-weight: 900; width: 160px;">$ ${totalTaxColjuegos.toLocaleString('es-CO')} COP</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="padding: 6px 8px; font-style: italic; font-size: 10px; background: #fafafa;">
+        <strong>En letras (Total Liquidado):</strong> ${totalTaxInLetters}
+      </div>
+    </div>
+
+    <!-- NUMERAL 25: NOTIFICACIÓN ELECTRÓNICA -->
+    <div class="f8-box" style="padding: 8px; font-size: 9.5px;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+        <strong>25. AUTORIZACIÓN NOTIFICACIÓN ELECTRÓNICA (Ley 1437/2011 Art. 56):</strong>
+        <span style="color: #007AFF; font-weight: 900;">[X] SI AUTORIZO</span>
+      </div>
+      <p style="margin: 0 0 6px;">Autorizo la notificación electrónica de que trata el artículo 56 de la Ley 1437 de 2011 al correo electrónico diligenciado en el presente formulario.</p>
+      <div style="border-top: 1px dashed #94a3b8; padding-top: 4px; color: #475569;">
+        <div><strong>Nota 1:</strong> La ganancia ocasional es asumida por la Empresa / Responsable de la rifa y totalizada en el plan de premios.</div>
+        <div><strong>Nota 2:</strong> Los valores liquidados en el numeral 24 son los que se consignan ante Coljuegos previo a la emisión de la resolución oficial.</div>
+        <div><strong>Nota 3:</strong> Conforme al Decreto 1068 de 2015 Art. 2.7.3.3, la competencia de rifas nacionales corresponde de manera exclusiva a Coljuegos.</div>
+      </div>
+    </div>
+
+    <!-- JURAMENTO Y FIRMAS -->
+    <div class="f8-box" style="padding: 9px; font-size: 9.5px;">
+      <p style="margin: 0 0 10px; text-align: justify;">
+        <strong>MANIFIESTO BAJO LA GRAVEDAD DE JURAMENTO</strong> no estar incurso en las inhabilidades consagradas en el Artículo 10 de la Ley 643 de 2001; que los premios aquí registrados son los que efectivamente han de ser entregados al ganador y que para todos los efectos administrativos, fiscales y judiciales, tanto la información como los soportes anexos son auténticos.
+      </p>
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-top: 14px; align-items: flex-end;">
+        <div style="border-top: 1px solid #000000; padding-top: 5px;">
+          <strong>26. Firma del Representante Legal / Responsable:</strong>
+          <div style="font-family: monospace; font-size: 10.5px; color: #007AFF; font-weight: 800;">
+            ✍️ FIRMADO DIGITALMENTE · MANDATO DIGITAL LEY 527 DE 1999
+          </div>
+          <div style="font-size: 11px; font-weight: 700;">${data.representative || data.storeName || 'Comerciante Responsable'}</div>
+        </div>
+        <div style="border-top: 1px solid #000000; padding-top: 5px;">
+          <strong>27. No. de Identificación:</strong>
+          <div style="font-size: 11px; font-weight: 700;">${data.nit || '901.834.192-5'}</div>
+          <small style="font-size: 9px; color: #64748b;">Radicado Oficial: ${radicado}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+}
+
 export default function Formulario8Modal({
   data,
   onClose,
@@ -121,6 +531,38 @@ export default function Formulario8Modal({
     window.print();
   };
 
+  const handleDownloadDocument = () => {
+    try {
+      const htmlContent = buildStandaloneFormulario8Html({
+        data,
+        radicado,
+        formattedDate,
+        ticketPrice,
+        totalTickets,
+        totalRevenue,
+        prizeCost,
+        prizeInLetters,
+        coljuegosTax14,
+        coljuegosAdmin1,
+        totalTaxColjuegos,
+        totalTaxInLetters,
+      });
+
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Formulario-8-Coljuegos-${radicado}.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.warn('Error al descargar documento:', err);
+      window.print();
+    }
+  };
+
   return (
     <div className="f8-overlay">
       <div className="formulario8-container">
@@ -139,6 +581,13 @@ export default function Formulario8Modal({
           </div>
 
           <div className="f8-topbar-actions">
+            <button
+              type="button"
+              onClick={handleDownloadDocument}
+              className="f8-btn-download"
+            >
+              <span>📥</span> Descargar
+            </button>
             <button
               type="button"
               onClick={handlePrint}
@@ -459,15 +908,22 @@ export default function Formulario8Modal({
         {/* PIE DE PÁGINA DEL MODAL */}
         <div className="no-print f8-footer">
           <span className="f8-footer-hint">
-            ℹ️ Documento oficial generado con radicado preliminar de correspondencia. Listo para radicar ante Coljuegos.
+            ℹ️ Documento oficial generado con radicado preliminar de correspondencia. Puedes descargarlo en tu dispositivo o imprimirlo en PDF para radicar ante Coljuegos.
           </span>
           <div className="f8-footer-actions">
+            <button
+              type="button"
+              onClick={handleDownloadDocument}
+              className="f8-btn-download"
+            >
+              📥 Descargar Formulario 8
+            </button>
             <button
               type="button"
               onClick={handlePrint}
               className="f8-btn-print"
             >
-              🖨️ Imprimir / Guardar PDF
+              🖨️ Guardar PDF / Imprimir
             </button>
             <button
               type="button"
@@ -492,7 +948,7 @@ export default function Formulario8Modal({
           align-items: center;
           justify-content: center;
           padding: 16px;
-          overflow-y: auto;
+          overflow: hidden;
           box-sizing: border-box;
         }
 
@@ -552,8 +1008,10 @@ export default function Formulario8Modal({
         }
 
         .f8-topbar-sub {
-          opacity: 0.8;
+          opacity: 0.85;
           font-size: 0.75rem;
+          color: #cbd5e1 !important;
+          -webkit-text-fill-color: #cbd5e1 !important;
           display: block;
           white-space: nowrap;
           overflow: hidden;
@@ -565,6 +1023,26 @@ export default function Formulario8Modal({
           align-items: center;
           gap: 8px;
           flex-shrink: 0;
+        }
+
+        .f8-btn-download {
+          background: #10b981;
+          color: #ffffff;
+          border: none;
+          padding: 8px 14px;
+          border-radius: 8px;
+          font-weight: 800;
+          font-size: 0.82rem;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+          transition: background 0.15s ease;
+        }
+
+        .f8-btn-download:hover {
+          background: #059669;
         }
 
         .f8-btn-print {
@@ -1007,31 +1485,42 @@ export default function Formulario8Modal({
           .f8-topbar-title {
             font-size: 0.90rem !important;
             color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
           }
 
           .f8-topbar-sub {
             font-size: 0.76rem !important;
             color: #cbd5e1 !important;
+            -webkit-text-fill-color: #cbd5e1 !important;
           }
 
           .f8-topbar-actions {
             display: flex !important;
             width: 100% !important;
-            gap: 8px !important;
+            gap: 6px !important;
+            flex-wrap: wrap !important;
+          }
+
+          .f8-btn-download {
+            flex: 1 1 45% !important;
+            justify-content: center !important;
+            padding: 9px 8px !important;
+            font-size: 0.78rem !important;
           }
 
           .f8-btn-print {
-            flex: 1 !important;
+            flex: 1 1 45% !important;
             justify-content: center !important;
-            padding: 10px !important;
-            font-size: 0.82rem !important;
+            padding: 9px 8px !important;
+            font-size: 0.78rem !important;
           }
 
           .f8-btn-close {
-            flex: 1 !important;
+            flex: 1 1 100% !important;
             justify-content: center !important;
-            padding: 10px !important;
-            font-size: 0.82rem !important;
+            padding: 7px !important;
+            font-size: 0.76rem !important;
+            background: rgba(255, 255, 255, 0.12) !important;
           }
 
           .f8-content {
@@ -1139,11 +1628,13 @@ export default function Formulario8Modal({
 
           .f8-footer-actions {
             width: 100% !important;
-            justify-content: stretch !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
           }
 
           .f8-footer-actions button {
-            flex: 1 !important;
+            width: 100% !important;
             justify-content: center !important;
             padding: 10px !important;
           }
