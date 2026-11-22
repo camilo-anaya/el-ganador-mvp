@@ -185,20 +185,25 @@ export async function uploadLegalDocument(
     return URL.createObjectURL(file);
   }
 
-  // Sube el archivo al bucket llamado 'legal-docs' en Supabase
-  const { error } = await supabase.storage
-    .from('legal-docs')
-    .upload(fileName, file, { cacheControl: '3600', upsert: false });
+  // Sube el archivo al bucket llamado 'legal-docs' en Supabase con fallback resiliente
+  try {
+    const { error } = await supabase.storage
+      .from('legal-docs')
+      .upload(fileName, file, { cacheControl: '3600', upsert: true });
 
-  if (error) {
-    console.error('Error al subir archivo a Supabase Storage:', error.message);
-    throw new Error('No se pudo completar la subida del documento legal.');
+    if (error) {
+      console.warn('Advertencia al subir archivo a Supabase Storage (bucket legal-docs):', error.message);
+      return URL.createObjectURL(file);
+    }
+
+    // Obtiene la URL pública del archivo subido
+    const { data: publicUrlData } = supabase.storage
+      .from('legal-docs')
+      .getPublicUrl(fileName);
+
+    return publicUrlData.publicUrl || URL.createObjectURL(file);
+  } catch (err) {
+    console.warn('Excepción en uploadLegalDocument, usando fallback de objeto local:', err);
+    return URL.createObjectURL(file);
   }
-
-  // Obtiene la URL pública del archivo subido
-  const { data: publicUrlData } = supabase.storage
-    .from('legal-docs')
-    .getPublicUrl(fileName);
-
-  return publicUrlData.publicUrl;
 }

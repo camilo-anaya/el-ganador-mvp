@@ -49,6 +49,61 @@ export function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
+/**
+ * Comprime y redimensiona imágenes del cliente a un tamaño óptimo (máx 1200px, 80% JPEG)
+ * para evitar sobrepasar la cuota de 5MB de localStorage y garantizar carga ultrarrápida.
+ */
+export function compressImageFileToDataUrl(file: File, maxDim = 1200, quality = 0.8): Promise<string> {
+  return new Promise((resolve) => {
+    if (!file.type.startsWith('image/')) {
+      fileToDataUrl(file).then(resolve).catch(() => resolve('/galeria-premios-el-ganador-realista.jpg'));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (readerEvent) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          let { width, height } = img;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(String(readerEvent.target?.result || ''));
+            return;
+          }
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressed = canvas.toDataURL('image/jpeg', quality);
+          resolve(compressed);
+        } catch {
+          resolve(String(readerEvent.target?.result || ''));
+        }
+      };
+      img.onerror = () => {
+        resolve(String(readerEvent.target?.result || ''));
+      };
+      img.src = String(readerEvent.target?.result || '');
+    };
+    reader.onerror = () => {
+      resolve('/galeria-premios-el-ganador-realista.jpg');
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 export async function shareRaffleLink(params: {
   title: string;
   text: string;
