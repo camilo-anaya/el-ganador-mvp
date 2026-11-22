@@ -129,10 +129,10 @@ export default function Formulario8Modal({
           <div className="f8-topbar-info">
             <span className="f8-topbar-icon">🏛️</span>
             <div style={{ minWidth: 0, flex: 1 }}>
-              <strong className="f8-topbar-title">
+              <strong className="f8-topbar-title" style={{ color: '#ffffff', display: 'block', fontSize: '0.90rem' }}>
                 Formulario 8 Oficial · Secretaria Legal IA
               </strong>
-              <small className="f8-topbar-sub">
+              <small className="f8-topbar-sub" style={{ display: 'block' }}>
                 Radicado: <span style={{ color: '#38bdf8', fontWeight: 900 }}>{radicado}</span> · Coljuegos CMI-FR-08 V7
               </small>
             </div>
@@ -543,6 +543,8 @@ export default function Formulario8Modal({
 
         .f8-topbar-title {
           font-size: 0.92rem;
+          color: #ffffff !important;
+          -webkit-text-fill-color: #ffffff !important;
           display: block;
           white-space: nowrap;
           overflow: hidden;
