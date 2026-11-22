@@ -202,6 +202,7 @@ function PanelEmpresarioContent() {
   const [myRaffles, setMyRaffles] = useState<any[]>([]);
   const [legalMode, setLegalMode] = useState<'ai_secretary' | 'manual'>('ai_secretary');
   const [mandatoAccepted, setMandatoAccepted] = useState(true);
+  const [emailTemplateCopied, setEmailTemplateCopied] = useState(false);
 
   // 🧮 CÁLCULOS MATEMÁTICOS DE LA CALCULADORA DIGITAL EN TIEMPO REAL
   const numericPrizeCost = parseFloat(prizeCost) || 0;
@@ -2452,6 +2453,197 @@ function PanelEmpresarioContent() {
                     <p style={{ margin: '10px 0 0', fontSize: '11.5px', color: isDark ? '#94a3b8' : '#475569', lineHeight: 1.4 }}>
                       💡 <strong>Instrucciones:</strong> Da clic en el enlace oficial de arriba, liquida y paga mediante PSE o genera el comprobante bancario por el valor del 14% de salud pública (${coljuegosTax14.toLocaleString('es-CO')} COP). Luego guarda el comprobante en PDF o foto y súbelo en la casilla de abajo.
                     </p>
+                  </div>
+
+                  {/* BLOQUE INFORMATIVO: GUÍA DE RADICACIÓN POR CORREO ELECTRÓNICO (COLJUEGOS) */}
+                  <div
+                    style={{
+                      padding: '16px',
+                      borderRadius: '12px',
+                      background: isDark ? 'rgba(15, 23, 42, 0.75)' : '#ffffff',
+                      border: isDark ? '1px solid rgba(0, 122, 255, 0.35)' : '1px solid #bfdbfe',
+                      boxShadow: isDark ? '0 4px 14px rgba(0, 0, 0, 0.3)' : '0 4px 14px rgba(0, 122, 255, 0.08)',
+                      marginBottom: '16px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '18px' }}>📧</span>
+                        <strong style={{ fontSize: '13.5px', color: isDark ? '#ffffff' : '#0f172a' }}>
+                          Guía Oficial de Radicación por Correo Electrónico
+                        </strong>
+                      </div>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          padding: '3px 8px',
+                          borderRadius: '999px',
+                          background: isDark ? 'rgba(0, 122, 255, 0.2)' : '#dbeafe',
+                          color: '#007AFF',
+                        }}
+                      >
+                        Coljuegos Institucional
+                      </span>
+                    </div>
+
+                    <p style={{ margin: '0 0 12px', fontSize: '12px', lineHeight: 1.5, color: isDark ? '#cbd5e1' : '#334155' }}>
+                      Si el pago se hizo mediante <strong>consignación bancaria en ventanilla</strong> (en los bancos autorizados por Coljuegos como Banco de Bogotá) o si quieres tener <strong>acuse de recibo formal y respaldo legal por escrito</strong>, SÍ se debe enviar por correo institucional. Para evitar rechazos o retrasos en reparto interno, utiliza los canales y formato oficiales:
+                    </p>
+
+                    {/* Buzones Oficiales y Asunto */}
+                    <div
+                      style={{
+                        padding: '12px 14px',
+                        borderRadius: '8px',
+                        background: isDark ? 'rgba(0,0,0,0.3)' : '#f8fafc',
+                        border: '1px solid rgba(148, 163, 184, 0.25)',
+                        fontSize: '12px',
+                        marginBottom: '12px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', flexWrap: 'wrap' }}>
+                        <strong style={{ minWidth: '75px', color: '#007AFF' }}>Para:</strong>
+                        <div style={{ flex: 1 }}>
+                          <code style={{ background: isDark ? '#1e293b' : '#e2e8f0', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, color: isDark ? '#38bdf8' : '#0284c7' }}>
+                            contactenos@coljuegos.gov.co
+                          </code>
+                          <span style={{ marginLeft: '6px', fontSize: '11px', opacity: 0.8 }}>
+                            (Buzón general de correspondencia y radicación de trámites)
+                          </span>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', flexWrap: 'wrap' }}>
+                        <strong style={{ minWidth: '75px', color: '#007AFF' }}>Con copia (CC):</strong>
+                        <div style={{ flex: 1 }}>
+                          <code style={{ background: isDark ? '#1e293b' : '#e2e8f0', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, color: isDark ? '#38bdf8' : '#0284c7' }}>
+                            notificaciones@coljuegos.gov.co
+                          </code>
+                          <span style={{ marginLeft: '6px', fontSize: '11px', opacity: 0.8 }}>
+                            (Buzón de notificaciones oficiales)
+                          </span>
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', flexWrap: 'wrap' }}>
+                        <strong style={{ minWidth: '75px', color: isDark ? '#94a3b8' : '#64748b' }}>Asunto sugerido:</strong>
+                        <div style={{ flex: 1, fontWeight: 600, color: isDark ? '#f1f5f9' : '#0f172a' }}>
+                          Radicación Formulario 8 - Rifa Nacional {raffleTitle || '[Nombre de tu Rifa]'} - Radicado [{legalRadicado || 'SOL-COLJ-2026-XXXXXX'}]
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Mensaje de correo sugerido */}
+                    <div style={{ marginBottom: '12px' }}>
+                      <div style={{ fontSize: '11.5px', fontWeight: 700, color: isDark ? '#94a3b8' : '#64748b', marginBottom: '4px' }}>
+                        📝 CUERPO DEL MENSAJE FORMAL:
+                      </div>
+                      <div
+                        style={{
+                          padding: '12px',
+                          borderRadius: '8px',
+                          background: isDark ? 'rgba(0,0,0,0.25)' : '#f1f5f9',
+                          border: '1px dashed rgba(148, 163, 184, 0.4)',
+                          fontSize: '11.5px',
+                          lineHeight: 1.55,
+                          color: isDark ? '#e2e8f0' : '#1e293b',
+                          fontStyle: 'italic',
+                          whiteSpace: 'pre-line',
+                        }}
+                      >
+                        {`"Cordial saludo, Coljuegos.
+Por medio de la presente, en calidad de representante legal de ${storeName || '[Nombre de tu Empresa / Tienda]'}, radico formalmente la solicitud de autorización para la rifa nacional '${raffleTitle || '[Nombre de tu Rifa]'}', adjuntando el Formulario 8 diligenciado, documento de identidad/Cámara de Comercio, soporte de propiedad del premio y el comprobante de pago de los derechos de explotación (14% de salud pública + 1% de administración) por valor de $${coljuegosTax14.toLocaleString('es-CO')} COP.
+Agradezco remitir el número de radicado formal de correspondencia.
+Atentamente, [Nombre y Teléfono]."`}
+                      </div>
+                    </div>
+
+                    {/* Documentos adjuntos indispensables */}
+                    <div style={{ marginBottom: '14px' }}>
+                      <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#007AFF', marginBottom: '8px' }}>
+                        📎 DOCUMENTOS ADJUNTOS INDISPENSABLES (PDF):
+                      </div>
+                      <div
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                          gap: '6px',
+                          fontSize: '11.5px',
+                        }}
+                      >
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                          📄 <strong>Formulario 8 Oficial</strong> diligenciado en PDF (el que descarga nuestra IA).
+                        </div>
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                          🧾 <strong>Voucher / Comprobante</strong> de pago bancario o PSE.
+                        </div>
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                          🏢 <strong>RUT actualizado</strong> de la empresa.
+                        </div>
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                          📋 <strong>Cédula del solicitante</strong> o Certificado de Cámara de Comercio.
+                        </div>
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                          🎁 <strong>Factura de compra</strong> o certificado de propiedad del premio.
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Acciones Rápidas: Mailto y Copiar */}
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                      <a
+                        href={`mailto:contactenos@coljuegos.gov.co?cc=notificaciones@coljuegos.gov.co&subject=${encodeURIComponent(
+                          `Radicación Formulario 8 - Rifa Nacional ${raffleTitle || '[Nombre de tu Rifa]'} - Radicado [${legalRadicado || 'SOL-COLJ-2026-XXXXXX'}]`
+                        )}&body=${encodeURIComponent(
+                          `Cordial saludo, Coljuegos.\n\nPor medio de la presente, en calidad de representante legal de ${storeName || '[Nombre de tu Empresa / Tienda]'}, radico formalmente la solicitud de autorización para la rifa nacional '${raffleTitle || '[Nombre de tu Rifa]'}', adjuntando el Formulario 8 diligenciado, documento de identidad/Cámara de Comercio, soporte de propiedad del premio y el comprobante de pago de los derechos de explotación (14% de salud pública + 1% de administración) por valor de $${coljuegosTax14.toLocaleString('es-CO')} COP.\n\nAgradezco remitir el número de radicado formal de correspondencia.\n\nAtentamente,\n[Nombre y Teléfono]`
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '8px 14px',
+                          borderRadius: '8px',
+                          background: '#007AFF',
+                          color: '#ffffff',
+                          fontSize: '12px',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                        }}
+                      >
+                        ✉️ Abrir Correo Pre-redactado (mailto) ↗
+                      </a>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const emailText = `PARA: contactenos@coljuegos.gov.co\nCON COPIA (CC): notificaciones@coljuegos.gov.co\nASUNTO: Radicación Formulario 8 - Rifa Nacional ${raffleTitle || '[Nombre de tu Rifa]'} - Radicado [${legalRadicado || 'SOL-COLJ-2026-XXXXXX'}]\n\nCordial saludo, Coljuegos.\nPor medio de la presente, en calidad de representante legal de ${storeName || '[Nombre de tu Empresa / Tienda]'}, radico formalmente la solicitud de autorización para la rifa nacional '${raffleTitle || '[Nombre de tu Rifa]'}', adjuntando el Formulario 8 diligenciado, documento de identidad/Cámara de Comercio, soporte de propiedad del premio y el comprobante de pago de los derechos de explotación (14% de salud pública + 1% de administración) por valor de $${coljuegosTax14.toLocaleString('es-CO')} COP.\n\nAgradezco remitir el número de radicado formal de correspondencia.\n\nAtentamente,\n[Nombre y Teléfono]\n\nDOCUMENTOS ADJUNTOS INDISPENSABLES:\n1. Formulario 8 Oficial diligenciado en PDF (el que descarga nuestra IA)\n2. Voucher / Comprobante de pago bancario o PSE\n3. RUT actualizado de la empresa\n4. Cédula del solicitante o Certificado de Cámara de Comercio\n5. Factura de compra o certificado de propiedad del premio`;
+                          navigator.clipboard?.writeText(emailText);
+                          setEmailTemplateCopied(true);
+                          setTimeout(() => setEmailTemplateCopied(false), 3000);
+                        }}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '8px 14px',
+                          borderRadius: '8px',
+                          background: isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0',
+                          color: isDark ? '#ffffff' : '#0f172a',
+                          fontSize: '12px',
+                          fontWeight: 600,
+                          border: '1px solid rgba(148, 163, 184, 0.3)',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {emailTemplateCopied ? '✓ ¡Plantilla Copiada al Portapapeles!' : '📋 Copiar Plantilla para Correo'}
+                      </button>
+                    </div>
                   </div>
 
                   {/* BLOQUE A: MANDATO DIGITAL Y PLAZO DE LEY */}
