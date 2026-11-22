@@ -2185,7 +2185,7 @@ function PanelEmpresarioContent() {
                       {legalScope === 'nacional' && (
                         <>
                           <a
-                            href="https://portaloperador.coljuegos.gov.co/"
+                            href="https://www.gov.co/ficha-tramites-y-servicios/T25560"
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{
@@ -2204,14 +2204,34 @@ function PanelEmpresarioContent() {
                             }}
                           >
                             <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <span>💳</span> Portal de Operador y Pago PSE Coljuegos (Oficial)
+                              <span>🏛️</span> Autorización para la operación de juegos de suerte y azar T25560
                             </span>
                             <span style={{ fontSize: '11px', background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: '4px' }}>
-                              Pagar PSE ↗
+                              Trámite y Pago ↗
                             </span>
                           </a>
 
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
+                            <a
+                              href="https://portaloperador.coljuegos.gov.co/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                padding: '9px 12px',
+                                borderRadius: '8px',
+                                background: isDark ? 'rgba(255,255,255,0.06)' : '#ffffff',
+                                border: '1px solid rgba(0, 122, 255, 0.3)',
+                                color: isDark ? '#93c5fd' : '#0369a1',
+                                textDecoration: 'none',
+                                fontSize: '0.78rem',
+                                fontWeight: 700,
+                              }}
+                            >
+                              <span>💳</span> Portal Operador Coljuegos (Pago PSE) ↗
+                            </a>
                             <a
                               href="https://www.coljuegos.gov.co/publicaciones/301297/tramite-de-rifas/"
                               target="_blank"
@@ -2231,26 +2251,6 @@ function PanelEmpresarioContent() {
                               }}
                             >
                               <span>📄</span> Guía Oficial de Rifas Coljuegos ↗
-                            </a>
-                            <a
-                              href="https://www.gov.co/servicios-y-tramites/T6612"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '9px 12px',
-                                borderRadius: '8px',
-                                background: isDark ? 'rgba(255,255,255,0.06)' : '#ffffff',
-                                border: '1px solid rgba(0, 122, 255, 0.3)',
-                                color: isDark ? '#93c5fd' : '#0369a1',
-                                textDecoration: 'none',
-                                fontSize: '0.78rem',
-                                fontWeight: 700,
-                              }}
-                            >
-                              <span>🏛️</span> Ventanilla Única GOV.CO (Trámite T6612) ↗
                             </a>
                           </div>
                         </>
