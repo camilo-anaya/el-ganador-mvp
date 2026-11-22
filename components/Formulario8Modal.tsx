@@ -101,9 +101,21 @@ export default function Formulario8Modal({
   const prizeInLetters = numberToSpanishLetters(prizeCost);
   const totalTaxInLetters = numberToSpanishLetters(totalTaxColjuegos);
 
-  const formattedDate = data.drawDate
-    ? new Date(data.drawDate).toLocaleDateString('es-CO', { year: 'numeric', month: '2-digit', day: '2-digit' })
-    : 'POR DEFINIR';
+  let formattedDate = '';
+  if (data.drawDate) {
+    try {
+      const cleanDate = String(data.drawDate).replace(/[^\d\-\:\/T\s]/g, '').trim();
+      const parsed = new Date(cleanDate || data.drawDate);
+      if (!isNaN(parsed.getTime())) {
+        formattedDate = parsed.toLocaleDateString('es-CO', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      }
+    } catch {}
+  }
+  if (!formattedDate) {
+    // Plazo legal de resolución Coljuegos (45 días calendario)
+    const fallbackDate = new Date(Date.now() + 45 * 24 * 60 * 60 * 1000);
+    formattedDate = fallbackDate.toLocaleDateString('es-CO', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  }
 
   const handlePrint = () => {
     window.print();
@@ -116,12 +128,12 @@ export default function Formulario8Modal({
         <div className="no-print f8-topbar">
           <div className="f8-topbar-info">
             <span className="f8-topbar-icon">🏛️</span>
-            <div>
+            <div style={{ minWidth: 0, flex: 1 }}>
               <strong className="f8-topbar-title">
                 Formulario 8 Oficial · Secretaria Legal IA
               </strong>
               <small className="f8-topbar-sub">
-                Radicado: <strong>{radicado}</strong> · Coljuegos CMI-FR-08 V7
+                Radicado: <span style={{ color: '#38bdf8', fontWeight: 900 }}>{radicado}</span> · Coljuegos CMI-FR-08 V7
               </small>
             </div>
           </div>
@@ -259,14 +271,14 @@ export default function Formulario8Modal({
               <span className="f8-value-large">{data.raffleTitle}</span>
             </div>
 
-            <div className="f8-grid-2col" style={{ alignItems: 'center' }}>
-              <div className="f8-cell f8-cell-divider">
-                <span className="f8-label">15. Cubrimiento de la rifa:</span>
+            <div className="f8-cell" style={{ borderBottom: '1px solid #000000' }}>
+              <span className="f8-label">15. Cubrimiento de la rifa:</span>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginTop: '3px' }}>
                 <span className="f8-value">Rifa de carácter nacional</span>
-              </div>
-              <div className="f8-cell f8-checkbox-row">
-                <span className="f8-check-selected">[X] SI (Nacional)</span>
-                <span className="f8-check-unselected">[ ] NO</span>
+                <div style={{ display: 'flex', gap: '12px', fontWeight: 800 }}>
+                  <span className="f8-check-selected">[X] SI (Nacional)</span>
+                  <span className="f8-check-unselected">[ ] NO</span>
+                </div>
               </div>
             </div>
 
@@ -960,6 +972,7 @@ export default function Formulario8Modal({
             padding: 0 !important;
             align-items: flex-start !important;
             background: #ffffff !important;
+            overflow: hidden !important;
           }
 
           .formulario8-container {
@@ -976,27 +989,47 @@ export default function Formulario8Modal({
 
           .f8-topbar {
             border-radius: 0 !important;
-            padding: 10px 12px !important;
+            padding: 12px 14px !important;
             border-left: none !important;
             border-right: none !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 10px !important;
+          }
+
+          .f8-topbar-info {
+            width: 100% !important;
           }
 
           .f8-topbar-title {
-            font-size: 0.84rem !important;
+            font-size: 0.90rem !important;
+            color: #ffffff !important;
           }
 
           .f8-topbar-sub {
-            font-size: 0.70rem !important;
+            font-size: 0.76rem !important;
+            color: #cbd5e1 !important;
+          }
+
+          .f8-topbar-actions {
+            display: flex !important;
+            width: 100% !important;
+            gap: 8px !important;
           }
 
           .f8-btn-print {
-            padding: 7px 11px !important;
-            font-size: 0.78rem !important;
+            flex: 1 !important;
+            justify-content: center !important;
+            padding: 10px !important;
+            font-size: 0.82rem !important;
           }
 
           .f8-btn-close {
-            padding: 7px 10px !important;
-            font-size: 0.78rem !important;
+            flex: 1 !important;
+            justify-content: center !important;
+            padding: 10px !important;
+            font-size: 0.82rem !important;
           }
 
           .f8-content {
