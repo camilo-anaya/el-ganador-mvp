@@ -1937,33 +1937,46 @@ function PanelEmpresarioContent() {
                         value={formatCopDisplay(ticketPrice)}
                         onChange={handleTicketPriceInput}
                         required
-                        style={{ padding: '10px 12px', borderRadius: '10px', border: '1.5px solid #007AFF', fontSize: '13.5px', fontWeight: 800, color: '#007AFF' }}
+                        style={{
+                          padding: '10px 12px',
+                          borderRadius: '10px',
+                          border: '2px solid #007AFF',
+                          background: isDark ? 'rgba(0, 122, 255, 0.1)' : '#eff6ff',
+                          color: '#007AFF',
+                          fontSize: '14px',
+                          fontWeight: 800,
+                        }}
                       />
                     </label>
                   </div>
 
                   {/* Botones Presets Rápidos de Precio */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 700, opacity: 0.75 }}>Ajuste rápido:</span>
-                    {['15000', '25000', '35000', '50000'].map((price) => (
-                      <button
-                        key={price}
-                        type="button"
-                        onClick={() => setTicketPrice(price)}
-                        style={{
-                          padding: '4px 10px',
-                          borderRadius: '8px',
-                          border: ticketPrice === price ? '1.5px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
-                          background: ticketPrice === price ? '#007AFF' : 'transparent',
-                          color: ticketPrice === price ? '#ffffff' : 'inherit',
-                          fontSize: '11.5px',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                        }}
-                      >
-                        ${parseInt(price, 10).toLocaleString('es-CO')}
-                      </button>
-                    ))}
+                    <span style={{ fontSize: '11px', fontWeight: 700, opacity: 0.75, color: isDark ? '#94a3b8' : '#475569' }}>Ajuste rápido:</span>
+                    {['15000', '25000', '35000', '50000'].map((price) => {
+                      const isSelected = ticketPrice === price;
+                      return (
+                        <button
+                          key={price}
+                          type="button"
+                          onClick={() => setTicketPrice(price)}
+                          style={{
+                            padding: '6px 12px',
+                            borderRadius: '8px',
+                            border: isSelected ? '1.5px solid #007AFF' : '1.5px solid rgba(0, 122, 255, 0.35)',
+                            background: isSelected ? '#007AFF' : isDark ? 'rgba(0, 122, 255, 0.12)' : '#eff6ff',
+                            color: isSelected ? '#ffffff' : '#007AFF',
+                            fontSize: '12px',
+                            fontWeight: 800,
+                            cursor: 'pointer',
+                            boxShadow: isSelected ? '0 2px 8px rgba(0, 122, 255, 0.35)' : 'none',
+                            transition: 'all 0.15s ease',
+                          }}
+                        >
+                          ${parseInt(price, 10).toLocaleString('es-CO')}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   {/* TARJETA DE PROYECCIÓN FINANCIERA EN TIEMPO REAL */}
@@ -1983,19 +1996,19 @@ function PanelEmpresarioContent() {
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px', fontSize: '12px', marginBottom: '12px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 10px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.04)' : '#ffffff', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(148, 163, 184, 0.25)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                         <span>🏛️ Coljuegos (14% Salud):</span>
                         <strong style={{ color: '#ef4444' }}>-${coljuegosTax14.toLocaleString('es-CO')}</strong>
                       </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 10px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.04)' : '#ffffff', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(148, 163, 184, 0.25)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                         <span>⚡ SaaS El Ganador (10%):</span>
-                        <strong style={{ color: '#0284c7' }}>-${platformFee10.toLocaleString('es-CO')}</strong>
+                        <strong style={{ color: '#007AFF' }}>-${platformFee10.toLocaleString('es-CO')}</strong>
                       </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 10px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.04)' : '#ffffff', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(148, 163, 184, 0.25)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                         <span>💳 Pasarela Wompi:</span>
                         <strong style={{ color: '#0284c7' }}>-${wompiFee.toLocaleString('es-CO')}</strong>
                       </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 10px', borderRadius: '8px', background: isDark ? 'rgba(255,255,255,0.04)' : '#ffffff', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(148, 163, 184, 0.25)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
                         <span>🎁 Costo del Premio:</span>
                         <strong style={{ color: '#64748b' }}>-${numericPrizeCost.toLocaleString('es-CO')}</strong>
                       </div>
