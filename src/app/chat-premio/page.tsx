@@ -47,23 +47,89 @@ export default function ChatPremioPage() {
   };
 
   return (
-    <div className="app-shell" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div
+      className="app-shell full-bleed-chat"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        minHeight: '100dvh',
+        width: '100vw',
+        maxWidth: '100vw',
+        paddingBottom: 0,
+        margin: 0,
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+        background: '#0a0f1d',
+      }}
+    >
       {/* CABECERA DEL CHAT */}
-      <header className="app-topbar">
-        <div className="brand-cluster">
-          <Link aria-label="Volver" className="profile-icon-btn" href="/mis-boletas">←</Link>
-          <div>
-            <span className="brand-title">CHAT DE COORDINACIÓN</span>
-            <small className="brand-subtitle">🏪 Motos Caribe Oficial · Sorteo Yamaha MT-09</small>
+      <header
+        className="app-topbar"
+        style={{
+          padding: 'max(calc(env(safe-area-inset-top, 0px) + 12px), 16px) 16px 12px',
+          width: '100%',
+          boxSizing: 'border-box',
+          background: '#0f172a',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+        }}
+      >
+        <div className="brand-cluster" style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%' }}>
+          <Link
+            aria-label="Volver"
+            className="profile-icon-btn"
+            href="/mis-boletas"
+            style={{
+              color: '#38bdf8',
+              fontSize: '20px',
+              textDecoration: 'none',
+              fontWeight: 800,
+              padding: '6px 10px',
+            }}
+          >
+            ←
+          </Link>
+          <div style={{ flex: 1 }}>
+            <span className="brand-title" style={{ display: 'block', fontSize: '15px', fontWeight: 900, color: '#ffffff' }}>
+              CHAT DE COORDINACIÓN
+            </span>
+            <small className="brand-subtitle" style={{ display: 'block', fontSize: '11px', color: '#94a3b8' }}>
+              🏪 Motos Caribe Oficial · Sorteo Yamaha MT-09
+            </small>
           </div>
         </div>
       </header>
 
       {/* ÁREA DE MENSAJES */}
-      <main className="app-scroll-canvas" style={{ flex: 1, padding: '15px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <div style={{ textAlign: 'center', margin: '10px 0' }}>
-          <span style={{ background: '#222', color: '#d4af37', padding: '6px 12px', borderRadius: '15px', fontSize: '11px', border: '1px solid #d4af37' }}>
-            🛡️ Canal de Entrega Seguro · Respaldado por El Ganador
+      <main
+        className="app-scroll-canvas"
+        style={{
+          flex: 1,
+          width: '100%',
+          maxWidth: '100%',
+          boxSizing: 'border-box',
+          padding: '16px',
+          overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          WebkitOverflowScrolling: 'touch',
+        }}
+      >
+        <div style={{ textAlign: 'center', margin: '4px 0 10px' }}>
+          <span
+            style={{
+              background: 'rgba(0, 122, 255, 0.15)',
+              color: '#38bdf8',
+              padding: '6px 14px',
+              borderRadius: '999px',
+              fontSize: '11px',
+              fontWeight: 700,
+              border: '1px solid rgba(56, 189, 248, 0.4)',
+              display: 'inline-block',
+            }}
+          >
+            🛡️ Canal Oficial de Entrega Seguro · Respaldado por El Ganador
           </span>
         </div>
 
@@ -72,17 +138,18 @@ export default function ChatPremioPage() {
             key={idx}
             style={{
               alignSelf: msg.sender === 'client' ? 'flex-end' : 'flex-start',
-              background: msg.sender === 'client' ? '#d4af37' : '#1a1a1a',
-              color: msg.sender === 'client' ? '#000' : '#fff',
+              background: msg.sender === 'client' ? 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)' : '#1e293b',
+              color: '#ffffff',
               padding: '12px 16px',
-              borderRadius: '12px',
-              maxWidth: '80%',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-              border: msg.sender === 'merchant' ? '1px solid #333' : 'none',
+              borderRadius: '14px',
+              maxWidth: '85%',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
+              border: msg.sender === 'merchant' ? '1px solid #334155' : 'none',
+              wordBreak: 'break-word',
             }}
           >
-            <p style={{ fontSize: '14px', margin: 0, lineHeight: '1.4' }}>{msg.text}</p>
-            <span style={{ display: 'block', fontSize: '10px', marginTop: '4px', textAlign: 'right', opacity: 0.7 }}>
+            <p style={{ fontSize: '14px', margin: 0, lineHeight: '1.45' }}>{msg.text}</p>
+            <span style={{ display: 'block', fontSize: '10px', marginTop: '6px', textAlign: 'right', opacity: 0.75 }}>
               {msg.time}
             </span>
           </div>
@@ -90,8 +157,16 @@ export default function ChatPremioPage() {
       </main>
 
       {/* BARRA DE ENTRADA DE TEXTO */}
-      <footer style={{ padding: '15px', background: '#0a0a0a', borderTop: '1px solid #222' }}>
-        <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '10px' }}>
+      <footer
+        style={{
+          padding: '12px 16px max(calc(env(safe-area-inset-bottom, 0px) + 12px), 14px)',
+          background: '#0f172a',
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
+        <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '10px', width: '100%' }}>
           <input
             type="text"
             placeholder="Escribe tu mensaje o dirección de entrega..."
@@ -100,19 +175,30 @@ export default function ChatPremioPage() {
             style={{
               flex: 1,
               padding: '12px 16px',
-              background: '#161616',
-              border: '1px solid #333',
-              borderRadius: '8px',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: '10px',
               color: '#fff',
+              fontSize: '14px',
               outline: 'none',
+              minWidth: 0,
             }}
           />
           <button
             type="submit"
             className="btn-submit-gold"
-            style={{ padding: '0 20px', borderRadius: '8px', fontWeight: 'bold' }}
+            style={{
+              padding: '0 20px',
+              borderRadius: '10px',
+              fontWeight: '900',
+              background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+              color: '#ffffff',
+              border: 'none',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+            }}
           >
-            Enviar
+            Enviar 📨
           </button>
         </form>
       </footer>

@@ -5118,15 +5118,15 @@ export default function LiveDrawDemoPage() {
                         : `★ ${winnerTicket.operatorName} · EXPEDIENTE NOTARIAL Y BANCARIO ★`}
                     </span>
                   </div>
-                  <p className="ticketSubTitle" id="ticketWinnerTitle">
+                  <p className="ticketSubTitle" id="ticketWinnerTitle" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                     {ticketViewMode === "public"
                       ? "TIQUETE OFICIAL DE JUEGO Y CONSTANCIA PÚBLICA"
                       : "TIQUETE PRIVADO ORIGINAL Y CONSTANCIA DE ADJUDICACIÓN DE PREMIO"}
                   </p>
-                  <p className="ticketConcessionInfo">
+                  <p className="ticketConcessionInfo" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                     {winnerTicket.operatorNit} · {winnerTicket.contractNumber}
                   </p>
-                  <span className="ticketResolutionBadge">
+                  <span className="ticketResolutionBadge" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                     AUTORIZA COLJUEGOS · {winnerTicket.resolutionNumber}
                   </span>
                 </div>
@@ -5134,14 +5134,14 @@ export default function LiveDrawDemoPage() {
                 {/* SECCIÓN NÚMERO GANADOR Y PLAN DE PREMIOS */}
                 <div className="ticketWinnerSection">
                   <span className="ticketPrizeBadge">● NÚMERO OFICIAL ADJUDICADO ●</span>
-                  <p className="ticketPrizeTitle">{winnerTicket.prizeTitle}</p>
+                  <p className="ticketPrizeTitle" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{winnerTicket.prizeTitle}</p>
                   <div className="ticketNumberBox">
-                    <span className="ticketNumberLabel">BOLETA GANADORA DEL SORTEO</span>
-                    <div className="ticketWinnerNumber">
+                    <span className="ticketNumberLabel" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>BOLETA GANADORA DEL SORTEO</span>
+                    <div className="ticketWinnerNumber" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                       {winnerTicket.ticketNumber}
                       {hasAmbiguityRisk(winnerTicket.ticketNumber) && <span className="ballUnderlineBar" />}
                     </div>
-                    <span className="ticketWinnerWords">{numberToSpanishWords(winnerTicket.ticketNumber)}</span>
+                    <span className="ticketWinnerWords" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{numberToSpanishWords(winnerTicket.ticketNumber)}</span>
                   </div>
                 </div>
 
@@ -5149,50 +5149,50 @@ export default function LiveDrawDemoPage() {
                 <div className={`ticketBuyerBox ${ticketViewMode === "private" ? "buyerBoxPrivate" : ""}`}>
                   <div className="ticketBuyerHeader">
                     <div className="ticketBuyerHeaderLeft">
-                      <strong>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                         {ticketViewMode === "public" ? "1. DATOS DEL COMPRADOR" : "1. IDENTIFICACIÓN COMPLETA (SARLAFT)"}
                       </strong>
                       <span className={ticketViewMode === "public" ? "ticketHabeasBadge" : "ticketPrivateBadge"}>
                         {ticketViewMode === "public" ? "🔒 Ley 1581/12" : "✅ Titular Verificado"}
                       </span>
                     </div>
-                    <span className="ticketSaleIdTag">{winnerTicket.saleId}</span>
+                    <span className="ticketSaleIdTag" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{winnerTicket.saleId}</span>
                   </div>
                   <div className="ticketDataGrid">
                     <div className="ticketDataCell">
-                      <span>Comprador</span>
-                      <strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Comprador</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                         {ticketViewMode === "public" ? winnerTicket.buyerNameMasked : winnerTicket.buyerName}
                       </strong>
                     </div>
                     <div className="ticketDataCell">
-                      <span>Documento C.C.</span>
-                      <strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Documento C.C.</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                         {ticketViewMode === "public" ? winnerTicket.buyerDocumentMasked : winnerTicket.buyerDocument}
                       </strong>
                     </div>
                     <div className="ticketDataCell">
-                      <span>Celular</span>
-                      <strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Celular</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                         {ticketViewMode === "public" ? winnerTicket.buyerPhoneMasked : winnerTicket.buyerPhone}
                       </strong>
                     </div>
                     <div className="ticketDataCell">
-                      <span>Ciudad</span>
-                      <strong>{winnerTicket.buyerCity}</strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Ciudad</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{winnerTicket.buyerCity}</strong>
                     </div>
                     <div className="ticketDataCell ticketDataFullCell">
-                      <span>Correo</span>
-                      <strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Correo</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                         {ticketViewMode === "public" ? winnerTicket.buyerEmailMasked : winnerTicket.buyerEmail}
                       </strong>
                     </div>
                   </div>
-                  <div className="ticketPrivacyNotice">
+                  <div className="ticketPrivacyNotice" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                     {ticketViewMode === "public" ? (
-                      <>🔒 <b>Habeas Data (Ley 1581/12):</b> Datos enmascarados para seguridad del ganador en transmisión pública.</>
+                      <>🔒 <b style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>Habeas Data (Ley 1581/12):</b> Datos enmascarados para seguridad del ganador en transmisión pública.</>
                     ) : (
-                      <>⚠️ <b>Expediente Privado:</b> Válido exclusivamente para el titular presentando Cédula original ante el Operador.</>
+                      <>⚠️ <b style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>Expediente Privado:</b> Válido exclusivamente para el titular presentando Cédula original ante el Operador.</>
                     )}
                   </div>
                 </div>
@@ -5200,47 +5200,47 @@ export default function LiveDrawDemoPage() {
                 {/* CAJA DE DATOS DE LA TRANSACCIÓN Y COMERCIALIZACIÓN */}
                 <div className="ticketBuyerBox">
                   <div className="ticketBuyerHeader">
-                    <strong>2. DETALLES DE TRANSACCIÓN Y EMISIÓN</strong>
-                    <span className="ticketSaleIdTag">REF: {winnerTicket.paymentRef}</span>
+                    <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>2. DETALLES DE TRANSACCIÓN Y EMISIÓN</strong>
+                    <span className="ticketSaleIdTag" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>REF: {winnerTicket.paymentRef}</span>
                   </div>
                   <div className="ticketDataGrid">
                     <div className="ticketDataCell">
-                      <span>Serie y Emisión</span>
-                      <strong>{winnerTicket.seriesRange}</strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Serie y Emisión</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{winnerTicket.seriesRange}</strong>
                     </div>
                     <div className="ticketDataCell">
-                      <span>Valor Boleta</span>
-                      <strong>{winnerTicket.ticketPrice}</strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Valor Boleta</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{winnerTicket.ticketPrice}</strong>
                     </div>
                     <div className="ticketDataCell">
-                      <span>Fecha Venta</span>
-                      <strong>{winnerTicket.saleDate}</strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Fecha Venta</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{winnerTicket.saleDate}</strong>
                     </div>
                     <div className="ticketDataCell">
-                      <span>Fecha Sorteo</span>
-                      <strong>{winnerTicket.drawDate}</strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Fecha Sorteo</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{winnerTicket.drawDate}</strong>
                     </div>
                     <div className="ticketDataCell ticketDataFullCell">
-                      <span>Canal Oficial</span>
-                      <strong>{winnerTicket.terminalId}</strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Canal Oficial</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{winnerTicket.terminalId}</strong>
                     </div>
                     <div className="ticketDataCell ticketDataFullCell">
-                      <span>Medio de Pago</span>
-                      <strong>{winnerTicket.paymentMethod}</strong>
+                      <span style={{ color: "#334155", WebkitTextFillColor: "#334155" }}>Medio de Pago</span>
+                      <strong style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>{winnerTicket.paymentMethod}</strong>
                     </div>
                   </div>
                 </div>
 
                 {/* CLÁUSULAS NORMATIVAS Y TÉRMINOS LEGALES DE COBRO (LEY 643 DE 2001) */}
-                <div className="ticketLegalClausesBox">
-                  <p>
-                    <b>Término de Caducidad (Art. 12 Ley 643 de 2001):</b> El derecho al cobro de premios de juegos de suerte y azar caduca en un (1) año calendario a partir de la fecha de realización del sorteo.
+                <div className="ticketLegalClausesBox" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
+                  <p style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
+                    <b style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>Término de Caducidad (Art. 12 Ley 643 de 2001):</b> El derecho al cobro de premios de juegos de suerte y azar caduca en un (1) año calendario a partir de la fecha de realización del sorteo.
                   </p>
-                  <p>
-                    <b>Retención Tributaria:</b> Sujeto a retención en la fuente por Ganancias Ocasionales (20%) según Estatuto Tributario Nacional (Art. 306 y 317) de la DIAN.
+                  <p style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
+                    <b style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>Retención Tributaria:</b> Sujeto a retención en la fuente por Ganancias Ocasionales (20%) según Estatuto Tributario Nacional (Art. 306 y 317) de la DIAN.
                   </p>
-                  <p>
-                    <b>Requisito de Cobro:</b> Presentar este tiquete original y Cédula de Ciudadanía original vigente del comprador registrado.
+                  <p style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
+                    <b style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>Requisito de Cobro:</b> Presentar este tiquete original y Cédula de Ciudadanía original vigente del comprador registrado.
                   </p>
                 </div>
 
@@ -5279,18 +5279,18 @@ export default function LiveDrawDemoPage() {
                     className="ticketBarcodeSvg"
                     dangerouslySetInnerHTML={{ __html: winnerTicket.barcodeSvg }}
                   />
-                  <small>Código de Verificación Fiscal: {winnerTicket.barcodeDigits}</small>
+                  <small style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>Código de Verificación Fiscal: {winnerTicket.barcodeDigits}</small>
                 </div>
 
                 {/* PIE DE TIQUETE Y APORTE A LA SALUD PÚBLICA */}
                 <div className="ticketFooterLegal">
-                  <span className="ticketHealthBanner">
+                  <span className="ticketHealthBanner" style={{ color: "#166534", WebkitTextFillColor: "#166534", fontWeight: 900 }}>
                     ★ JUGAR LEGAL ES APORTAR A LA SALUD PÚBLICA DE COLOMBIA (SGSSS) · PROHIBIDA LA VENTA A MENORES DE EDAD (LEY 1098 DE 2006) ★
                   </span>
-                  <p>
+                  <p style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>
                     Transacción de juego supervisada y auditada con tecnología criptográfica verificable HMAC-SHA256 y muestreo uniforme sin sesgo.
                   </p>
-                  <span className="ticketSecurityHash">Sello Criptográfico Digital: {winnerTicket.securityHash}</span>
+                  <span className="ticketSecurityHash" style={{ color: "#000000", WebkitTextFillColor: "#000000" }}>Sello Criptográfico Digital: {winnerTicket.securityHash}</span>
                 </div>
               </div>
               <div className="ticketSawtoothBottom" aria-hidden="true" />
