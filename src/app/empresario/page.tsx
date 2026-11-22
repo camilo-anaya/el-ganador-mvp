@@ -705,8 +705,20 @@ function PanelEmpresarioContent() {
 
   return (
     <div className="app-shell">
-      {/* BARRA SUPERIOR EMPRESARIAL */}
-      <header className="app-topbar">
+      {/* BARRA SUPERIOR EMPRESARIAL FULL-BLEED */}
+      <header
+        className="app-topbar"
+        style={{
+          width: '100%',
+          maxWidth: '100%',
+          borderRadius: 0,
+          borderLeft: 'none',
+          borderRight: 'none',
+          margin: 0,
+          padding: 'calc(env(safe-area-inset-top, 0px) + 8px) 14px 8px 14px',
+          boxSizing: 'border-box',
+        }}
+      >
         <div className="brand-cluster">
           <span aria-hidden="true" className="profile-icon-btn">🏪</span>
           <div style={{ minWidth: 0, overflow: 'hidden' }}>
@@ -714,121 +726,7 @@ function PanelEmpresarioContent() {
             <small className="brand-subtitle" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>{storeName}</small>
           </div>
         </div>
-        <div className="topbar-actions" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap', flexShrink: 0 }}>
-          {/* CAMPANA DE NOTIFICACIONES DE LA SECRETARIA IA */}
-          <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '32px' }}>
-            <button
-              type="button"
-              className="btn-topbar-action btn-topbar-alertas"
-              onClick={() => {
-                setShowBusinessNotifDropdown((prev) => !prev);
-                if (!showBusinessNotifDropdown && unreadBusinessNotifsCount > 0) {
-                  markBusinessNotificationsAsRead();
-                }
-              }}
-              title="Notificaciones de Secretaria IA y Ventas"
-              aria-label="Notificaciones empresariales"
-              style={{
-                position: 'relative',
-                height: '32px',
-                padding: '0 10px',
-                fontSize: '11.5px',
-                borderRadius: '8px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                background: unreadBusinessNotifsCount > 0 ? 'rgba(0, 122, 255, 0.2)' : (isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9'),
-                color: isDark ? '#ffffff' : '#0f172a',
-                border: unreadBusinessNotifsCount > 0 ? '1.5px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
-                whiteSpace: 'nowrap',
-                boxSizing: 'border-box',
-                cursor: 'pointer',
-              }}
-            >
-              🔔 <span className="topbar-action-label">Alertas</span>
-              {unreadBusinessNotifsCount > 0 && (
-                <span
-                  style={{
-                    background: '#ef4444',
-                    color: '#ffffff',
-                    fontSize: '10px',
-                    fontWeight: 900,
-                    borderRadius: '999px',
-                    padding: '1px 5px',
-                    lineHeight: 1,
-                  }}
-                >
-                  {unreadBusinessNotifsCount}
-                </span>
-              )}
-            </button>
-
-            {/* BANDEJA FLOTANTE DE NOTIFICACIONES EMPRESARIALES */}
-            {showBusinessNotifDropdown && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  marginTop: '8px',
-                  width: '320px',
-                  maxWidth: '90vw',
-                  background: 'var(--surface-card, #ffffff)',
-                  border: '1.5px solid #007AFF',
-                  borderRadius: '14px',
-                  boxShadow: '0 12px 36px rgba(0,0,0,0.3)',
-                  zIndex: 9999,
-                  overflow: 'hidden',
-                  textAlign: 'left',
-                }}
-              >
-                <div style={{ padding: '12px 14px', background: 'linear-gradient(135deg, #0f172a 0%, #020617 100%)', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <strong style={{ fontSize: '0.86rem' }}>🔔 Secretaria Legal IA &amp; Alertas</strong>
-                  <button
-                    type="button"
-                    onClick={() => setShowBusinessNotifDropdown(false)}
-                    style={{ background: 'transparent', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '14px' }}
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                <div style={{ maxHeight: '320px', overflowY: 'auto', padding: '8px' }}>
-                  {businessNotifs.length === 0 ? (
-                    <div style={{ padding: '24px 12px', textAlign: 'center', opacity: 0.8, fontSize: '0.82rem' }}>
-                      <span style={{ fontSize: '28px', display: 'block', marginBottom: '6px' }}>🤖</span>
-                      No tienes notificaciones pendientes. La <strong>Secretaria Legal IA</strong> te avisará aquí en cuanto radique tus sorteos.
-                    </div>
-                  ) : (
-                    businessNotifs.map((n) => (
-                      <div
-                        key={n.id}
-                        style={{
-                          padding: '10px',
-                          borderRadius: '10px',
-                          borderBottom: '1px solid rgba(148, 163, 184, 0.15)',
-                          marginBottom: '4px',
-                          background: n.read ? 'transparent' : 'rgba(0, 122, 255, 0.08)',
-                          fontSize: '0.8rem',
-                        }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                          <strong style={{ color: '#007AFF' }}>{n.title}</strong>
-                          <small style={{ fontSize: '0.68rem', opacity: 0.7 }}>{n.dateStr}</small>
-                        </div>
-                        <p style={{ margin: 0, lineHeight: 1.4, opacity: 0.9 }}>{n.message}</p>
-                        {n.radicado && (
-                          <div style={{ marginTop: '4px', fontSize: '0.74rem', color: '#0284c7', fontWeight: 800 }}>
-                            Radicado: {n.radicado}
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+        <div className="topbar-actions" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap', flexShrink: 0 }}>
           <Link
             href="/"
             className="btn-topbar-action btn-topbar-vitrina"
@@ -836,8 +734,8 @@ function PanelEmpresarioContent() {
             style={{
               textDecoration: 'none',
               height: '32px',
-              padding: '0 10px',
-              fontSize: '11.5px',
+              padding: '0 12px',
+              fontSize: '12px',
               borderRadius: '8px',
               display: 'inline-flex',
               alignItems: 'center',
@@ -866,8 +764,8 @@ function PanelEmpresarioContent() {
             title="Compartir vitrina y enlace de la tienda"
             style={{
               height: '32px',
-              padding: '0 10px',
-              fontSize: '11.5px',
+              padding: '0 12px',
+              fontSize: '12px',
               borderRadius: '8px',
               display: 'inline-flex',
               alignItems: 'center',
@@ -891,8 +789,8 @@ function PanelEmpresarioContent() {
             title="Cerrar sesión empresarial"
             style={{
               height: '32px',
-              padding: '0 10px',
-              fontSize: '11.5px',
+              padding: '0 12px',
+              fontSize: '12px',
               borderRadius: '8px',
               display: 'inline-flex',
               alignItems: 'center',
@@ -911,20 +809,27 @@ function PanelEmpresarioContent() {
         </div>
       </header>
 
-      <div className="desktop-workspace-grid">
+      <div className="desktop-workspace-grid" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
         <BusinessSidebar activeKey={activeTab} />
-        <main className="app-scroll-canvas" style={{ paddingBottom: '112px' }}>
+        <main className="app-scroll-canvas" style={{ width: '100%', maxWidth: '100%', paddingLeft: 0, paddingRight: 0, margin: 0, paddingBottom: '112px', boxSizing: 'border-box' }}>
           {/* AVISO DE ESTADO KYB */}
           {!kybApproved && (
             <div
               className="station-block-premium"
               style={{
                 background: isDark ? 'linear-gradient(135deg, #0f172a 0%, #020617 100%)' : '#eff6ff',
-                border: '1.5px solid #007AFF',
+                borderTop: '1.5px solid #007AFF',
+                borderBottom: '1.5px solid #007AFF',
+                borderLeft: 'none',
+                borderRight: 'none',
+                borderRadius: 0,
                 color: isDark ? '#ffffff' : '#0f172a',
                 padding: '14px 16px',
-                borderRadius: '14px',
                 marginBottom: '14px',
+                width: '100%',
+                marginLeft: 0,
+                marginRight: 0,
+                boxSizing: 'border-box',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -1741,8 +1646,15 @@ function PanelEmpresarioContent() {
                   className="station-card-step"
                   style={{
                     background: isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff',
-                    border: '1px solid rgba(148, 163, 184, 0.22)',
-                    borderRadius: '16px',
+                    borderTop: '1px solid rgba(148, 163, 184, 0.22)',
+                    borderBottom: '1px solid rgba(148, 163, 184, 0.22)',
+                    borderLeft: 'none',
+                    borderRight: 'none',
+                    borderRadius: 0,
+                    width: '100%',
+                    marginLeft: 0,
+                    marginRight: 0,
+                    boxSizing: 'border-box',
                     padding: '18px 16px',
                     marginBottom: '16px',
                     boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
@@ -1905,8 +1817,15 @@ function PanelEmpresarioContent() {
                   className="station-card-step"
                   style={{
                     background: isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff',
-                    border: '2px solid #007AFF',
-                    borderRadius: '16px',
+                    borderTop: '2px solid #007AFF',
+                    borderBottom: '2px solid #007AFF',
+                    borderLeft: 'none',
+                    borderRight: 'none',
+                    borderRadius: 0,
+                    width: '100%',
+                    marginLeft: 0,
+                    marginRight: 0,
+                    boxSizing: 'border-box',
                     padding: '18px 16px',
                     marginBottom: '16px',
                     boxShadow: '0 6px 20px rgba(0, 122, 255, 0.1)',
@@ -2080,8 +1999,15 @@ function PanelEmpresarioContent() {
                   className="station-card-step"
                   style={{
                     background: isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff',
-                    border: '1.5px solid #007AFF',
-                    borderRadius: '16px',
+                    borderTop: '1.5px solid #007AFF',
+                    borderBottom: '1.5px solid #007AFF',
+                    borderLeft: 'none',
+                    borderRight: 'none',
+                    borderRadius: 0,
+                    width: '100%',
+                    marginLeft: 0,
+                    marginRight: 0,
+                    boxSizing: 'border-box',
                     padding: '18px 16px',
                     marginBottom: '18px',
                     boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
