@@ -888,17 +888,42 @@ function PanelEmpresarioContent() {
         <main className="app-scroll-canvas" style={{ paddingBottom: '112px' }}>
           {/* AVISO DE ESTADO KYB */}
           {!kybApproved && (
-            <div className="station-block-premium" style={{ background: '#451a03', border: '1px solid #f59e0b', color: '#fef3c7', padding: '14px', borderRadius: '14px', marginBottom: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <div
+              className="station-block-premium"
+              style={{
+                background: isDark ? 'linear-gradient(135deg, #0f172a 0%, #020617 100%)' : '#eff6ff',
+                border: '1.5px solid #007AFF',
+                color: isDark ? '#ffffff' : '#0f172a',
+                padding: '14px 16px',
+                borderRadius: '14px',
+                marginBottom: '14px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '12px',
+                boxShadow: '0 4px 14px rgba(0, 122, 255, 0.12)',
+              }}
+            >
               <div>
-                <strong>⚠️ Validación KYB en Proceso:</strong>
-                <p style={{ margin: '4px 0 0', fontSize: '0.84rem' }}>
-                  Tu documentación comercial se encuentra en validación legal. Carga tus documentos mercantiles a Supabase Storage para ratificar tu cuenta.
+                <strong style={{ color: '#007AFF' }}>🛡️ Validación KYB en Proceso:</strong>
+                <p style={{ margin: '4px 0 0', fontSize: '0.84rem', color: isDark ? '#cbd5e1' : '#334155' }}>
+                  Tu documentación comercial se encuentra en validación legal. Carga tus documentos mercantiles para ratificar tu cuenta empresarial.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveTab('kyb')}
-                style={{ padding: '8px 16px', background: '#f59e0b', color: '#000', fontWeight: 'bold', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
+                style={{
+                  padding: '8px 16px',
+                  background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                  color: '#ffffff',
+                  fontWeight: 800,
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(0, 122, 255, 0.3)',
+                }}
               >
                 📁 Subir Documentos KYB →
               </button>
@@ -972,8 +997,8 @@ function PanelEmpresarioContent() {
               className="chip-btn"
               style={{
                 textDecoration: 'none',
-                borderColor: 'rgba(212, 175, 55, 0.45)',
-                color: '#f5b82e',
+                borderColor: 'rgba(0, 122, 255, 0.45)',
+                color: '#007AFF',
                 fontWeight: 800,
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -1149,7 +1174,7 @@ function PanelEmpresarioContent() {
                     width: '84px',
                     height: '84px',
                     borderRadius: '50%',
-                    border: '3px solid #f5b82e',
+                    border: '3px solid #007AFF',
                     background: '#0b0e12',
                     boxShadow: '0 8px 20px rgba(0, 0, 0, 0.32)',
                     overflow: 'hidden',
@@ -1202,9 +1227,9 @@ function PanelEmpresarioContent() {
                     style={{
                       padding: '3px 8px',
                       borderRadius: '999px',
-                      background: 'rgba(16, 185, 129, 0.16)',
-                      border: '1px solid rgba(16, 185, 129, 0.45)',
-                      color: '#059669',
+                      background: 'rgba(0, 122, 255, 0.12)',
+                      border: '1px solid rgba(0, 122, 255, 0.35)',
+                      color: '#007AFF',
                       fontSize: '11px',
                       fontWeight: 800,
                     }}
@@ -1343,20 +1368,20 @@ function PanelEmpresarioContent() {
                         style={{ width: '100%', height: '140px', objectFit: 'cover', display: 'block' }}
                       />
                       <div style={{ padding: '12px' }}>
-                        <div style={{ fontSize: '11px', color: '#fde047', fontWeight: 700 }}>🔥 SORTEO VERIFICADO EN VITRINA</div>
+                        <div style={{ fontSize: '11px', color: '#38bdf8', fontWeight: 700 }}>🔥 SORTEO VERIFICADO EN VITRINA</div>
                         <div style={{ fontSize: '15px', fontWeight: 800, margin: '4px 0 6px' }}>
                           {raffleTitle || 'Gran Sorteo Oficial · Premio Destacado'}
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <span style={{ fontSize: '14px', fontWeight: 800, color: '#6ee7b7' }}>
+                          <span style={{ fontSize: '14px', fontWeight: 800, color: '#ffffff' }}>
                             $ {parseInt(ticketPrice || '35000', 10).toLocaleString('es-CO')} / boleta
                           </span>
                           <span
                             style={{
                               padding: '7px 12px',
                               borderRadius: '8px',
-                              background: '#f5b82e',
-                              color: '#090d12',
+                              background: '#007AFF',
+                              color: '#ffffff',
                               fontWeight: 800,
                               fontSize: '12px',
                             }}
@@ -1469,13 +1494,13 @@ function PanelEmpresarioContent() {
                       borderRadius: '14px',
                       border: 'none',
                       background: bioSaved
-                        ? 'linear-gradient(135deg, #10b981 0%, #047857 100%)'
-                        : 'linear-gradient(135deg, #f5b82e 0%, #d97706 100%)',
-                      color: bioSaved ? '#ffffff' : '#090d12',
+                        ? 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)'
+                        : 'linear-gradient(135deg, #007AFF 0%, #0056b3 100%)',
+                      color: '#ffffff',
                       fontWeight: 800,
                       fontSize: '14.5px',
                       cursor: 'pointer',
-                      boxShadow: '0 8px 20px rgba(245, 184, 46, 0.32)',
+                      boxShadow: '0 6px 18px rgba(0, 122, 255, 0.35)',
                     }}
                   >
                     {bioSaved ? '✅ Biografía y Redes Actualizadas en Vitrina' : '💾 Guardar Perfil Empresarial'}
@@ -1542,7 +1567,7 @@ function PanelEmpresarioContent() {
                 )}
 
                 {storyMediaType === 'video' && !videoError && (
-                  <div style={{ margin: '6px 0', padding: '6px 12px', borderRadius: '8px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', color: '#86efac', fontSize: '0.8rem', fontWeight: 700 }}>
+                  <div style={{ margin: '6px 0', padding: '6px 12px', borderRadius: '8px', background: 'rgba(0, 122, 255, 0.12)', border: '1px solid #007AFF', color: '#38bdf8', fontSize: '0.8rem', fontWeight: 700 }}>
                     🎥 Clip de video verificado (Duración permitida: máximo 120 segundos / 2 minutos).
                   </div>
                 )}
@@ -1594,9 +1619,9 @@ function PanelEmpresarioContent() {
                   style={{
                     padding: '8px 14px',
                     borderRadius: '10px',
-                    border: '1px solid rgba(212, 175, 55, 0.4)',
-                    background: showColjuegosGuide ? 'rgba(212, 175, 55, 0.15)' : 'transparent',
-                    color: '#f5b82e',
+                    border: '1px solid rgba(0, 122, 255, 0.4)',
+                    background: showColjuegosGuide ? 'rgba(0, 122, 255, 0.15)' : 'transparent',
+                    color: '#007AFF',
                     fontSize: '12px',
                     fontWeight: 700,
                     cursor: 'pointer',
@@ -1620,8 +1645,8 @@ function PanelEmpresarioContent() {
               {createdRaffleSlug && (
                 <div
                   style={{
-                    background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.08) 100%)',
-                    border: '2px solid #10b981',
+                    background: 'linear-gradient(135deg, rgba(0, 122, 255, 0.15) 0%, rgba(2, 132, 199, 0.08) 100%)',
+                    border: '2px solid #007AFF',
                     borderRadius: '16px',
                     padding: '18px 20px',
                     marginBottom: '20px',
@@ -1630,13 +1655,14 @@ function PanelEmpresarioContent() {
                     alignItems: 'center',
                     flexWrap: 'wrap',
                     gap: '12px',
+                    boxShadow: '0 4px 14px rgba(0, 122, 255, 0.12)',
                   }}
                 >
                   <div>
-                    <span style={{ background: '#10b981', color: '#ffffff', fontSize: '10.5px', fontWeight: 900, padding: '3px 10px', borderRadius: '999px', textTransform: 'uppercase' }}>
-                      ✅ ¡Rifa Montada en Vitrina!
+                    <span style={{ background: '#007AFF', color: '#ffffff', fontSize: '10.5px', fontWeight: 900, padding: '3px 10px', borderRadius: '999px', textTransform: 'uppercase' }}>
+                      🚀 ¡Rifa Montada en Vitrina!
                     </span>
-                    <h3 style={{ margin: '8px 0 4px', fontSize: '1.15rem', fontWeight: 900, color: '#10b981' }}>
+                    <h3 style={{ margin: '8px 0 4px', fontSize: '1.15rem', fontWeight: 900, color: '#007AFF' }}>
                       {raffleTitle || 'Gran Sorteo Oficial'}
                     </h3>
                     <p style={{ margin: 0, fontSize: '0.84rem', opacity: 0.9 }}>
@@ -1967,7 +1993,7 @@ function PanelEmpresarioContent() {
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff' }}>
                         <span>💳 Pasarela Wompi:</span>
-                        <strong style={{ color: '#f59e0b' }}>-${wompiFee.toLocaleString('es-CO')}</strong>
+                        <strong style={{ color: '#0284c7' }}>-${wompiFee.toLocaleString('es-CO')}</strong>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff' }}>
                         <span>🎁 Costo del Premio:</span>
@@ -1979,8 +2005,8 @@ function PanelEmpresarioContent() {
                       style={{
                         padding: '12px 14px',
                         borderRadius: '10px',
-                        background: netProfit >= 0 ? (isDark ? 'rgba(16, 185, 129, 0.15)' : '#ecfdf5') : (isDark ? 'rgba(239, 68, 68, 0.15)' : '#fef2f2'),
-                        border: `1.5px solid ${netProfit >= 0 ? '#10b981' : '#ef4444'}`,
+                        background: netProfit >= 0 ? (isDark ? 'rgba(0, 122, 255, 0.12)' : '#eff6ff') : (isDark ? 'rgba(239, 68, 68, 0.15)' : '#fef2f2'),
+                        border: `1.5px solid ${netProfit >= 0 ? '#007AFF' : '#ef4444'}`,
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
@@ -1989,14 +2015,14 @@ function PanelEmpresarioContent() {
                       }}
                     >
                       <div>
-                        <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: netProfit >= 0 ? '#10b981' : '#ef4444' }}>
+                        <span style={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', color: netProfit >= 0 ? '#007AFF' : '#ef4444' }}>
                           Ganancia Neta Limpia para el Empresario
                         </span>
-                        <div style={{ fontSize: '1.2rem', fontWeight: 900, color: netProfit >= 0 ? '#10b981' : '#ef4444' }}>
+                        <div style={{ fontSize: '1.2rem', fontWeight: 900, color: netProfit >= 0 ? '#007AFF' : '#ef4444' }}>
                           ${netProfit.toLocaleString('es-CO')} COP
                         </div>
                       </div>
-                      <span style={{ fontSize: '12px', fontWeight: 800, padding: '4px 8px', borderRadius: '6px', background: netProfit >= 0 ? '#10b981' : '#ef4444', color: '#ffffff' }}>
+                      <span style={{ fontSize: '12px', fontWeight: 800, padding: '4px 8px', borderRadius: '6px', background: netProfit >= 0 ? '#007AFF' : '#ef4444', color: '#ffffff' }}>
                         Margen: {profitMargin}%
                       </span>
                     </div>
@@ -2458,18 +2484,17 @@ function PanelEmpresarioContent() {
                   {/* BLOQUE INFORMATIVO: GUÍA DE RADICACIÓN POR CORREO ELECTRÓNICO (COLJUEGOS) */}
                   <div
                     style={{
-                      padding: '16px',
+                      padding: '14px 16px',
                       borderRadius: '12px',
-                      background: isDark ? 'rgba(15, 23, 42, 0.75)' : '#ffffff',
-                      border: isDark ? '1px solid rgba(0, 122, 255, 0.35)' : '1px solid #bfdbfe',
-                      boxShadow: isDark ? '0 4px 14px rgba(0, 0, 0, 0.3)' : '0 4px 14px rgba(0, 122, 255, 0.08)',
-                      marginBottom: '16px',
+                      background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff',
+                      border: '1px solid rgba(0, 122, 255, 0.25)',
+                      marginBottom: '14px',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '10px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ fontSize: '18px' }}>📧</span>
-                        <strong style={{ fontSize: '13.5px', color: isDark ? '#ffffff' : '#0f172a' }}>
+                        <strong style={{ fontSize: '13px', color: '#007AFF' }}>
                           Guía Oficial de Radicación por Correo Electrónico
                         </strong>
                       </div>
@@ -2496,8 +2521,8 @@ function PanelEmpresarioContent() {
                       style={{
                         padding: '12px 14px',
                         borderRadius: '8px',
-                        background: isDark ? 'rgba(0,0,0,0.3)' : '#f8fafc',
-                        border: '1px solid rgba(148, 163, 184, 0.25)',
+                        background: isDark ? 'rgba(0,0,0,0.3)' : '#ffffff',
+                        border: '1px solid rgba(0, 122, 255, 0.2)',
                         fontSize: '12px',
                         marginBottom: '12px',
                         display: 'flex',
@@ -2508,7 +2533,7 @@ function PanelEmpresarioContent() {
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', flexWrap: 'wrap' }}>
                         <strong style={{ minWidth: '75px', color: '#007AFF' }}>Para:</strong>
                         <div style={{ flex: 1 }}>
-                          <code style={{ background: isDark ? '#1e293b' : '#e2e8f0', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, color: isDark ? '#38bdf8' : '#0284c7' }}>
+                          <code style={{ background: isDark ? '#1e293b' : '#e2e8f0', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, color: '#007AFF' }}>
                             contactenos@coljuegos.gov.co
                           </code>
                           <span style={{ marginLeft: '6px', fontSize: '11px', opacity: 0.8 }}>
@@ -2520,7 +2545,7 @@ function PanelEmpresarioContent() {
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', flexWrap: 'wrap' }}>
                         <strong style={{ minWidth: '75px', color: '#007AFF' }}>Con copia (CC):</strong>
                         <div style={{ flex: 1 }}>
-                          <code style={{ background: isDark ? '#1e293b' : '#e2e8f0', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, color: isDark ? '#38bdf8' : '#0284c7' }}>
+                          <code style={{ background: isDark ? '#1e293b' : '#e2e8f0', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, color: '#007AFF' }}>
                             notificaciones@coljuegos.gov.co
                           </code>
                           <span style={{ marginLeft: '6px', fontSize: '11px', opacity: 0.8 }}>
@@ -2546,8 +2571,8 @@ function PanelEmpresarioContent() {
                         style={{
                           padding: '12px',
                           borderRadius: '8px',
-                          background: isDark ? 'rgba(0,0,0,0.25)' : '#f1f5f9',
-                          border: '1px dashed rgba(148, 163, 184, 0.4)',
+                          background: isDark ? 'rgba(0,0,0,0.25)' : '#ffffff',
+                          border: '1px dashed rgba(0, 122, 255, 0.3)',
                           fontSize: '11.5px',
                           lineHeight: 1.55,
                           color: isDark ? '#e2e8f0' : '#1e293b',
@@ -2570,24 +2595,24 @@ Atentamente, [Nombre y Teléfono]."`}
                       <div
                         style={{
                           display: 'grid',
-                          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
                           gap: '6px',
                           fontSize: '11.5px',
                         }}
                       >
-                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff', border: '1px solid rgba(0, 122, 255, 0.15)' }}>
                           📄 <strong>Formulario 8 Oficial</strong> diligenciado en PDF (el que descarga nuestra IA).
                         </div>
-                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff', border: '1px solid rgba(0, 122, 255, 0.15)' }}>
                           🧾 <strong>Voucher / Comprobante</strong> de pago bancario o PSE.
                         </div>
-                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff', border: '1px solid rgba(0, 122, 255, 0.15)' }}>
                           🏢 <strong>RUT actualizado</strong> de la empresa.
                         </div>
-                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff', border: '1px solid rgba(0, 122, 255, 0.15)' }}>
                           📋 <strong>Cédula del solicitante</strong> o Certificado de Cámara de Comercio.
                         </div>
-                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#f8fafc', border: '1px solid rgba(148, 163, 184, 0.2)' }}>
+                        <div style={{ padding: '8px 10px', borderRadius: '6px', background: isDark ? 'rgba(255,255,255,0.03)' : '#ffffff', border: '1px solid rgba(0, 122, 255, 0.15)' }}>
                           🎁 <strong>Factura de compra</strong> o certificado de propiedad del premio.
                         </div>
                       </div>
@@ -2633,11 +2658,11 @@ Atentamente, [Nombre y Teléfono]."`}
                           gap: '6px',
                           padding: '8px 14px',
                           borderRadius: '8px',
-                          background: isDark ? 'rgba(255,255,255,0.08)' : '#e2e8f0',
-                          color: isDark ? '#ffffff' : '#0f172a',
+                          background: isDark ? 'rgba(255,255,255,0.08)' : '#ffffff',
+                          color: isDark ? '#ffffff' : '#007AFF',
                           fontSize: '12px',
                           fontWeight: 600,
-                          border: '1px solid rgba(148, 163, 184, 0.3)',
+                          border: '1px solid rgba(0, 122, 255, 0.3)',
                           cursor: 'pointer',
                         }}
                       >
@@ -2694,15 +2719,15 @@ Atentamente, [Nombre y Teléfono]."`}
                   {/* BLOQUE B: VOUCHER DE PAGO DERECHOS DE EXPLOTACIÓN (14% SALUD) */}
                   <div
                     style={{
-                      padding: '16px',
+                      padding: '14px 16px',
                       borderRadius: '12px',
-                      background: isDark ? '#0b1622' : '#f8fafc',
-                      border: '1px solid rgba(148, 163, 184, 0.3)',
+                      background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff',
+                      border: '1px solid rgba(0, 122, 255, 0.25)',
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '10px' }}>
                       <div>
-                        <strong style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <strong style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', color: '#007AFF' }}>
                           <span>🧾</span> Voucher de Pago de Derechos de Explotación (14% Salud)
                         </strong>
                         <p style={{ margin: '2px 0 0', fontSize: '11.5px', color: isDark ? '#94a3b8' : '#64748b' }}>
@@ -2723,8 +2748,8 @@ Atentamente, [Nombre y Teléfono]."`}
                         style={{
                           padding: '14px',
                           borderRadius: '10px',
-                          border: legalReceiptFile ? '1.5px solid #10b981' : '1.5px dashed #007AFF',
-                          background: legalReceiptFile ? (isDark ? 'rgba(16, 185, 129, 0.1)' : '#ecfdf5') : (isDark ? 'rgba(0, 122, 255, 0.05)' : '#eff6ff'),
+                          border: legalReceiptFile ? '1.5px solid #007AFF' : '1.5px dashed #007AFF',
+                          background: legalReceiptFile ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? 'rgba(0, 122, 255, 0.05)' : '#eff6ff'),
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
@@ -2733,10 +2758,10 @@ Atentamente, [Nombre y Teléfono]."`}
                           textAlign: 'center',
                           fontSize: '13px',
                           fontWeight: 700,
-                          color: legalReceiptFile ? '#10b981' : '#007AFF',
+                          color: '#007AFF',
                         }}
                       >
-                        <span>{legalReceiptFile ? '✅' : '📤'}</span>
+                        <span>{legalReceiptFile ? '✓' : '📤'}</span>
                         <span>
                           {legalReceiptFile
                             ? `Voucher cargado: ${legalReceiptFile.name} (${(legalReceiptFile.size / 1024).toFixed(0)} KB)`
@@ -2759,9 +2784,9 @@ Atentamente, [Nombre y Teléfono]."`}
                           fontSize: '11.5px',
                           padding: '8px 12px',
                           borderRadius: '8px',
-                          background: legalReceiptFile ? (isDark ? 'rgba(16, 185, 129, 0.15)' : '#f0fdf4') : (isDark ? 'rgba(245, 158, 11, 0.15)' : '#fffbeb'),
-                          border: `1px solid ${legalReceiptFile ? '#10b981' : '#f59e0b'}`,
-                          color: legalReceiptFile ? '#10b981' : '#b45309',
+                          background: legalReceiptFile ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? 'rgba(0, 0, 0, 0.25)' : '#ffffff'),
+                          border: `1px solid ${legalReceiptFile ? '#007AFF' : 'rgba(0, 122, 255, 0.2)'}`,
+                          color: legalReceiptFile ? '#007AFF' : (isDark ? '#cbd5e1' : '#334155'),
                           display: 'flex',
                           alignItems: 'center',
                           gap: '6px',
@@ -2771,7 +2796,7 @@ Atentamente, [Nombre y Teléfono]."`}
                         <span>
                           {legalReceiptFile
                             ? `Voucher listo. Al montar la rifa quedará formalmente radicada en: [⏳ En Espera de Resolución ${legalScope === 'nacional' ? 'Coljuegos (15-30 Días)' : legalScope === 'distrital' ? 'Distrital Bogotá (5-15 Días)' : (currentDept?.name || 'Entidad Departamental')}].`
-                            : 'Si aún no has realizado el pago en los enlaces oficiales de PSE o banco, puedes montar la rifa ahora y quedará en: [⚠️ En Confirmación por Subir Voucher]. Una vez subido el voucher desde tu panel, pasará automáticamente a [⏳ En Espera].'}
+                            : 'Si aún no has realizado el pago en los enlaces oficiales de PSE o banco, puedes montar la rifa ahora y quedará en: [En Confirmación por Subir Voucher]. Una vez subido el voucher desde tu panel, pasará automáticamente a [⏳ En Espera].'}
                         </span>
                       </div>
                     </div>
@@ -2842,7 +2867,7 @@ Atentamente, [Nombre y Teléfono]."`}
                             background: isDark ? '#1e293b' : '#ffffff',
                             borderRadius: '14px',
                             padding: '16px',
-                            border: isPendingVoucher ? '1.5px solid #f59e0b' : isPendingColjuegos ? '1.5px solid #0284c7' : '1.5px solid #10b981',
+                            border: isPendingVoucher ? '1.5px solid #007AFF' : isPendingColjuegos ? '1.5px solid #0284c7' : '1.5px solid #007AFF',
                             boxShadow: '0 4px 14px rgba(0,0,0,0.05)',
                           }}
                         >
@@ -2854,13 +2879,13 @@ Atentamente, [Nombre y Teléfono]."`}
                                 padding: '3px 8px',
                                 borderRadius: '999px',
                                 textTransform: 'uppercase',
-                                background: isPendingVoucher ? '#f59e0b' : isPendingColjuegos ? '#0284c7' : '#10b981',
+                                background: isPendingVoucher ? 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)' : isPendingColjuegos ? '#0284c7' : '#007AFF',
                                 color: '#ffffff',
                               }}
                             >
-                              {isPendingVoucher ? '⚠️ En Confirmación (Subir Voucher)' : isPendingColjuegos ? '⏳ Espera Coljuegos (15-30 Días)' : '✅ Activa en Vitrina'}
+                              {isPendingVoucher ? '⏳ En Confirmación (Subir Voucher)' : isPendingColjuegos ? '⏳ Espera Coljuegos (15-30 Días)' : '✓ Activa en Vitrina'}
                             </span>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: isPendingVoucher ? '#f59e0b' : '#007AFF' }}>
+                            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#007AFF' }}>
                               {raf.radicado_number || raf.legalRadicado || 'En Trámite'}
                             </span>
                           </div>
@@ -2888,9 +2913,9 @@ Atentamente, [Nombre y Teléfono]."`}
                                 gap: '6px',
                                 padding: '8px 12px',
                                 borderRadius: '8px',
-                                background: isDark ? 'rgba(245, 158, 11, 0.15)' : '#fffbeb',
-                                border: '1.5px dashed #f59e0b',
-                                color: '#d97706',
+                                background: isDark ? 'rgba(0, 122, 255, 0.12)' : '#eff6ff',
+                                border: '1.5px dashed #007AFF',
+                                color: '#007AFF',
                                 fontSize: '0.8rem',
                                 fontWeight: 800,
                                 cursor: 'pointer',
@@ -2988,16 +3013,16 @@ Atentamente, [Nombre y Teléfono]."`}
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', marginBottom: '10px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                   <span>• Formulario 8 Oficial:</span>
-                                  <span style={{ color: '#16a34a', fontWeight: 700 }}>✓ Generado por IA</span>
+                                  <span style={{ color: '#007AFF', fontWeight: 700 }}>✓ Generado por IA</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                   <span>• Mandato Digital (Ley 527):</span>
-                                  <span style={{ color: '#16a34a', fontWeight: 700 }}>✓ Firmado Electrónicamente</span>
+                                  <span style={{ color: '#007AFF', fontWeight: 700 }}>✓ Firmado Electrónicamente</span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                   <span>• Voucher de Pago (14% Salud):</span>
-                                  <span style={{ color: (raf.payment_receipt_url || raf.legalReceiptUrl) ? '#16a34a' : '#f59e0b', fontWeight: 700 }}>
-                                    {(raf.payment_receipt_url || raf.legalReceiptUrl) ? '✓ Verificado en Bóveda' : '⚠️ Pendiente por Cargar'}
+                                  <span style={{ color: (raf.payment_receipt_url || raf.legalReceiptUrl) ? '#007AFF' : '#64748b', fontWeight: 700 }}>
+                                    {(raf.payment_receipt_url || raf.legalReceiptUrl) ? '✓ Verificado en Bóveda' : 'En Espera de Comprobante'}
                                   </span>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -3006,7 +3031,7 @@ Atentamente, [Nombre y Teléfono]."`}
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                   <span>• Cámara de Comercio y RUT:</span>
-                                  <span style={{ color: '#16a34a', fontWeight: 700 }}>✓ Vinculado desde KYB</span>
+                                  <span style={{ color: '#007AFF', fontWeight: 700 }}>✓ Vinculado desde KYB</span>
                                 </div>
                               </div>
 
@@ -3056,7 +3081,7 @@ Atentamente, [Nombre y Teléfono]."`}
               {/* RESUMEN DE RECAUDO EN BOLETERÍA POR SORTEO */}
               <div style={{ marginTop: '28px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#f5b82e', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#38bdf8', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <span>💰</span> Recaudo en Boletería por Sorteo / Evento
                   </h3>
                   <button
@@ -3075,7 +3100,7 @@ Atentamente, [Nombre y Teléfono]."`}
                   ]).map((dr: any) => (
                     <div key={dr.drawId} className="revenue-stat-card" style={{ borderRadius: '10px', padding: '12px' }}>
                       <div className="card-title" style={{ fontSize: '13px', fontWeight: 'bold', marginBottom: '4px' }}>{dr.title}</div>
-                      <div style={{ fontSize: '15px', fontWeight: 900, color: '#f5b82e' }}>
+                      <div style={{ fontSize: '15px', fontWeight: 900, color: '#007AFF' }}>
                         ${Number(dr.totalRevenue).toLocaleString('es-CO')} COP
                       </div>
                       <div style={{ fontSize: '11px', color: '#94a3b8', marginTop: '2px' }}>
@@ -3121,8 +3146,8 @@ Atentamente, [Nombre y Teléfono]."`}
                       fontSize: '12px',
                       padding: '6px 12px',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.15)',
-                      color: '#f4c752',
+                      border: '1px solid rgba(0, 122, 255, 0.3)',
+                      color: '#38bdf8',
                       borderRadius: '8px',
                       cursor: 'pointer',
                       fontWeight: 'bold',
@@ -3236,7 +3261,7 @@ Atentamente, [Nombre y Teléfono]."`}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '16px' }}>
                       <div className="business-metric-subcard" style={{ borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
                         <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Ventas</div>
-                        <div style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#f4c752', marginTop: '3px', wordBreak: 'break-all' }}>
+                        <div style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#38bdf8', marginTop: '3px', wordBreak: 'break-all' }}>
                           ${totalSales.toLocaleString('es-CO')}
                         </div>
                       </div>
@@ -3289,9 +3314,9 @@ Atentamente, [Nombre y Teléfono]."`}
                                   padding: '2px 8px',
                                   borderRadius: '6px',
                                   fontWeight: 800,
-                                  background: dr.status === 'En Vivo' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)',
-                                  color: dr.status === 'En Vivo' ? '#ef4444' : '#10b981',
-                                  border: `1px solid ${dr.status === 'En Vivo' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(16, 185, 129, 0.4)'}`,
+                                  background: dr.status === 'En Vivo' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(0, 122, 255, 0.15)',
+                                  color: dr.status === 'En Vivo' ? '#ef4444' : '#007AFF',
+                                  border: `1px solid ${dr.status === 'En Vivo' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(0, 122, 255, 0.35)'}`,
                                 }}
                               >
                                 {dr.status}
@@ -3320,7 +3345,7 @@ Atentamente, [Nombre y Teléfono]."`}
                             </div>
 
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '4px' }}>
-                              <span style={{ fontSize: '11px', color: '#10b981', fontWeight: 700 }}>
+                              <span style={{ fontSize: '11px', color: '#007AFF', fontWeight: 700 }}>
                                 ✓ {dr.progressPct}% de la meta recogida
                               </span>
                               <Link
@@ -3408,9 +3433,9 @@ Atentamente, [Nombre y Teléfono]."`}
                             style={{
                               display: 'inline-block',
                               padding: '10px 18px',
-                              background: 'rgba(244,199,82,0.15)',
-                              border: '1px solid rgba(244,199,82,0.4)',
-                              color: '#f4c752',
+                              background: 'rgba(0, 122, 255, 0.12)',
+                              border: '1px solid rgba(0, 122, 255, 0.35)',
+                              color: '#007AFF',
                               fontWeight: 'bold',
                               fontSize: '13px',
                               borderRadius: '8px',
@@ -3471,8 +3496,8 @@ Atentamente, [Nombre y Teléfono]."`}
                     Registro Único Tributario con actividad económica autorizada para el comercio.
                   </p>
                   {kybDocs['rut'] ? (
-                    <div style={{ padding: '8px 12px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', color: '#16a34a', fontSize: '0.8rem', marginBottom: '10px' }}>
-                      ✅ Subido a Supabase: <strong>{kybDocs['rut'].name}</strong> ({kybDocs['rut'].uploadedAt})
+                    <div style={{ padding: '8px 12px', background: isDark ? 'rgba(0, 122, 255, 0.12)' : '#eff6ff', border: '1px solid #007AFF', borderRadius: '8px', color: '#007AFF', fontSize: '0.8rem', marginBottom: '10px' }}>
+                      ✓ Subido a Supabase: <strong>{kybDocs['rut'].name}</strong> ({kybDocs['rut'].uploadedAt})
                     </div>
                   ) : null}
                   <label className="media-native-btn kyb-upload-btn" style={{ width: '100%', justifyContent: 'center' }}>
@@ -3488,8 +3513,8 @@ Atentamente, [Nombre y Teléfono]."`}
                     Certificado de Existencia y Representación Legal (vigencia inferior a 30 días).
                   </p>
                   {kybDocs['camara_comercio'] ? (
-                    <div style={{ padding: '8px 12px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', color: '#16a34a', fontSize: '0.8rem', marginBottom: '10px' }}>
-                      ✅ Subido a Supabase: <strong>{kybDocs['camara_comercio'].name}</strong> ({kybDocs['camara_comercio'].uploadedAt})
+                    <div style={{ padding: '8px 12px', background: isDark ? 'rgba(0, 122, 255, 0.12)' : '#eff6ff', border: '1px solid #007AFF', borderRadius: '8px', color: '#007AFF', fontSize: '0.8rem', marginBottom: '10px' }}>
+                      ✓ Subido a Supabase: <strong>{kybDocs['camara_comercio'].name}</strong> ({kybDocs['camara_comercio'].uploadedAt})
                     </div>
                   ) : null}
                   <label className="media-native-btn kyb-upload-btn" style={{ width: '100%', justifyContent: 'center' }}>
@@ -3505,8 +3530,8 @@ Atentamente, [Nombre y Teléfono]."`}
                     Documento de identidad al 150% de la persona natural o representante mercantil.
                   </p>
                   {kybDocs['cedula'] ? (
-                    <div style={{ padding: '8px 12px', background: 'rgba(34, 197, 94, 0.15)', border: '1px solid #22c55e', borderRadius: '8px', color: '#16a34a', fontSize: '0.8rem', marginBottom: '10px' }}>
-                      ✅ Subido a Supabase: <strong>{kybDocs['cedula'].name}</strong> ({kybDocs['cedula'].uploadedAt})
+                    <div style={{ padding: '8px 12px', background: isDark ? 'rgba(0, 122, 255, 0.12)' : '#eff6ff', border: '1px solid #007AFF', borderRadius: '8px', color: '#007AFF', fontSize: '0.8rem', marginBottom: '10px' }}>
+                      ✓ Subido a Supabase: <strong>{kybDocs['cedula'].name}</strong> ({kybDocs['cedula'].uploadedAt})
                     </div>
                   ) : null}
                   <label className="media-native-btn kyb-upload-btn" style={{ width: '100%', justifyContent: 'center' }}>
@@ -3519,8 +3544,8 @@ Atentamente, [Nombre y Teléfono]."`}
               <div className="kyb-status-box" style={{ marginTop: '20px', padding: '16px', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                 <div>
                   <h4 className="kyb-status-title" style={{ margin: 0 }}>Estado del Expediente KYB</h4>
-                  <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: kybApproved ? '#16a34a' : '#d97706', fontWeight: 700 }}>
-                    {kybApproved ? '✅ Verificación Empresarial Ratificada y Vigente' : '⏳ En proceso de revisión de expedientes'}
+                  <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: kybApproved ? '#007AFF' : '#0284c7', fontWeight: 700 }}>
+                    {kybApproved ? '✓ Verificación Empresarial Ratificada y Vigente' : '⏳ En proceso de revisión de expedientes'}
                   </p>
                 </div>
                 <button

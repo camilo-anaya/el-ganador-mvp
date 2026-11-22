@@ -17509,9 +17509,9 @@ html[data-theme='dark'] .app-topbar {
   box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
 }
 
-/* Estaciones y tarjetas con separación organizada y sin verde */
-.station-block-premium {
-  background: #121212 !important;
+/* Estaciones y tarjetas con separación organizada y sin verde en Modo Oscuro */
+[data-theme='dark'] .station-block-premium {
+  background: #0f172a !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 20px !important;
   padding: 18px 16px !important;
@@ -21356,8 +21356,8 @@ html[data-theme='dark'] .see-all-grid-btn {
 /* ==========================================================================
    PORTAL EMPRESARIAL EN MÓVIL: 100% ANCHO REAL, ALINEADO A LOS LATERALES
    ========================================================================== */
-@media (max-width: 1023px) {
-  /* En móviles y tablets, el grid no añade márgenes laterales redundantes */
+@media (max-width: 768px) {
+  /* En móviles, el grid se adapta verticalmente sin márgenes laterales redundantes */
   .desktop-workspace-grid {
     display: flex !important;
     flex-direction: column !important;
@@ -21389,21 +21389,21 @@ html[data-theme='dark'] .see-all-grid-btn {
     width: 100% !important;
     max-width: 100% !important;
     border-radius: 16px !important;
-    border: 1px solid rgba(148, 163, 184, 0.28) !important;
+    border: 1px solid #e2e8f0 !important;
     margin: 0 0 12px 0 !important;
     padding: 14px 10px !important;
     box-sizing: border-box !important;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08) !important;
-    background: var(--bg-card, #ffffff);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05) !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
   }
 
   /* Las tarjetas internas de pasos (Paso 1, Paso 2, Paso 3) se alinean a los laterales sin encogerse */
   .station-card-step,
-  .station-block-premium .station-card-step,
-  .station-block-premium form > div {
+  .station-block-premium .station-card-step {
     width: 100% !important;
     max-width: 100% !important;
-    padding: 14px 10px !important;
+    padding: 16px 12px !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
     box-sizing: border-box !important;
@@ -21411,10 +21411,23 @@ html[data-theme='dark'] .see-all-grid-btn {
   }
 
   [data-theme='dark'] .desktop-workspace-grid .station-block-premium,
-  .dark .desktop-workspace-grid .station-block-premium {
+  .dark .desktop-workspace-grid .station-block-premium,
+  [data-theme='dark'] .station-block-premium,
+  .dark .station-block-premium {
     background: #0f172a !important;
     border-color: rgba(255, 255, 255, 0.14) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+    color: #ffffff !important;
+  }
+
+  [data-theme='dark'] .station-card-step,
+  .dark .station-card-step {
+    background: rgba(15, 23, 42, 0.85) !important;
+  }
+
+  [data-theme='light'] .station-card-step,
+  .light .station-card-step {
+    background: #ffffff !important;
   }
 
   /* Barra superior empresarial compacta y perfectamente alineada a los laterales */
