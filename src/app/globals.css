@@ -20403,17 +20403,108 @@ div[class*="card"]:not([class*="live"]):not([class*="compact-raffle"]):not([clas
   color: var(--text-color);
 }
 
-/* Preservar contraste y legibilidad en botones interactivos dentro de tarjetas.
-   Los botones que declaran su propio color de texto en línea (style="color:...")
-   se respetan: forzar blanco sobre fondos claros dejaba el texto invisible
-   (ej. selector de tipo de rifa en /crear-rifa). */
-div[class*="card"] button:not([class*="secondary"]):not([style*=";color:"]):not([style^="color:"]),
+/* Preservar contraste y legibilidad en enlaces y botones con fondo solido azul/verde */
 div[class*="card"] a[style*="background: #007AFF"],
 div[class*="card"] a[style*="background:#007AFF"],
 div[class*="card"] a[style*="background: #00c853"],
 div[class*="card"] a[style*="background:#00c853"],
-div[class*="card"] button[style*="background: #007AFF"] {
+div[class*="card"] button[style*="background: #007AFF"],
+div[class*="card"] button[style*="background:#007AFF"],
+button.btn-primary-blue,
+.btn-primary-blue {
   color: #ffffff !important;
+}
+
+/* Reglas explicitas de alto contraste para botones de pasos y selectores en panel empresario */
+.station-card-step button.quick-price-pill,
+button.quick-price-pill {
+  font-weight: 800 !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.station-card-step button.quick-price-pill:not(.selected) {
+  color: #007AFF !important;
+  background: #eff6ff !important;
+  border: 1.5px solid rgba(0, 122, 255, 0.35) !important;
+}
+
+[data-theme='dark'] .station-card-step button.quick-price-pill:not(.selected),
+.dark .station-card-step button.quick-price-pill:not(.selected) {
+  color: #60a5fa !important;
+  background: rgba(0, 122, 255, 0.12) !important;
+  border: 1.5px solid rgba(0, 122, 255, 0.35) !important;
+}
+
+.station-card-step button.quick-price-pill.selected {
+  color: #ffffff !important;
+  background: #007AFF !important;
+  border: 1.5px solid #007AFF !important;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.35) !important;
+}
+
+/* Selector de Entidad Reguladora (Jurisdiccion) */
+.station-card-step button.legal-scope-btn {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.station-card-step button.legal-scope-btn.selected {
+  border: 2px solid #007AFF !important;
+  background: #eff6ff !important;
+  color: #007AFF !important;
+}
+
+[data-theme='dark'] .station-card-step button.legal-scope-btn.selected,
+.dark .station-card-step button.legal-scope-btn.selected {
+  background: rgba(0, 122, 255, 0.15) !important;
+  border: 2px solid #007AFF !important;
+  color: #007AFF !important;
+}
+
+.station-card-step button.legal-scope-btn:not(.selected) {
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+[data-theme='dark'] .station-card-step button.legal-scope-btn:not(.selected),
+.dark .station-card-step button.legal-scope-btn:not(.selected) {
+  background: #0b1622 !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+  color: #cbd5e1 !important;
+}
+
+.station-card-step button.legal-scope-btn.selected .scope-title {
+  color: #007AFF !important;
+}
+
+.station-card-step button.legal-scope-btn.selected .scope-subtitle {
+  color: #1e40af !important;
+}
+
+[data-theme='dark'] .station-card-step button.legal-scope-btn.selected .scope-subtitle,
+.dark .station-card-step button.legal-scope-btn.selected .scope-subtitle {
+  color: #93c5fd !important;
+}
+
+.station-card-step button.legal-scope-btn:not(.selected) .scope-title {
+  color: #0f172a !important;
+}
+
+[data-theme='dark'] .station-card-step button.legal-scope-btn:not(.selected) .scope-title,
+.dark .station-card-step button.legal-scope-btn:not(.selected) .scope-title {
+  color: #ffffff !important;
+}
+
+.station-card-step button.legal-scope-btn:not(.selected) .scope-subtitle {
+  color: #64748b !important;
+}
+
+[data-theme='dark'] .station-card-step button.legal-scope-btn:not(.selected) .scope-subtitle,
+.dark .station-card-step button.legal-scope-btn:not(.selected) .scope-subtitle {
+  color: #94a3b8 !important;
 }
 
 

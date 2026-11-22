@@ -1959,13 +1959,14 @@ function PanelEmpresarioContent() {
                         <button
                           key={price}
                           type="button"
+                          className={`quick-price-pill ${isSelected ? 'selected' : ''}`}
                           onClick={() => setTicketPrice(price)}
                           style={{
                             padding: '6px 12px',
                             borderRadius: '8px',
                             border: isSelected ? '1.5px solid #007AFF' : '1.5px solid rgba(0, 122, 255, 0.35)',
-                            background: isSelected ? '#007AFF' : isDark ? 'rgba(0, 122, 255, 0.12)' : '#eff6ff',
-                            color: isSelected ? '#ffffff' : '#007AFF',
+                            background: isSelected ? '#007AFF' : (isDark ? 'rgba(0, 122, 255, 0.12)' : '#eff6ff'),
+                            color: isSelected ? '#ffffff' : (isDark ? '#60a5fa' : '#007AFF'),
                             fontSize: '12px',
                             fontWeight: 800,
                             cursor: 'pointer',
@@ -2084,12 +2085,13 @@ function PanelEmpresarioContent() {
                       {/* Opción 1: Nacional Coljuegos */}
                       <button
                         type="button"
+                        className={`legal-scope-btn ${legalScope === 'nacional' ? 'selected' : ''}`}
                         onClick={() => setLegalScope('nacional')}
                         style={{
                           padding: '12px 14px',
                           borderRadius: '12px',
                           border: legalScope === 'nacional' ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
-                          background: legalScope === 'nacional' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? '#0b1622' : '#f8fafc'),
+                          background: legalScope === 'nacional' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? '#0b1622' : '#ffffff'),
                           color: legalScope === 'nacional' ? '#007AFF' : (isDark ? '#cbd5e1' : '#334155'),
                           fontWeight: 800,
                           fontSize: '0.88rem',
@@ -2102,10 +2104,15 @@ function PanelEmpresarioContent() {
                           transition: 'all 0.2s',
                         }}
                       >
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span>🇨🇴</span> Nacional (Coljuegos)
+                        <span className="scope-title" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: legalScope === 'nacional' ? '#007AFF' : (isDark ? '#ffffff' : '#0f172a'), fontWeight: 800 }}>
+                          <svg width="20" height="14" viewBox="0 0 36 24" fill="none" style={{ borderRadius: '2px', display: 'inline-block', verticalAlign: 'middle', flexShrink: 0, boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>
+                            <rect width="36" height="12" fill="#FCD116" />
+                            <rect y="12" width="36" height="6" fill="#003893" />
+                            <rect y="18" width="36" height="6" fill="#CE1126" />
+                          </svg>
+                          Nacional (Coljuegos)
                         </span>
-                        <span style={{ fontSize: '0.72rem', fontWeight: 500, opacity: 0.85 }}>
+                        <span className="scope-subtitle" style={{ fontSize: '0.72rem', fontWeight: 500, color: legalScope === 'nacional' ? (isDark ? '#93c5fd' : '#1e40af') : (isDark ? '#94a3b8' : '#64748b') }}>
                           Válido en todo el país · 15 a 30 días hábiles
                         </span>
                       </button>
@@ -2113,12 +2120,13 @@ function PanelEmpresarioContent() {
                       {/* Opción 2: Distrital Bogotá D.C. */}
                       <button
                         type="button"
+                        className={`legal-scope-btn ${legalScope === 'distrital' ? 'selected' : ''}`}
                         onClick={() => setLegalScope('distrital')}
                         style={{
                           padding: '12px 14px',
                           borderRadius: '12px',
                           border: legalScope === 'distrital' ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
-                          background: legalScope === 'distrital' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? '#0b1622' : '#f8fafc'),
+                          background: legalScope === 'distrital' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? '#0b1622' : '#ffffff'),
                           color: legalScope === 'distrital' ? '#007AFF' : (isDark ? '#cbd5e1' : '#334155'),
                           fontWeight: 800,
                           fontSize: '0.88rem',
@@ -2131,10 +2139,10 @@ function PanelEmpresarioContent() {
                           transition: 'all 0.2s',
                         }}
                       >
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span className="scope-title" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: legalScope === 'distrital' ? '#007AFF' : (isDark ? '#ffffff' : '#0f172a'), fontWeight: 800 }}>
                           <span>🏛️</span> Distrital (Bogotá D.C.)
                         </span>
-                        <span style={{ fontSize: '0.72rem', fontWeight: 500, opacity: 0.85 }}>
+                        <span className="scope-subtitle" style={{ fontSize: '0.72rem', fontWeight: 500, color: legalScope === 'distrital' ? (isDark ? '#93c5fd' : '#1e40af') : (isDark ? '#94a3b8' : '#64748b') }}>
                           Lotería de Bogotá / Alcaldía Mayor · 5 a 15 días
                         </span>
                       </button>
@@ -2142,12 +2150,13 @@ function PanelEmpresarioContent() {
                       {/* Opción 3: Departamental / Regional */}
                       <button
                         type="button"
+                        className={`legal-scope-btn ${legalScope === 'departamental' ? 'selected' : ''}`}
                         onClick={() => setLegalScope('departamental')}
                         style={{
                           padding: '12px 14px',
                           borderRadius: '12px',
                           border: legalScope === 'departamental' ? '2px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
-                          background: legalScope === 'departamental' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? '#0b1622' : '#f8fafc'),
+                          background: legalScope === 'departamental' ? (isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff') : (isDark ? '#0b1622' : '#ffffff'),
                           color: legalScope === 'departamental' ? '#007AFF' : (isDark ? '#cbd5e1' : '#334155'),
                           fontWeight: 800,
                           fontSize: '0.88rem',
@@ -2160,10 +2169,10 @@ function PanelEmpresarioContent() {
                           transition: 'all 0.2s',
                         }}
                       >
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span className="scope-title" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: legalScope === 'departamental' ? '#007AFF' : (isDark ? '#ffffff' : '#0f172a'), fontWeight: 800 }}>
                           <span>📍</span> Departamental (32 Dptos)
                         </span>
-                        <span style={{ fontSize: '0.72rem', fontWeight: 500, opacity: 0.85 }}>
+                        <span className="scope-subtitle" style={{ fontSize: '0.72rem', fontWeight: 500, color: legalScope === 'departamental' ? (isDark ? '#93c5fd' : '#1e40af') : (isDark ? '#94a3b8' : '#64748b') }}>
                           Loterías Departamentales · 3 a 10 días
                         </span>
                       </button>
