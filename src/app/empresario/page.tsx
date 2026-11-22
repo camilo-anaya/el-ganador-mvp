@@ -233,7 +233,7 @@ function PanelEmpresarioContent() {
     setTicketPrice(rawDigits);
   };
 
-  // Carga reactiva de rifas del empresario (Secretaria IA + manuales)
+  // Carga reactiva de rifas del empresario (Secretaria IA + manuales sin duplicados)
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const loadMyRaffles = () => {
@@ -242,7 +242,15 @@ function PanelEmpresarioContent() {
         const raw2 = localStorage.getItem('elganador_custom_raffles');
         const l1 = raw1 ? JSON.parse(raw1) : [];
         const l2 = raw2 ? JSON.parse(raw2) : [];
-        setMyRaffles([...l1, ...l2]);
+        const combined = [...l1, ...l2];
+        const uniqueMap = new Map<string, any>();
+        combined.forEach((item) => {
+          const key = item?.id || item?.radicado_number || item?.title;
+          if (key && !uniqueMap.has(key)) {
+            uniqueMap.set(key, item);
+          }
+        });
+        setMyRaffles(Array.from(uniqueMap.values()));
       } catch (err) {
         console.warn('Error loading my raffles:', err);
       }
