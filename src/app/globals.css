@@ -20419,92 +20419,264 @@ button.btn-primary-blue,
 .station-card-step button.quick-price-pill,
 button.quick-price-pill {
   font-weight: 800 !important;
-  cursor: pointer;
-  transition: all 0.15s ease;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
 }
 
-.station-card-step button.quick-price-pill:not(.selected) {
+.station-card-step button.quick-price-pill:not(.selected),
+button.quick-price-pill:not(.selected) {
   color: #007AFF !important;
+  -webkit-text-fill-color: #007AFF !important;
   background: #eff6ff !important;
   border: 1.5px solid rgba(0, 122, 255, 0.35) !important;
 }
 
 [data-theme='dark'] .station-card-step button.quick-price-pill:not(.selected),
-.dark .station-card-step button.quick-price-pill:not(.selected) {
+.dark .station-card-step button.quick-price-pill:not(.selected),
+[data-theme='dark'] button.quick-price-pill:not(.selected),
+.dark button.quick-price-pill:not(.selected) {
   color: #60a5fa !important;
+  -webkit-text-fill-color: #60a5fa !important;
   background: rgba(0, 122, 255, 0.12) !important;
   border: 1.5px solid rgba(0, 122, 255, 0.35) !important;
 }
 
-.station-card-step button.quick-price-pill.selected {
+.station-card-step button.quick-price-pill.selected,
+button.quick-price-pill.selected {
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   background: #007AFF !important;
   border: 1.5px solid #007AFF !important;
   box-shadow: 0 2px 8px rgba(0, 122, 255, 0.35) !important;
 }
 
 /* Selector de Entidad Reguladora (Jurisdiccion) */
-.station-card-step button.legal-scope-btn {
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
+.station-card-step button.legal-scope-btn,
+button.legal-scope-btn {
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  text-align: left !important;
 }
 
-.station-card-step button.legal-scope-btn.selected {
+.station-card-step button.legal-scope-btn.selected,
+button.legal-scope-btn.selected {
   border: 2px solid #007AFF !important;
   background: #eff6ff !important;
   color: #007AFF !important;
+  -webkit-text-fill-color: #007AFF !important;
 }
 
 [data-theme='dark'] .station-card-step button.legal-scope-btn.selected,
-.dark .station-card-step button.legal-scope-btn.selected {
+.dark .station-card-step button.legal-scope-btn.selected,
+[data-theme='dark'] button.legal-scope-btn.selected,
+.dark button.legal-scope-btn.selected {
   background: rgba(0, 122, 255, 0.15) !important;
   border: 2px solid #007AFF !important;
   color: #007AFF !important;
+  -webkit-text-fill-color: #007AFF !important;
 }
 
-.station-card-step button.legal-scope-btn:not(.selected) {
+.station-card-step button.legal-scope-btn:not(.selected),
+button.legal-scope-btn:not(.selected) {
   border: 1px solid rgba(148, 163, 184, 0.3) !important;
   background: #ffffff !important;
   color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
 }
 
 [data-theme='dark'] .station-card-step button.legal-scope-btn:not(.selected),
-.dark .station-card-step button.legal-scope-btn:not(.selected) {
+.dark .station-card-step button.legal-scope-btn:not(.selected),
+[data-theme='dark'] button.legal-scope-btn:not(.selected),
+.dark button.legal-scope-btn:not(.selected) {
   background: #0b1622 !important;
   border: 1px solid rgba(148, 163, 184, 0.25) !important;
   color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
 }
 
-.station-card-step button.legal-scope-btn.selected .scope-title {
+.station-card-step button.legal-scope-btn.selected .scope-title,
+button.legal-scope-btn.selected .scope-title {
   color: #007AFF !important;
+  -webkit-text-fill-color: #007AFF !important;
 }
 
-.station-card-step button.legal-scope-btn.selected .scope-subtitle {
+.station-card-step button.legal-scope-btn.selected .scope-subtitle,
+button.legal-scope-btn.selected .scope-subtitle {
   color: #1e40af !important;
+  -webkit-text-fill-color: #1e40af !important;
 }
 
 [data-theme='dark'] .station-card-step button.legal-scope-btn.selected .scope-subtitle,
-.dark .station-card-step button.legal-scope-btn.selected .scope-subtitle {
+.dark .station-card-step button.legal-scope-btn.selected .scope-subtitle,
+[data-theme='dark'] button.legal-scope-btn.selected .scope-subtitle,
+.dark button.legal-scope-btn.selected .scope-subtitle {
   color: #93c5fd !important;
+  -webkit-text-fill-color: #93c5fd !important;
 }
 
-.station-card-step button.legal-scope-btn:not(.selected) .scope-title {
+.station-card-step button.legal-scope-btn:not(.selected) .scope-title,
+button.legal-scope-btn:not(.selected) .scope-title {
   color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
 }
 
 [data-theme='dark'] .station-card-step button.legal-scope-btn:not(.selected) .scope-title,
-.dark .station-card-step button.legal-scope-btn:not(.selected) .scope-title {
+.dark .station-card-step button.legal-scope-btn:not(.selected) .scope-title,
+[data-theme='dark'] button.legal-scope-btn:not(.selected) .scope-title,
+.dark button.legal-scope-btn:not(.selected) .scope-title {
   color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 
-.station-card-step button.legal-scope-btn:not(.selected) .scope-subtitle {
+.station-card-step button.legal-scope-btn:not(.selected) .scope-subtitle,
+button.legal-scope-btn:not(.selected) .scope-subtitle {
   color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
 }
 
 [data-theme='dark'] .station-card-step button.legal-scope-btn:not(.selected) .scope-subtitle,
-.dark .station-card-step button.legal-scope-btn:not(.selected) .scope-subtitle {
+.dark .station-card-step button.legal-scope-btn:not(.selected) .scope-subtitle,
+[data-theme='dark'] button.legal-scope-btn:not(.selected) .scope-subtitle,
+.dark button.legal-scope-btn:not(.selected) .scope-subtitle {
   color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+}
+
+/* =========================================================
+   BARRA SUPERIOR EMPRESARIAL: ALINEACIÓN HORIZONTAL IMPECABLE
+   Evita que los botones de Alertas, Vitrina, Compartir y Salir se apilen
+   ========================================================= */
+.app-topbar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.app-topbar .brand-cluster {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 1 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.app-topbar .topbar-actions {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+  flex-shrink: 0 !important;
+}
+
+.app-topbar .topbar-actions > div,
+.app-topbar .topbar-actions > a,
+.app-topbar .topbar-actions > button {
+  display: inline-flex !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+}
+
+.app-topbar .topbar-actions .btn-topbar-action,
+.app-topbar .topbar-actions .btn-compact-action {
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  line-height: 30px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+  margin: 0 !important;
+  font-weight: 800 !important;
+  font-size: 11.5px !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+}
+
+.app-topbar .topbar-actions .btn-topbar-alertas {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+  box-shadow: none !important;
+}
+
+[data-theme='dark'] .app-topbar .topbar-actions .btn-topbar-alertas,
+.dark .app-topbar .topbar-actions .btn-topbar-alertas {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.app-topbar .topbar-actions .btn-topbar-vitrina {
+  background: rgba(56, 189, 248, 0.16) !important;
+  color: #0284c7 !important;
+  -webkit-text-fill-color: #0284c7 !important;
+  border: 1px solid rgba(56, 189, 248, 0.45) !important;
+  box-shadow: none !important;
+}
+
+.app-topbar .topbar-actions .btn-topbar-share {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.3) !important;
+  box-shadow: none !important;
+}
+
+[data-theme='dark'] .app-topbar .topbar-actions .btn-topbar-share,
+.dark .app-topbar .topbar-actions .btn-topbar-share {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.app-topbar .topbar-actions .btn-topbar-logout {
+  background: rgba(239, 68, 68, 0.12) !important;
+  color: #ef4444 !important;
+  -webkit-text-fill-color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 480px) {
+  .app-topbar {
+    padding: calc(env(safe-area-inset-top, 0px) + 6px) 8px 6px 8px !important;
+    gap: 6px !important;
+  }
+
+  .app-topbar .brand-title {
+    font-size: 0.84rem !important;
+  }
+
+  .app-topbar .brand-subtitle {
+    max-width: 100px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 0.72rem !important;
+  }
+
+  .app-topbar .topbar-actions {
+    gap: 4px !important;
+  }
+
+  .app-topbar .topbar-actions .btn-topbar-action,
+  .app-topbar .topbar-actions .btn-compact-action {
+    padding: 0 6px !important;
+    font-size: 10.5px !important;
+  }
 }
 
 

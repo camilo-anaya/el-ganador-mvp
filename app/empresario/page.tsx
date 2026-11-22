@@ -709,17 +709,17 @@ function PanelEmpresarioContent() {
       <header className="app-topbar">
         <div className="brand-cluster">
           <span aria-hidden="true" className="profile-icon-btn">🏪</span>
-          <div>
-            <span className="brand-title">PERFIL EMPRESARIAL</span>
-            <small className="brand-subtitle">{storeName}</small>
+          <div style={{ minWidth: 0, overflow: 'hidden' }}>
+            <span className="brand-title" style={{ whiteSpace: 'nowrap' }}>PERFIL EMPRESARIAL</span>
+            <small className="brand-subtitle" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>{storeName}</small>
           </div>
         </div>
-        <div className="topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap' }}>
+        <div className="topbar-actions" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap', flexShrink: 0 }}>
           {/* CAMPANA DE NOTIFICACIONES DE LA SECRETARIA IA */}
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', height: '32px' }}>
             <button
               type="button"
-              className="btn-compact-action"
+              className="btn-topbar-action btn-topbar-alertas"
               onClick={() => {
                 setShowBusinessNotifDropdown((prev) => !prev);
                 if (!showBusinessNotifDropdown && unreadBusinessNotifsCount > 0) {
@@ -730,17 +730,22 @@ function PanelEmpresarioContent() {
               aria-label="Notificaciones empresariales"
               style={{
                 position: 'relative',
-                padding: '6px 10px',
+                height: '32px',
+                padding: '0 10px',
                 fontSize: '11.5px',
                 borderRadius: '8px',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '4px',
-                background: unreadBusinessNotifsCount > 0 ? 'rgba(0, 122, 255, 0.2)' : undefined,
-                borderColor: unreadBusinessNotifsCount > 0 ? '#007AFF' : undefined,
+                background: unreadBusinessNotifsCount > 0 ? 'rgba(0, 122, 255, 0.2)' : (isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9'),
+                color: isDark ? '#ffffff' : '#0f172a',
+                border: unreadBusinessNotifsCount > 0 ? '1.5px solid #007AFF' : '1px solid rgba(148, 163, 184, 0.3)',
+                whiteSpace: 'nowrap',
+                boxSizing: 'border-box',
+                cursor: 'pointer',
               }}
             >
-              🔔 <span>Alertas</span>
+              🔔 <span className="topbar-action-label">Alertas</span>
               {unreadBusinessNotifsCount > 0 && (
                 <span
                   style={{
@@ -750,6 +755,7 @@ function PanelEmpresarioContent() {
                     fontWeight: 900,
                     borderRadius: '999px',
                     padding: '1px 5px',
+                    lineHeight: 1,
                   }}
                 >
                   {unreadBusinessNotifsCount}
@@ -825,28 +831,31 @@ function PanelEmpresarioContent() {
           </div>
           <Link
             href="/"
-            className="btn-compact-action"
+            className="btn-topbar-action btn-topbar-vitrina"
             title="Ver Marketplace público con rifas y publicidad de todos los comercios"
             style={{
               textDecoration: 'none',
-              background: 'rgba(56, 189, 248, 0.16)',
-              color: '#38bdf8',
-              border: '1px solid rgba(56, 189, 248, 0.45)',
-              fontWeight: 800,
+              height: '32px',
+              padding: '0 10px',
+              fontSize: '11.5px',
+              borderRadius: '8px',
               display: 'inline-flex',
               alignItems: 'center',
               gap: '4px',
-              padding: '6px 10px',
-              fontSize: '11.5px',
-              borderRadius: '8px',
+              background: 'rgba(56, 189, 248, 0.16)',
+              color: '#0284c7',
+              border: '1px solid rgba(56, 189, 248, 0.45)',
+              fontWeight: 800,
               whiteSpace: 'nowrap',
+              boxSizing: 'border-box',
+              cursor: 'pointer',
             }}
           >
-            🏛️ <span>Vitrina</span>
+            🏛️ <span className="topbar-action-label">Vitrina</span>
           </Link>
           <button
             type="button"
-            className="btn-compact-action"
+            className="btn-topbar-action btn-topbar-share"
             onClick={() =>
               shareRaffleLink({
                 title: storeName,
@@ -854,31 +863,50 @@ function PanelEmpresarioContent() {
                 path: `/?tienda=${encodeURIComponent(storeName)}`,
               })
             }
+            title="Compartir vitrina y enlace de la tienda"
             style={{
-              padding: '6px 10px',
+              height: '32px',
+              padding: '0 10px',
               fontSize: '11.5px',
               borderRadius: '8px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              background: isDark ? 'rgba(255,255,255,0.06)' : '#f1f5f9',
+              color: isDark ? '#ffffff' : '#0f172a',
+              border: '1px solid rgba(148, 163, 184, 0.3)',
+              fontWeight: 800,
               whiteSpace: 'nowrap',
+              boxSizing: 'border-box',
+              cursor: 'pointer',
             }}
           >
-            📤 <span>Compartir</span>
+            📤 <span className="topbar-action-label">Compartir</span>
           </button>
           <button
             type="button"
-            className="btn-compact-action"
+            className="btn-topbar-action btn-topbar-logout"
             onClick={() => void performLogout()}
             aria-label="Cerrar sesión empresarial"
+            title="Cerrar sesión empresarial"
             style={{
+              height: '32px',
+              padding: '0 10px',
+              fontSize: '11.5px',
+              borderRadius: '8px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
               background: 'rgba(239, 68, 68, 0.12)',
               color: '#ef4444',
               border: '1px solid rgba(239, 68, 68, 0.35)',
-              padding: '6px 10px',
-              fontSize: '11.5px',
-              borderRadius: '8px',
+              fontWeight: 800,
               whiteSpace: 'nowrap',
+              boxSizing: 'border-box',
+              cursor: 'pointer',
             }}
           >
-            🚪 <span>Salir</span>
+            🚪 <span className="topbar-action-label">Salir</span>
           </button>
         </div>
       </header>
