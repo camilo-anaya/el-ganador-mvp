@@ -14,6 +14,7 @@ import { fileToDataUrl, shareRaffleLink } from '@/lib/nativeActions';
 import { supabase, uploadStoryToSupabase, uploadKybDocumentToSupabase, uploadLegalDocument } from '@/lib/supabase';
 import { getBusinessNotifications, markBusinessNotificationsAsRead, addBusinessNotification, BusinessNotification } from '@/lib/notifications';
 import { useTheme } from '@/context/ThemeContext';
+import Formulario8Modal from '@/components/Formulario8Modal';
 
 function PanelEmpresarioContent() {
   const router = useRouter();
@@ -34,6 +35,7 @@ function PanelEmpresarioContent() {
   const [businessNotifs, setBusinessNotifs] = useState<BusinessNotification[]>([]);
   const [showBusinessNotifDropdown, setShowBusinessNotifDropdown] = useState(false);
   const [expandedExpedienteId, setExpandedExpedienteId] = useState<string | null>(null);
+  const [selectedFormulario8Raffle, setSelectedFormulario8Raffle] = useState<any | null>(null);
 
   useEffect(() => {
     const loadNotifs = () => setBusinessNotifs(getBusinessNotifications());
@@ -2813,6 +2815,32 @@ function PanelEmpresarioContent() {
                                 </div>
                               </div>
 
+                              {/* BOTÓN OFICIAL DE DESCARGA E IMPRESIÓN DEL FORMULARIO 8 */}
+                              <div style={{ marginBottom: '10px', paddingTop: '6px', borderTop: '1px dashed rgba(2, 132, 199, 0.3)' }}>
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedFormulario8Raffle(raf)}
+                                  style={{
+                                    width: '100%',
+                                    padding: '9px 12px',
+                                    borderRadius: '8px',
+                                    border: '1.5px solid #007AFF',
+                                    background: isDark ? 'rgba(0, 122, 255, 0.15)' : '#eff6ff',
+                                    color: '#007AFF',
+                                    fontWeight: 800,
+                                    fontSize: '0.8rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px',
+                                    boxShadow: '0 2px 8px rgba(0, 122, 255, 0.12)',
+                                  }}
+                                >
+                                  <span>📄</span> Ver y Descargar Formulario 8 Oficial Diligenciado (PDF) ↗
+                                </button>
+                              </div>
+
                               <strong style={{ color: isDark ? '#ffffff' : '#0f172a', display: 'block', marginBottom: '4px', borderTop: '1px solid rgba(148, 163, 184, 0.2)', paddingTop: '8px' }}>
                                 ⏱️ Trazabilidad de Nuestra Gestión:
                               </strong>
@@ -3314,6 +3342,35 @@ function PanelEmpresarioContent() {
 
         </main>
       </div>
+
+      {/* MODAL OFICIAL DE VISUALIZACIÓN E IMPRESIÓN DEL FORMULARIO 8 */}
+      {selectedFormulario8Raffle && (
+        <Formulario8Modal
+          data={{
+            radicado: selectedFormulario8Raffle.radicado_number || selectedFormulario8Raffle.legalRadicado || 'SOL-COLJ-2026-819204',
+            storeName: storeName || selectedFormulario8Raffle.merchant || 'MOTOS CARIBE S.A.S.',
+            nit: '901.834.192-5',
+            department: selectedFormulario8Raffle.city === 'Bogotá D.C.' ? 'Bogotá D.C. / Cundinamarca' : 'Colombia',
+            city: selectedFormulario8Raffle.city || 'Bogotá D.C.',
+            address: 'Carrera 15 # 85-30, Oficina 402',
+            email: 'contacto@motoscaribe.com.co',
+            representative: storeName || 'Representante Legal Autorizado',
+            phone: '+57 300 456 7890',
+            activity: 'Comercio al por menor y mayor de motocicletas, repuestos, accesorios y vehículos.',
+            raffleTitle: selectedFormulario8Raffle.title || 'Gran Sorteo Oficial',
+            isNational: selectedFormulario8Raffle.coverage === 'nacional' || selectedFormulario8Raffle.legalScope === 'nacional',
+            ticketPrice: Number(selectedFormulario8Raffle.ticket_price) || 25000,
+            totalTickets: Number(selectedFormulario8Raffle.total_tickets) || 1000,
+            totalRevenue: (Number(selectedFormulario8Raffle.ticket_price) || 25000) * (Number(selectedFormulario8Raffle.total_tickets) || 1000),
+            drawDate: selectedFormulario8Raffle.draw_date || selectedFormulario8Raffle.timeLabel,
+            lotteryName: 'Lotería de Medellín (o Lotería Oficial Vigilada)',
+            prizeCost: Number(selectedFormulario8Raffle.prize_value) || 15000000,
+            prizeDescription: selectedFormulario8Raffle.description || 'Vehículo / Motocicleta 0 km libre de gravámenes y pignoraciones.',
+            gainTaxPaidBy: 'empresa',
+          }}
+          onClose={() => setSelectedFormulario8Raffle(null)}
+        />
+      )}
 
       {/* BARRA INFERIOR EMPRESARIAL (componente independiente) */}
       <BusinessBottomNav activeKey={activeTab} />
