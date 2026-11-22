@@ -1859,7 +1859,7 @@ function PanelEmpresarioContent() {
                         value={raffleTitle}
                         onChange={(e) => setRaffleTitle(e.target.value)}
                         required
-                        style={{ padding: '11px 13px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '14px' }}
+                        style={{ padding: '11px 13px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '16px' }}
                       />
                     </label>
 
@@ -1871,7 +1871,7 @@ function PanelEmpresarioContent() {
                         value={raffleDesc}
                         onChange={(e) => setRaffleDesc(e.target.value)}
                         required
-                        style={{ padding: '11px 13px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '14px', resize: 'vertical' }}
+                        style={{ padding: '11px 13px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '16px', resize: 'vertical' }}
                       />
                     </label>
 
@@ -1882,7 +1882,7 @@ function PanelEmpresarioContent() {
                           type="datetime-local"
                           value={drawDateTime}
                           onChange={(e) => setDrawDateTime(e.target.value)}
-                          style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '13px' }}
+                          style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '16px' }}
                         />
                       </label>
                       <label style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
@@ -1890,7 +1890,7 @@ function PanelEmpresarioContent() {
                         <select
                           value={coverage}
                           onChange={(e) => setCoverage(e.target.value)}
-                          style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '13px' }}
+                          style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '16px' }}
                         >
                           <option value="nacional">🇨🇴 Toda Colombia (Envío asegurado)</option>
                           <option value="regional">📍 Regional / Entrega en Concesionario</option>
@@ -1935,7 +1935,7 @@ function PanelEmpresarioContent() {
                       <select
                         value={ballotGrid}
                         onChange={(e) => setBallotGrid(e.target.value)}
-                        style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '13.5px', fontWeight: 700 }}
+                        style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '16px', fontWeight: 700 }}
                       >
                         <option value="100">100 Números (00 - 99)</option>
                         <option value="200">200 Números (000 - 199)</option>
@@ -1952,7 +1952,7 @@ function PanelEmpresarioContent() {
                         placeholder="$ 15.000.000"
                         value={formatCopDisplay(prizeCost)}
                         onChange={handlePrizeCostInput}
-                        style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '13.5px', fontWeight: 700 }}
+                        style={{ padding: '10px 12px', borderRadius: '10px', border: '1px solid rgba(148,163,184,0.35)', fontSize: '16px', fontWeight: 700 }}
                       />
                     </label>
 
@@ -1971,7 +1971,7 @@ function PanelEmpresarioContent() {
                           border: '2px solid #007AFF',
                           background: isDark ? 'rgba(0, 122, 255, 0.1)' : '#eff6ff',
                           color: '#007AFF',
-                          fontSize: '14px',
+                          fontSize: '16px',
                           fontWeight: 800,
                         }}
                       />

@@ -22315,6 +22315,46 @@ html[data-theme='dark'] .revenue-progress-track,
   border-radius: 3px;
 }
 
+/* ============================================================================
+   BLINDAJE CONTRA AUTO-ZOOM Y EXPANSIÓN DESCONTROLADA EN MÓVILES (iOS / Android)
+   1. En iOS Safari, si un campo input/select/textarea tiene font-size < 16px,
+      el sistema amplía automáticamente la pantalla (auto-zoom) al tocarlo y
+      nunca se reajusta solo, rompiendo la experiencia de App Nativa.
+   2. Forzar font-size mínimo de 16px en campos interactivos en pantallas móviles.
+   3. Evitar gestos no intencionados de pinch-zoom en el lienzo principal.
+   ============================================================================ */
+@media screen and (max-width: 768px) {
+  input,
+  select,
+  textarea,
+  input[type='text'],
+  input[type='number'],
+  input[type='email'],
+  input[type='tel'],
+  input[type='password'],
+  input[type='search'],
+  input[type='url'],
+  select:focus,
+  input:focus,
+  textarea:focus {
+    font-size: 16px !important;
+  }
+}
+
+html,
+body {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
+  touch-action: pan-y manipulation !important;
+}
+
+:root {
+  touch-action: pan-y manipulation;
+}
+
+
 
 
 
