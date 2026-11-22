@@ -1683,12 +1683,13 @@ function PanelEmpresarioContent() {
               <form onSubmit={handlePublishRaffle} className="auth-form" style={{ marginBottom: '32px' }}>
                 {/* PASO 1: FOTOS Y DATOS DEL PREMIO */}
                 <div
+                  className="station-card-step"
                   style={{
                     background: isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff',
                     border: '1px solid rgba(148, 163, 184, 0.22)',
                     borderRadius: '16px',
-                    padding: '20px',
-                    marginBottom: '18px',
+                    padding: '18px 16px',
+                    marginBottom: '16px',
                     boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
                   }}
                 >
@@ -1846,12 +1847,13 @@ function PanelEmpresarioContent() {
 
                 {/* PASO 2: CALCULADORA DIGITAL DE RENTABILIDAD */}
                 <div
+                  className="station-card-step"
                   style={{
                     background: isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff',
                     border: '2px solid #007AFF',
                     borderRadius: '16px',
-                    padding: '20px',
-                    marginBottom: '18px',
+                    padding: '18px 16px',
+                    marginBottom: '16px',
                     boxShadow: '0 6px 20px rgba(0, 122, 255, 0.1)',
                   }}
                 >
@@ -1872,7 +1874,7 @@ function PanelEmpresarioContent() {
                     </span>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', marginBottom: '16px' }}>
                     <label style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                       <span style={{ fontSize: '12.5px', fontWeight: 700 }}>Tamaño del Cartón (Balotas)</span>
                       <select
@@ -2006,12 +2008,13 @@ function PanelEmpresarioContent() {
 
                 {/* PASO 3: JURISDICCIÓN, ENLACES OFICIALES DIRECTOS Y VOUCHER DE PAGO */}
                 <div
+                  className="station-card-step"
                   style={{
                     background: isDark ? 'rgba(15, 23, 42, 0.6)' : '#ffffff',
                     border: '1.5px solid #007AFF',
                     borderRadius: '16px',
-                    padding: '20px',
-                    marginBottom: '20px',
+                    padding: '18px 16px',
+                    marginBottom: '18px',
                     boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
                   }}
                 >
@@ -2037,7 +2040,7 @@ function PanelEmpresarioContent() {
                     <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 800, marginBottom: '8px', color: isDark ? '#94a3b8' : '#475569' }}>
                       SELECCIONA LA ENTIDAD REGULADORA DE TU SORTEO:
                     </label>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '8px' }}>
                       {/* Opción 1: Nacional Coljuegos */}
                       <button
                         type="button"

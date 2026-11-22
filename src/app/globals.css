@@ -21354,34 +21354,60 @@ html[data-theme='dark'] .see-all-grid-btn {
 }
 
 /* ==========================================================================
-   PORTAL EMPRESARIAL EN MÓVIL: RECUADROS ORDENADOS, TARJETAS ESTRUCTURADAS
+   PORTAL EMPRESARIAL EN MÓVIL: 100% ANCHO REAL, ALINEADO A LOS LATERALES
    ========================================================================== */
-@media (max-width: 768px) {
-  /* En la superficie empresarial, el lienzo tiene márgenes y respiro profesional */
-  .desktop-workspace-grid,
-  .desktop-workspace-grid .app-scroll-canvas {
+@media (max-width: 1023px) {
+  /* En móviles y tablets, el grid no añade márgenes laterales redundantes */
+  .desktop-workspace-grid {
+    display: flex !important;
+    flex-direction: column !important;
     width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 14px !important;
-    padding-right: 14px !important;
-    padding-top: 10px !important;
-    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+    max-width: 100vw !important;
+    padding: 0 !important;
     margin: 0 !important;
     box-sizing: border-box !important;
     overflow-x: hidden !important;
   }
 
-  /* Los recuadros empresariales son tarjetas limpias, con esquinas redondeadas y bordes completos */
-  .desktop-workspace-grid .station-block-premium {
+  .desktop-workspace-grid .app-scroll-canvas,
+  .app-scroll-canvas {
     width: 100% !important;
     max-width: 100% !important;
-    border-radius: 18px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    padding-top: 8px !important;
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+    gap: 12px !important;
+  }
+
+  /* Los recuadros empresariales ocupan el 100% del ancho con respiro equilibrado */
+  .desktop-workspace-grid .station-block-premium,
+  .station-block-premium {
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 16px !important;
     border: 1px solid rgba(148, 163, 184, 0.28) !important;
-    margin: 0 0 16px 0 !important;
-    padding: 16px 14px !important;
+    margin: 0 0 12px 0 !important;
+    padding: 14px 10px !important;
     box-sizing: border-box !important;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08) !important;
     background: var(--bg-card, #ffffff);
+  }
+
+  /* Las tarjetas internas de pasos (Paso 1, Paso 2, Paso 3) se alinean a los laterales sin encogerse */
+  .station-card-step,
+  .station-block-premium .station-card-step,
+  .station-block-premium form > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 14px 10px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+    border-radius: 14px !important;
   }
 
   [data-theme='dark'] .desktop-workspace-grid .station-block-premium,
@@ -21391,9 +21417,12 @@ html[data-theme='dark'] .see-all-grid-btn {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
   }
 
-  /* Barra superior empresarial compacta y ordenada sin desbordarse */
+  /* Barra superior empresarial compacta y perfectamente alineada a los laterales */
   .app-topbar {
-    padding: calc(env(safe-area-inset-top, 0px) + 8px) 12px 8px 12px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding: calc(env(safe-area-inset-top, 0px) + 8px) 10px 8px 10px !important;
+    box-sizing: border-box !important;
   }
 
   .app-topbar .brand-title {
@@ -21415,15 +21444,19 @@ html[data-theme='dark'] .see-all-grid-btn {
     white-space: nowrap !important;
   }
 
-  /* Tira de herramientas / chips empresariales con scroll suave */
-  .desktop-workspace-grid .category-chips {
+  /* Tira de herramientas / chips empresariales alineados sin cortes */
+  .desktop-workspace-grid .category-chips,
+  .category-chips {
     width: 100% !important;
-    padding: 4px 2px 10px 2px !important;
-    margin: 0 0 14px 0 !important;
+    max-width: 100% !important;
+    padding: 4px 0 8px 0 !important;
+    margin: 0 0 10px 0 !important;
     gap: 8px !important;
+    box-sizing: border-box !important;
   }
 
-  .desktop-workspace-grid .category-chips .chip-btn {
+  .desktop-workspace-grid .category-chips .chip-btn,
+  .category-chips .chip-btn {
     font-size: 0.82rem !important;
     padding: 7px 12px !important;
     white-space: nowrap !important;
