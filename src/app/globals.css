@@ -21751,6 +21751,21 @@ html[data-theme='dark'] .see-all-grid-btn {
     padding: 7px 12px !important;
     white-space: nowrap !important;
   }
+
+  /* Tarjetas y sub-cajas empresariales a pantalla completa sin bordes laterales */
+  .kyb-doc-card,
+  .kyb-status-box,
+  .revenue-stat-card,
+  .business-metric-subcard,
+  .raffle-registered-card,
+  .business-ad-banner-premium {
+    border-radius: 0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
 }
 
 /* ==========================================================================

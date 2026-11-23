@@ -1057,11 +1057,17 @@ function PanelEmpresarioContent() {
             <section
               className="station-block-premium"
               style={{
-                padding: '16px',
-                borderRadius: '20px',
+                width: '100%',
+                maxWidth: '100%',
+                padding: '16px 14px',
+                borderRadius: 0,
+                borderLeft: 'none',
+                borderRight: 'none',
                 background: 'var(--bg-card, #ffffff)',
-                border: '1px solid rgba(148, 163, 184, 0.22)',
+                borderTop: '1px solid rgba(148, 163, 184, 0.22)',
+                borderBottom: '1px solid rgba(148, 163, 184, 0.22)',
                 boxShadow: '0 8px 24px rgba(15, 23, 42, 0.08)',
+                boxSizing: 'border-box',
               }}
             >
               {/* Selector Editar vs Vista Previa como Cliente */}
@@ -1554,7 +1560,18 @@ function PanelEmpresarioContent() {
               MÓDULO 2: SUBIR ESTADOS (24 HORAS · FOTOS Y VIDEOS MÁX 120S)
               ========================================================= */}
           {activeTab === 'estados' && (
-            <section className="station-block-premium">
+            <section
+              className="station-block-premium"
+              style={{
+                width: '100%',
+                maxWidth: '100%',
+                borderRadius: 0,
+                borderLeft: 'none',
+                borderRight: 'none',
+                padding: '16px 14px',
+                boxSizing: 'border-box',
+              }}
+            >
               <div className="compact-section-title">
                 <h2>📸 Publicar Estado en Tiempo Real (24 Horas)</h2>
               </div>
@@ -1643,7 +1660,18 @@ function PanelEmpresarioContent() {
               MÓDULO 3: PUBLICAR NUEVA RIFA + CARTÓN DE BALOTAS
               ========================================================= */}
           {activeTab === 'rifas' && (
-            <section className="station-block-premium">
+            <section
+              className="station-block-premium"
+              style={{
+                width: '100%',
+                maxWidth: '100%',
+                borderRadius: 0,
+                borderLeft: 'none',
+                borderRight: 'none',
+                padding: '16px 14px',
+                boxSizing: 'border-box',
+              }}
+            >
               <div className="compact-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '16px' }}>
                 <div>
                   <h2 style={{ fontSize: '1.3rem', fontWeight: 900, margin: 0, color: isDark ? '#ffffff' : '#0f172a' }}>
@@ -1762,7 +1790,7 @@ function PanelEmpresarioContent() {
                     marginLeft: 0,
                     marginRight: 0,
                     boxSizing: 'border-box',
-                    padding: '18px 16px',
+                    padding: '18px 12px',
                     marginBottom: '16px',
                     boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
                   }}
@@ -1933,7 +1961,7 @@ function PanelEmpresarioContent() {
                     marginLeft: 0,
                     marginRight: 0,
                     boxSizing: 'border-box',
-                    padding: '18px 16px',
+                    padding: '18px 12px',
                     marginBottom: '16px',
                     boxShadow: '0 6px 20px rgba(0, 122, 255, 0.1)',
                   }}
@@ -2038,9 +2066,14 @@ function PanelEmpresarioContent() {
                   <div
                     style={{
                       background: isDark ? '#0b1622' : '#f8fafc',
-                      borderRadius: '14px',
-                      padding: '16px',
-                      border: '1px solid rgba(0, 122, 255, 0.25)',
+                      borderRadius: 0,
+                      padding: '16px 12px',
+                      borderTop: '1px solid rgba(0, 122, 255, 0.25)',
+                      borderBottom: '1px solid rgba(0, 122, 255, 0.25)',
+                      borderLeft: 'none',
+                      borderRight: 'none',
+                      width: '100%',
+                      boxSizing: 'border-box',
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', borderBottom: '1px solid rgba(148, 163, 184, 0.2)', paddingBottom: '8px' }}>
@@ -2115,7 +2148,7 @@ function PanelEmpresarioContent() {
                     marginLeft: 0,
                     marginRight: 0,
                     boxSizing: 'border-box',
-                    padding: '18px 16px',
+                    padding: '18px 12px',
                     marginBottom: '18px',
                     boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
                   }}
@@ -2567,11 +2600,16 @@ function PanelEmpresarioContent() {
                   {/* BLOQUE INFORMATIVO: GUÍA DE RADICACIÓN POR CORREO ELECTRÓNICO (COLJUEGOS) */}
                   <div
                     style={{
-                      padding: '14px 16px',
-                      borderRadius: '12px',
+                      padding: '14px 12px',
+                      borderRadius: 0,
+                      borderLeft: 'none',
+                      borderRight: 'none',
+                      borderTop: '1px solid rgba(0, 122, 255, 0.25)',
+                      borderBottom: '1px solid rgba(0, 122, 255, 0.25)',
                       background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff',
-                      border: '1px solid rgba(0, 122, 255, 0.25)',
                       marginBottom: '14px',
+                      width: '100%',
+                      boxSizing: 'border-box',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '10px' }}>
@@ -2757,11 +2795,16 @@ Atentamente, [Nombre y Teléfono]."`}
                   {/* BLOQUE A: MANDATO DIGITAL Y PLAZO DE LEY */}
                   <div
                     style={{
-                      padding: '14px 16px',
-                      borderRadius: '12px',
+                      padding: '14px 12px',
+                      borderRadius: 0,
+                      borderLeft: 'none',
+                      borderRight: 'none',
+                      borderTop: '1px solid rgba(0, 122, 255, 0.25)',
+                      borderBottom: '1px solid rgba(0, 122, 255, 0.25)',
                       background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff',
-                      border: '1px solid rgba(0, 122, 255, 0.25)',
                       marginBottom: '14px',
+                      width: '100%',
+                      boxSizing: 'border-box',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
@@ -2802,10 +2845,15 @@ Atentamente, [Nombre y Teléfono]."`}
                   {/* BLOQUE B: VOUCHER DE PAGO DERECHOS DE EXPLOTACIÓN (14% SALUD) */}
                   <div
                     style={{
-                      padding: '14px 16px',
-                      borderRadius: '12px',
+                      padding: '14px 12px',
+                      borderRadius: 0,
+                      borderLeft: 'none',
+                      borderRight: 'none',
+                      borderTop: '1px solid rgba(0, 122, 255, 0.25)',
+                      borderBottom: '1px solid rgba(0, 122, 255, 0.25)',
                       background: isDark ? 'rgba(0, 122, 255, 0.08)' : '#f0f9ff',
-                      border: '1px solid rgba(0, 122, 255, 0.25)',
+                      width: '100%',
+                      boxSizing: 'border-box',
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '8px', marginBottom: '10px' }}>
@@ -2948,9 +2996,14 @@ Atentamente, [Nombre y Teléfono]."`}
                           key={raf.id || idx}
                           style={{
                             background: isDark ? '#1e293b' : '#ffffff',
-                            borderRadius: '14px',
-                            padding: '16px',
-                            border: isPendingVoucher ? '1.5px solid #007AFF' : isPendingColjuegos ? '1.5px solid #0284c7' : '1.5px solid #007AFF',
+                            borderRadius: 0,
+                            borderLeft: 'none',
+                            borderRight: 'none',
+                            borderTop: isPendingVoucher ? '1.5px solid #007AFF' : isPendingColjuegos ? '1.5px solid #0284c7' : '1.5px solid #007AFF',
+                            borderBottom: isPendingVoucher ? '1.5px solid #007AFF' : isPendingColjuegos ? '1.5px solid #0284c7' : '1.5px solid #007AFF',
+                            padding: '16px 14px',
+                            width: '100%',
+                            boxSizing: 'border-box',
                             boxShadow: '0 4px 14px rgba(0,0,0,0.05)',
                           }}
                         >
@@ -3181,7 +3234,20 @@ Atentamente, [Nombre y Teléfono]."`}
                     { drawId: 'RIF-2026-000185', title: 'PlayStation 5 Pro', unitPrice: 25000, soldTickets: 168, totalTickets: 200, totalRevenue: 4200000, progressPct: 84 },
                     { drawId: 'RIF-2026-000186', title: 'Moto Yamaha NMAX 155', unitPrice: 15000, soldTickets: 390, totalTickets: 500, totalRevenue: 5850000, progressPct: 78 },
                   ]).map((dr: any) => (
-                    <div key={dr.drawId} className="revenue-stat-card" style={{ borderRadius: '10px', padding: '12px' }}>
+                    <div
+                      key={dr.drawId}
+                      className="revenue-stat-card"
+                      style={{
+                        borderRadius: 0,
+                        borderLeft: 'none',
+                        borderRight: 'none',
+                        borderTop: '1px solid rgba(0, 122, 255, 0.25)',
+                        borderBottom: '1px solid rgba(0, 122, 255, 0.25)',
+                        padding: '12px 14px',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                      }}
+                    >
                       <div className="card-title" style={{ fontSize: '13px', fontWeight: 'bold', marginBottom: '4px' }}>{dr.title}</div>
                       <div style={{ fontSize: '15px', fontWeight: 900, color: '#007AFF' }}>
                         ${Number(dr.totalRevenue).toLocaleString('es-CO')} COP
@@ -3206,7 +3272,18 @@ Atentamente, [Nombre y Teléfono]."`}
               MÓDULO 4: CRM DE CLIENTES Y GESTIÓN DE BOLETAS
               ========================================================= */}
           {activeTab === 'crm' && (
-            <section className="station-block-premium">
+            <section
+              className="station-block-premium"
+              style={{
+                width: '100%',
+                maxWidth: '100%',
+                borderRadius: 0,
+                borderLeft: 'none',
+                borderRight: 'none',
+                padding: '16px 14px',
+                boxSizing: 'border-box',
+              }}
+            >
               <div className="compact-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
                 <h2>👥 CRM de Clientes y Boletas Compradas</h2>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -3342,19 +3419,19 @@ Atentamente, [Nombre y Teléfono]."`}
                   <div>
                     {/* Tarjetas de métricas del CRM */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '16px' }}>
-                      <div className="business-metric-subcard" style={{ borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
+                      <div className="business-metric-subcard" style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none', padding: '10px 4px', textAlign: 'center' }}>
                         <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Ventas</div>
                         <div style={{ fontSize: '13.5px', fontWeight: 'bold', color: '#38bdf8', marginTop: '3px', wordBreak: 'break-all' }}>
                           ${totalSales.toLocaleString('es-CO')}
                         </div>
                       </div>
-                      <div className="business-metric-subcard" style={{ borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
+                      <div className="business-metric-subcard" style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none', padding: '10px 4px', textAlign: 'center' }}>
                         <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Boletas</div>
                         <div className="metric-val" style={{ fontSize: '13.5px', fontWeight: 'bold', marginTop: '3px' }}>
                           {totalTickets}
                         </div>
                       </div>
-                      <div className="business-metric-subcard" style={{ borderRadius: '10px', padding: '10px 4px', textAlign: 'center' }}>
+                      <div className="business-metric-subcard" style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none', padding: '10px 4px', textAlign: 'center' }}>
                         <div style={{ fontSize: '10px', color: '#888', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Clientes</div>
                         <div className="metric-val" style={{ fontSize: '13.5px', fontWeight: 'bold', marginTop: '3px' }}>
                           {uniqueBuyers}
@@ -3563,7 +3640,7 @@ Atentamente, [Nombre y Teléfono]."`}
               MÓDULO 6: VALIDACIÓN LEGAL KYB Y SUBIDA A SUPABASE STORAGE
               ========================================================= */}
           {activeTab === 'kyb' && (
-            <section className="station-block-premium">
+            <section className="station-block-premium" style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none' }}>
               <div className="compact-section-title">
                 <h2>🏢 Validación KYB y Expediente Mercantil</h2>
               </div>
@@ -3573,7 +3650,7 @@ Atentamente, [Nombre y Teléfono]."`}
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginTop: '16px' }}>
                 {/* 1. RUT */}
-                <div className="kyb-doc-card">
+                <div className="kyb-doc-card" style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none' }}>
                   <h4 className="kyb-doc-title">📄 1. RUT Actualizado (DIAN)</h4>
                   <p className="kyb-doc-desc">
                     Registro Único Tributario con actividad económica autorizada para el comercio.
@@ -3590,7 +3667,7 @@ Atentamente, [Nombre y Teléfono]."`}
                 </div>
 
                 {/* 2. CÁMARA DE COMERCIO */}
-                <div className="kyb-doc-card">
+                <div className="kyb-doc-card" style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none' }}>
                   <h4 className="kyb-doc-title">🏢 2. Certificado Cámara de Comercio</h4>
                   <p className="kyb-doc-desc">
                     Certificado de Existencia y Representación Legal (vigencia inferior a 30 días).
@@ -3607,7 +3684,7 @@ Atentamente, [Nombre y Teléfono]."`}
                 </div>
 
                 {/* 3. CÉDULA REPRESENTANTE LEGAL */}
-                <div className="kyb-doc-card">
+                <div className="kyb-doc-card" style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none' }}>
                   <h4 className="kyb-doc-title">🪪 3. Cédula del Representante Legal</h4>
                   <p className="kyb-doc-desc">
                     Documento de identidad al 150% de la persona natural o representante mercantil.
@@ -3624,7 +3701,7 @@ Atentamente, [Nombre y Teléfono]."`}
                 </div>
               </div>
 
-              <div className="kyb-status-box" style={{ marginTop: '20px', padding: '16px', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+              <div className="kyb-status-box" style={{ marginTop: '20px', padding: '16px', borderRadius: 0, borderLeft: 'none', borderRight: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
                 <div>
                   <h4 className="kyb-status-title" style={{ margin: 0 }}>Estado del Expediente KYB</h4>
                   <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: kybApproved ? '#007AFF' : '#0284c7', fontWeight: 700 }}>

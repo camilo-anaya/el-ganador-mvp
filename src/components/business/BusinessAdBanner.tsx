@@ -77,12 +77,18 @@ export default function BusinessAdBanner() {
               <section
                 aria-label="Vitrina Publicitaria Empresarial"
                 style={{
-                  marginBottom: '16px',
-                  borderRadius: '18px',
+                  width: '100%',
+                  maxWidth: '100%',
+                  marginBottom: '14px',
+                  borderRadius: 0,
                   overflow: 'hidden',
                   background: '#05070a',
-                  border: '1px solid rgba(245, 184, 46, 0.38)',
+                  borderTop: '1px solid rgba(245, 184, 46, 0.38)',
+                  borderBottom: '1px solid rgba(245, 184, 46, 0.38)',
+                  borderLeft: 'none',
+                  borderRight: 'none',
                   boxShadow: '0 10px 26px rgba(0, 0, 0, 0.22)',
+                  boxSizing: 'border-box',
                 }}
               >
                 <div
