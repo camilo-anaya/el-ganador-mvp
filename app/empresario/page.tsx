@@ -1059,7 +1059,7 @@ function PanelEmpresarioContent() {
               style={{
                 width: '100%',
                 maxWidth: '100%',
-                padding: '16px 14px',
+                padding: '16px 0',
                 borderRadius: 0,
                 borderLeft: 'none',
                 borderRight: 'none',
@@ -1076,8 +1076,8 @@ function PanelEmpresarioContent() {
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr',
                   gap: '8px',
-                  padding: '5px',
-                  borderRadius: '14px',
+                  padding: '5px 14px',
+                  borderRadius: 0,
                   background: 'rgba(15, 23, 42, 0.08)',
                   marginBottom: '16px',
                 }}
@@ -1087,7 +1087,7 @@ function PanelEmpresarioContent() {
                   onClick={() => setProfileViewMode('edit')}
                   style={{
                     padding: '10px 12px',
-                    borderRadius: '10px',
+                    borderRadius: '8px',
                     border: 'none',
                     fontWeight: 700,
                     fontSize: '13px',
@@ -1104,7 +1104,7 @@ function PanelEmpresarioContent() {
                   onClick={() => setProfileViewMode('client')}
                   style={{
                     padding: '10px 12px',
-                    borderRadius: '10px',
+                    borderRadius: '8px',
                     border: 'none',
                     fontWeight: 700,
                     fontSize: '13px',
@@ -1125,7 +1125,9 @@ function PanelEmpresarioContent() {
                     position: 'relative',
                     width: '100%',
                     height: '168px',
-                    borderRadius: '16px',
+                    borderRadius: 0,
+                    borderLeft: 'none',
+                    borderRight: 'none',
                     overflow: 'hidden',
                     background: '#0b1622',
                   }}
@@ -1568,14 +1570,14 @@ function PanelEmpresarioContent() {
                 borderRadius: 0,
                 borderLeft: 'none',
                 borderRight: 'none',
-                padding: '16px 14px',
+                padding: '16px 0',
                 boxSizing: 'border-box',
               }}
             >
-              <div className="compact-section-title">
+              <div className="compact-section-title" style={{ padding: '0 14px 10px 14px' }}>
                 <h2>📸 Publicar Estado en Tiempo Real (24 Horas)</h2>
               </div>
-              <p className="station-subtitle">
+              <p className="station-subtitle" style={{ padding: '0 14px' }}>
                 Exclusivo para empresas con rol <strong>business</strong>. Sube fotos o videos comerciales de hasta <strong>2 minutos (120 segundos)</strong> para aparecer en el carrusel superior del Marketplace durante 24 horas.
               </p>
 
@@ -1668,11 +1670,11 @@ function PanelEmpresarioContent() {
                 borderRadius: 0,
                 borderLeft: 'none',
                 borderRight: 'none',
-                padding: '16px 14px',
+                padding: '16px 0',
                 boxSizing: 'border-box',
               }}
             >
-              <div className="compact-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '16px' }}>
+              <div className="compact-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '16px', padding: '0 14px' }}>
                 <div>
                   <h2 style={{ fontSize: '1.3rem', fontWeight: 900, margin: 0, color: isDark ? '#ffffff' : '#0f172a' }}>
                     🎟️ Publicar Rifa Oficial y Configurar Cartón 3D
@@ -2941,7 +2943,9 @@ Atentamente, [Nombre y Teléfono]."`}
                   style={{
                     width: '100%',
                     padding: '16px',
-                    borderRadius: '14px',
+                    borderRadius: 0,
+                    borderLeft: 'none',
+                    borderRight: 'none',
                     border: 'none',
                     background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
                     color: '#ffffff',
@@ -2967,7 +2971,7 @@ Atentamente, [Nombre y Teléfono]."`}
 
               {/* LISTA DE SORTEOS REGISTRADOS */}
               <div style={{ marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 12px', display: 'flex', alignItems: 'center', gap: '6px', padding: '0 14px' }}>
                   <span>📋</span> Mis Sorteos Registrados ({myRaffles.length})
                 </h3>
 
@@ -3280,11 +3284,11 @@ Atentamente, [Nombre y Teléfono]."`}
                 borderRadius: 0,
                 borderLeft: 'none',
                 borderRight: 'none',
-                padding: '16px 14px',
+                padding: '16px 0',
                 boxSizing: 'border-box',
               }}
             >
-              <div className="compact-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+              <div className="compact-section-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', padding: '0 14px' }}>
                 <h2>👥 CRM de Clientes y Boletas Compradas</h2>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <button
@@ -3441,7 +3445,7 @@ Atentamente, [Nombre y Teléfono]."`}
 
                     {/* SECCIÓN OFICIAL: CONTEO EN TIEMPO REAL DEL DINERO POR SORTEO / EVENTO */}
                     <div style={{ marginBottom: '24px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '6px', padding: '0 14px' }}>
                         <h3 className="crm-section-title" style={{ fontSize: '13.5px', fontWeight: 'bold', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
                           <span>💰</span> Registro de Recaudo por Sorteo
                         </h3>
@@ -3454,7 +3458,9 @@ Atentamente, [Nombre y Teléfono]."`}
                             key={dr.drawId}
                             className="revenue-stat-card"
                             style={{
-                              borderRadius: '12px',
+                              borderRadius: 0,
+                              borderLeft: 'none',
+                              borderRight: 'none',
                               padding: '14px',
                               display: 'flex',
                               flexDirection: 'column',

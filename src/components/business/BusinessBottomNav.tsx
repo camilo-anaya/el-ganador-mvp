@@ -75,7 +75,7 @@ const ITEMS: Array<{ key: BusinessNavKey; label: string; href: string }> = [
 export default function BusinessBottomNav({ activeKey }: Props) {
   return (
     <nav
-      className="floating-island-nav business-bottom-nav"
+      className="business-bottom-nav"
       aria-label="Navegación empresarial"
       style={{
         position: 'fixed',
