@@ -159,6 +159,20 @@ const LIVE_MINI_ROOMS = [
 
 const RAFFLES_CATALOG: CompactRaffleItem[] = [
   {
+    id: 'test-piloto-wompi-1000',
+    title: '🧪 Prueba Piloto Pasarela Wompi Bancolombia ($1.000 COP)',
+    description: 'Sorteo oficial de prueba técnica para validar la recepción de fondos reales en Wompi Bancolombia y sellado criptográfico SHA-256.',
+    ballotGrid: 100,
+    merchant: 'El Ganador Oficial',
+    city: 'Bogotá',
+    priceCop: '$ 1.000',
+    soldPercent: 10,
+    timeLabel: '⚡ Validación en Vivo',
+    category: 'tech',
+    image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
+    stage: 'live',
+  },
+  {
     id: 'combo-flagship-5g',
     title: 'Smartphone 5G Pro Max + Smartwatch',
     description: 'Smartphone 5G Pro Max de 256 GB liberado con pantalla OLED 120Hz, triple cámara 48 MP y Smartwatch AMOLED con monitor cardíaco. Garantía 1 año.',
