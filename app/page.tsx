@@ -170,7 +170,7 @@ const RAFFLES_CATALOG: CompactRaffleItem[] = [
     timeLabel: '⚡ Validación en Vivo',
     category: 'tech',
     image: '/galeria-premios-hogar-moda-viajes-portrait.jpg',
-    stage: 'live',
+    stage: 'closing_soon',
   },
   {
     id: 'combo-flagship-5g',
