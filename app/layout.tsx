@@ -1,61 +1,52 @@
-import './globals.css';
-import type { Metadata, Viewport } from 'next';
-import { ThemeProvider } from '@/context/ThemeContext';
-import { NativeAppBridge } from '@/components/NativeAppBridge';
+import type { Metadata, Viewport } from "next";
+import { NativeAppBridge } from "@/components/NativeAppBridge";
+import { ThemeProvider } from "@/context/ThemeContext";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'El Ganador · Sorteos en Vivo',
-  description: 'La plataforma oficial de sorteos verificables en tiempo real.',
-  applicationName: 'El Ganador',
+  title: "El Ganador",
+  description: "Marketplace digital de sorteos y rifas online",
+  applicationName: "El Ganador",
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
-    title: 'El Ganador',
-  },
-  formatDetection: {
-    telephone: false,
+    statusBarStyle: "black-translucent",
+    title: "El Ganador",
   },
   icons: {
     icon: [
-      { url: '/app-icon-192.png?v=4', sizes: '192x192', type: 'image/png' },
-      { url: '/app-icon-512.png?v=4', sizes: '512x512', type: 'image/png' },
+      { url: "/app-icon-192.png?v=4", sizes: "192x192", type: "image/png" },
+      { url: "/app-icon-512.png?v=4", sizes: "512x512", type: "image/png" },
     ],
-    apple: '/apple-touch-icon.png?v=4',
+    apple: "/apple-touch-icon.png?v=4",
   },
+  manifest: "/manifest.webmanifest?v=4",
 };
 
 export const viewport: Viewport = {
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: 'cover',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#070a09' },
-  ],
+  viewportFit: "cover",
+  themeColor: "#0a0a0c", // Color insignia oficial: Negro profundo (evita el verde en la barra superior nativa)
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
-        {/* Bloqueo estricto de auto-zoom y escalado para experiencia 100% App Nativa */}
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="El Ganador" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=4" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/app-icon-192.png?v=4" />
-        <link rel="manifest" href="/manifest.webmanifest?v=4" />
-
-        {/* Script oficial de Wompi indispensable para evitar pantallas de carga infinitas */}
+        {/* Script oficial de Wompi indispensable para widget checkout */}
         <script src="https://checkout.wompi.co/widget.js" async />
       </head>
       <body suppressHydrationWarning>
         <NativeAppBridge />
-        <ThemeProvider>{children}</ThemeProvider>
+        <div className="native-shell">
+          <ThemeProvider>{children}</ThemeProvider>
+        </div>
       </body>
     </html>
   );
