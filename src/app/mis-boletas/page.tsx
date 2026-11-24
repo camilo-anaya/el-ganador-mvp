@@ -301,9 +301,9 @@ export default function MisBoletasClientePage() {
                   </span>
                   <span style={{ color: '#34d399', fontSize: '11px', fontWeight: '700' }}>● Certificada SHA-256</span>
                 </div>
-                <h1 className="txt-white" style={{ margin: 0, fontSize: '20px', fontWeight: '900', color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2 }}>
+                <span style={{ margin: 0, fontSize: '20px', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.3px', lineHeight: 1.2, display: 'block' }}>
                   MIS BOLETAS Y CARTONES
-                </h1>
+                </span>
               </div>
             </div>
 
@@ -346,12 +346,12 @@ export default function MisBoletasClientePage() {
                 textAlign: 'center',
               }}
             >
-              <span className="txt-muted" style={{ fontSize: '10px', color: '#94a3b8', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>
+              <span style={{ fontSize: '10px', color: '#94a3b8', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>
                 Pagadas y Selladas
               </span>
-              <strong className="txt-emerald" style={{ fontSize: '15px', color: '#34d399', fontWeight: '900' }}>
+              <span style={{ fontSize: '15px', color: '#34d399', fontWeight: 900, display: 'block' }}>
                 {paidCount} Activas
-              </strong>
+              </span>
             </div>
 
             <div
@@ -363,12 +363,12 @@ export default function MisBoletasClientePage() {
                 textAlign: 'center',
               }}
             >
-              <span className="txt-muted" style={{ fontSize: '10px', color: '#94a3b8', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>
+              <span style={{ fontSize: '10px', color: '#94a3b8', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>
                 Sello Notarial
               </span>
-              <strong className="txt-gold" style={{ fontSize: '15px', color: '#fbbf24', fontWeight: '900' }}>
+              <span style={{ fontSize: '15px', color: '#fbbf24', fontWeight: 900, display: 'block' }}>
                 Inmutable
-              </strong>
+              </span>
             </div>
 
             <div
@@ -380,12 +380,12 @@ export default function MisBoletasClientePage() {
                 textAlign: 'center',
               }}
             >
-              <span className="txt-muted" style={{ fontSize: '10px', color: '#94a3b8', display: 'block', textTransform: 'uppercase', fontWeight: '700' }}>
+              <span style={{ fontSize: '10px', color: '#94a3b8', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>
                 Extracción
               </span>
-              <strong className="txt-white" style={{ fontSize: '15px', color: '#ffffff', fontWeight: '900' }}>
+              <span style={{ fontSize: '15px', color: '#ffffff', fontWeight: 900, display: 'block' }}>
                 Balotera 3D
-              </strong>
+              </span>
             </div>
           </div>
         </div>
@@ -577,15 +577,15 @@ export default function MisBoletasClientePage() {
                         padding: '12px 14px',
                       }}
                     >
-                      <span className="txt-muted" style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: '800', display: 'block', marginBottom: '4px' }}>
+                      <span style={{ fontSize: '11px', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800, display: 'block', marginBottom: '4px' }}>
                         Sorteo Notariado Oficial
                       </span>
-                      <h3 className="txt-white" style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: '900', color: '#ffffff', lineHeight: 1.3 }}>
+                      <span style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: 900, color: '#ffffff', lineHeight: 1.3, display: 'block' }}>
                         {tkt.raffleTitle}
-                      </h3>
+                      </span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap', fontSize: '12px', color: '#cbd5e1' }}>
-                        <span className="txt-slate">🏪 <strong className="txt-white">{tkt.merchant}</strong></span>
-                        <span className="txt-slate">🗓️ {tkt.drawDate}</span>
+                        <span style={{ color: '#cbd5e1' }}>🏪 <span style={{ color: '#ffffff', fontWeight: 800 }}>{tkt.merchant}</span></span>
+                        <span style={{ color: '#cbd5e1' }}>🗓️ {tkt.drawDate}</span>
                       </div>
                     </div>
 
@@ -599,7 +599,7 @@ export default function MisBoletasClientePage() {
                         textAlign: 'center',
                       }}
                     >
-                      <span className="txt-gold" style={{ fontSize: '11px', color: '#fbbf24', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '10px' }}>
+                      <span style={{ fontSize: '11px', color: '#fbbf24', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '10px' }}>
                         🎱 Números Asignados para la Balotera Oficial
                       </span>
                       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', flexWrap: 'wrap', margin: '4px 0 10px' }}>
@@ -626,7 +626,7 @@ export default function MisBoletasClientePage() {
                           </div>
                         ))}
                       </div>
-                      <small className="txt-muted" style={{ color: '#94a3b8', fontSize: '11px', display: 'block' }}>
+                      <small style={{ color: '#94a3b8', fontSize: '11px', display: 'block' }}>
                         {tkt.numbers.length} {tkt.numbers.length === 1 ? 'balota registrada' : 'balotas registradas'} en balotera para extracción en vivo
                       </small>
                     </div>
@@ -642,10 +642,10 @@ export default function MisBoletasClientePage() {
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
                         <div>
-                          <span className="txt-muted" style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>Inversión Total:</span>
-                          <strong className="txt-white" style={{ fontSize: '18px', color: '#ffffff', fontWeight: '900' }}>
+                          <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>Inversión Total:</span>
+                          <span style={{ fontSize: '18px', color: '#ffffff', fontWeight: 900, display: 'block' }}>
                             {tkt.priceCop}
-                          </strong>
+                          </span>
                         </div>
                         <div style={{ textAlign: 'right' }}>
                           <span className="txt-muted" style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>Pasarela Recaudadora:</span>
