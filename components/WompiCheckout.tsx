@@ -26,7 +26,7 @@ export default function WompiCheckout({
     const configuredKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || '';
     const publicKey = configuredKey && !configuredKey.includes('tu_llave')
       ? configuredKey
-      : 'pub_test_Q5yDA9xoKdePiumALrhQV9RLG2ECZldD';
+      : 'pub_prod_szkcn750ePT0UEoi8Hil02CtApMvVCLV';
     
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://elganador.co';
     const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');

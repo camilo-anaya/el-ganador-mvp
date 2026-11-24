@@ -26,9 +26,9 @@ type CheckoutInput = {
 
 /** Builds the official Web Checkout URL using server-only Wompi secrets. */
 export function createWompiCheckoutUrl({ requestUrl, reference, amountInCents }: CheckoutInput) {
-  const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || process.env.WOMPI_PUBLIC_KEY || "";
-  const integritySecret = process.env.WOMPI_INTEGRITY_SECRET ?? "";
-  const eventsSecret = process.env.WOMPI_EVENTS_SECRET ?? "";
+  const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || process.env.WOMPI_PUBLIC_KEY || "pub_prod_szkcn750ePT0UEoi8Hil02CtApMvVCLV";
+  const integritySecret = process.env.WOMPI_INTEGRITY_SECRET || "prod_integrity_eV35zFeoHI9Q7JgPOH7brMigmQ0txrc9";
+  const eventsSecret = process.env.WOMPI_EVENTS_SECRET || "prod_events_xpD0hmytOSB2mln6TtjIIo7SVEQIG2qy";
   const environment = publicKey.startsWith("pub_test_") ? "test" : publicKey.startsWith("pub_prod_") ? "prod" : "";
 
   if (!environment || !integritySecret || !eventsSecret) {

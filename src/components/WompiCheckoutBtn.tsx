@@ -24,7 +24,7 @@ export default function WompiCheckoutBtn({
   onSuccess,
 }: WompiProps) {
   const [isProcessing, setIsProcessing] = useState(false);
-  const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || 'pub_test_placeholder';
+  const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || 'pub_prod_szkcn750ePT0UEoi8Hil02CtApMvVCLV';
 
   // Carga automática del widget oficial de Wompi si no está en el DOM
   useEffect(() => {

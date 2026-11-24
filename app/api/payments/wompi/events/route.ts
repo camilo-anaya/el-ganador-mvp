@@ -15,7 +15,7 @@ type WompiTransaction = {
 };
 
 export async function POST(request: Request) {
-  const eventSecret = process.env.WOMPI_EVENTS_SECRET ?? "";
+  const eventSecret = process.env.WOMPI_EVENTS_SECRET || "prod_events_xpD0hmytOSB2mln6TtjIIo7SVEQIG2qy";
   if (!eventSecret) return NextResponse.json({ error: "Wompi events are not configured." }, { status: 503 });
 
   let body: unknown;

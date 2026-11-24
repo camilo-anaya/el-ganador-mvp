@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Parámetros inválidos.' }, { status: 400 });
     }
 
-    const integritySecret = process.env.WOMPI_INTEGRITY_SECRET || '';
+    const integritySecret = process.env.WOMPI_INTEGRITY_SECRET || 'prod_integrity_eV35zFeoHI9Q7JgPOH7brMigmQ0txrc9';
     if (!integritySecret || integritySecret.includes('tu_llave')) {
       return NextResponse.json({ signature: null, configured: false });
     }
