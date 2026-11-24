@@ -357,10 +357,10 @@ export default function MisBoletasClientePage() {
         </div>
       </header>
 
-      <div className="desktop-workspace-grid" style={{ maxWidth: '820px', margin: '0 auto' }}>
+      <div className="desktop-workspace-grid" style={{ maxWidth: '820px', margin: '0 auto', background: '#0a0a0c' }}>
         <DesktopSidebar />
-        <main className="app-scroll-canvas" style={{ padding: '0 0 80px' }}>
-          {/* BOTONES DE FILTRO EN COLOR AZUL Y BLANCO */}
+        <main className="app-scroll-canvas" style={{ background: '#0a0a0c', minHeight: 'calc(100vh - 120px)', padding: '0 0 80px' }}>
+          {/* BOTONES DE FILTRO EN COLOR AZUL, BLANCO Y NEGRO */}
           <nav
             style={{
               display: 'flex',
@@ -378,9 +378,9 @@ export default function MisBoletasClientePage() {
                 flex: 1,
                 padding: '10px 14px',
                 borderRadius: '12px',
-                border: filter === 'pagada' ? '2px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.12)',
-                background: filter === 'pagada' ? 'linear-gradient(135deg, rgba(0, 122, 255, 0.25) 0%, rgba(0, 122, 255, 0.12) 100%)' : 'rgba(255, 255, 255, 0.04)',
-                color: filter === 'pagada' ? '#ffffff' : '#94a3b8',
+                border: filter === 'pagada' ? '2px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.15)',
+                background: filter === 'pagada' ? '#007AFF' : '#141824',
+                color: '#ffffff',
                 fontWeight: 900,
                 fontSize: '13px',
                 cursor: 'pointer',
@@ -388,6 +388,7 @@ export default function MisBoletasClientePage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '6px',
+                boxShadow: filter === 'pagada' ? '0 4px 14px rgba(0, 122, 255, 0.45)' : 'none',
                 transition: 'all 0.2s ease',
               }}
             >
@@ -401,9 +402,9 @@ export default function MisBoletasClientePage() {
                 flex: 1,
                 padding: '10px 14px',
                 borderRadius: '12px',
-                border: filter === 'all' ? '2px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.12)',
-                background: filter === 'all' ? 'linear-gradient(135deg, rgba(0, 122, 255, 0.25) 0%, rgba(0, 122, 255, 0.12) 100%)' : 'rgba(255, 255, 255, 0.04)',
-                color: filter === 'all' ? '#ffffff' : '#94a3b8',
+                border: filter === 'all' ? '2px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.15)',
+                background: filter === 'all' ? '#007AFF' : '#141824',
+                color: filter === 'all' ? '#ffffff' : '#cbd5e1',
                 fontWeight: 900,
                 fontSize: '13px',
                 cursor: 'pointer',
@@ -411,6 +412,7 @@ export default function MisBoletasClientePage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '6px',
+                boxShadow: filter === 'all' ? '0 4px 14px rgba(0, 122, 255, 0.45)' : 'none',
                 transition: 'all 0.2s ease',
               }}
             >
@@ -424,9 +426,9 @@ export default function MisBoletasClientePage() {
                 flex: 1,
                 padding: '10px 14px',
                 borderRadius: '12px',
-                border: filter === 'apartada' ? '2px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.12)',
-                background: filter === 'apartada' ? 'linear-gradient(135deg, rgba(0, 122, 255, 0.25) 0%, rgba(0, 122, 255, 0.12) 100%)' : 'rgba(255, 255, 255, 0.04)',
-                color: filter === 'apartada' ? '#ffffff' : '#94a3b8',
+                border: filter === 'apartada' ? '2px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.15)',
+                background: filter === 'apartada' ? '#007AFF' : '#141824',
+                color: filter === 'apartada' ? '#ffffff' : '#cbd5e1',
                 fontWeight: 900,
                 fontSize: '13px',
                 cursor: 'pointer',
@@ -434,6 +436,7 @@ export default function MisBoletasClientePage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '6px',
+                boxShadow: filter === 'apartada' ? '0 4px 14px rgba(0, 122, 255, 0.45)' : 'none',
                 transition: 'all 0.2s ease',
               }}
             >
