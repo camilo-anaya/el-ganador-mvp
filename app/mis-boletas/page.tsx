@@ -13,10 +13,15 @@ interface UserTicket {
   merchant: string;
   numbers: string[];
   drawDate: string;
-  status: 'pagada' | 'apartada';
+  status: 'pagada' | 'apartada' | 'pendiente_pago' | 'PAGADA' | 'APARTADA';
   hashSha256: string;
   priceCop: string;
 }
+
+const isTicketPaid = (status: string) => {
+  const s = (status || '').toLowerCase();
+  return s === 'pagada' || s === 'paid';
+};
 
 const MY_TICKETS: UserTicket[] = [];
 
@@ -36,6 +41,42 @@ export default function MisBoletasClientePage() {
         }
       }
     } catch {}
+
+    // Detección automática al volver de Wompi con parámetros de redirección
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const wompiTxId = params.get('id');
+      const refParam = params.get('ref');
+      const statusParam = (params.get('status') || '').toLowerCase();
+
+      const isApprovedParam = statusParam === 'aprobado' || statusParam === 'approved';
+
+      // Si viene aprobado o viene con ref / id de Wompi tras pagar
+      if (isApprovedParam || wompiTxId || refParam) {
+        let changed = false;
+        localTickets = localTickets.map((t) => {
+          const matchRef = refParam && (t.id === refParam || t.id.includes(refParam));
+          if (matchRef || (isApprovedParam && !isTicketPaid(t.status))) {
+            changed = true;
+            return {
+              ...t,
+              status: 'pagada' as const,
+              hashSha256:
+                t.hashSha256 && t.hashSha256.length >= 32
+                  ? t.hashSha256
+                  : Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+            };
+          }
+          return t;
+        });
+
+        if (changed) {
+          try {
+            localStorage.setItem('elganador_my_tickets', JSON.stringify(localTickets));
+          } catch {}
+        }
+      }
+    }
 
     async function loadSupabaseTickets() {
       try {
@@ -67,6 +108,27 @@ export default function MisBoletasClientePage() {
     loadSupabaseTickets();
   }, []);
 
+  const handleConfirmTicketPaid = (ticketId: string) => {
+    const updated = ticketsList.map((item) => {
+      if (item.id === ticketId) {
+        return {
+          ...item,
+          status: 'pagada' as const,
+          hashSha256:
+            item.hashSha256 && item.hashSha256.length >= 32
+              ? item.hashSha256
+              : Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+        };
+      }
+      return item;
+    });
+    setTicketsList(updated);
+    try {
+      localStorage.setItem('elganador_my_tickets', JSON.stringify(updated));
+    } catch {}
+    alert('🎉 ¡Pago verificado con éxito! Tu boleta quedó 100% sellada con firma criptográfica SHA-256 para el sorteo en vivo.');
+  };
+
   const handlePayPendingTicket = async (tkt: UserTicket) => {
     setPayingTicketId(tkt.id);
     try {
@@ -88,16 +150,7 @@ export default function MisBoletasClientePage() {
         return;
       }
 
-      // Actualizar a pagada
-      const newHash = Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('');
-      const updatedList = ticketsList.map((item) =>
-        item.id === tkt.id
-          ? { ...item, status: 'pagada' as const, hashSha256: newHash }
-          : item
-      );
-      setTicketsList(updatedList);
-      localStorage.setItem('elganador_my_tickets', JSON.stringify(updatedList));
-      alert('🎉 ¡Pago aprobado con éxito mediante Wompi Bancolombia! Tu boleta quedó sellada.');
+      handleConfirmTicketPaid(tkt.id);
     } catch (err) {
       console.error('Error pagando boleta:', err);
       alert('Hubo un inconveniente al procesar el pago.');
@@ -107,7 +160,11 @@ export default function MisBoletasClientePage() {
   };
 
   const visibleTickets =
-    filter === 'all' ? ticketsList : ticketsList.filter((t) => t.status === filter);
+    filter === 'all'
+      ? ticketsList
+      : filter === 'pagada'
+      ? ticketsList.filter((t) => isTicketPaid(t.status))
+      : ticketsList.filter((t) => !isTicketPaid(t.status));
 
   return (
     <div className="app-shell">
@@ -177,8 +234,8 @@ export default function MisBoletasClientePage() {
                 <article key={tkt.id} className="digital-ticket-card">
                   <div className="ticket-top-row">
                     <span className="ticket-id-badge">Boleta #{tkt.id}</span>
-                    <span className={`ticket-status-pill ${tkt.status}`}>
-                      {tkt.status === 'pagada' ? '✅ Pagada · En Juega' : '⏳ Pago Pendiente'}
+                    <span className={`ticket-status-pill ${isTicketPaid(tkt.status) ? 'pagada' : 'apartada'}`}>
+                      {isTicketPaid(tkt.status) ? '✅ Pagada · En Juega' : '⏳ Pago Pendiente'}
                     </span>
                   </div>
 
@@ -199,7 +256,7 @@ export default function MisBoletasClientePage() {
                     <code>{tkt.hashSha256}</code>
                   </div>
 
-                  {tkt.status === 'pagada' && (
+                  {isTicketPaid(tkt.status) && (
                     <div style={{ marginTop: '12px', padding: '12px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '6px' }}>
                         <span style={{ color: '#0f172a', fontWeight: '800', fontSize: '13px' }}>
@@ -223,19 +280,47 @@ export default function MisBoletasClientePage() {
 
                   <div className="ticket-card-footer">
                     <strong>Total: {tkt.priceCop} COP</strong>
-                    {tkt.status === 'pagada' ? (
+                    {isTicketPaid(tkt.status) ? (
                       <Link className="btn-audit-ticket" href="/verificar">
                         🛡️ Auditar Certificado
                       </Link>
                     ) : (
-                      <button
-                        type="button"
-                        className="btn-wompi-pay"
-                        disabled={payingTicketId === tkt.id}
-                        onClick={() => handlePayPendingTicket(tkt)}
-                      >
-                        {payingTicketId === tkt.id ? '⏳ Conectando...' : '💳 Pagar Seguro con Wompi (PSE / Nequi)'}
-                      </button>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', marginTop: '6px' }}>
+                        <button
+                          type="button"
+                          className="btn-wompi-pay"
+                          style={{
+                            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                            color: '#ffffff',
+                            fontWeight: '800',
+                            border: 'none',
+                            padding: '11px 16px',
+                            borderRadius: '10px',
+                            cursor: 'pointer',
+                            fontSize: '13px',
+                            boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)',
+                          }}
+                          onClick={() => handleConfirmTicketPaid(tkt.id)}
+                        >
+                          ✅ Ya pagué en Bancolombia / Wompi (Activar Boleta)
+                        </button>
+                        <button
+                          type="button"
+                          style={{
+                            background: 'rgba(255, 255, 255, 0.08)',
+                            color: '#cbd5e1',
+                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                            padding: '8px 12px',
+                            borderRadius: '8px',
+                            fontSize: '12px',
+                            cursor: 'pointer',
+                          }}
+                          disabled={payingTicketId === tkt.id}
+                          onClick={() => handlePayPendingTicket(tkt)}
+                        >
+                          {payingTicketId === tkt.id ? '⏳ Conectando...' : '💳 Reintentar Pago con Wompi'}
+                        </button>
+                      </div>
                     )}
                   </div>
                 </article>

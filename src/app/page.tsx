@@ -1192,8 +1192,16 @@ export default function CompactWhiteMarketplacePage() {
       setIsProcessingWompi(false);
       const transaction = result?.transaction;
       if (transaction?.status === 'APPROVED') {
+        try {
+          const rawStored = localStorage.getItem('elganador_my_tickets');
+          const myTickets = rawStored ? JSON.parse(rawStored) : [];
+          const updated = myTickets.map((t: any) =>
+            t.id === ref ? { ...t, status: 'pagada' } : t
+          );
+          localStorage.setItem('elganador_my_tickets', JSON.stringify(updated));
+        } catch {}
         alert('🎉 ¡Pago aprobado con éxito! Tu boleta ha sido sellada y registrada.');
-        window.location.href = redirectUrl || '/mis-boletas';
+        window.location.href = redirectUrl || `/mis-boletas?status=aprobado&ref=${ref}`;
       } else if (transaction?.status === 'DECLINED' || transaction?.status === 'ERROR') {
         alert('⚠️ El pago no se completó. Puedes volver a intentarlo cuando gustes.');
       }

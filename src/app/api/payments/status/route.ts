@@ -5,14 +5,42 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  const reference = new URL(request.url).searchParams.get("reference") ?? "";
-  if (!reference) {
-    return NextResponse.json({ error: "Referencia inválida." }, { status: 400 });
+  const { searchParams } = new URL(request.url);
+  const reference = searchParams.get("reference") ?? "";
+  const txId = searchParams.get("id") ?? "";
+
+  if (!reference && !txId) {
+    return NextResponse.json({ error: "Referencia o ID inválido." }, { status: 400 });
   }
 
-  // 1. Caso de Compra de Boletas de Sorteo (referencias 'tik_...' o IDs de participación)
-  if (reference.startsWith("tik_") || reference.startsWith("part_")) {
-    const rawId = reference.replace(/^tik_/, "");
+  // 0. Si viene ID de transacción de Wompi, consultar directamente Wompi
+  if (txId) {
+    try {
+      const wompiRes = await fetch(`https://production.wompi.co/v1/transactions/${txId}`, {
+        headers: { "Cache-Control": "no-cache" }
+      });
+      if (wompiRes.ok) {
+        const wompiJson = await wompiRes.json();
+        const tx = wompiJson?.data;
+        if (tx) {
+          return NextResponse.json({
+            type: "wompi",
+            status: tx.status,
+            reference: tx.reference,
+            amountInCents: tx.amount_in_cents,
+            id: tx.id,
+            paymentMethod: tx.payment_method_type,
+          }, { headers: { "Cache-Control": "no-store, max-age=0" } });
+        }
+      }
+    } catch (e) {
+      console.warn("Error consultando Wompi:", e);
+    }
+  }
+
+  // 1. Caso de Compra de Boletas de Sorteo (referencias 'tik_...', 'TKT-...' o IDs de participación)
+  if (reference.startsWith("tik_") || reference.startsWith("part_") || reference.startsWith("TKT-") || reference.startsWith("tkt_")) {
+    const rawId = reference.replace(/^(tik_|TKT-|tkt_)/, "");
     try {
       const partResult = await query(
         `SELECT p.id, p.draw_id, p.buyer_name, p.buyer_email, p.ticket_numbers, p.total_amount, p.status, d.title as draw_title

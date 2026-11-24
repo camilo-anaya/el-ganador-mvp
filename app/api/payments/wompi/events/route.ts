@@ -45,8 +45,8 @@ export async function POST(request: Request) {
   // =========================================================================
   // CASO 1: COMPRA DE BOLETAS DE SORTEO (Referencia comienza con 'tik_')
   // =========================================================================
-  if (reference.startsWith("tik_")) {
-    const rawId = reference.replace(/^tik_/, "");
+  if (reference.startsWith("tik_") || reference.startsWith("TKT-") || reference.startsWith("tkt_")) {
+    const rawId = reference.replace(/^(tik_|TKT-|tkt_)/, "");
     try {
       await withTransaction(async (tx) => {
         const partResult = await tx.query(
