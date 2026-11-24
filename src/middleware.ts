@@ -14,10 +14,7 @@ const SURFACE_COOKIE = 'elganador_surface';
  */
 const CLIENT_ONLY_PREFIXES = [
   '/favoritos',
-  '/mis-boletas',
   '/perfil',
-  '/comprar-boleta',
-  '/comprar',
   '/cuenta',
   '/pago',
   '/chat-premio',
