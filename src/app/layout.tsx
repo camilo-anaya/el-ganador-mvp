@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { NativeAppBridge } from '@/components/NativeAppBridge';
 
 export const metadata: Metadata = {
   title: 'El Ganador · Sorteos en Vivo',
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script src="https://checkout.wompi.co/widget.js" async />
       </head>
       <body suppressHydrationWarning>
+        <NativeAppBridge />
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

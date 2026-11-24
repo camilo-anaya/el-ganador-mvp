@@ -1,4 +1,5 @@
 import type { CapacitorConfig } from "@capacitor/cli";
+import { KeyboardResize, KeyboardStyle } from "@capacitor/keyboard";
 
 const config: CapacitorConfig = {
   appId: "com.solvio.elganador",
@@ -16,12 +17,12 @@ const config: CapacitorConfig = {
   plugins: {
     StatusBar: {
       overlaysWebView: true,
-      style: "DARK", // Usa "LIGHT" si tu barra superior es muy clara
+      style: "DARK" as any, // Usa "LIGHT" si tu barra superior es muy clara
       backgroundColor: "#00000000",
     },
     Keyboard: {
-      resize: "none",
-      style: "DARK",
+      resize: KeyboardResize.None,
+      style: KeyboardStyle.Dark,
       resizeOnFullScreen: true,
     },
   },
