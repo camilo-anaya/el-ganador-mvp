@@ -1120,7 +1120,7 @@ export default function CompactWhiteMarketplacePage() {
 
     // 2. Integración Oficial Wompi (Web Checkout directo en móvil para evitar bloqueo táctil de iframe iOS + Widget limpio en escritorio)
     const configuredKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || '';
-    const publicKey = configuredKey && !configuredKey.includes('tu_llave') && !configuredKey.includes('xxxxxx')
+    const publicKey = (configuredKey && configuredKey.startsWith('pub_prod_'))
       ? configuredKey
       : 'pub_prod_szkcn750ePT0UEoi8Hil02CtApMvVCLV';
 

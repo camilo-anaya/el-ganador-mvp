@@ -129,7 +129,7 @@ function ComprarBoletaContent() {
     setSelectedNumbers(shuffled.slice(0, Math.min(qty, shuffled.length)).sort((a, b) => a - b));
   };
 
-  const handleProceedToWompiPayment = () => {
+  const handleProceedToWompiPayment = async () => {
     if (selectedNumbers.length === 0 || !userSession) {
       alert('Por favor selecciona al menos un número de la suerte disponible.');
       return;
@@ -139,7 +139,7 @@ function ComprarBoletaContent() {
     const ticketPriceInCents = totalAmount * 100;
     const reference = `TKT-${raffleId}-${selectedNumbers.join('-')}-${Date.now()}`;
     const configuredKey = process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || '';
-    const publicKey = configuredKey && !configuredKey.includes('tu_llave') && !configuredKey.includes('xxxxxx')
+    const publicKey = (configuredKey && configuredKey.startsWith('pub_prod_'))
       ? configuredKey
       : 'pub_prod_szkcn750ePT0UEoi8Hil02CtApMvVCLV';
 
@@ -147,6 +147,20 @@ function ComprarBoletaContent() {
     const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
     const redirectUrl = isLocal ? undefined : `${origin}/mis-boletas?status=aprobado&ref=${reference}`;
     const cleanPhone = (userSession?.phone || '3001234567').replace(/\D/g, '').slice(-10) || '3001234567';
+
+    // Obtener firma de integridad oficial para modo producción
+    let integritySignature: string | null = null;
+    try {
+      const sigRes = await fetch('/api/payments/wompi-signature', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reference, amountInCents: ticketPriceInCents, currency: 'COP' }),
+      });
+      if (sigRes.ok) {
+        const sigData = await sigRes.json();
+        if (sigData?.signature) integritySignature = String(sigData.signature);
+      }
+    } catch {}
 
     // Guardar en billetera local
     try {
@@ -192,6 +206,11 @@ function ComprarBoletaContent() {
         }
       };
 
+      if (integritySignature) {
+        config['signature:integrity'] = integritySignature;
+        config['signature_integrity'] = integritySignature;
+      }
+
       if (redirectUrl) {
         config.redirectUrl = redirectUrl;
       }
@@ -210,9 +229,20 @@ function ComprarBoletaContent() {
       return;
     }
 
-    const wompiUrl = `https://checkout.wompi.co/p/?public-key=${publicKey}&currency=COP&amount-in-cents=${ticketPriceInCents}&reference=${reference}&redirect-url=${encodeURIComponent(redirectUrl || '')}&customer-data:email=${encodeURIComponent(userSession.email)}`;
+    const params = new URLSearchParams({
+      'public-key': publicKey,
+      currency: 'COP',
+      'amount-in-cents': String(ticketPriceInCents),
+      reference,
+      'customer-data:email': userSession.email,
+      'customer-data:full-name': userSession.name,
+      'customer-data:phone-number': cleanPhone,
+      'customer-data:phone-number-prefix': '+57',
+    });
+    if (redirectUrl) params.set('redirect-url', redirectUrl);
+    if (integritySignature) params.set('signature:integrity', integritySignature);
 
-    window.location.href = wompiUrl;
+    window.location.href = `https://checkout.wompi.co/p/?${params.toString()}`;
   };
 
   if (loading) {
