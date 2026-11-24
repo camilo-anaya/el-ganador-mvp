@@ -11,7 +11,7 @@ const config: CapacitorConfig = {
     androidScheme: "https",
   },
   android: {
-    adjustMarginsForEdgeToEdge: "auto",
+    ...({ adjustMarginsForEdgeToEdge: "auto" } as any),
   },
   plugins: {
     StatusBar: {
