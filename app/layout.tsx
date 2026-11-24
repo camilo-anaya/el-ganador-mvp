@@ -44,9 +44,7 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <NativeAppBridge />
-        <div className="native-shell">
-          <ThemeProvider>{children}</ThemeProvider>
-        </div>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
