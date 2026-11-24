@@ -67,9 +67,9 @@ export default function FavoritesSection() {
                 fontWeight: 'bold',
                 fontSize: '13px',
                 cursor: 'pointer',
-                border: 'none',
-                background: merchant.isFollowing ? '#333' : '#d4af37',
-                color: merchant.isFollowing ? '#fff' : '#000'
+                background: merchant.isFollowing ? 'rgba(0, 122, 255, 0.15)' : '#007AFF',
+                color: merchant.isFollowing ? '#007AFF' : '#ffffff',
+                border: merchant.isFollowing ? '1px solid rgba(0, 122, 255, 0.4)' : 'none',
               }}
             >
               {merchant.isFollowing ? 'Siguiendo ✓' : 'Seguir +'}

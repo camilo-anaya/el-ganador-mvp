@@ -37,7 +37,7 @@
 .adminHeaderBrand {
   font-size: 19px;
   font-weight: 900;
-  color: #065f46;
+  color: #007AFF;
   text-decoration: none;
   letter-spacing: -0.5px;
   display: flex;
@@ -46,9 +46,9 @@
 }
 
 .adminHeaderBadge {
-  background: #ecfdf5;
-  color: #047857;
-  border: 1px solid #a7f3d0;
+  background: #f0f7ff;
+  color: #0062cc;
+  border: 1px solid #bfdbfe;
   font-size: 10px;
   font-weight: 800;
   padding: 3px 8px;
@@ -73,7 +73,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #10b981;
+  background: #38bdf8;
   box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
   animation: adminPulse 2s infinite;
 }
@@ -138,7 +138,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
   display: grid;
   place-items: center;
@@ -161,7 +161,7 @@
 .adminStoreChipPlan {
   font-size: 9px;
   font-weight: 700;
-  color: #059669;
+  color: #007AFF;
 }
 
 .adminBtnLogout {
@@ -217,7 +217,7 @@
 }
 
 .adminSidebarStoreHeader {
-  background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+  background: linear-gradient(135deg, #0a0f1d 0%, #007AFF 100%);
   color: #ffffff;
   padding: 14px 16px;
   border-radius: 14px;
@@ -233,7 +233,7 @@
   height: 42px;
   border-radius: 10px;
   background: #ffffff;
-  color: #065f46;
+  color: #007AFF;
   display: grid;
   place-items: center;
   font-size: 20px;
@@ -259,7 +259,7 @@
 .adminSidebarStoreMeta p {
   margin: 2px 0 0;
   font-size: 11px;
-  color: #a7f3d0;
+  color: #bfdbfe;
 }
 
 .adminSidebarNavGroup {
@@ -314,9 +314,9 @@
 }
 
 .adminNavItem.isActive {
-  background: #ecfdf5;
-  color: #065f46;
-  border-color: #a7f3d0;
+  background: #f0f7ff;
+  color: #007AFF;
+  border-color: #bfdbfe;
   font-weight: 800;
 }
 
@@ -348,7 +348,7 @@
 }
 
 .adminNavItem.isActive .adminNavBadge {
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
 }
 
@@ -389,7 +389,7 @@
 
 .adminSidebarHintBox b {
   font-size: 12px;
-  color: #065f46;
+  color: #007AFF;
 }
 
 .adminSidebarHintBox p {
@@ -404,7 +404,7 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: #047857;
+  color: #0062cc;
   font-size: 11px;
   font-weight: 800;
   cursor: pointer;
@@ -428,7 +428,7 @@
 
 /* HERO COMMAND CENTER BANNER */
 .adminHeroWorkbench {
-  background: linear-gradient(135deg, #064e3b 0%, #065f46 45%, #0f172a 100%);
+  background: linear-gradient(135deg, #0a0f1d 0%, #007AFF 45%, #0f172a 100%);
   color: #ffffff;
   border-radius: 20px;
   padding: 28px 32px;
@@ -471,7 +471,7 @@
 .adminHeroTitles p {
   margin: 6px 0 0;
   font-size: 13px;
-  color: #a7f3d0;
+  color: #bfdbfe;
   max-width: 620px;
   line-height: 1.5;
 }
@@ -652,7 +652,7 @@
 .adminKpiProgressBar {
   height: 100%;
   border-radius: 10px;
-  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(90deg, #38bdf8 0%, #007AFF 100%);
 }
 
 /* 5. WORKBENCH TWO COLUMN GRID */
@@ -707,7 +707,7 @@
 }
 
 .adminBtnSmallAction {
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
   border: none;
   font-size: 12px;
@@ -722,7 +722,7 @@
 }
 
 .adminBtnSmallAction:hover {
-  background: #065f46;
+  background: #007AFF;
 }
 
 /* LISTA DE RIFAS ACTIVAS (ESTILO SAAS TABLE) */
@@ -881,7 +881,7 @@
   width: 120px;
   height: 150px;
   border-radius: 14px;
-  border: 2px dashed #a7f3d0;
+  border: 2px dashed #bfdbfe;
   background: #f0fdf4;
   display: flex;
   flex-direction: column;
@@ -889,7 +889,7 @@
   justify-content: center;
   gap: 8px;
   cursor: pointer;
-  color: #047857;
+  color: #0062cc;
   font-size: 12px;
   font-weight: 800;
   flex-shrink: 0;
@@ -1058,9 +1058,9 @@
     flex-shrink: 0;
   }
   .adminMobileTabBtn.isActive {
-    background: #ecfdf5;
-    border-color: #a7f3d0;
-    color: #065f46;
+    background: #f0f7ff;
+    border-color: #bfdbfe;
+    color: #007AFF;
     font-weight: 800;
   }
   .adminKpisGrid {
@@ -1193,7 +1193,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
   display: grid;
   place-items: center;
@@ -1216,7 +1216,7 @@
 }
 
 .adminFeedComposerTextarea:focus {
-  border-color: #059669;
+  border-color: #007AFF;
   box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
 }
 
@@ -1250,9 +1250,9 @@
 }
 
 .adminFeedFilterBtn.isActive {
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
-  border-color: #047857;
+  border-color: #0062cc;
 }
 
 .adminFeedCard {
@@ -1463,7 +1463,7 @@
 .purchaseItemAmount {
   font-size: 16px;
   font-weight: 900;
-  color: #065f46;
+  color: #007AFF;
 }
 
 .purchaseItemStatus {
@@ -1474,8 +1474,8 @@
   font-weight: 800;
   padding: 2px 8px;
   border-radius: 99px;
-  background: #ecfdf5;
-  color: #059669;
+  background: #f0f7ff;
+  color: #007AFF;
 }
 
 .purchaseItemActions {
@@ -1506,13 +1506,13 @@
 }
 
 .btnPurchaseAction.primary {
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
-  border-color: #047857;
+  border-color: #0062cc;
 }
 
 .btnPurchaseAction.primary:hover {
-  background: #065f46;
+  background: #007AFF;
 }
 
 /* ==========================================================================
@@ -1543,7 +1543,7 @@
   height: 100%;
   border-radius: 20px;
   object-fit: cover;
-  border: 3px solid #059669;
+  border: 3px solid #007AFF;
   box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
 }
 
@@ -1551,7 +1551,7 @@
   width: 100%;
   height: 100%;
   border-radius: 20px;
-  background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  background: linear-gradient(135deg, #0a0f1d 0%, #0062cc 100%);
   color: #ffffff;
   display: grid;
   place-items: center;
@@ -1580,7 +1580,7 @@
 
 .adminAvatarCameraBtn:hover {
   transform: scale(1.1);
-  background: #047857;
+  background: #0062cc;
 }
 
 .adminProfilePhotoMeta {
@@ -1622,9 +1622,9 @@
 }
 
 .storyCaptureBtn.photo {
-  border-color: #10b981;
-  background: #ecfdf5;
-  color: #065f46;
+  border-color: #38bdf8;
+  background: #f0f7ff;
+  color: #007AFF;
 }
 
 .storyCaptureBtn.video {
@@ -1682,8 +1682,8 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 2px solid #10b981;
-  background: #065f46;
+  border: 2px solid #38bdf8;
+  background: #007AFF;
   color: #ffffff;
   font-size: 11px;
   font-weight: 800;
@@ -1780,7 +1780,7 @@
 .fbAdminCoverPlaceholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+  background: linear-gradient(135deg, #0a0f1d 0%, #007AFF 50%, #0062cc 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1884,7 +1884,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  background: linear-gradient(135deg, #0a0f1d 0%, #0062cc 100%);
   color: #ffffff;
   display: grid;
   place-items: center;
@@ -1912,7 +1912,7 @@
 
 .fbAdminAvatarCameraBtn:hover {
   transform: scale(1.1);
-  background: #047857;
+  background: #0062cc;
 }
 
 .fbAdminMeta {

@@ -1042,7 +1042,7 @@ export default function Formulario8Modal({
         }
 
         .f8-btn-download:hover {
-          background: #059669;
+          background: #007AFF;
         }
 
         .f8-btn-print {

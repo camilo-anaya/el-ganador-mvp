@@ -107,7 +107,7 @@ export default function CrearRifaEmpresarioPage() {
           receiptUrl = payUrlData.publicUrl;
         }
       } else {
-        receiptUrl = `https://el-ganador-mvp.vercel.app/docs/formulario-8-radicacion-${radicadoFinal}.pdf`;
+        receiptUrl = `/empresario/formulario-8?rad=${radicadoFinal}`;
       }
 
       const rafflePayload = {

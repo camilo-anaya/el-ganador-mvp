@@ -509,8 +509,8 @@ export default function PerfilClientePage() {
                   justifyContent: 'space-between',
                   padding: '14px 16px',
                   borderRadius: '14px',
-                  border: themePreference === 'light' ? '1.5px solid #d4af37' : '1px solid rgba(255, 255, 255, 0.1)',
-                  background: themePreference === 'light' ? 'rgba(212, 175, 55, 0.14)' : 'rgba(255, 255, 255, 0.04)',
+                  border: themePreference === 'light' ? '1.5px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.1)',
+                  background: themePreference === 'light' ? 'rgba(0, 122, 255, 0.15)' : 'rgba(255, 255, 255, 0.04)',
                   color: '#ffffff',
                   cursor: 'pointer',
                   textAlign: 'left',
@@ -524,7 +524,7 @@ export default function PerfilClientePage() {
                   </div>
                 </div>
                 {themePreference === 'light' && (
-                  <span style={{ color: '#d4af37', fontWeight: 800, fontSize: '16px' }}>✓</span>
+                  <span style={{ color: '#007AFF', fontWeight: 800, fontSize: '16px' }}>✓</span>
                 )}
               </button>
 
@@ -542,8 +542,8 @@ export default function PerfilClientePage() {
                   justifyContent: 'space-between',
                   padding: '14px 16px',
                   borderRadius: '14px',
-                  border: themePreference === 'dark' ? '1.5px solid #d4af37' : '1px solid rgba(255, 255, 255, 0.1)',
-                  background: themePreference === 'dark' ? 'rgba(212, 175, 55, 0.14)' : 'rgba(255, 255, 255, 0.04)',
+                  border: themePreference === 'dark' ? '1.5px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.1)',
+                  background: themePreference === 'dark' ? 'rgba(0, 122, 255, 0.15)' : 'rgba(255, 255, 255, 0.04)',
                   color: '#ffffff',
                   cursor: 'pointer',
                   textAlign: 'left',
@@ -553,11 +553,11 @@ export default function PerfilClientePage() {
                   <span style={{ fontSize: '24px' }}>🌙</span>
                   <div>
                     <div style={{ fontWeight: 700, fontSize: '14px', color: '#ffffff' }}>Modo Oscuro (Dark Luxury)</div>
-                    <div style={{ fontSize: '12px', color: '#94a3b8' }}>Fondo carbón y detalles dorados</div>
+                    <div style={{ fontSize: '12px', color: '#94a3b8' }}>Fondo carbón y detalles azules</div>
                   </div>
                 </div>
                 {themePreference === 'dark' && (
-                  <span style={{ color: '#d4af37', fontWeight: 800, fontSize: '16px' }}>✓</span>
+                  <span style={{ color: '#007AFF', fontWeight: 800, fontSize: '16px' }}>✓</span>
                 )}
               </button>
 
@@ -575,8 +575,8 @@ export default function PerfilClientePage() {
                   justifyContent: 'space-between',
                   padding: '14px 16px',
                   borderRadius: '14px',
-                  border: themePreference === 'system' ? '1.5px solid #d4af37' : '1px solid rgba(255, 255, 255, 0.1)',
-                  background: themePreference === 'system' ? 'rgba(212, 175, 55, 0.14)' : 'rgba(255, 255, 255, 0.04)',
+                  border: themePreference === 'system' ? '1.5px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.1)',
+                  background: themePreference === 'system' ? 'rgba(0, 122, 255, 0.15)' : 'rgba(255, 255, 255, 0.04)',
                   color: '#ffffff',
                   cursor: 'pointer',
                   textAlign: 'left',
@@ -590,7 +590,7 @@ export default function PerfilClientePage() {
                   </div>
                 </div>
                 {themePreference === 'system' && (
-                  <span style={{ color: '#d4af37', fontWeight: 800, fontSize: '16px' }}>✓</span>
+                  <span style={{ color: '#007AFF', fontWeight: 800, fontSize: '16px' }}>✓</span>
                 )}
               </button>
             </div>

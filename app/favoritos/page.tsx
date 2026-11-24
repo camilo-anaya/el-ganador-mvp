@@ -1166,7 +1166,7 @@ export default function FavoritosPage() {
                   onClick={() => handleSendBroadcastNotification(currentBiz.name)}
                   disabled={notificationSent === currentBiz.name}
                   style={{
-                    background: notificationSent === currentBiz.name ? '#10b981' : '#059669',
+                    background: notificationSent === currentBiz.name ? '#10b981' : '#007AFF',
                     color: '#ffffff',
                     border: 'none',
                     padding: '12px 20px',

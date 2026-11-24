@@ -368,14 +368,14 @@ export default function TodosLosSorteosPage() {
               style={{
                 textAlign: 'center',
                 padding: '12px',
-                background: 'linear-gradient(135deg, #d4af37, #b48008)',
-                color: '#000000',
+                background: 'linear-gradient(135deg, #007AFF, #0056b3)',
+                color: '#ffffff',
                 fontWeight: 900,
                 fontSize: '13.5px',
                 borderRadius: '10px',
                 textDecoration: 'none',
                 marginTop: 'auto',
-                boxShadow: '0 4px 12px rgba(212, 175, 55, 0.25)',
+                boxShadow: '0 4px 12px rgba(0, 122, 255, 0.35)',
               }}
             >
               Apartar Boleta →

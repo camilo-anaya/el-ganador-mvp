@@ -802,7 +802,7 @@ export default function PlanesPublicitariosPage() {
               }}
             >
               <div>
-                <div style={{ fontSize: '0.86rem', fontWeight: 900, color: activeSubInfo ? (isDark ? '#6ee7b7' : '#065f46') : (isDark ? '#fca5a5' : '#991b1b') }}>
+                <div style={{ fontSize: '0.86rem', fontWeight: 900, color: activeSubInfo ? (isDark ? '#6ee7b7' : '#007AFF') : (isDark ? '#fca5a5' : '#991b1b') }}>
                   {activeSubInfo
                     ? `🟢 BANNER ENCENDIDO EN VIVO · ${activeSubInfo.planName} (${activeSubInfo.cycle})`
                     : '🔴 BANNER APAGADO · Sin suscripción mensual activa'}
@@ -830,7 +830,7 @@ export default function PlanesPublicitariosPage() {
             </div>
 
             {autonomousPublishedNotice && (
-              <div style={{ marginBottom: '14px', padding: '12px 16px', borderRadius: '12px', background: isDark ? 'rgba(16, 185, 129, 0.16)' : '#ecfdf5', border: '1px solid #10b981', color: isDark ? '#6ee7b7' : '#065f46', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', fontSize: '0.86rem', fontWeight: 700 }}>
+              <div style={{ marginBottom: '14px', padding: '12px 16px', borderRadius: '12px', background: isDark ? 'rgba(16, 185, 129, 0.16)' : '#ecfdf5', border: '1px solid #10b981', color: isDark ? '#6ee7b7' : '#007AFF', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', fontSize: '0.86rem', fontWeight: 700 }}>
                 <span>🎉 {autonomousPublishedNotice}</span>
                 <Link href="/" style={{ padding: '6px 14px', borderRadius: '8px', background: '#10b981', color: '#ffffff', textDecoration: 'none', fontWeight: 800, fontSize: '0.8rem' }}>
                   Ver en el Banner Principal →

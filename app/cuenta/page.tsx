@@ -765,12 +765,12 @@ export default function CustomerAccountPage() {
             </div>
 
             {/* SEGURIDAD DE LA CUENTA DEL CLIENTE */}
-            <div className="biometricPromoCard" style={{ background: "linear-gradient(135deg, #064e3b 0%, #065f46 100%)", border: "1px solid #059669" }}>
+            <div className="biometricPromoCard" style={{ background: "linear-gradient(135deg, #0f1422 0%, #0a0a0c 100%)", border: "1.5px solid #007AFF" }}>
               <div className="biometricLeft">
                 <div className="faceIdGlowingIcon">🔐</div>
                 <div>
                   <h3 style={{ color: "#ffffff" }}>Bóveda de Seguridad & Protección al Comprador</h3>
-                  <p style={{ color: "#d1fae5" }}>
+                  <p style={{ color: "#94a3b8" }}>
                     Tus boletas, números apartados y datos bancarios están protegidos con cifrado de grado bancario. Solo tú puedes autorizar cobros de premios mayores con tu contraseña y PIN personal.
                   </p>
                 </div>

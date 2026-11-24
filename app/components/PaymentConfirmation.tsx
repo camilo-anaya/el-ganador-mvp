@@ -113,7 +113,7 @@ export default function PaymentConfirmation({ reference }: { reference: string }
             aria-hidden="true"
             style={{
               background: isApproved ? "rgba(16, 185, 129, 0.15)" : "#fef3c7",
-              color: isApproved ? "#059669" : "#d97706",
+              color: isApproved ? "#007AFF" : "#d97706",
               fontSize: "32px",
             }}
           >

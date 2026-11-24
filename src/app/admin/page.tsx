@@ -1085,7 +1085,7 @@ export default function AdminPage() {
             type="button"
             className="adminHeaderLink"
             onClick={() => { setTab("Mis Compras"); setDraft(null); }}
-            style={{ fontWeight: 800, color: "#065f46", borderColor: "#a7f3d0", background: "#f0fdf4", cursor: "pointer" }}
+            style={{ fontWeight: 800, color: "#007AFF", borderColor: "#a7f3d0", background: "#f0fdf4", cursor: "pointer" }}
             title="Ver mis boletas compradas y facturas"
           >
             <span>🛍️ Mis Compras ({myPurchases.length || 3})</span>
@@ -1158,7 +1158,7 @@ export default function AdminPage() {
             >
               <span className="adminNavIcon">🛍️</span>
               <span className="adminNavLabel">Mis Compras</span>
-              <span className="adminNavBadge" style={{ background: "#ecfdf5", color: "#065f46" }}>
+              <span className="adminNavBadge" style={{ background: "#ecfdf5", color: "#007AFF" }}>
                 {myPurchases.length || 3}
               </span>
             </button>
@@ -1416,7 +1416,7 @@ export default function AdminPage() {
                   <div className="adminCard">
                     <div className="adminCardHeader">
                       <div className="adminCardHeaderTitles">
-                        <span style={{ fontSize: "10px", fontWeight: "800", color: "#059669", letterSpacing: "1px", textTransform: "uppercase" }}>
+                        <span style={{ fontSize: "10px", fontWeight: "800", color: "#007AFF", letterSpacing: "1px", textTransform: "uppercase" }}>
                           OPERACIÓN EN TIEMPO REAL
                         </span>
                         <h3>Seguimiento Operativo de Rifas en Curso</h3>
@@ -1466,7 +1466,7 @@ export default function AdminPage() {
                                   <span>•</span>
                                   <span>Vendidos: <strong>{count(d.sold)} / {count(d.total_tickets)} ({pct}%)</strong></span>
                                   <span>•</span>
-                                  <span>Recaudo: <strong style={{ color: "#059669" }}>{money(raffleRev)}</strong></span>
+                                  <span>Recaudo: <strong style={{ color: "#007AFF" }}>{money(raffleRev)}</strong></span>
                                 </div>
 
                                 <div className="adminRaffleProgressTrack">
@@ -1474,7 +1474,7 @@ export default function AdminPage() {
                                     style={{
                                       height: "100%",
                                       width: `${pct}%`,
-                                      background: pct >= 80 ? "linear-gradient(90deg, #10b981, #059669)" : "linear-gradient(90deg, #3b82f6, #1d4ed8)",
+                                      background: pct >= 80 ? "linear-gradient(90deg, #10b981, #007AFF)" : "linear-gradient(90deg, #3b82f6, #1d4ed8)",
                                       borderRadius: "6px",
                                     }}
                                   />
@@ -1504,7 +1504,7 @@ export default function AdminPage() {
                                 <a
                                   href="/"
                                   className="adminBtnTableEdit"
-                                  style={{ color: "#059669" }}
+                                  style={{ color: "#007AFF" }}
                                 >
                                   🔗 Ver en Marketplace
                                 </a>
@@ -1599,14 +1599,14 @@ export default function AdminPage() {
                         <h3>Tu Capacidad de Publicación y Aforo</h3>
                         <p>Vigencia activa hasta {planExpiryLabel}. Capacidad ilimitada de cartones y rifas en paralelo.</p>
                       </div>
-                      <span className="portalPill" style={{ background: "#ecfdf5", color: "#065f46", fontWeight: "800" }}>
+                      <span className="portalPill" style={{ background: "#ecfdf5", color: "#007AFF", fontWeight: "800" }}>
                         🟢 Verificado Notarial Coljuegos
                       </span>
                     </div>
                     <div style={{ background: "#f8fafc", padding: "16px", borderRadius: "12px", border: "1px solid #e2e8f0" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", fontSize: "13px", fontWeight: "700", marginBottom: "8px" }}>
                         <span>Aforo Utilizado en Sorteos Activos:</span>
-                        <span style={{ color: "#059669" }}>{count(sold)} / {count(sold + available)} ({sold + available > 0 ? Math.round((sold / (sold + available)) * 100) : 0}%)</span>
+                        <span style={{ color: "#007AFF" }}>{count(sold)} / {count(sold + available)} ({sold + available > 0 ? Math.round((sold / (sold + available)) * 100) : 0}%)</span>
                       </div>
                       <div className="portalProgress">
                         <span style={{ width: `${sold + available > 0 ? Math.round((sold / (sold + available)) * 100) : 0}%` }} />
@@ -1651,12 +1651,12 @@ export default function AdminPage() {
                       </div>
                       <div className="adminTelemetryItem">
                         <small>🎯 Tasa de Permanencia</small>
-                        <strong style={{ color: "#059669" }}>91.4%</strong>
+                        <strong style={{ color: "#007AFF" }}>91.4%</strong>
                       </div>
                     </div>
 
                     <div style={{ background: "#ffffff", padding: "12px", borderRadius: "10px", border: "1px solid #e2e8f0", fontSize: "12px", color: "#334155", lineHeight: "1.4" }}>
-                      <strong style={{ color: "#047857" }}>💡 Oportunidad Comercial:</strong> Tus usuarios permanecen más de 4 minutos conectados a la sala 3D. Tienes aforo premium para comercializar pautas y patrocinios.
+                      <strong style={{ color: "#0062cc" }}>💡 Oportunidad Comercial:</strong> Tus usuarios permanecen más de 4 minutos conectados a la sala 3D. Tienes aforo premium para comercializar pautas y patrocinios.
                     </div>
 
                     <div style={{ marginTop: "12px", display: "flex", gap: "8px", flexWrap: "wrap" }}>
@@ -1704,7 +1704,7 @@ export default function AdminPage() {
                   {/* CARD 3: VIGENCIA DE SUSCRIPCIONES EN TIEMPO REAL */}
                   <div className="adminCard">
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                      <span style={{ fontSize: "10px", fontWeight: "800", color: "#059669", letterSpacing: "1px", textTransform: "uppercase" }}>
+                      <span style={{ fontSize: "10px", fontWeight: "800", color: "#007AFF", letterSpacing: "1px", textTransform: "uppercase" }}>
                         VIGENCIA & SUSCRIPCIONES
                       </span>
                       <span className="portalStatus isLive" style={{ fontSize: "10px" }}>🟢 Activas</span>
@@ -1714,7 +1714,7 @@ export default function AdminPage() {
                       <div style={{ background: "#f8fafc", padding: "12px", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                           <strong style={{ fontSize: "13px", color: "#0f172a" }}>🏢 Perfil Empresarial</strong>
-                          <span style={{ fontSize: "11px", fontWeight: "800", color: "#059669" }}>{bizSubCountdown.days} días restantes</span>
+                          <span style={{ fontSize: "11px", fontWeight: "800", color: "#007AFF" }}>{bizSubCountdown.days} días restantes</span>
                         </div>
                         <small style={{ color: "#64748b", fontSize: "11px" }}>Vence: {planExpiryLabel}</small>
                       </div>
@@ -1750,7 +1750,7 @@ export default function AdminPage() {
           <div className="subsViewHeader">
             <div className="subsTitleRow">
               <div>
-                <p className="portalEyebrow" style={{ color: "#059669", margin: "0 0 6px" }}>CONTROL FINANCIERO & VIGENCIA</p>
+                <p className="portalEyebrow" style={{ color: "#007AFF", margin: "0 0 6px" }}>CONTROL FINANCIERO & VIGENCIA</p>
                 <h1 className="subsMainTitle">💳 Centro de Suscripciones & Pauta Publicitaria</h1>
                 <p className="subsSubtitle">
                   Gestión integral de tu perfil empresarial verificado y tus vallas publicitarias en circulación. Ambas suscripciones están vinculadas a débito automático por adelantado mediante tu tarjeta de crédito corporativa.
@@ -1851,7 +1851,7 @@ export default function AdminPage() {
                 </div>
                 <div className="billingLine">
                   <span>Renovación automática:</span>
-                  <strong style={{ color: "#059669" }}>Activada (Débito por Adelantado)</strong>
+                  <strong style={{ color: "#007AFF" }}>Activada (Débito por Adelantado)</strong>
                 </div>
               </div>
 
@@ -1896,7 +1896,7 @@ export default function AdminPage() {
               <div className="subMetricProgressBox">
                 <div className="metricLabelRow">
                   <span>Cumplimiento Normativo:</span>
-                  <strong style={{ color: "#059669" }}>100% Verificado</strong>
+                  <strong style={{ color: "#007AFF" }}>100% Verificado</strong>
                 </div>
                 <div className="metricProgressBarTrack">
                   <div className="metricProgressBarFill gold" style={{ width: "95%" }} />
@@ -1917,7 +1917,7 @@ export default function AdminPage() {
                 </div>
                 <div className="billingLine">
                   <span>Renovación automática:</span>
-                  <strong style={{ color: "#059669" }}>Activada (Débito Anual por Adelantado)</strong>
+                  <strong style={{ color: "#007AFF" }}>Activada (Débito Anual por Adelantado)</strong>
                 </div>
               </div>
 
@@ -1965,7 +1965,7 @@ export default function AdminPage() {
                     <td>Suscripción Perfil Empresa Verificado (1 Año)</td>
                     <td>15 Oct 2026</td>
                     <td><span className="cardTinyTag">💳 Visa •••• 4821</span></td>
-                    <td><strong style={{ color: "#059669" }}>$ 390.000 COP</strong></td>
+                    <td><strong style={{ color: "#007AFF" }}>$ 390.000 COP</strong></td>
                     <td><span className="statusApprovedBadge">✓ Aprobado</span></td>
                     <td><button type="button" className="btnDownloadInvoice" onClick={() => alert("Descargando PDF...")}>⬇ PDF</button></td>
                   </tr>
@@ -1974,7 +1974,7 @@ export default function AdminPage() {
                     <td>Pauta Publicitaria 20.000 Impresiones en Circulación</td>
                     <td>15 Oct 2026</td>
                     <td><span className="cardTinyTag">💳 Visa •••• 4821</span></td>
-                    <td><strong style={{ color: "#059669" }}>$ 180.000 COP</strong></td>
+                    <td><strong style={{ color: "#007AFF" }}>$ 180.000 COP</strong></td>
                     <td><span className="statusApprovedBadge">✓ Aprobado</span></td>
                     <td><button type="button" className="btnDownloadInvoice" onClick={() => alert("Descargando PDF...")}>⬇ PDF</button></td>
                   </tr>
@@ -1990,7 +1990,7 @@ export default function AdminPage() {
         <section className="portalPanel">
           <div className="portalPanelHeading">
             <div>
-              <p className="portalEyebrow" style={{ color: "#059669" }}>HISTORIAL CONTABLE & BOLETERÍA DIGITAL</p>
+              <p className="portalEyebrow" style={{ color: "#007AFF" }}>HISTORIAL CONTABLE & BOLETERÍA DIGITAL</p>
               <h2>🛍️ Mis Compras, Boletas y Facturas Adquiridas</h2>
               <p>
                 Historial completo de boletas compradas en sorteos oficiales, facturación de servicios de plataforma y recibos con pasarela Wompi según Ley 643 de 2001.
@@ -2028,7 +2028,7 @@ export default function AdminPage() {
             </div>
             <div className="purchasesKpiCard">
               <span className="purchasesKpiLabel">🛡️ Respaldo Notarial</span>
-              <div className="purchasesKpiValue" style={{ color: "#047857" }}>100% Cifrado</div>
+              <div className="purchasesKpiValue" style={{ color: "#0062cc" }}>100% Cifrado</div>
               <span className="purchasesKpiSub">Criptografía SHA-256 e IVA 19% certificado</span>
             </div>
           </div>
@@ -2043,9 +2043,9 @@ export default function AdminPage() {
                 padding: "8px 16px",
                 borderRadius: "8px",
                 border: "1px solid",
-                borderColor: purchasesFilter === "all" ? "#047857" : "#e2e8f0",
+                borderColor: purchasesFilter === "all" ? "#0062cc" : "#e2e8f0",
                 background: purchasesFilter === "all" ? "#ecfdf5" : "#ffffff",
-                color: purchasesFilter === "all" ? "#065f46" : "#475569",
+                color: purchasesFilter === "all" ? "#007AFF" : "#475569",
                 fontWeight: 800,
                 cursor: "pointer"
               }}
@@ -2060,9 +2060,9 @@ export default function AdminPage() {
                 padding: "8px 16px",
                 borderRadius: "8px",
                 border: "1px solid",
-                borderColor: purchasesFilter === "completed" ? "#047857" : "#e2e8f0",
+                borderColor: purchasesFilter === "completed" ? "#0062cc" : "#e2e8f0",
                 background: purchasesFilter === "completed" ? "#ecfdf5" : "#ffffff",
-                color: purchasesFilter === "completed" ? "#065f46" : "#475569",
+                color: purchasesFilter === "completed" ? "#007AFF" : "#475569",
                 fontWeight: 800,
                 cursor: "pointer"
               }}
@@ -2389,7 +2389,7 @@ export default function AdminPage() {
                   type="submit"
                   className="portalPrimary"
                   disabled={crmBroadcastBusy}
-                  style={{ background: "#059669", fontSize: "14px", padding: "10px 20px" }}
+                  style={{ background: "#007AFF", fontSize: "14px", padding: "10px 20px" }}
                 >
                   {crmBroadcastBusy ? "Enviando a la comunidad…" : `🚀 Enviar Rifa a ${crmBroadcastAudience === "vip" ? crmStats.vipCount : crmBroadcastAudience === "active" ? crmStats.activeBuyers : crmStats.totalContacts} Clientes`}
                 </button>
@@ -2481,7 +2481,7 @@ export default function AdminPage() {
                         <b>{c.totalTickets} boletas</b>
                       </td>
                       <td>
-                        <span style={{ color: "#047857", fontWeight: 800 }}>{money(c.totalSpent)}</span>
+                        <span style={{ color: "#0062cc", fontWeight: 800 }}>{money(c.totalSpent)}</span>
                       </td>
                       <td>
                         <small>{c.lastDraw}</small>
@@ -2520,7 +2520,7 @@ export default function AdminPage() {
         <section className="portalPanel">
           <div className="portalPanelHeading">
             <div>
-              <p className="portalEyebrow" style={{ color: "#059669" }}>SALA 3D & TELEMETRÍA EN TIEMPO REAL</p>
+              <p className="portalEyebrow" style={{ color: "#007AFF" }}>SALA 3D & TELEMETRÍA EN TIEMPO REAL</p>
               <h2>Audiencia, Espectadores y Rating en Vivo</h2>
               <p>Monitoreo segundo a segundo de cuántas personas se unen a las transmisiones y cómo se calcula su permanencia.</p>
             </div>
@@ -2639,7 +2639,7 @@ export default function AdminPage() {
           <div className="adminCard">
             <div className="adminCardHeader">
               <div className="adminCardHeaderTitles">
-                <span style={{ fontSize: "10px", fontWeight: "800", color: "#059669", letterSpacing: "1px", textTransform: "uppercase" }}>
+                <span style={{ fontSize: "10px", fontWeight: "800", color: "#007AFF", letterSpacing: "1px", textTransform: "uppercase" }}>
                   RED SOCIAL EMPRESARIAL & NOVEDADES
                 </span>
                 <h2>📰 Feed Oficial de Publicaciones de Comercios</h2>
@@ -2685,7 +2685,7 @@ export default function AdminPage() {
               </div>
               <div>
                 <strong style={{ fontSize: "14px", color: "#0f172a" }}>{account?.business_name}</strong>
-                <small style={{ display: "block", fontSize: "11px", color: "#059669", fontWeight: "700" }}>
+                <small style={{ display: "block", fontSize: "11px", color: "#007AFF", fontWeight: "700" }}>
                   ✓ Perfil Comercial Verificado · Publicación oficial para el Feed
                 </small>
               </div>
@@ -2757,7 +2757,7 @@ export default function AdminPage() {
                   />
                 </label>
                 {postImage && (
-                  <span style={{ fontSize: "12px", color: "#059669", fontWeight: "700" }}>
+                  <span style={{ fontSize: "12px", color: "#007AFF", fontWeight: "700" }}>
                     ✓ {postImage.name}
                   </span>
                 )}
@@ -2857,7 +2857,7 @@ export default function AdminPage() {
                       <a
                         href={`/?buscar=${encodeURIComponent(p.business_name ?? "")}`}
                         className="btnHeroOutline"
-                        style={{ fontSize: "11px", padding: "6px 12px", color: "#059669", borderColor: "#a7f3d0", textDecoration: "none" }}
+                        style={{ fontSize: "11px", padding: "6px 12px", color: "#007AFF", borderColor: "#a7f3d0", textDecoration: "none" }}
                       >
                         🛒 Ver Rifas de esta Tienda →
                       </a>
@@ -3035,7 +3035,7 @@ export default function AdminPage() {
                   <h2 style={{ margin: 0, fontSize: "24px", fontWeight: 900, color: "#0f172a" }}>
                     {account.business_name}
                   </h2>
-                  <span className="badgeSecurity" style={{ background: "#ecfdf5", color: "#059669", borderColor: "#a7f3d0" }}>
+                  <span className="badgeSecurity" style={{ background: "#ecfdf5", color: "#007AFF", borderColor: "#a7f3d0" }}>
                     ✓ Perfil Comercial Verificado
                   </span>
                 </div>
@@ -3051,7 +3051,7 @@ export default function AdminPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inlineLink"
-                    style={{ fontSize: "12px", fontWeight: "800", color: "#047857" }}
+                    style={{ fontSize: "12px", fontWeight: "800", color: "#0062cc" }}
                   >
                     👁️ Ver Vitrina en Marketplace →
                   </a>
@@ -3087,7 +3087,7 @@ export default function AdminPage() {
                         </button>
                       </div>
                     ) : (
-                      <div style={{ width: "100%", height: "80px", borderRadius: "10px", background: "linear-gradient(135deg, #064e3b 0%, #065f46 100%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#a7f3d0", fontSize: "12px", fontWeight: "700", marginBottom: "8px" }}>
+                      <div style={{ width: "100%", height: "80px", borderRadius: "10px", background: "linear-gradient(135deg, #0a0f1d 0%, #007AFF 100%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#bfdbfe", fontSize: "12px", fontWeight: "700", marginBottom: "8px" }}>
                         🖼️ Sin portada personalizada (Se muestra gradiente corporativo)
                       </div>
                     )}
@@ -3117,7 +3117,7 @@ export default function AdminPage() {
                       <img
                         src={profile.photoUrl}
                         alt="Logo del comercio"
-                        style={{ width: "56px", height: "56px", borderRadius: "50%", objectFit: "cover", border: "2px solid #059669" }}
+                        style={{ width: "56px", height: "56px", borderRadius: "50%", objectFit: "cover", border: "2px solid #007AFF" }}
                       />
                     ) : (
                       <div
@@ -3125,7 +3125,7 @@ export default function AdminPage() {
                           width: "56px",
                           height: "56px",
                           borderRadius: "50%",
-                          background: "#065f46",
+                          background: "#007AFF",
                           color: "#ffffff",
                           display: "grid",
                           placeItems: "center",

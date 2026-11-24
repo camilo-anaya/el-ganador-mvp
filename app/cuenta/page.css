@@ -11,7 +11,8 @@
 
 /* --- HEADER HUD DEL CLIENTE --- */
 .customerHeroCard {
-  background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #0f766e 100%);
+  background: linear-gradient(135deg, #0e131f 0%, #0a0a0c 50%, #111827 100%);
+  border: 1.5px solid #007AFF;
   border-radius: 20px;
   padding: 28px;
   color: #ffffff;
@@ -33,7 +34,7 @@
   right: -60px;
   width: 220px;
   height: 220px;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 122, 255, 0.25) 0%, transparent 70%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -49,9 +50,9 @@
   width: 90px;
   height: 90px;
   border-radius: 50%;
-  border: 3px solid #fbbf24;
+  border: 3px solid #007AFF;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  background: #022c22;
+  background: #0a0a0c;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -71,7 +72,7 @@
   font-size: 32px;
   font-weight: 900;
   color: #fbbf24;
-  background: #064e3b;
+  background: #007AFF;
 }
 
 .avatarCameraBtn {
@@ -197,13 +198,13 @@
 }
 
 .customerTabBtn:hover {
-  color: #065f46;
-  background: #f1f5f9;
+  color: #007AFF;
+  background: rgba(0, 122, 255, 0.08);
 }
 
 .customerTabBtn.active {
-  color: #065f46;
-  background: #ecfdf5;
+  color: #007AFF;
+  background: rgba(0, 122, 255, 0.12);
 }
 
 .customerTabBtn.active::after {
@@ -213,7 +214,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: #059669;
+  background: #007AFF;
   border-radius: 3px;
 }
 
@@ -300,7 +301,7 @@
   height: 76px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #059669;
+  border: 2px solid #007AFF;
 }
 
 .photoActions {
@@ -314,7 +315,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: #059669;
+  background: #007AFF;
   color: #ffffff;
   border-radius: 8px;
   font-size: 13px;
@@ -324,7 +325,7 @@
 }
 
 .uploadFileLabel:hover {
-  background: #047857;
+  background: #0056b3;
 }
 
 .uploadFileInputHidden {
@@ -353,7 +354,7 @@
 
 .presetAvatarBtn:hover {
   transform: scale(1.15);
-  border-color: #059669;
+  border-color: #007AFF;
 }
 
 /* --- KYC DOCUMENTO --- */
@@ -427,8 +428,8 @@
 .customerForm input:focus,
 .customerForm select:focus {
   outline: none;
-  border-color: #059669;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
+  border-color: #007AFF;
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.25);
 }
 
 .customerForm input:disabled {
@@ -438,7 +439,7 @@
 }
 
 .btnCustomerPrimary {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  background: linear-gradient(135deg, #007AFF 0%, #0056b3 100%);
   color: #ffffff;
   border: none;
   padding: 12px 20px;
@@ -450,13 +451,13 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.35);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btnCustomerPrimary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 6px 16px rgba(0, 122, 255, 0.45);
 }
 
 .btnCustomerPrimary:disabled {
@@ -537,18 +538,18 @@
 }
 
 .btnFaceIdTrigger.isActiveState {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  border-color: #34d399;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, #007AFF 0%, #0056b3 100%);
+  border-color: #38bdf8;
+  box-shadow: 0 4px 14px rgba(0, 122, 255, 0.4);
 }
 
 /* --- BÓVEDA CRIPTOGRÁFICA MILITAR --- */
 .encryptionVaultCard {
-  background: #022c22;
-  border: 1px solid #059669;
+  background: #0a0a0c;
+  border: 1.5px solid #007AFF;
   border-radius: 16px;
   padding: 24px;
-  color: #ecfdf5;
+  color: #f8fafc;
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
@@ -576,9 +577,9 @@
 }
 
 .vaultBadge {
-  background: #064e3b;
-  border: 1px solid #10b981;
-  color: #6ee7b7;
+  background: rgba(0, 122, 255, 0.15);
+  border: 1px solid #007AFF;
+  color: #38bdf8;
   padding: 4px 12px;
   border-radius: 10px;
   font-size: 11px;
@@ -791,10 +792,10 @@
 }
 
 .subFilterBtn.active {
-  background: #059669;
-  border-color: #047857;
+  background: #007AFF;
+  border-color: #0056b3;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.35);
 }
 
 .historySectionGroup {
@@ -809,7 +810,7 @@
   border-radius: 10px;
   background: #f1f5f9;
   margin-bottom: 14px;
-  border-left: 4px solid #059669;
+  border-left: 4px solid #007AFF;
 }
 
 .historyGroupHeader.expiredGroup {
@@ -1005,9 +1006,9 @@
 }
 
 .ticketNumberBadge {
-  background: #022c22;
-  border: 1.5px solid #10b981;
-  color: #a7f3d0;
+  background: #0a0a0c;
+  border: 1.5px solid #007AFF;
+  color: #38bdf8;
   padding: 3px 10px;
   border-radius: 8px;
   font-size: 13px;
@@ -1208,7 +1209,7 @@
   margin: 0;
   font-size: 15px;
   font-weight: 800;
-  color: #059669;
+  color: #007AFF;
   font-family: monospace;
 }
 
@@ -1284,7 +1285,7 @@
 }
 
 .dianTotLine.total strong {
-  color: #059669;
+  color: #007AFF;
   font-size: 16px;
 }
 
@@ -1316,7 +1317,7 @@
 }
 
 .btnDianPrint {
-  background: #059669;
+  background: #007AFF;
   color: #ffffff;
   border: none;
   padding: 12px;
@@ -1324,7 +1325,7 @@
   font-weight: 800;
   font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
 }
 
 .emptySubSection {
@@ -1378,7 +1379,7 @@
 .portalHeaderLeft .portalBrand {
   font-size: 17px !important;
   font-weight: 900 !important;
-  color: #047857 !important;
+  color: #007AFF !important;
   letter-spacing: -0.5px !important;
   text-decoration: none !important;
 }
@@ -1466,8 +1467,8 @@
   display: inline-block !important;
   font-size: 11px !important;
   font-weight: 800 !important;
-  color: #047857 !important;
-  background: #dcfce7 !important;
+  color: #007AFF !important;
+  background: rgba(0, 122, 255, 0.12) !important;
   padding: 3px 8px !important;
   border-radius: 6px !important;
 }
@@ -1538,8 +1539,8 @@
 }
 
 .presetAvatarBtnCard:hover {
-  border-color: #059669 !important;
-  background: #f0fdf4 !important;
+  border-color: #007AFF !important;
+  background: rgba(0, 122, 255, 0.08) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -1643,7 +1644,7 @@
   }
   
   .customerTabBtn.active {
-    background: #065f46 !important;
+    background: #007AFF !important;
     color: #ffffff !important;
   }
   

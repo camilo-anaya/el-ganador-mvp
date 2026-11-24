@@ -609,13 +609,13 @@ const VIBRANT_AD_THEMES = [
     couponColor: '#ffffff',
   },
   {
-    bg: 'linear-gradient(135deg, #065f46 0%, #059669 40%, #10b981 100%)', // Esmeralda Radiante
-    border: 'rgba(52, 211, 153, 0.75)',
-    shadow: '0 12px 36px rgba(5, 150, 105, 0.45)',
-    tagBg: 'rgba(0, 0, 0, 0.35)',
-    tagBorder: '#a7f3d0',
+    bg: 'linear-gradient(135deg, #0a0a0c 0%, #007AFF 50%, #0056b3 100%)', // Azul Eléctrico Insignia
+    border: 'rgba(0, 122, 255, 0.75)',
+    shadow: '0 12px 36px rgba(0, 122, 255, 0.45)',
+    tagBg: 'rgba(0, 0, 0, 0.45)',
+    tagBorder: '#38bdf8',
     btnBg: '#ffffff',
-    btnText: '#064e3b',
+    btnText: '#007AFF',
     couponBg: 'rgba(255, 255, 255, 0.22)',
     couponColor: '#ffffff',
   },
@@ -1137,6 +1137,27 @@ export default function CompactWhiteMarketplacePage() {
       myTickets.unshift(newTicket);
       localStorage.setItem('elganador_my_tickets', JSON.stringify(myTickets));
     } catch {}
+
+    // 1.5. Registrar orden en base de datos para sincronizar con Wompi, webhook y CRM Empresarial
+    try {
+      await fetch('/api/payments/create-intent', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reference: ref,
+          drawId: ticketModalRaffle.id,
+          raffleTitle: ticketModalRaffle.title,
+          merchant: ticketModalRaffle.merchant,
+          buyerName: buyerNam,
+          buyerEmail: buyerMail,
+          buyerPhone: buyerPh,
+          numbers: assignedNumbers.map((n) => parseInt(n, 10)),
+          totalAmount,
+        }),
+      });
+    } catch (intentErr) {
+      console.warn('Aviso registrando intención de pago:', intentErr);
+    }
 
     // 2. Integración Oficial Wompi (Web Checkout directo en móvil para evitar bloqueo táctil de iframe iOS + Widget limpio en escritorio)
     const configuredKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || '';
@@ -3636,8 +3657,8 @@ export default function CompactWhiteMarketplacePage() {
                     setTimeout(() => setCopiedLink(false), 2000);
                   }}
                   style={{
-                    background: copiedLink ? '#007AFF' : 'linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%)',
-                    color: copiedLink ? '#fff' : '#000',
+                    background: copiedLink ? '#0284c7' : '#007AFF',
+                    color: '#ffffff',
                     fontWeight: 800,
                     fontSize: '0.85rem',
                     border: 'none',
@@ -3742,7 +3763,7 @@ export default function CompactWhiteMarketplacePage() {
                 ✕
               </button>
               <div style={{ position: 'absolute', bottom: '12px', left: '16px', right: '16px' }}>
-                <span style={{ fontSize: '10px', background: '#d4af37', color: '#000', fontWeight: 900, padding: '3px 8px', borderRadius: '6px' }}>
+                <span style={{ fontSize: '10px', background: '#007AFF', color: '#ffffff', fontWeight: 900, padding: '3px 8px', borderRadius: '6px' }}>
                   MARCA PATROCINADORA VERIFICADA
                 </span>
                 <h2 style={{ fontSize: '20px', fontWeight: 900, color: '#ffffff', margin: '6px 0 2px' }}>
@@ -3859,13 +3880,13 @@ export default function CompactWhiteMarketplacePage() {
                     display: 'block',
                     textAlign: 'center',
                     padding: '14px',
-                    background: 'linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%)',
-                    color: '#000000',
+                    background: 'linear-gradient(135deg, #007AFF 0%, #0056b3 100%)',
+                    color: '#ffffff',
                     fontWeight: 900,
                     fontSize: '14px',
                     borderRadius: '12px',
                     textDecoration: 'none',
-                    boxShadow: '0 4px 14px rgba(212, 175, 55, 0.35)'
+                    boxShadow: '0 4px 14px rgba(0, 122, 255, 0.35)'
                   }}
                 >
                   🎯 Ver Sorteo Vinculado de esta Empresa →

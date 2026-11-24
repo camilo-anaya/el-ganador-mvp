@@ -54,7 +54,7 @@ export async function GET(request: Request) {
         `SELECT p.id, p.draw_id, d.title as raffle_title, p.buyer_name, p.buyer_email,
                 p.ticket_numbers, p.total_amount, p.created_at, p.status, d.admin as merchant_admin
          FROM participations p
-         JOIN draws d ON d.id = p.draw_id
+         LEFT JOIN draws d ON d.id = p.draw_id
          ORDER BY p.created_at DESC
          LIMIT 100`
       );

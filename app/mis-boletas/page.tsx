@@ -43,41 +43,10 @@ export default function MisBoletasClientePage() {
       }
     } catch {}
 
-    // Auto-actualizar y asegurar que las boletas compradas con Wompi queden como PAGADAS
-    let hasUpdated = false;
+    // Filtrar boletas de prueba temporales residuales
+    localTickets = localTickets.filter((t) => !t.id.startsWith('TKT-PILOT'));
 
-    if (localTickets.length > 0) {
-      localTickets = localTickets.map((t) => {
-        if (!isTicketPaid(t.status)) {
-          hasUpdated = true;
-          return {
-            ...t,
-            status: 'pagada' as const,
-            priceCop: t.priceCop || '$ 2.000 COP',
-            hashSha256:
-              t.hashSha256 && t.hashSha256.length >= 32
-                ? t.hashSha256
-                : Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
-          };
-        }
-        return t;
-      });
-    } else {
-      // Si la billetera está vacía en este navegador, inicializar la boleta oficial de $2.000 COP comprada por Wompi
-      hasUpdated = true;
-      localTickets = [
-        {
-          id: `TKT-PILOT-${Date.now().toString().slice(-6)}`,
-          raffleTitle: 'Sorteo Piloto Oficial · 2 Boletas Pagadas',
-          merchant: 'El Ganador Colombia (Oficial Verificado)',
-          numbers: ['07', '23'],
-          drawDate: 'Hoy en vivo · 8:00 PM',
-          status: 'pagada',
-          hashSha256: '9f8e7d6c5b4a3f2e1d0c9b8a7f6e5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e',
-          priceCop: '$ 2.000 COP',
-        },
-      ];
-    }
+    let hasUpdated = false;
 
     // Detección automática al volver de Wompi con parámetros de redirección
     if (typeof window !== 'undefined') {
@@ -89,6 +58,20 @@ export default function MisBoletasClientePage() {
       const isApprovedParam = statusParam === 'aprobado' || statusParam === 'approved';
 
       if (isApprovedParam || wompiTxId || refParam) {
+        if (refParam && !localTickets.some((t) => t.id === refParam || t.id.includes(refParam))) {
+          hasUpdated = true;
+          localTickets.unshift({
+            id: refParam,
+            raffleTitle: 'Sorteo Oficial El Ganador',
+            merchant: 'El Ganador Colombia (Oficial Verificado)',
+            numbers: ['01'],
+            drawDate: 'Próximo sorteo en vivo',
+            status: 'pagada',
+            hashSha256: Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+            priceCop: '$ 35.000 COP',
+          });
+        }
+
         localTickets = localTickets.map((t) => {
           const matchRef = refParam && (t.id === refParam || t.id.includes(refParam));
           if (matchRef || isApprovedParam) {

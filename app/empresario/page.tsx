@@ -551,8 +551,8 @@ function PanelEmpresarioContent() {
             : '⚠️ Pendiente Voucher');
 
       const now = Date.now();
-      const resolutionPdfUrl = `https://el-ganador-mvp.vercel.app/docs/formulario-8-radicacion-${radicadoFinal}.pdf`;
-      const paymentReceiptFinal = receiptUrl || `https://el-ganador-mvp.vercel.app/docs/voucher-tramite-${radicadoFinal}.pdf`;
+      const resolutionPdfUrl = `/empresario/formulario-8?id=raffle-${slug}-${now}&rad=${radicadoFinal}`;
+      const paymentReceiptFinal = receiptUrl || `/empresario/formulario-8?id=raffle-${slug}-${now}&rad=${radicadoFinal}`;
 
       const newRaffle = {
         id: `raffle-${slug}-${now}`,
@@ -664,8 +664,9 @@ function PanelEmpresarioContent() {
       // Fallback resiliente automático: nunca bloquear al usuario en el demo
       const fallbackRadicado = `SOL-COLJ-2026-${Math.floor(100000 + Math.random() * 900000)}`;
       const fallbackSlug = (raffleTitle || 'sorteo-oficial').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const fallbackId = `raffle-${fallbackSlug}-${Date.now()}`;
       const fallbackRaffle = {
-        id: `raffle-${fallbackSlug}-${Date.now()}`,
+        id: fallbackId,
         title: raffleTitle || 'Gran Sorteo Oficial',
         merchant: storeName,
         city: 'Colombia',
@@ -685,8 +686,8 @@ function PanelEmpresarioContent() {
         legalScope,
         legalRadicado: fallbackRadicado,
         radicado_number: fallbackRadicado,
-        resolution_pdf_url: `https://el-ganador-mvp.vercel.app/docs/formulario-8-radicacion-${fallbackRadicado}.pdf`,
-        payment_receipt_url: `https://el-ganador-mvp.vercel.app/docs/voucher-tramite-${fallbackRadicado}.pdf`,
+        resolution_pdf_url: `/empresario/formulario-8?id=${fallbackId}&rad=${fallbackRadicado}`,
+        payment_receipt_url: `/empresario/formulario-8?id=${fallbackId}&rad=${fallbackRadicado}`,
         status: 'en_tramite_coljuegos',
         legalVerified: true,
       };

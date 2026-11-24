@@ -169,7 +169,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .searchBox > span { font-size: 20px; line-height: 1; color: #34d399; }
 .searchBox input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: #ffffff; font-size: 13px; font-weight: 600; }
 .searchBox input::placeholder { color: #94a3b8; font-weight: 500; }
-.buyTop { min-height: 42px; padding: 0 18px; color: white; font-weight: 900; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 11px; background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); text-shadow: 0 1px 3px rgba(0,0,0,0.4); letter-spacing: 0.3px; transition: all 0.2s; }
+.buyTop { min-height: 42px; padding: 0 18px; color: white; font-weight: 900; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 11px; background: linear-gradient(135deg, #007AFF 0%, #10b981 50%, #34d399 100%); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35); text-shadow: 0 1px 3px rgba(0,0,0,0.4); letter-spacing: 0.3px; transition: all 0.2s; }
 .buyTop:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.48); }
 .profileButton { display: flex; align-items: center; gap: 9px; white-space: nowrap; border: 0; background: transparent; color: var(--ink); font-weight: 800; font-size: 12px; }
 .userAvatar { width: 37px; height: 37px; display: grid; place-items: center; border-radius: 50%; background: #e8eef4; font-size: 18px; }
@@ -618,7 +618,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   min-height: 32px;
   padding: 0 12px;
   color: #ffffff;
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #007AFF 0%, #10b981 100%);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 8px;
   font-size: 11px;
@@ -1110,7 +1110,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
     transform: translateY(-2px);
   }
   .bottomNavItem.active .bottomNavLabel {
-    color: #059669;
+    color: #007AFF;
     font-weight: 900;
   }
   .bottomNavItem.active::after {
@@ -1120,11 +1120,11 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
     width: 14px;
     height: 3px;
     border-radius: 3px;
-    background: #059669;
+    background: #007AFF;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
   }
   .bottomNavItem.featuredPublish .bottomNavIconWrap {
-    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+    background: linear-gradient(135deg, #10b981 0%, #0062cc 100%);
     color: #ffffff;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.38), 0 2px 6px rgba(0, 0, 0, 0.22);
     transform: translateY(-4px);
@@ -1134,7 +1134,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
   }
   .bottomNavItem.featuredPublish .bottomNavLabel {
-    color: #047857;
+    color: #0062cc;
     font-weight: 900;
   }
   .bottomNavItem.featuredPublish:hover .bottomNavIconWrap,
@@ -1529,7 +1529,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   }
   .accountTypeSwitch .selected {
     background: #ffffff !important;
-    color: #064e3b !important;
+    color: #007AFF !important; border: 1px solid #007AFF !important;
     border: 1px solid #e2d19f !important;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
   }
@@ -2845,7 +2845,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   font-weight: 900;
   text-decoration: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #10b981, #007AFF);
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
@@ -2966,7 +2966,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 .dropdownItem:hover {
   background: #f8fafc;
-  color: #047857;
+  color: #0062cc;
 }
 
 .dropdownItem.logoutItem {
@@ -2998,7 +2998,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 .howItWorksHeader h2 {
   font-size: 24px;
-  color: #064e3b;
+  color: #007AFF;
   margin: 4px 0 6px;
 }
 
@@ -3035,7 +3035,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   width: 32px;
   height: 32px;
   border-radius: 10px;
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
   display: grid;
   place-items: center;
@@ -3109,7 +3109,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
   display: grid;
   place-items: center;
@@ -3135,7 +3135,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 .btnStepWompi {
   padding: 8px 14px;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #10b981, #007AFF);
   color: #ffffff;
   font-weight: 850;
   font-size: 11px;
@@ -3267,7 +3267,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
   display: grid;
   place-items: center;
@@ -3624,7 +3624,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   display: block;
   font-size: 18px;
   font-weight: 950;
-  color: #047857;
+  color: #0062cc;
 }
 
 .adMetricPillItem small {
@@ -3660,7 +3660,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .adPackageCard.featured {
-  border-color: #047857;
+  border-color: #0062cc;
   background: #f0fdf4;
   box-shadow: 0 8px 24px rgba(4, 120, 87, 0.12);
 }
@@ -3685,7 +3685,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .adPackagePrice {
   font-size: 18px;
   font-weight: 950;
-  color: #047857;
+  color: #0062cc;
   margin: 6px 0 12px;
 }
 
@@ -3713,7 +3713,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 .adPackageFeatures li::before {
   content: "✓";
-  color: #047857;
+  color: #0062cc;
   font-weight: 900;
 }
 
@@ -3987,7 +3987,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .crmItem strong {
   display: block;
   font-size: 18px;
-  color: #047857;
+  color: #0062cc;
   font-weight: 950;
 }
 
@@ -4022,7 +4022,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   position: absolute;
   inset: 0 0 auto;
   height: 4px;
-  background: linear-gradient(90deg, #d97706, #f59e0b, #047857, #2563eb);
+  background: linear-gradient(90deg, #d97706, #f59e0b, #0062cc, #2563eb);
 }
 
 .pasarelaControls {
@@ -4251,12 +4251,12 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .btnBusinessAction {
-  background: #047857;
+  background: #0062cc;
   color: #ffffff;
 }
 
 .btnBusinessAction:hover {
-  background: #065f46;
+  background: #007AFF;
 }
 
 .btnWhatsappAction {
@@ -4862,7 +4862,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .telemetryStepCard.highlightStep .stepNumberBadge {
-  background: #059669;
+  background: #007AFF;
   color: #ffffff;
 }
 
@@ -5180,7 +5180,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   background: #ecfdf5;
   border: 1px solid #a7f3d0;
   border-radius: 6px;
-  color: #065f46;
+  color: #007AFF;
   font-size: 11px;
   font-weight: 700;
 }
@@ -5486,7 +5486,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
    ACCIÓN RÁPIDA: BOTÓN SUBIR RIFA INTUITIVO
    ======================================================== */
 .adminQuickActionBanner {
-  background: linear-gradient(135deg, #064e3b 0%, #065f46 60%, #047857 100%);
+  background: linear-gradient(135deg, #0e131f 0%, #007AFF 100%);
   border-radius: 16px;
   padding: 20px 24px;
   color: #ffffff;
@@ -5495,9 +5495,9 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-  box-shadow: 0 8px 24px rgba(6, 78, 59, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.25);
   margin-bottom: 20px;
-  border: 1px solid #10b981;
+  border: 1.5px solid #007AFF;
 }
 
 .quickActionBadge {
@@ -5550,7 +5550,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .btnSubirRifaTable {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  background: linear-gradient(135deg, #007AFF 0%, #0062cc 100%);
   color: #ffffff;
   border: 1px solid #34d399;
   padding: 8px 16px;
@@ -5789,8 +5789,8 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #064e3b;
-  color: #fbbf24;
+  background: #007AFF;
+  color: #ffffff;
   font-weight: 900;
 }
 
@@ -5949,7 +5949,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #065f46, #047857);
+  background: linear-gradient(135deg, #007AFF, #0062cc);
   color: #34d399;
   display: flex;
   align-items: center;
@@ -6190,7 +6190,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 .bizSubPlanBadge {
   background: #d1fae5;
-  color: #065f46;
+  color: #007AFF;
   font-size: 10px;
   font-weight: 900;
   padding: 2px 8px;
@@ -6201,13 +6201,13 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .bizSubStatusDot {
   font-size: 11px;
   font-weight: 800;
-  color: #047857;
+  color: #0062cc;
 }
 
 .bizSubLeft h3 {
   margin: 4px 0 2px;
   font-size: 15px;
-  color: #064e3b;
+  color: #007AFF;
 }
 
 .bizSubLeft p {
@@ -6231,7 +6231,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .bizSubCounterLabel {
   font-size: 9.5px;
   font-weight: 800;
-  color: #047857;
+  color: #0062cc;
   letter-spacing: 0.3px;
 }
 
@@ -6239,7 +6239,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 16px;
   font-weight: 900;
-  color: #065f46;
+  color: #007AFF;
   margin: 2px 0;
 }
 
@@ -6434,7 +6434,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .subsTagBreadcrumb {
   font-size: 11px;
   font-weight: 800;
-  color: #059669;
+  color: #007AFF;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -6478,7 +6478,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 .badgeSecurity {
   background: #ecfdf5;
-  color: #065f46;
+  color: #007AFF;
   border: 1px solid #a7f3d0;
 }
 
@@ -6835,7 +6835,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .metricProgressBarFill.gold {
-  background: linear-gradient(90deg, #059669, #34d399);
+  background: linear-gradient(90deg, #007AFF, #34d399);
 }
 
 .metricPercentText {
@@ -6885,7 +6885,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .btnSubRenew.profile {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: linear-gradient(135deg, #007AFF, #0062cc);
   box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
 }
 
@@ -7355,7 +7355,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .navItem.navItemPublish {
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.12) 100%);
   border: 1px dashed rgba(16, 185, 129, 0.45);
-  color: #065f46;
+  color: #007AFF;
   font-weight: 850;
   margin: 2px 0;
 }
@@ -7481,7 +7481,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 .publishTabBtn.active {
   color: #0f172a;
-  border-bottom-color: #059669;
+  border-bottom-color: #007AFF;
   background: #ffffff;
   border-radius: 8px 8px 0 0;
 }
@@ -7528,7 +7528,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .publishFormGroup select:focus,
 .publishFormGroup textarea:focus {
   outline: none;
-  border-color: #059669;
+  border-color: #007AFF;
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
 }
 
@@ -7577,7 +7577,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .photoCounterPill {
   font-size: 11px;
   font-weight: 850;
-  color: #059669;
+  color: #007AFF;
   background: #dcfce7;
   padding: 4px 10px;
   border-radius: 99px;
@@ -7604,7 +7604,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .quickPrizeThumb.selected {
-  border-color: #059669;
+  border-color: #007AFF;
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
 }
 
@@ -7671,7 +7671,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #007AFF 0%, #10b981 100%);
   color: #ffffff;
   font-size: 14px;
   font-weight: 850;
@@ -7811,7 +7811,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .newsThumbItem.active {
-  border-color: #059669;
+  border-color: #007AFF;
 }
 
 .newsThumbItem img {
@@ -7890,9 +7890,9 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .mechanicCardOption.active {
-  border-color: #059669;
+  border-color: #007AFF;
   background: #f0fdf4;
-  box-shadow: 0 0 0 1px #059669;
+  box-shadow: 0 0 0 1px #007AFF;
 }
 
 .mechanicCardOption:disabled {
@@ -7981,7 +7981,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 .postSpecPill.price {
   background: #ecfdf5;
-  color: #047857;
+  color: #0062cc;
   border: 1px solid #a7f3d0;
 }
 
@@ -8042,11 +8042,11 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .btnCopyUniqueLink:hover {
-  background: #059669;
+  background: #007AFF;
 }
 
 .btnCopyUniqueLink.copied {
-  background: #059669;
+  background: #007AFF;
 }
 
 
@@ -8248,7 +8248,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   color: #ffffff;
 }
 .profileSegmentBtn.active.customer {
-  background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+  background: linear-gradient(135deg, #007AFF 0%, #0062cc 100%);
   color: #ffffff;
   border-color: #10b981;
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
@@ -8440,7 +8440,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 .clientQuickCard:hover {
   transform: translateY(-2px);
-  border-color: #059669;
+  border-color: #007AFF;
   box-shadow: 0 8px 20px rgba(5, 150, 105, 0.12);
 }
 .clientQuickIcon {
@@ -8499,7 +8499,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   transition: all 0.2s ease;
 }
 .btnProfileSwitchAction:hover {
-  background: #047857;
+  background: #0062cc;
 }
 
 /* Acciones rápidas para empresarios */
@@ -8561,7 +8561,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #10b981 0%, #007AFF 100%);
   color: #ffffff;
   border: 0;
   border-radius: 99px;
@@ -8588,7 +8588,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .addStoryRing {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  background: linear-gradient(135deg, #10b981 0%, #007AFF 100%) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
   display: flex !important;
   align-items: center !important;
@@ -8607,7 +8607,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   bottom: 0px;
   right: 0px;
   background: #ffffff;
-  color: #059669;
+  color: #007AFF;
   font-size: 11px;
   font-weight: 900;
   width: 16px;
@@ -8637,8 +8637,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #064e3b;
-  color: #a7f3d0;
+  background: #007AFF; color: #ffffff;
   font-size: 11px;
   font-weight: 800;
   padding: 3px 10px;
@@ -8686,7 +8685,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .raffleFilterPill.active {
-  background: #059669;
+  background: #007AFF;
   border-color: #10b981;
   color: #ffffff;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
@@ -8695,7 +8694,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .liveSyncActive {
   background: #022c22 !important;
   color: #6ee7b7 !important;
-  border: 1px solid #059669 !important;
+  border: 1px solid #007AFF !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -8737,7 +8736,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 /* =====================================================================
    FORMATO PUBLICACIÓN DE INSTAGRAM PARA RIFAS (PANTALLA COMPLETA MÓVIL)
-   Paleta Oficial: Verde (#10b981 / #059669 / #00c853) & Negro (#090d16 / #050811)
+   Paleta Oficial: Verde (#10b981 / #007AFF / #00c853) & Negro (#090d16 / #050811)
    Sombras: 100% Negras (rgba(0,0,0,0.45))
    ===================================================================== */
 
@@ -8780,7 +8779,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   height: 42px;
   border-radius: 50%;
   padding: 2.2px;
-  background: linear-gradient(135deg, #10b981 0%, #00e676 50%, #047857 100%);
+  background: linear-gradient(135deg, #10b981 0%, #00e676 50%, #0062cc 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9103,7 +9102,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 .instaProgressFill {
   height: 100%;
-  background: linear-gradient(90deg, #059669 0%, #10b981 60%, #34d399 100%);
+  background: linear-gradient(90deg, #007AFF 0%, #10b981 60%, #34d399 100%);
   border-radius: 99px;
   transition: width 0.4s ease;
 }
@@ -9164,7 +9163,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   padding: 13px 18px;
   border-radius: 12px;
   border: 1px solid rgba(16, 185, 129, 0.4);
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #007AFF 0%, #10b981 100%);
   color: #000000;
   font-size: 14px;
   font-weight: 900;
@@ -9200,7 +9199,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 
 /* =====================================================================
    INTERFAZ COMPLETA ESTILO FACEBOOK FEED (RED SOCIAL DE VENTAS)
-   Paleta: Verde Esmeralda (#10b981 / #059669) & Negro Obsidiana (#090d16 / #0b1320)
+   Paleta: Verde Esmeralda (#10b981 / #007AFF) & Negro Obsidiana (#090d16 / #0b1320)
    Sombras: 100% Negras profundas (rgba(0, 0, 0, 0.45))
    ===================================================================== */
 
@@ -9334,7 +9333,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   height: 42px;
   border-radius: 50%;
   padding: 2.2px;
-  background: linear-gradient(135deg, #10b981 0%, #00e676 50%, #047857 100%);
+  background: linear-gradient(135deg, #10b981 0%, #00e676 50%, #0062cc 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9638,7 +9637,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .fbActionBuyBtn {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+  background: linear-gradient(135deg, #007AFF 0%, #10b981 100%) !important;
   color: #000000 !important;
   font-weight: 900 !important;
   border: 1px solid rgba(16, 185, 129, 0.4) !important;
@@ -10261,7 +10260,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #007AFF 0%, #10b981 100%);
   color: #000000;
   border: none;
   border-radius: 8px;
@@ -10428,7 +10427,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .igProgressBar {
   height: 100%;
   border-radius: 99px;
-  background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(90deg, #007AFF 0%, #10b981 100%);
   box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
   transition: width 0.4s ease;
 }
@@ -10740,7 +10739,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   line-height: 1.45;
 }
 .exploreAllRafflesCard .btnExploreCatalogAction {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, #10b981, #007AFF);
   color: #ffffff;
   border: 0;
   padding: 10px 18px;
@@ -10947,7 +10946,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .igActionSharePill.isCopied {
-  background: #059669 !important;
+  background: #007AFF !important;
   border-color: #10b981 !important;
   color: #ffffff !important;
 }
@@ -10985,7 +10984,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .btnStoryCopyLink {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+  background: linear-gradient(135deg, #007AFF 0%, #10b981 100%) !important;
   color: #000000 !important;
   font-weight: 850 !important;
   font-size: 11.5px !important;
@@ -11384,7 +11383,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .igShopCtaButton:not(.urgent) {
-  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%) !important;
+  background: linear-gradient(135deg, #007AFF 0%, #10b981 50%, #34d399 100%) !important;
   color: #000000 !important;
 }
 
@@ -11473,7 +11472,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   width: 32px !important;
   height: 32px !important;
   border-radius: 50% !important;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  background: linear-gradient(135deg, #10b981 0%, #007AFF 100%) !important;
   color: #000000 !important;
   font-weight: 900 !important;
   font-size: 13.5px !important;
@@ -11616,7 +11615,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .btnNewsSocialCopy.isCopied {
-  background: #059669 !important;
+  background: #007AFF !important;
   border-color: #10b981 !important;
   color: #ffffff !important;
 }
@@ -11627,7 +11626,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   gap: 5px !important;
   padding: 6px 13px !important;
   border-radius: 8px !important;
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+  background: linear-gradient(135deg, #007AFF 0%, #10b981 100%) !important;
   color: #000000 !important;
   font-size: 11px !important;
   font-weight: 850 !important;
@@ -12142,7 +12141,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .fbStoreCoverFallback {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+  background: linear-gradient(135deg, #0e131f 0%, #007AFF 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12152,7 +12151,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .fbStoreCoverGradient {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 75% 25%, rgba(16, 185, 129, 0.35) 0%, transparent 65%);
+  background: radial-gradient(circle at 75% 25%, rgba(0, 122, 255, 0.35) 0%, transparent 65%);
 }
 
 .fbStoreCoverPattern {
@@ -12195,7 +12194,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+  background: linear-gradient(135deg, #007AFF 0%, #0056b3 100%);
   color: #ffffff;
   display: grid;
   place-items: center;
@@ -12210,7 +12209,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #059669;
+  background: #007AFF;
   color: #ffffff;
   border: 2px solid #ffffff;
   display: grid;
@@ -12237,7 +12236,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   align-items: center;
   gap: 4px;
   background: #ecfdf5;
-  color: #047857;
+  color: #0062cc;
   border: 1px solid #a7f3d0;
   padding: 4px 10px;
   border-radius: 999px;
@@ -12267,7 +12266,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   padding: 16px 20px;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
-  border-left: 4px solid #059669;
+  border-left: 4px solid #007AFF;
   border-radius: 12px;
 }
 
@@ -12298,7 +12297,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   border-bottom: 1px solid #a7f3d0;
   padding: 10px 20px;
   font-size: 13px;
-  color: #065f46;
+  color: #007AFF;
   flex-wrap: wrap;
 }
 
@@ -12309,7 +12308,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .fbStoreOwnerEditBtn {
-  background: #059669;
+  background: #007AFF;
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -12324,7 +12323,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .fbStoreOwnerEditBtn:hover {
-  background: #047857;
+  background: #0062cc;
 }
 
 /* BOTÓN DE EDITAR PORTADA SOBRE LA PORTADA */
@@ -12400,7 +12399,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 .btnEditBioSmall {
   background: none;
   border: none;
-  color: #059669;
+  color: #007AFF;
   font-size: 11px;
   font-weight: 800;
   cursor: pointer;
@@ -12409,7 +12408,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
 }
 
 .btnEditBioSmall:hover {
-  color: #047857;
+  color: #0062cc;
 }
 
 /* MODAL DE EDICIÓN DE PERFIL EN VITRINA */
@@ -12439,7 +12438,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #059669;
+  border: 2px solid #007AFF;
 }
 
 
@@ -12575,7 +12574,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px s
   }
   .igCtaButtonSide {
     padding: 0 16px !important;
-    background: linear-gradient(135deg, #059669, #047857) !important;
+    background: linear-gradient(135deg, #007AFF, #0062cc) !important;
     flex: 1 !important;
     justify-content: center !important;
   }
@@ -14804,7 +14803,7 @@ html[data-theme='dark'] .commercial-showcase-header {
   border-radius: 999px;
   background: #ecfdf5;
   border: 1px solid #a7f3d0;
-  color: #065f46;
+  color: #007AFF;
   font-size: 0.7rem;
   font-weight: 700;
 }

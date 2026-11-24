@@ -45,7 +45,7 @@ export async function GET(request: Request) {
       const partResult = await query(
         `SELECT p.id, p.draw_id, p.buyer_name, p.buyer_email, p.ticket_numbers, p.total_amount, p.status, d.title as draw_title
          FROM participations p
-         JOIN draws d ON d.id = p.draw_id
+         LEFT JOIN draws d ON d.id = p.draw_id
          WHERE p.id = $1 OR p.id = $2
          LIMIT 1`,
         [reference, rawId]
@@ -82,7 +82,7 @@ export async function GET(request: Request) {
             status,
             participationId: part.id,
             drawId: part.draw_id,
-            drawTitle: part.draw_title,
+            drawTitle: part.draw_title || "Sorteo Oficial El Ganador",
             buyerName: part.buyer_name,
             buyerEmail: part.buyer_email,
             ticketNumbers,
