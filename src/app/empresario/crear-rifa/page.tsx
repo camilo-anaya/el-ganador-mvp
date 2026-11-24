@@ -129,17 +129,49 @@ export default function CrearRifaEmpresarioPage() {
         status: isAiSecretary ? 'en_tramite_coljuegos' : 'active',
       };
 
-      // Guardar en Supabase
-      const { error: dbError } = await supabase.from('raffles').insert([rafflePayload]);
-      if (dbError) {
-        console.warn('DB Supabase info:', dbError.message);
+      // Guardar en Supabase y capturar el ID oficial generado
+      let insertedId = `raffle_${Date.now()}`;
+      try {
+        const { data: dbData, error: dbError } = await supabase.from('raffles').insert([rafflePayload]).select();
+        if (dbData && dbData[0]?.id) {
+          insertedId = dbData[0].id;
+        }
+        if (dbError) {
+          console.warn('DB Supabase info:', dbError.message);
+        }
+      } catch (e) {
+        console.warn('Supabase insert error:', e);
       }
 
-      // Guardar también en localStorage para persistencia local inmediata
-      const localRafflesRaw = localStorage.getItem('elganador_raffles_list');
-      const localRaffles = localRafflesRaw ? JSON.parse(localRafflesRaw) : [];
-      localRaffles.unshift({ ...rafflePayload, id: `raffle_${Date.now()}` });
-      localStorage.setItem('elganador_raffles_list', JSON.stringify(localRaffles));
+      // Estructurar objeto completo para la vitrina
+      const fullRaffle = {
+        ...rafflePayload,
+        id: insertedId,
+        priceCop: `$ ${ticketPrice.toLocaleString('es-CO')}`,
+        timeLabel: '⏳ En Espera de Radicado',
+        category: 'vehiculos',
+        stage: 'upcoming',
+        soldPercent: 0,
+        ballotGrid: totalTickets,
+        image: prizePhoto || '/galeria-premios-el-ganador-realista.jpg',
+      };
+
+      // Guardar en localStorage para persistencia local inmediata en ambas llaves
+      try {
+        const localRafflesRaw = localStorage.getItem('elganador_raffles_list');
+        const localRaffles = localRafflesRaw ? JSON.parse(localRafflesRaw) : [];
+        localRaffles.unshift(fullRaffle);
+        localStorage.setItem('elganador_raffles_list', JSON.stringify(localRaffles));
+
+        const customRafflesRaw = localStorage.getItem('elganador_custom_raffles');
+        const customRaffles = customRafflesRaw ? JSON.parse(customRafflesRaw) : [];
+        customRaffles.unshift(fullRaffle);
+        localStorage.setItem('elganador_custom_raffles', JSON.stringify(customRaffles));
+
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('elganador_raffles_updated'));
+        }
+      } catch {}
 
       // 🔔 DISPARAR NOTIFICACIÓN INTERNA DE LA SECRETARIA IA AL PANEL EMPRESARIAL
       if (isAiSecretary) {

@@ -1,11 +1,60 @@
 // src/app/api/feed/route.ts
 import { NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function GET() {
   const now = new Date().toISOString();
+
+  let supabaseRaffles: any[] = [];
+  try {
+    const { data, error } = await supabase
+      .from('raffles')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!error && Array.isArray(data)) {
+      supabaseRaffles = data.map((r: any) => {
+        const price = Number(r.ticket_price || 25000);
+        const total = Number(r.total_tickets || 1000);
+        let img = '/galeria-premios-el-ganador-realista.jpg';
+        if (r.payment_receipt_url && (r.payment_receipt_url.includes('.jpg') || r.payment_receipt_url.includes('.jpeg') || r.payment_receipt_url.includes('.png') || r.payment_receipt_url.includes('storage'))) {
+          img = r.payment_receipt_url;
+        }
+        let timeDisplay = '⏳ Próximamente';
+        if (r.draw_date) {
+          try {
+            timeDisplay = `🗓️ ${new Date(r.draw_date).toLocaleDateString('es-CO')}`;
+          } catch {}
+        }
+        return {
+          id: r.id,
+          title: r.title || 'Gran Sorteo Oficial',
+          merchant: r.city ? `Comercio ${r.city}` : 'Comercio Oficial',
+          city: r.city || 'Colombia',
+          priceCop: `$ ${price.toLocaleString('es-CO')}`,
+          ticket_price: price,
+          total_tickets: total,
+          soldPercent: 0,
+          timeLabel: timeDisplay,
+          category: 'vehiculos',
+          image: img,
+          stage: 'upcoming',
+          description: r.description || 'Sorteo oficial respaldado por El Ganador.',
+          ballotGrid: total,
+          radicado_number: r.radicado_number,
+          resolution_pdf_url: r.resolution_pdf_url,
+          payment_receipt_url: r.payment_receipt_url,
+          status: r.status,
+          legalVerified: true,
+        };
+      });
+    }
+  } catch (err) {
+    console.warn('Error fetching Supabase feed raffles:', err);
+  }
 
   // Base de datos en vivo (conecta aquí tu consulta real a PostgreSQL / SQLite)
   const payload = {
@@ -119,6 +168,7 @@ export async function GET() {
       },
     ],
     raffles: [
+      ...supabaseRaffles,
       {
         id: 'combo-flagship-5g',
         title: 'Smartphone 5G Pro Max + Smartwatch',

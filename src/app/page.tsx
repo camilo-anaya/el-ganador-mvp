@@ -947,15 +947,35 @@ export default function CompactWhiteMarketplacePage() {
   const [activeStoriesList, setActiveStoriesList] = useState<MerchantStory[]>(MERCHANT_STORIES);
   const [customRaffles, setCustomRaffles] = useState<CompactRaffleItem[]>([]);
 
-  // Sincronización continua de Rifas creadas en localStorage
+  // Sincronización continua de Rifas creadas en localStorage (unificando ambas llaves)
   useEffect(() => {
     const syncRaffles = () => {
       try {
-        const raw = localStorage.getItem('elganador_custom_raffles');
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) setCustomRaffles(parsed);
+        const rawCustom = localStorage.getItem('elganador_custom_raffles');
+        const rawList = localStorage.getItem('elganador_raffles_list');
+        const parsedCustom = rawCustom ? JSON.parse(rawCustom) : [];
+        const parsedList = rawList ? JSON.parse(rawList) : [];
+        const combined = [
+          ...(Array.isArray(parsedCustom) ? parsedCustom : []),
+          ...(Array.isArray(parsedList) ? parsedList : []),
+        ];
+
+        const map = new Map<string, CompactRaffleItem>();
+        for (const item of combined) {
+          const key = item.id || item.radicado_number || item.title;
+          if (key && !map.has(key)) {
+            map.set(key, {
+              ...item,
+              id: item.id || key,
+              stage: item.stage || 'upcoming',
+              priceCop: item.priceCop || (item.ticket_price ? `$ ${Number(item.ticket_price).toLocaleString('es-CO')}` : '$ 25.000'),
+              soldPercent: item.soldPercent || 0,
+              category: item.category || 'vehiculos',
+              image: item.image || (item.photos && item.photos[0]) || '/galeria-premios-el-ganador-realista.jpg',
+            });
+          }
         }
+        setCustomRaffles(Array.from(map.values()));
       } catch {}
     };
     syncRaffles();
@@ -1227,6 +1247,76 @@ export default function CompactWhiteMarketplacePage() {
     setCopiedLink(false);
   };
 
+  // Detección automática y apertura directa de rifa compartida (?sorteo=... o ?raffleId=...)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    let isMounted = true;
+
+    const checkAndOpenSharedRaffle = async () => {
+      const search = window.location.search;
+      if (!search) return;
+      const params = new URLSearchParams(search);
+      const targetId = params.get('sorteo') || params.get('raffleId') || params.get('rifa');
+      if (!targetId) return;
+
+      const norm = targetId.trim().toLowerCase();
+
+      // 1. Buscar en memoria local (custom, feed, catálogo estático)
+      const allAvailable = [
+        ...customRaffles,
+        ...(feed?.raffles ?? []),
+        ...RAFFLES_CATALOG,
+      ];
+
+      const match = allAvailable.find((r: any) =>
+        r.id?.toLowerCase() === norm ||
+        r.radicado_number?.toLowerCase() === norm ||
+        r.legalRadicado?.toLowerCase() === norm ||
+        r.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-') === norm
+      );
+
+      if (match) {
+        if (!isMounted) return;
+        setCustomRaffles((prev) => {
+          if (prev.some((r) => r.id === match.id)) return prev;
+          return [match, ...prev];
+        });
+        setSelectedRaffleDetail(match);
+        setTimeout(() => {
+          const el = document.getElementById(`raffle-${match.id}`);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 350);
+        return;
+      }
+
+      // 2. Si no está en memoria, consultar endpoint /api/raffles?id=...
+      try {
+        const res = await fetch(`/api/raffles?id=${encodeURIComponent(targetId)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (isMounted && data && data.ok && data.raffle) {
+            const fetchedRaffle = data.raffle;
+            setCustomRaffles((prev) => [fetchedRaffle, ...prev.filter((r) => r.id !== fetchedRaffle.id)]);
+            setSelectedRaffleDetail(fetchedRaffle);
+            setTimeout(() => {
+              const el = document.getElementById(`raffle-${fetchedRaffle.id}`);
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 350);
+          }
+        }
+      } catch (err) {
+        console.warn('Error fetching shared raffle:', err);
+      }
+    };
+
+    checkAndOpenSharedRaffle();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [feed?.raffles, customRaffles.length]);
+
   useEffect(() => {
     const loadWonPrizes = () => {
       try {
@@ -1322,7 +1412,7 @@ export default function CompactWhiteMarketplacePage() {
     rafflesList.filter((r) => r.stage === 'closing_soon')
   );
   const upcomingRaffles = filterByCat(
-    rafflesList.filter((r) => r.stage === 'upcoming')
+    rafflesList.filter((r) => r.stage !== 'closing_soon')
   );
 
   // División en bloques para mostrar mayor contenido (2 bloques A pocas horas + 3 bloques Próximos con fechas futuras)
@@ -1335,6 +1425,7 @@ export default function CompactWhiteMarketplacePage() {
   const renderRaffleCard = (item: CompactRaffleItem, variant: 'urgent' | 'upcoming') => (
     <article
       key={item.id}
+      id={`raffle-${item.id}`}
       className={
         variant === 'urgent'
           ? 'compact-raffle-card card-type-urgent'

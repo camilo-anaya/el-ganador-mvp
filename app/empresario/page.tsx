@@ -595,7 +595,7 @@ function PanelEmpresarioContent() {
           } catch {}
         }
 
-        await supabase.from('raffles').insert([{
+        const { data: insertedRaffles, error: dbErr } = await supabase.from('raffles').insert([{
           title: newRaffle.title,
           description: newRaffle.description,
           prize_value: totalRevenue,
@@ -608,7 +608,12 @@ function PanelEmpresarioContent() {
           payment_receipt_url: paymentReceiptFinal,
           draw_date: validDrawDate,
           status: 'pending_approval',
-        }]);
+        }]).select();
+
+        if (insertedRaffles && insertedRaffles[0]?.id) {
+          newRaffle.id = insertedRaffles[0].id;
+          setCreatedRaffleSlug(insertedRaffles[0].id);
+        }
       } catch (dbErr) {
         console.warn('Supabase insert skipped or offline:', dbErr);
       }
@@ -1756,7 +1761,11 @@ function PanelEmpresarioContent() {
                     </Link>
                     <button
                       type="button"
-                      onClick={() => void shareRaffleLink({ title: raffleTitle || 'Gran Sorteo Oficial', text: '¡Participa en nuestro gran sorteo oficial!', path: `/sorteo-en-vivo` })}
+                      onClick={() => void shareRaffleLink({
+                        title: raffleTitle || 'Gran Sorteo Oficial',
+                        text: '¡Participa en nuestro gran sorteo oficial!',
+                        path: `/?sorteo=${createdRaffleSlug || 'sorteo-oficial'}`,
+                      })}
                       style={{
                         padding: '10px 16px',
                         borderRadius: '10px',
@@ -3076,9 +3085,9 @@ Atentamente, [Nombre y Teléfono]."`}
                             </label>
                           )}
 
-                          <div style={{ display: 'flex', gap: '8px' }}>
+                          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                             <Link
-                              href="/"
+                              href={`/?sorteo=${raf.id || raf.radicado_number}`}
                               style={{
                                 flex: 1,
                                 textAlign: 'center',
@@ -3090,10 +3099,38 @@ Atentamente, [Nombre y Teléfono]."`}
                                 fontWeight: 700,
                                 textDecoration: 'none',
                                 border: '1px solid rgba(0, 122, 255, 0.3)',
+                                minWidth: '90px',
                               }}
                             >
                               👁️ Ver en Vitrina
                             </Link>
+                            <button
+                              type="button"
+                              onClick={() => void shareRaffleLink({
+                                title: raf.title || 'Gran Sorteo Oficial',
+                                text: `¡Participa en el sorteo oficial de ${raf.title}!`,
+                                path: `/?sorteo=${raf.id || raf.radicado_number}`,
+                              })}
+                              style={{
+                                flex: 1,
+                                textAlign: 'center',
+                                padding: '8px',
+                                borderRadius: '8px',
+                                background: '#25D366',
+                                color: '#ffffff',
+                                fontSize: '0.78rem',
+                                fontWeight: 800,
+                                border: 'none',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '4px',
+                                minWidth: '90px',
+                              }}
+                            >
+                              <span>📤</span> Compartir
+                            </button>
                             <Link
                               href="/sorteo-en-vivo"
                               style={{
@@ -3106,6 +3143,7 @@ Atentamente, [Nombre y Teléfono]."`}
                                 fontSize: '0.78rem',
                                 fontWeight: 800,
                                 textDecoration: 'none',
+                                minWidth: '90px',
                               }}
                             >
                               🎱 Sala 3D
