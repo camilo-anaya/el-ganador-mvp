@@ -56,10 +56,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       metaThemeColor.setAttribute('content', mode === 'dark' ? '#000000' : '#ffffff');
     }
 
-    // Sincroniza la barra de estado en Android e iOS mediante Capacitor
+    // Sincroniza la barra de estado en Android e iOS mediante Capacitor (solo en nativo real)
     try {
       const cap = (window as unknown as {
         Capacitor?: {
+          isNativePlatform?: () => boolean;
+          getPlatform?: () => string;
           Plugins?: {
             StatusBar?: {
               setStyle: (opts: { style: string }) => Promise<void>;
@@ -68,10 +70,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
           };
         };
       }).Capacitor;
+      const isNative = cap?.isNativePlatform ? cap.isNativePlatform() : false;
+      const isNotWeb = cap?.getPlatform ? cap.getPlatform() !== 'web' : false;
       const statusBar = cap?.Plugins?.StatusBar;
-      if (statusBar) {
-        statusBar.setStyle({ style: mode === 'dark' ? 'DARK' : 'LIGHT' });
-        statusBar.setBackgroundColor?.({ color: mode === 'dark' ? '#000000' : '#ffffff' });
+      if (statusBar && isNative && isNotWeb) {
+        statusBar.setStyle({ style: mode === 'dark' ? 'DARK' : 'LIGHT' }).catch(() => {});
+        statusBar.setBackgroundColor?.({ color: mode === 'dark' ? '#000000' : '#ffffff' }).catch(() => {});
       }
     } catch {
       // Ignorar en entorno web estándar
