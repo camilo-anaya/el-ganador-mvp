@@ -28,9 +28,37 @@ export async function GET(request: Request) {
     paymentMethods = [];
   }
 
+  // Consultar historial de eventos de pagos y suscripciones de Wompi
+  let paymentEvents: unknown[] = [];
+  try {
+    const peRes = await query(
+      `SELECT id, event_type, description, amount, created_at
+       FROM payment_events
+       WHERE account_id = $1 OR account_id = 'biz-001'
+       ORDER BY created_at DESC
+       LIMIT 15`,
+      [accountId]
+    );
+    paymentEvents = peRes.rows;
+  } catch {}
+
+  // Consultar suscripciones de banners publicitarios activos
+  let activeBanners: unknown[] = [];
+  try {
+    const bRes = await query(
+      `SELECT id, brand, title, plan_id, billing_cycle, paid, active, subscription_status, payment_reference, activated_at, expires_at
+       FROM banner_ads
+       ORDER BY updated_at DESC
+       LIMIT 10`
+    );
+    activeBanners = bRes.rows;
+  } catch {}
+
   return NextResponse.json({
     subscription: {
       businessName: biz.business_name,
+      paymentEvents,
+      activeBanners,
       profile: {
         plan: biz.plan || "empresa_verificado",
         name: "Plan Empresa Verificado · Ley 643 de 2001",

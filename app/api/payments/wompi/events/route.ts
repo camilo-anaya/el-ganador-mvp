@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { withTransaction } from "../../../../../lib/db";
+import { query, withTransaction } from "../../../../../lib/db";
 import { advancePlanExpiry, getPlan, plans } from "../../../../../lib/plans";
 import { verifyWompiEvent } from "../../../../../lib/wompi";
 
@@ -12,6 +12,12 @@ type WompiTransaction = {
   status?: unknown;
   amount_in_cents?: unknown;
   currency?: unknown;
+  customer_data?: {
+    email?: string;
+    full_name?: string;
+    phone_number?: string;
+  };
+  customer_email?: string;
 };
 
 export async function POST(request: Request) {
@@ -162,6 +168,151 @@ export async function POST(request: Request) {
 
     if (outcome === "unmatched" || outcome === "transaction-mismatch") {
       console.error("Wompi event did not match a pending plan payment", { outcome });
+    }
+  }
+
+  // =========================================================================
+  // CASO 3: SUSCRIPCIÓN DE PAUTA PUBLICITARIA Y BANNER (Referencia 'PLAN-' o 'SUB-')
+  // =========================================================================
+  if (
+    reference.startsWith("PLAN-") ||
+    reference.startsWith("SUB-") ||
+    reference.startsWith("plan_") ||
+    reference.startsWith("sub_")
+  ) {
+    try {
+      // 1. Extraer planId y ciclo de facturación
+      const parts = reference.split("-");
+      // Formato: PLAN-[PLAN_ID]-[CYCLE]-[TIMESTAMP]
+      const planId = (parts[1] || "PRO").toLowerCase();
+      const billingCycle = (parts[2] || "MENSUAL").toLowerCase() as "mensual" | "trimestral" | "anual";
+      const days = billingCycle === "anual" ? 365 : billingCycle === "trimestral" ? 90 : 30;
+      const expiresAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+      const priority = planId === "enterprise" ? 2 : 1;
+
+      // Extraer datos del cliente si vienen en Wompi
+      const customerData = (transaction?.customer_data || data?.customer_data || {}) as Record<string, unknown>;
+      const customerEmail = String(
+        customerData?.email ||
+        transaction?.customer_email ||
+        (data as Record<string, unknown>)?.customer_email ||
+        "empresa@elganador.co"
+      ).trim().toLowerCase();
+      const customerName = String(
+        customerData?.full_name ||
+        (data as Record<string, unknown>)?.customer_name ||
+        "Empresa Aliada"
+      ).trim();
+
+      // Asegurar existencia de tabla banner_ads
+      await query(`
+        CREATE TABLE IF NOT EXISTS banner_ads (
+          id TEXT PRIMARY KEY,
+          business_email TEXT NOT NULL,
+          brand TEXT NOT NULL,
+          tag TEXT NOT NULL,
+          category TEXT NOT NULL,
+          title TEXT NOT NULL,
+          description TEXT NOT NULL,
+          coupon TEXT NOT NULL,
+          cta_text TEXT NOT NULL,
+          cta_link TEXT NOT NULL,
+          image_url TEXT NOT NULL,
+          badge TEXT NOT NULL,
+          plan_id TEXT NOT NULL DEFAULT 'pro',
+          billing_cycle TEXT NOT NULL DEFAULT 'mensual',
+          priority INTEGER NOT NULL DEFAULT 1,
+          paid INTEGER NOT NULL DEFAULT 0,
+          active INTEGER NOT NULL DEFAULT 0,
+          subscription_status TEXT NOT NULL DEFAULT 'pending',
+          payment_reference TEXT,
+          impressions INTEGER NOT NULL DEFAULT 0,
+          clicks INTEGER NOT NULL DEFAULT 0,
+          activated_at TEXT,
+          expires_at TEXT,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      `);
+
+      if (status === "APPROVED") {
+        // Buscar si ya existía un borrador o registro previo con esta referencia o email
+        const existingRes = await query(
+          `SELECT * FROM banner_ads WHERE payment_reference = $1 OR LOWER(business_email) = $2 ORDER BY updated_at DESC LIMIT 1`,
+          [reference, customerEmail]
+        );
+        const existing = existingRes.rows[0] as Record<string, unknown> | undefined;
+
+        const tag = planId === "enterprise" ? "👑 PATROCINADOR ENTERPRISE VIP" : "⚡ PATROCINADOR PRO ACTIVO";
+        const category = `${planId === "enterprise" ? "Cobertura Nacional" : "Cobertura Regional"} · Suscripción ${billingCycle}`;
+        const badge = `✓ Suscripción ${billingCycle} activa`;
+        const title = existing?.title ? String(existing.title) : "Promoción Oficial El Ganador";
+        const description = existing?.description ? String(existing.description) : "Patrocinador verificado con suscripción activa en El Ganador.";
+        const coupon = existing?.coupon ? String(existing.coupon) : "Cupón: ELGANADOR";
+        const ctaText = existing?.cta_text ? String(existing.cta_text) : "Ver Vitrina & Promoción →";
+        const ctaLink = existing?.cta_link ? String(existing.cta_link) : "/empresario/publicidad";
+        const imageUrl = existing?.image_url ? String(existing.image_url) : "/banner-el-ganador-oficial.jpg";
+        const brand = existing?.brand ? String(existing.brand) : customerName;
+        const adId = existing ? String(existing.id) : `ad-sub-${reference}`;
+
+        if (existing) {
+          await query(
+            `UPDATE banner_ads
+             SET paid = 1, active = 1, subscription_status = 'active',
+                 plan_id = $1, billing_cycle = $2, priority = $3,
+                 payment_reference = $4, activated_at = $5, expires_at = $6, updated_at = $7
+             WHERE id = $8`,
+            [planId, billingCycle, priority, reference, now, expiresAt, now, adId]
+          );
+        } else {
+          await query(
+            `INSERT INTO banner_ads (
+              id, business_email, brand, tag, category, title, description, coupon, cta_text, cta_link,
+              image_url, badge, plan_id, billing_cycle, priority, paid, active, subscription_status,
+              payment_reference, impressions, clicks, activated_at, expires_at, created_at, updated_at
+            ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,1,1,'active',$16,0,0,$17,$18,$19,$20)`,
+            [adId, customerEmail, brand, tag, category, title, description, coupon, ctaText, ctaLink, imageUrl, badge, planId, billingCycle, priority, reference, now, expiresAt, now, now]
+          );
+        }
+
+        // Registrar evento de pago y actualizar cuenta empresarial
+        try {
+          const eventId = `wompi:sub:${transactionId}:${status}`;
+          const accRes = await query(`SELECT id FROM business_accounts WHERE LOWER(email) = $1 LIMIT 1`, [customerEmail]);
+          const accId = accRes.rows[0]?.id ? String(accRes.rows[0].id) : "biz-001";
+
+          await query(
+            `UPDATE business_accounts
+             SET ad_plan = $1, ad_plan_expires_at = $2, ad_impressions_limit = COALESCE(ad_impressions_limit, 0) + $3
+             WHERE id = $4`,
+            [planId, expiresAt, planId === "enterprise" ? 100000 : 25000, accId]
+          );
+
+          await query(
+            `INSERT INTO payment_events (id, account_id, event_type, description, amount, created_at)
+             VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT(id) DO NOTHING`,
+            [
+              eventId,
+              accId,
+              `wompi.subscription.${status.toLowerCase()}`,
+              `🎉 Suscripción Publicitaria Aprobada (${planId.toUpperCase()} - ${billingCycle}): ${brand} ($${(amountInCents / 100).toLocaleString("es-CO")} COP) · Ref: ${reference}`,
+              amountInCents,
+              now,
+            ]
+          );
+
+          console.log(`[WOMPI WEBHOOK] ✅ Suscripción publicitaria activada: ${brand} (${planId.toUpperCase()} - ${billingCycle}) Ref: ${reference}`);
+        } catch (e) {
+          console.warn("Error registrando payment_event de suscripción publicitaria:", e);
+        }
+      } else if (status === "DECLINED" || status === "ERROR") {
+        await query(
+          `UPDATE banner_ads SET subscription_status = 'failed', active = 0, updated_at = $1 WHERE payment_reference = $2`,
+          [now, reference]
+        );
+      }
+    } catch (err) {
+      console.error("Error procesando webhook de suscripción publicitaria:", err);
     }
   }
 

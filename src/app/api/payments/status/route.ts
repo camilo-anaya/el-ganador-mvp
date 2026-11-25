@@ -124,6 +124,41 @@ export async function GET(request: Request) {
     }
   }
 
-  // Si no se encuentra en ninguna de las dos tablas
+  // 3. Caso de Suscripción Publicitaria / Banner (referencias 'PLAN-', 'SUB-', 'plan_', 'sub_')
+  if (
+    reference.startsWith("PLAN-") ||
+    reference.startsWith("SUB-") ||
+    reference.startsWith("plan_") ||
+    reference.startsWith("sub_")
+  ) {
+    try {
+      const bannerRes = await query(
+        `SELECT id, business_email, brand, plan_id, billing_cycle, paid, active, subscription_status, expires_at
+         FROM banner_ads
+         WHERE payment_reference = $1
+         LIMIT 1`,
+        [reference]
+      );
+      const ad = bannerRes.rows[0] as Record<string, unknown> | undefined;
+      if (ad) {
+        const isApproved = Number(ad.paid) === 1 && String(ad.subscription_status) === "active";
+        return NextResponse.json(
+          {
+            type: "advertising_subscription",
+            status: isApproved ? "APPROVED" : String(ad.subscription_status).toUpperCase(),
+            planId: ad.plan_id,
+            billingCycle: ad.billing_cycle,
+            brand: ad.brand,
+            expiresAt: ad.expires_at,
+          },
+          { headers: { "Cache-Control": "no-store, max-age=0" } }
+        );
+      }
+    } catch (e) {
+      console.warn("Error consultando estado de pauta publicitaria:", e);
+    }
+  }
+
+  // Si no se encuentra en ninguna de las tablas
   return NextResponse.json({ error: "No encontramos este pago." }, { status: 404 });
 }

@@ -2559,7 +2559,7 @@ export default function CompactWhiteMarketplacePage() {
               </p>
             </div>
 
-            <Link className="btn-pautar-header" href="/publicidad">
+            <Link className="btn-pautar-header" href="/empresario/publicidad">
               📢 Publicidad y Marketing →
             </Link>
           </div>
@@ -2578,17 +2578,17 @@ export default function CompactWhiteMarketplacePage() {
                 <div className="promo-brand-identity">
                   <span className="promo-avatar-icon">⚡</span>
                   <div>
-                    <strong>TechStore Colombia</strong>
-                    <small>Tecnología & Gadgets · Bogotá</small>
+                    <strong style={{ color: '#ffffff' }}>TechStore Colombia</strong>
+                    <small style={{ color: '#38bdf8' }}>Tecnología & Gadgets · Bogotá</small>
                   </div>
                 </div>
 
-                <p className="promo-brand-copy">
+                <p className="promo-brand-copy" style={{ color: '#e2e8f0' }}>
                   Distribuidor tecnológico verificado. Beneficios y descuentos exclusivos en tienda para toda la comunidad de El Ganador.
                 </p>
 
                 <div className="promo-brand-footer">
-                  <span className="promo-metric">⭐ 4.9 · Marca Verificada</span>
+                  <span className="promo-metric" style={{ color: '#cbd5e1' }}>⭐ 4.9 · Marca Verificada</span>
                   <Link className="promo-visit-btn" href="/novedades">
                     Ver Vitrina ↗
                   </Link>
@@ -2613,7 +2613,7 @@ export default function CompactWhiteMarketplacePage() {
                   <li>✓ Disponible para cualquier empresa o emprendimiento</li>
                 </ul>
 
-                <Link className="btn-cta-advertise-full" href="/publicidad">
+                <Link className="btn-cta-advertise-full" href="/empresario/publicidad">
                   ✨ Publicitar mi Empresa Ahora →
                 </Link>
               </div>
@@ -2689,15 +2689,15 @@ export default function CompactWhiteMarketplacePage() {
                   <div className="promo-brand-identity">
                     <span className="promo-avatar-icon">{brand.icon}</span>
                     <div>
-                      <strong>{brand.name}</strong>
-                      <small>{brand.type}</small>
+                      <strong style={{ color: '#ffffff' }}>{brand.name}</strong>
+                      <small style={{ color: '#38bdf8' }}>{brand.type}</small>
                     </div>
                   </div>
 
-                  <p className="promo-brand-copy">{brand.description}</p>
+                  <p className="promo-brand-copy" style={{ color: '#e2e8f0' }}>{brand.description}</p>
 
                   <div className="promo-brand-footer">
-                    <span className="promo-metric">{brand.metric}</span>
+                    <span className="promo-metric" style={{ color: '#cbd5e1' }}>{brand.metric}</span>
                     <Link className="promo-visit-btn" href="/novedades">
                       Explorar ↗
                     </Link>

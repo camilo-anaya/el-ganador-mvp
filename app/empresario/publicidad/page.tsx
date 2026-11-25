@@ -374,6 +374,30 @@ export default function PlanesPublicitariosPage() {
           },
         })
       );
+
+      // Persistir borrador con la referencia en el servidor para que el webhook de Wompi tenga todos los datos
+      try {
+        await fetch('/api/banner-ads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'save_draft',
+            businessEmail,
+            brand: adBrand,
+            title: adHeadline,
+            description: adDescription,
+            coupon: adCoupon,
+            ctaLink: adCtaLink,
+            image: adImage,
+            planId: plan.id,
+            billingCycle,
+            reference,
+            active: adActive,
+          }),
+        });
+      } catch (err) {
+        console.warn('Error guardando borrador previo en servidor:', err);
+      }
     } catch {}
 
     // Firma de integridad SHA-256 (si WOMPI_INTEGRITY_SECRET está configurado)

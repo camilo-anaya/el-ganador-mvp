@@ -208,14 +208,16 @@ export async function POST(request: Request) {
     const paidFlag = hasActivePaidSub ? 1 : 0;
     const activeFlag = hasActivePaidSub && body.active !== false ? 1 : 0;
     const subStatus = hasActivePaidSub ? (activeFlag ? 'active' : 'paused') : 'pending';
+    const draftRef = body.reference ? String(body.reference) : (existing?.payment_reference ? String(existing.payment_reference) : null);
 
     if (existing) {
       await query(
         `UPDATE banner_ads
          SET brand = $1, title = $2, description = $3, coupon = $4, cta_text = $5,
-             cta_link = $6, image_url = $7, active = $8, subscription_status = $9, updated_at = $10
-         WHERE id = $11`,
-        [brand, title, description, coupon, ctaText, ctaLink, imageUrl, activeFlag, subStatus, nowIso, id]
+             cta_link = $6, image_url = $7, active = $8, subscription_status = $9,
+             plan_id = $10, billing_cycle = $11, priority = $12, payment_reference = COALESCE($13, payment_reference), updated_at = $14
+         WHERE id = $15`,
+        [brand, title, description, coupon, ctaText, ctaLink, imageUrl, activeFlag, subStatus, planId, billingCycle, priority, draftRef, nowIso, id]
       );
     } else {
       await query(
@@ -223,8 +225,8 @@ export async function POST(request: Request) {
           id, business_email, brand, tag, category, title, description, coupon, cta_text, cta_link,
           image_url, badge, plan_id, billing_cycle, priority, paid, active, subscription_status,
           payment_reference, impressions, clicks, activated_at, expires_at, created_at, updated_at
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,NULL,0,0,NULL,NULL,$19,$20)`,
-        [id, email, brand, tag, category, title, description, coupon, ctaText, ctaLink, imageUrl, badge, planId, billingCycle, priority, paidFlag, activeFlag, subStatus, nowIso, nowIso]
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,0,0,NULL,NULL,$20,$21)`,
+        [id, email, brand, tag, category, title, description, coupon, ctaText, ctaLink, imageUrl, badge, planId, billingCycle, priority, paidFlag, activeFlag, subStatus, draftRef, nowIso, nowIso]
       );
     }
 

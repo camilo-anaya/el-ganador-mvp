@@ -14997,36 +14997,37 @@ html[data-theme='dark'] .promo-avatar-icon {
 .promo-brand-identity strong {
   display: block;
   font-size: 0.92rem;
-  color: #0f172a;
+  color: #ffffff !important;
+  font-weight: 800;
   line-height: 1.2;
 }
 
 html[data-theme='dark'] .promo-brand-identity strong {
-  color: #f8fafc;
+  color: #ffffff !important;
 }
 
 .promo-brand-identity small {
   display: block;
   font-size: 0.72rem;
-  color: #046a38;
+  color: #38bdf8 !important;
   font-weight: 700;
   margin-top: 2px;
 }
 
 html[data-theme='dark'] .promo-brand-identity small {
-  color: #34d399;
+  color: #38bdf8 !important;
 }
 
 .promo-brand-copy {
   margin: 0;
   font-size: 0.78rem;
-  color: #475569;
+  color: #e2e8f0 !important;
   line-height: 1.45;
   flex: 1;
 }
 
 html[data-theme='dark'] .promo-brand-copy {
-  color: #cbd5e1;
+  color: #e2e8f0 !important;
 }
 
 .promo-brand-footer {
@@ -15035,29 +15036,29 @@ html[data-theme='dark'] .promo-brand-copy {
   align-items: center;
   gap: 8px;
   padding-top: 10px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid rgba(255, 255, 255, 0.14) !important;
 }
 
 html[data-theme='dark'] .promo-brand-footer {
-  border-top-color: rgba(255, 255, 255, 0.08);
+  border-top-color: rgba(255, 255, 255, 0.14) !important;
 }
 
 .promo-metric {
   font-size: 0.7rem;
   font-weight: 700;
-  color: #334155;
+  color: #cbd5e1 !important;
 }
 
 html[data-theme='dark'] .promo-metric {
-  color: #94a3b8;
+  color: #cbd5e1 !important;
 }
 
 .promo-visit-btn {
   padding: 6px 12px;
   border-radius: 8px;
-  background: #ecfdf5;
-  border: 1px solid #a7f3d0;
-  color: #046a38;
+  background: rgba(0, 122, 255, 0.14) !important;
+  border: 1px solid rgba(0, 122, 255, 0.38) !important;
+  color: #38bdf8 !important;
   font-size: 0.73rem;
   font-weight: 800;
   text-decoration: none;
@@ -17949,6 +17950,54 @@ html[data-theme='dark'] .station-block-premium {
   background: #1a1a1a !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   border-radius: 16px !important;
+}
+
+/* Reglas de máxima legibilidad para texto sobre fondo negro en tarjetas publicitarias */
+.promo-brand-card .promo-brand-identity strong,
+[data-theme='dark'] .promo-brand-card .promo-brand-identity strong {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+.promo-brand-card .promo-brand-identity small,
+[data-theme='dark'] .promo-brand-card .promo-brand-identity small {
+  color: #38bdf8 !important;
+  font-weight: 700 !important;
+}
+
+.promo-brand-card .promo-brand-copy,
+[data-theme='dark'] .promo-brand-card .promo-brand-copy {
+  color: #e2e8f0 !important;
+}
+
+.promo-brand-card .promo-metric,
+[data-theme='dark'] .promo-brand-card .promo-metric {
+  color: #cbd5e1 !important;
+  font-weight: 700 !important;
+}
+
+.promo-brand-card .promo-brand-footer,
+[data-theme='dark'] .promo-brand-card .promo-brand-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+.promo-brand-card .promo-avatar-icon,
+[data-theme='dark'] .promo-brand-card .promo-avatar-icon {
+  background: #252830 !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+}
+
+.promo-brand-card .promo-visit-btn,
+[data-theme='dark'] .promo-brand-card .promo-visit-btn {
+  background: rgba(0, 122, 255, 0.14) !important;
+  border: 1px solid rgba(0, 122, 255, 0.38) !important;
+  color: #38bdf8 !important;
+  font-weight: 800 !important;
+}
+
+.promo-brand-card .promo-benefits-list li {
+  color: #f1f5f9 !important;
 }
 
 /* 2. Categorías Independientes (Sin Contenedor Global) */
