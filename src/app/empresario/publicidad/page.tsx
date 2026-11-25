@@ -51,7 +51,7 @@ const PUBLICITY_PLANS: PlanInfo[] = [
     spacesAndFormats: [
       'Espacio en Carrusel Superior Rotativo de Vitrina',
       'Banner HD con botón directo y cupón promocional de tienda',
-      'Presencia destacada en Sala 3D (Ruleta 50 o Balotera 300)',
+      'Presencia destacada en Vitrina Comercial de Marcas',
       'Hasta 5 sorteos o campañas simultáneas activas',
     ],
     raffleCapacity: 'Hasta 5 campañas activas',
@@ -66,9 +66,9 @@ const PUBLICITY_PLANS: PlanInfo[] = [
     priceMonthly: 299900,
     description: 'Para grandes marcas, cadenas de retail y operadores a nivel Colombia.',
     spacesAndFormats: [
-      'Patrocinador Oficial Exclusivo en Sala 3D en Vivo',
-      'Video spots de hasta 120 segundos + Mención en transmisiones',
-      'Posición preferente Top 1 en Carrusel y Vitrina',
+      'Posición preferencial Top 1 fija en Carrusel Superior Nacional',
+      'Presencia destacada en Vitrina Comercial con enlace directo a WhatsApp / Web',
+      'Publicación de promociones en Historias de 24 Horas del Comercio',
       'Sorteos y pautas ilimitadas con Coljuegos (32 departamentos)',
       'Comisión fija del 10% y soporte corporativo 24/7',
     ],
@@ -487,7 +487,7 @@ export default function PlanesPublicitariosPage() {
             Planes Publicitarios en El Ganador
           </h1>
           <p style={{ fontSize: '0.98rem', color: isDark ? '#cbd5e1' : '#334155', lineHeight: '1.6', maxWidth: '850px', margin: 0 }}>
-            Elige el plan publicitario ideal para tu marca o comercio. Todos los planes unifican tus <strong style={{ color: '#007AFF' }}>espacios de pauta</strong> (carrusel superior, historias 24h y sala 3D en vivo) y se pagan directamente a nuestra pasarela oficial Wompi (PSE, Bancolombia, Nequi y Tarjetas).
+            Elige el plan publicitario ideal para tu marca o comercio. Todos los planes unifican tus <strong style={{ color: '#007AFF' }}>espacios de pauta</strong> (carrusel superior, vitrina comercial e historias de 24 horas) y se pagan directamente a nuestra pasarela oficial Wompi (PSE, Bancolombia, Nequi y Tarjetas).
           </p>
         </header>
 
@@ -708,13 +708,13 @@ export default function PlanesPublicitariosPage() {
                     <td style={{ padding: '12px 16px', fontWeight: 700, color: isDark ? '#ffffff' : '#1e293b' }}>Ubicación en Vitrina</td>
                     <td style={{ padding: '12px 16px', color: isDark ? '#cbd5e1' : '#475569' }}>Filtro local municipal</td>
                     <td style={{ padding: '12px 16px', color: '#38bdf8', fontWeight: 700 }}>Carrusel Superior Rotativo</td>
-                    <td style={{ padding: '12px 16px', color: '#f59e0b', fontWeight: 700 }}>Carrusel Top 1 + Sala 3D</td>
+                    <td style={{ padding: '12px 16px', color: '#f59e0b', fontWeight: 700 }}>Carrusel Top 1 Fijo + Vitrina VIP</td>
                   </tr>
                   <tr style={{ borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #f1f5f9', background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#fafafa' }}>
                     <td style={{ padding: '12px 16px', fontWeight: 700, color: isDark ? '#ffffff' : '#1e293b' }}>Formatos Publicitarios</td>
                     <td style={{ padding: '12px 16px', color: isDark ? '#cbd5e1' : '#475569' }}>Historias 24h (Fotos)</td>
                     <td style={{ padding: '12px 16px', color: isDark ? '#cbd5e1' : '#334155' }}>Banner HD + Cupón de tienda</td>
-                    <td style={{ padding: '12px 16px', color: isDark ? '#cbd5e1' : '#334155' }}>Video spot 120s + Mención en vivo</td>
+                    <td style={{ padding: '12px 16px', color: isDark ? '#cbd5e1' : '#334155' }}>Banner HD + Historias 24h + Cupón VIP</td>
                   </tr>
                   <tr style={{ borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #f1f5f9' }}>
                     <td style={{ padding: '12px 16px', fontWeight: 700, color: isDark ? '#ffffff' : '#1e293b' }}>Alcance Territorial</td>
@@ -782,10 +782,10 @@ export default function PlanesPublicitariosPage() {
             </div>
 
             <div style={{ background: isDark ? '#1e293b' : '#f8fafc', padding: '20px', borderRadius: '14px', border: isDark ? '1px solid rgba(255, 255, 255, 0.12)' : '1px solid #e2e8f0' }}>
-              <div style={{ fontSize: '2rem', marginBottom: '10px' }}>🎱</div>
-              <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 6px', color: isDark ? '#ffffff' : '#0f172a' }}>Patrocinador Sala 3D en Vivo</h4>
+              <div style={{ fontSize: '2rem', marginBottom: '10px' }}>🏪</div>
+              <h4 style={{ fontSize: '1rem', fontWeight: 800, margin: '0 0 6px', color: isDark ? '#ffffff' : '#0f172a' }}>Vitrina Comercial & Cupones</h4>
               <p style={{ fontSize: '0.84rem', color: isDark ? '#cbd5e1' : '#475569', margin: 0, lineHeight: '1.5' }}>
-                Mención de marca y logotipo proyectado en la balotera y ruleta 3D durante las transmisiones en directo de sorteos oficiales.
+                Tu marca destacada en la vitrina comercial con botones directos hacia tu WhatsApp o tienda web, más cupones de descuento exclusivos.
               </p>
             </div>
           </div>

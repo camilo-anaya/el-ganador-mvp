@@ -2584,7 +2584,7 @@ export default function CompactWhiteMarketplacePage() {
               <div className="promo-brand-media">
                 <img src="/galeria-premios-hogar-moda-viajes-portrait.jpg" alt="TechStore Colombia" loading="lazy" />
                 <div className="promo-media-gradient" />
-                <span className="promo-top-badge gold">⚡ PATROCINADOR SALA 3D</span>
+                <span className="promo-top-badge gold">⚡ PATROCINADOR DESTACADO</span>
                 <span className="promo-offer-ribbon">🎁 15% OFF Cupón: ELGANADOR</span>
               </div>
 

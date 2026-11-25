@@ -1811,7 +1811,7 @@ export default function AdminPage() {
                 <div>
                   <span className="subCardCategory">PUBLICIDAD EN MARKETPLACE & REDES</span>
                   <h3>Suscripción de Pauta Publicitaria</h3>
-                  <small>Vallas digitales circulantes en portada y salas de sorteo 3D</small>
+                  <small>Vallas digitales circulantes en portada y vitrina comercial</small>
                 </div>
                 <span className="subStatusIndicator active">🟢 Pauta Activa</span>
               </div>
