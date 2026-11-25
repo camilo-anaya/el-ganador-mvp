@@ -96,27 +96,53 @@ export default function BusinessAdBanner() {
                     position: 'relative',
                     width: '100%',
                     height: '180px',
-                    background: currentAd.imageUrl?.includes('banner-el-ganador-oficial')
-                      ? 'radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%)'
-                      : '#000000',
+                    background: '#000000',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     overflow: 'hidden',
                   }}
                 >
-                  <img
-                    src={currentAd.imageUrl}
-                    alt={currentAd.headline}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain',
-                      padding: currentAd.imageUrl?.includes('banner-el-ganador-oficial') ? '8px 12px' : '0',
-                      filter: currentAd.imageUrl?.includes('banner-el-ganador-oficial') ? 'drop-shadow(0 8px 18px rgba(0,0,0,0.75))' : 'none',
-                      display: 'block',
-                    }}
-                  />
+                  {liveBannerAds.map((ad, idx) => {
+                    const isActive = idx === (bannerSlideIdx % liveBannerAds.length);
+                    const isOfficial = ad.imageUrl?.includes('banner-el-ganador-oficial');
+                    return (
+                      <div
+                        key={ad.id || idx}
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          opacity: isActive ? 1 : 0,
+                          zIndex: isActive ? 2 : 1,
+                          transition: 'opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1)',
+                          pointerEvents: isActive ? 'auto' : 'none',
+                          background: isOfficial
+                            ? 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 35%, #000000 78%)'
+                            : '#0a0a0c',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <img
+                          src={ad.imageUrl}
+                          alt={ad.headline}
+                          loading="eager"
+                          decoding="async"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain',
+                            padding: isOfficial ? '8px 12px' : '0',
+                            filter: isOfficial
+                              ? 'drop-shadow(0 0 28px rgba(255, 255, 255, 0.38)) drop-shadow(0 8px 18px rgba(0,0,0,0.85))'
+                              : 'none',
+                            display: 'block',
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
                   <span
                     style={{
                       position: 'absolute',

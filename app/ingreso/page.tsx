@@ -470,29 +470,24 @@ function IngresoContent() {
   );
 
   const CrownBrandBadge = () => (
-    <div className="mobileTopBrandBadge">
-      <svg className="mobileTopCrownSvg" viewBox="0 0 24 16" fill="none">
-        <path
-          d="M2 14.5L0.5 4.5L6.5 8.5L12 1L17.5 8.5L23.5 4.5L22 14.5H2Z"
-          fill="url(#goldCrownHeaderGrad)"
-          stroke="#fef08a"
-          strokeWidth="0.75"
-          strokeLinejoin="round"
-        />
-        <circle cx="0.5" cy="4" r="1.1" fill="#fff" />
-        <circle cx="6.5" cy="8" r="1.1" fill="#fff" />
-        <circle cx="12" cy="1" r="1.3" fill="#fff" />
-        <circle cx="17.5" cy="8" r="1.1" fill="#fff" />
-        <circle cx="23.5" cy="4" r="1.1" fill="#fff" />
-        <defs>
-          <linearGradient id="goldCrownHeaderGrad" x1="12" y1="1" x2="12" y2="15" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#fef08a" />
-            <stop offset="0.5" stopColor="#eab308" />
-            <stop offset="1" stopColor="#ca8a04" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <span className="mobileTopBrandText">EL GANADOR</span>
+    <div className="mobileTopBrandBadge" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+      <img
+        src="/banner-el-ganador-oficial.png"
+        alt="Logo El Ganador"
+        style={{
+          height: '28px',
+          width: 'auto',
+          maxWidth: '42px',
+          objectFit: 'contain',
+          display: 'block',
+          filter: theme === 'dark'
+            ? 'drop-shadow(0 0 8px rgba(255, 255, 255, 0.45)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6))'
+            : 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22))',
+        }}
+      />
+      <span className="mobileTopBrandText" style={{ fontSize: '13px', fontWeight: 900, color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>
+        EL GANADOR
+      </span>
     </div>
   );
 
@@ -651,7 +646,39 @@ function IngresoContent() {
       </header>
 
       {/* Cabecera con tipografía y mensaje de bienvenida */}
-      <div className="mobileSheetHeaderHero">
+      <div className="mobileSheetHeaderHero" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+        <div
+          style={{
+            width: '84px',
+            height: '62px',
+            margin: '0 auto 8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '16px',
+            background: theme === 'dark'
+              ? 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 40%, rgba(0,0,0,0.4) 80%)'
+              : 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.6) 50%, transparent 100%)',
+            boxShadow: theme === 'dark'
+              ? '0 6px 18px rgba(0,0,0,0.5)'
+              : '0 4px 14px rgba(0,0,0,0.06)',
+          }}
+        >
+          <img
+            src="/banner-el-ganador-oficial.png"
+            alt="Logo Oficial El Ganador"
+            style={{
+              width: '76px',
+              height: 'auto',
+              maxHeight: '56px',
+              objectFit: 'contain',
+              display: 'block',
+              filter: theme === 'dark'
+                ? 'drop-shadow(0 0 16px rgba(255, 255, 255, 0.45)) drop-shadow(0 4px 10px rgba(0,0,0,0.8))'
+                : 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.85)) drop-shadow(0 3px 8px rgba(0,0,0,0.18))',
+            }}
+          />
+        </div>
         <p className="mobileScriptGreeting">¡Hola de nuevo!</p>
         <h1 className="mobileSansTitle" style={{ color: "#ffffff" }}>Inicia Sesión</h1>
         <p className="mobileSubNotice">
@@ -842,7 +869,39 @@ function IngresoContent() {
       </header>
 
       {/* Cabecera con tipografía y mensaje de bienvenida */}
-      <div className="mobileSheetHeaderHero">
+      <div className="mobileSheetHeaderHero" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+        <div
+          style={{
+            width: '84px',
+            height: '62px',
+            margin: '0 auto 8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '16px',
+            background: theme === 'dark'
+              ? 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 40%, rgba(0,0,0,0.4) 80%)'
+              : 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.6) 50%, transparent 100%)',
+            boxShadow: theme === 'dark'
+              ? '0 6px 18px rgba(0,0,0,0.5)'
+              : '0 4px 14px rgba(0,0,0,0.06)',
+          }}
+        >
+          <img
+            src="/banner-el-ganador-oficial.png"
+            alt="Logo Oficial El Ganador"
+            style={{
+              width: '76px',
+              height: 'auto',
+              maxHeight: '56px',
+              objectFit: 'contain',
+              display: 'block',
+              filter: theme === 'dark'
+                ? 'drop-shadow(0 0 16px rgba(255, 255, 255, 0.45)) drop-shadow(0 4px 10px rgba(0,0,0,0.8))'
+                : 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.85)) drop-shadow(0 3px 8px rgba(0,0,0,0.18))',
+            }}
+          />
+        </div>
         <p className="mobileScriptGreeting">¡Bienvenido!</p>
         <h1 className="mobileSansTitle" style={{ color: "#ffffff" }}>Crea tu Cuenta</h1>
         <p className="mobileSubNotice">

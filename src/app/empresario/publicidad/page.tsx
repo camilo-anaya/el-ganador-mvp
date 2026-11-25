@@ -982,7 +982,7 @@ export default function PlanesPublicitariosPage() {
                 👁️ Vista Previa en Carrusel de Vitrina {activeSubInfo ? `· Suscripción ${activeSubInfo.cycle} activa` : '· Se publica automáticamente al pagar tu plan mensual'}:
               </span>
               <div style={{ background: isDark ? '#0f172a' : '#ffffff', borderRadius: '12px', overflow: 'hidden', border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid #e2e8f0' }}>
-                <div style={{ width: '100%', height: '170px', background: 'radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <div style={{ width: '100%', height: '170px', background: 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 35%, #000000 78%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
                   <img
                     src={adImage || '/banner-el-ganador-oficial.png'}
                     alt="Vista previa del banner"
@@ -991,7 +991,7 @@ export default function PlanesPublicitariosPage() {
                       height: '100%',
                       objectFit: 'contain',
                       padding: '8px 12px',
-                      filter: 'drop-shadow(0 8px 18px rgba(0,0,0,0.75))',
+                      filter: 'drop-shadow(0 0 28px rgba(255, 255, 255, 0.38)) drop-shadow(0 8px 18px rgba(0,0,0,0.85))',
                       display: 'block'
                     }}
                   />

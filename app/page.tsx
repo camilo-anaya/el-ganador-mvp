@@ -565,15 +565,15 @@ interface WonPrize {
 
 const VIBRANT_AD_THEMES = [
   {
-    bg: 'linear-gradient(135deg, #022c22 0%, #065f46 45%, #047857 100%)', // Verde Esmeralda de Lujo & Oro Real · El Ganador Oficial
-    border: 'rgba(250, 204, 21, 0.85)',
-    shadow: '0 12px 36px rgba(4, 120, 87, 0.45)',
-    tagBg: 'rgba(0, 0, 0, 0.5)',
-    tagBorder: '#fde047',
-    btnBg: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-    btnText: '#0f172a',
-    couponBg: 'rgba(0, 0, 0, 0.35)',
-    couponColor: '#fde047',
+    bg: 'linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%)', // Negro Obsidiana y Platino Real · El Ganador Oficial
+    border: 'rgba(255, 255, 255, 0.35)',
+    shadow: '0 12px 36px rgba(0, 0, 0, 0.65)',
+    tagBg: 'rgba(255, 255, 255, 0.12)',
+    tagBorder: 'rgba(255, 255, 255, 0.4)',
+    btnBg: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)',
+    btnText: '#09090b',
+    couponBg: 'rgba(255, 255, 255, 0.15)',
+    couponColor: '#ffffff',
   },
   {
     bg: 'linear-gradient(135deg, #9a3412 0%, #ea580c 40%, #f59e0b 100%)', // Fuego Solar y Ámbar Alegre
@@ -812,6 +812,16 @@ export default function CompactWhiteMarketplacePage() {
     }, 4500);
     return () => clearInterval(interval);
   }, [isAdPaused, activeSponsorAds.length]);
+
+  // Precarga inmediata de todas las imágenes del carrusel para eliminar destellos negros
+  useEffect(() => {
+    activeSponsorAds.forEach((ad) => {
+      if (typeof window !== 'undefined' && ad?.image) {
+        const img = new Image();
+        img.src = ad.image;
+      }
+    });
+  }, [activeSponsorAds]);
 
   const currentAdTheme = VIBRANT_AD_THEMES[safeAdIndex % VIBRANT_AD_THEMES.length];
   const { theme, setThemePreference } = useTheme();
@@ -1648,13 +1658,27 @@ export default function CompactWhiteMarketplacePage() {
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') manualRefresh();
             }}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
             title="Volver al inicio y actualizar"
           >
+            <img
+              src="/banner-el-ganador-oficial.png"
+              alt="Logo El Ganador"
+              style={{
+                height: '32px',
+                width: 'auto',
+                maxWidth: '48px',
+                objectFit: 'contain',
+                display: 'block',
+                filter: theme === 'dark'
+                  ? 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.4)) drop-shadow(0 2px 6px rgba(0,0,0,0.7))'
+                  : 'drop-shadow(0 2px 6px rgba(0,0,0,0.25))',
+              }}
+            />
             <div>
               <h1
                 style={{
-                  fontSize: '17px',
+                  fontSize: '16px',
                   fontWeight: 900,
                   margin: 0,
                   color: theme === 'dark' ? '#ffffff' : '#000000',
@@ -2105,36 +2129,63 @@ export default function CompactWhiteMarketplacePage() {
             {/* CONTENIDO CENTRADO Y UNIFORME */}
             <div className="official-ad-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px', width: '100%' }}>
               
-              {/* FOTO GRANDE Y DESTACADA DE BORDE A BORDE (FULL BLEED) */}
+              {/* FOTO GRANDE Y DESTACADA CON TRANSICIÓN CROSSFADE (CERO DESTELLO NEGRO) */}
               <div
-                className={`official-ad-media ${currentAd.id === 'ad-el-ganador-oficial' ? 'is-official-brand' : ''}`}
+                className="official-ad-media"
                 style={{
                   position: 'relative',
                   width: '100%',
                   height: '255px',
                   borderRadius: '0px',
                   overflow: 'hidden',
-                  background: currentAd.id === 'ad-el-ganador-oficial'
-                    ? 'radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%)'
-                    : '#000000',
+                  background: '#000000',
                   boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
                   margin: '0',
                 }}
               >
-                <img
-                  key={currentAd.id}
-                  src={currentAd.image}
-                  alt={currentAd.brand}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: currentAd.id === 'ad-el-ganador-oficial' ? 'contain' : 'cover',
-                    borderRadius: '0px',
-                    background: 'transparent',
-                    padding: currentAd.id === 'ad-el-ganador-oficial' ? '8px 14px' : '0',
-                    filter: currentAd.id === 'ad-el-ganador-oficial' ? 'drop-shadow(0 10px 22px rgba(0,0,0,0.75))' : 'none',
-                  }}
-                />
+                {activeSponsorAds.map((ad, idx) => {
+                  const isActive = idx === safeAdIndex;
+                  const isOfficial = ad.id === 'ad-el-ganador-oficial';
+                  return (
+                    <div
+                      key={ad.id || idx}
+                      className={`official-ad-slide ${isOfficial ? 'is-official-brand' : ''}`}
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        opacity: isActive ? 1 : 0,
+                        zIndex: isActive ? 2 : 1,
+                        transition: 'opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1)',
+                        pointerEvents: isActive ? 'auto' : 'none',
+                        background: isOfficial
+                          ? 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 35%, #000000 78%)'
+                          : '#0a0a0c',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <img
+                        src={ad.image}
+                        alt={ad.brand}
+                        loading="eager"
+                        decoding="async"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: isOfficial ? 'contain' : 'cover',
+                          borderRadius: '0px',
+                          background: 'transparent',
+                          padding: isOfficial ? '8px 14px' : '0',
+                          filter: isOfficial
+                            ? 'drop-shadow(0 0 28px rgba(255, 255, 255, 0.38)) drop-shadow(0 10px 22px rgba(0,0,0,0.85))'
+                            : 'none',
+                        }}
+                      />
+                    </div>
+                  );
+                })}
 
                 {/* BADGE FLOTANTE DE PATROCINADOR VIP */}
                 <div
@@ -3836,7 +3887,7 @@ export default function CompactWhiteMarketplacePage() {
               height: '180px',
               width: '100%',
               background: selectedVitrinaAd.id === 'ad-el-ganador-oficial'
-                ? 'radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%)'
+                ? 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 35%, #000000 78%)'
                 : '#000'
             }}>
               <img
@@ -3847,7 +3898,9 @@ export default function CompactWhiteMarketplacePage() {
                   height: '100%',
                   objectFit: selectedVitrinaAd.id === 'ad-el-ganador-oficial' ? 'contain' : 'cover',
                   padding: selectedVitrinaAd.id === 'ad-el-ganador-oficial' ? '10px 14px' : '0',
-                  filter: selectedVitrinaAd.id === 'ad-el-ganador-oficial' ? 'drop-shadow(0 8px 18px rgba(0,0,0,0.75))' : 'none',
+                  filter: selectedVitrinaAd.id === 'ad-el-ganador-oficial'
+                    ? 'drop-shadow(0 0 28px rgba(255, 255, 255, 0.38)) drop-shadow(0 8px 18px rgba(0,0,0,0.85))'
+                    : 'none',
                 }}
               />
               <div style={{ position: 'absolute', inset: 0, background: selectedVitrinaAd.id === 'ad-el-ganador-oficial' ? 'none' : 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)' }} />
