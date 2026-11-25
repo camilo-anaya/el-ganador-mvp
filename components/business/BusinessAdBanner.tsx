@@ -25,7 +25,7 @@ export default function BusinessAdBanner() {
       imageUrl: '/banner-el-ganador-oficial.png',
       ctaText: '📢 Publicar Mi Anuncio',
       ctaLink: '/empresario/publicidad',
-      badge: 'OFICIAL · PAUTA ACTIVA',
+      badge: '🔥 PATROCINADOR VIP · EL GANADOR',
     },
   ]);
   const [bannerSlideIdx, setBannerSlideIdx] = useState(0);
@@ -45,7 +45,7 @@ export default function BusinessAdBanner() {
           imageUrl: ad.imageUrl || '/banner-el-ganador-oficial.png',
           ctaText: ad.ctaText || 'Ver Promoción',
           ctaLink: ad.ctaLink || '/empresario/publicidad',
-          badge: ad.planTier ? `PAUTA ${String(ad.planTier).toUpperCase()}` : 'ANUNCIO ACTIVO',
+          badge: ad.planTier ? `⚡ PATROCINADOR ${String(ad.planTier).toUpperCase()} VIP` : '🔥 PATROCINADOR VIP',
         }));
         if (activeFromApi.length > 0) {
           setLiveBannerAds((prev) => {
@@ -161,7 +161,7 @@ export default function BusinessAdBanner() {
                       pointerEvents: 'none',
                     }}
                   >
-                    {currentAd.badge || 'PUBLICIDAD ACTIVA'}
+                    {currentAd.badge || '🔥 PATROCINADOR VIP'}
                   </span>
                 </div>
 
