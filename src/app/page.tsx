@@ -2801,38 +2801,39 @@ export default function CompactWhiteMarketplacePage() {
             Apple Inc. y Google LLC no son patrocinadores ni tienen relación alguna con los sorteos o premios publicados en esta aplicación.
           </p>
 
-          {/* SELLO DE MARCA CON LOGO EL GANADOR EN PEQUEÑO */}
+          {/* SELLO DE MARCA CON LOGO EL GANADOR EN TAMAÑO DESTACADO Y VISIBLE */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '4px',
-              marginTop: '14px',
-              paddingTop: '12px',
-              borderTop: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #f1f5f9',
+              gap: '8px',
+              marginTop: '18px',
+              paddingTop: '16px',
+              borderTop: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.07)',
+              width: '100%',
             }}
           >
             <img
               src="/el-ganador-logo.png"
-              alt="Logo El Ganador"
+              alt="Logo El Ganador Oficial"
               style={{
-                width: '44px',
-                height: '44px',
+                width: '96px',
+                height: '96px',
                 objectFit: 'contain',
                 filter: theme === 'dark'
-                  ? 'drop-shadow(0 0 12px rgba(255, 215, 0, 0.45))'
-                  : 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.15))',
+                  ? 'drop-shadow(0 4px 20px rgba(255, 215, 0, 0.55)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.85))'
+                  : 'drop-shadow(0 6px 16px rgba(0, 0, 0, 0.16)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
                 userSelect: 'none',
               }}
             />
             <span
               style={{
-                fontSize: '11px',
+                fontSize: '13px',
                 fontWeight: 900,
-                letterSpacing: '1px',
-                color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                letterSpacing: '1.2px',
+                color: theme === 'dark' ? '#f8fafc' : '#0f172a',
                 textTransform: 'uppercase',
               }}
             >
@@ -2840,9 +2841,9 @@ export default function CompactWhiteMarketplacePage() {
             </span>
             <small
               style={{
-                fontSize: '10px',
-                color: theme === 'dark' ? '#64748b' : '#94a3b8',
-                fontWeight: 600,
+                fontSize: '11px',
+                color: theme === 'dark' ? '#94a3b8' : '#64748b',
+                fontWeight: 700,
               }}
             >
               Tecnología & Transparencia Notarial · Sorteos 100% Verificables
