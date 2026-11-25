@@ -2600,17 +2600,28 @@ export default function CompactWhiteMarketplacePage() {
             <article className="promo-brand-card tier-advertise-cta">
               <div className="promo-cta-visual-top">
                 <span className="promo-top-badge dark-gold">🚀 ESPACIO PUBLICITARIO DISPONIBLE</span>
-                <h3>¿Quieres que miles de clientes vean tu empresa aquí?</h3>
-                <p>
-                  <strong>No necesitas organizar rifas para pautar.</strong> Promociona tu tienda, concesionario, restaurante o marca en toda Colombia.
+                <h3 style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>
+                  ¿Quieres que miles de clientes vean tu empresa aquí?
+                </h3>
+                <p style={{ color: theme === 'dark' ? '#cbd5e1' : '#334155' }}>
+                  <strong style={{ color: theme === 'dark' ? '#ffffff' : '#0f172a' }}>No necesitas organizar rifas para pautar.</strong> Promociona tu tienda, concesionario, restaurante o marca en toda Colombia.
                 </p>
               </div>
 
               <div className="promo-brand-body">
                 <ul className="promo-benefits-list">
-                  <li>✓ Vitrina destacada con enlace directo a tus ofertas</li>
-                  <li>✓ Alcance segmentado +50.000 usuarios activos</li>
-                  <li>✓ Disponible para cualquier empresa o emprendimiento</li>
+                  <li style={{ color: theme === 'dark' ? '#f1f5f9' : '#0f172a', fontWeight: 700 }}>
+                    <span className="promo-check-icon" style={{ color: theme === 'dark' ? '#38bdf8' : '#007AFF', fontWeight: 900, marginRight: '6px' }}>✓</span>
+                    <span>Vitrina destacada con enlace directo a tus ofertas</span>
+                  </li>
+                  <li style={{ color: theme === 'dark' ? '#f1f5f9' : '#0f172a', fontWeight: 700 }}>
+                    <span className="promo-check-icon" style={{ color: theme === 'dark' ? '#38bdf8' : '#007AFF', fontWeight: 900, marginRight: '6px' }}>✓</span>
+                    <span>Alcance segmentado +50.000 usuarios activos</span>
+                  </li>
+                  <li style={{ color: theme === 'dark' ? '#f1f5f9' : '#0f172a', fontWeight: 700 }}>
+                    <span className="promo-check-icon" style={{ color: theme === 'dark' ? '#38bdf8' : '#007AFF', fontWeight: 900, marginRight: '6px' }}>✓</span>
+                    <span>Disponible para cualquier empresa o emprendimiento</span>
+                  </li>
                 </ul>
 
                 <Link className="btn-cta-advertise-full" href="/empresario/publicidad">

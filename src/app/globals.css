@@ -17996,8 +17996,96 @@ html[data-theme='dark'] .station-block-premium {
   font-weight: 800 !important;
 }
 
-.promo-brand-card .promo-benefits-list li {
+/* Tarjeta de Invitación a Pautar (.tier-advertise-cta) */
+.promo-brand-card.tier-advertise-cta,
+.tier-advertise-cta {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08) !important;
+}
+
+.promo-brand-card.tier-advertise-cta .promo-cta-visual-top {
+  background: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.promo-brand-card.tier-advertise-cta .promo-cta-visual-top h3 {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+.promo-brand-card.tier-advertise-cta .promo-cta-visual-top p {
+  color: #334155 !important;
+}
+
+.promo-brand-card.tier-advertise-cta .promo-cta-visual-top p strong {
+  color: #0f172a !important;
+}
+
+.promo-brand-card.tier-advertise-cta .promo-brand-body {
+  background: #ffffff !important;
+}
+
+.promo-brand-card.tier-advertise-cta .promo-benefits-list,
+.promo-brand-card.tier-advertise-cta .promo-benefits-list li,
+.tier-advertise-cta .promo-benefits-list li {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  font-size: 0.78rem !important;
+  line-height: 1.4 !important;
+}
+
+.promo-brand-card.tier-advertise-cta .promo-check-icon,
+.tier-advertise-cta .promo-check-icon {
+  color: #007AFF !important;
+  font-weight: 900 !important;
+  font-size: 0.9rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* Modo oscuro para la tarjeta de invitación a pautar */
+[data-theme='dark'] .promo-brand-card.tier-advertise-cta,
+html[data-theme='dark'] .promo-brand-card.tier-advertise-cta {
+  background: #1c1c1e !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4) !important;
+}
+
+[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-cta-visual-top,
+html[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-cta-visual-top {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-cta-visual-top h3,
+html[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-cta-visual-top h3 {
+  color: #ffffff !important;
+}
+
+[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-cta-visual-top p,
+html[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-cta-visual-top p {
+  color: #cbd5e1 !important;
+}
+
+[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-cta-visual-top p strong,
+html[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-cta-visual-top p strong {
+  color: #ffffff !important;
+}
+
+[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-brand-body,
+html[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-brand-body {
+  background: #1c1c1e !important;
+}
+
+[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-benefits-list,
+[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-benefits-list li,
+html[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-benefits-list li {
   color: #f1f5f9 !important;
+}
+
+[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-check-icon,
+html[data-theme='dark'] .promo-brand-card.tier-advertise-cta .promo-check-icon {
+  color: #38bdf8 !important;
 }
 
 /* 2. Categorías Independientes (Sin Contenedor Global) */
