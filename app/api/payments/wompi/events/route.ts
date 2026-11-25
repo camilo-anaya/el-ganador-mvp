@@ -251,7 +251,7 @@ export async function POST(request: Request) {
         const coupon = existing?.coupon ? String(existing.coupon) : "Cupón: ELGANADOR";
         const ctaText = existing?.cta_text ? String(existing.cta_text) : "Ver Vitrina & Promoción →";
         const ctaLink = existing?.cta_link ? String(existing.cta_link) : "/empresario/publicidad";
-        const imageUrl = existing?.image_url ? String(existing.image_url) : "/banner-el-ganador-oficial.jpg";
+        const imageUrl = existing?.image_url ? String(existing.image_url) : "/banner-el-ganador-oficial.png";
         const brand = existing?.brand ? String(existing.brand) : customerName;
         const adId = existing ? String(existing.id) : `ad-sub-${reference}`;
 

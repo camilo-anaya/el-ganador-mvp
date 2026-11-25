@@ -48,7 +48,7 @@ function mapRowToAd(r: Record<string, unknown>) {
     coupon: String(r.coupon || 'Cupón: ELGANADOR'),
     ctaText: String(r.cta_text || 'Ver Vitrina & Promoción →'),
     ctaLink: String(r.cta_link || '/publicidad'),
-    image: String(r.image_url || '/banner-el-ganador-oficial.jpg'),
+    image: String(r.image_url || '/banner-el-ganador-oficial.png'),
     badge: String(r.badge || '✓ Suscripción activa'),
     planId: String(r.plan_id || 'pro'),
     billingCycle: String(r.billing_cycle || 'mensual'),
@@ -158,7 +158,7 @@ export async function POST(request: Request) {
     const rawCoupon = String(body.coupon || existing?.coupon || 'ELGANADOR').trim();
     const coupon = rawCoupon.toLowerCase().startsWith('cupón') ? rawCoupon : `Cupón: ${rawCoupon}`;
     const ctaLink = String(body.ctaLink || existing?.cta_link || '/publicidad').trim() || '/publicidad';
-    const imageUrl = String(body.image || existing?.image_url || '/banner-el-ganador-oficial.jpg').trim();
+    const imageUrl = String(body.image || existing?.image_url || '/banner-el-ganador-oficial.png').trim();
     const tag = planId === 'enterprise' ? '👑 PATROCINADOR ENTERPRISE VIP' : '⚡ PATROCINADOR PRO ACTIVO';
     const category = `${planId === 'enterprise' ? 'Cobertura Nacional' : 'Cobertura Regional'} · Suscripción ${billingCycle}`;
     const badge = `✓ Suscripción ${billingCycle} activa`;

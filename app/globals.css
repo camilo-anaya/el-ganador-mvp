@@ -14172,6 +14172,17 @@ body {
   object-fit: cover;
 }
 
+.official-ad-media.is-official-brand {
+  background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%) !important;
+}
+
+.official-ad-media.is-official-brand img {
+  object-fit: contain !important;
+  background: transparent !important;
+  padding: 8px 14px !important;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.75)) !important;
+}
+
 /* TARJETAS EDITORIALES DE MARCAS Y TIENDAS ALIADAS */
 .station-subtitle {
   font-size: 0.78rem;
@@ -21458,9 +21469,14 @@ header h1,
     object-fit: cover !important;
     border-radius: 0 !important;
   }
+  .official-ad-media.is-official-brand {
+    background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%) !important;
+  }
   .official-ad-media.is-official-brand img {
     object-fit: contain !important;
-    background: #000000 !important;
+    background: transparent !important;
+    padding: 8px 14px !important;
+    filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.75)) !important;
   }
   .official-ad-text {
     display: flex !important;

@@ -565,15 +565,15 @@ interface WonPrize {
 
 const VIBRANT_AD_THEMES = [
   {
-    bg: 'linear-gradient(135deg, #581c87 0%, #7e22ce 40%, #c026d3 100%)', // Púrpura y Magenta Eléctrico
-    border: 'rgba(217, 70, 239, 0.7)',
-    shadow: '0 12px 36px rgba(126, 34, 206, 0.45)',
-    tagBg: 'rgba(0, 0, 0, 0.35)',
-    tagBorder: '#f0abfc',
-    btnBg: '#ffffff',
-    btnText: '#701a75',
-    couponBg: 'rgba(255, 255, 255, 0.22)',
-    couponColor: '#ffffff',
+    bg: 'linear-gradient(135deg, #022c22 0%, #065f46 45%, #047857 100%)', // Verde Esmeralda de Lujo & Oro Real · El Ganador Oficial
+    border: 'rgba(250, 204, 21, 0.85)',
+    shadow: '0 12px 36px rgba(4, 120, 87, 0.45)',
+    tagBg: 'rgba(0, 0, 0, 0.5)',
+    tagBorder: '#fde047',
+    btnBg: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+    btnText: '#0f172a',
+    couponBg: 'rgba(0, 0, 0, 0.35)',
+    couponColor: '#fde047',
   },
   {
     bg: 'linear-gradient(135deg, #9a3412 0%, #ea580c 40%, #f59e0b 100%)', // Fuego Solar y Ámbar Alegre
@@ -643,7 +643,7 @@ const SPONSOR_CAROUSEL_ADS = [
     coupon: 'Cupón: ELGANADOR',
     ctaText: 'Pautar o Participar Ahora →',
     ctaLink: '/publicidad',
-    image: '/banner-el-ganador-oficial.jpg',
+    image: '/banner-el-ganador-oficial.png',
     badge: '👑 Oficial El Ganador',
   },
   {
@@ -2114,7 +2114,9 @@ export default function CompactWhiteMarketplacePage() {
                   height: '255px',
                   borderRadius: '0px',
                   overflow: 'hidden',
-                  background: '#000000',
+                  background: currentAd.id === 'ad-el-ganador-oficial'
+                    ? 'radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%)'
+                    : '#000000',
                   boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
                   margin: '0',
                 }}
@@ -2128,7 +2130,9 @@ export default function CompactWhiteMarketplacePage() {
                     height: '100%',
                     objectFit: currentAd.id === 'ad-el-ganador-oficial' ? 'contain' : 'cover',
                     borderRadius: '0px',
-                    background: '#000000',
+                    background: 'transparent',
+                    padding: currentAd.id === 'ad-el-ganador-oficial' ? '8px 14px' : '0',
+                    filter: currentAd.id === 'ad-el-ganador-oficial' ? 'drop-shadow(0 10px 22px rgba(0,0,0,0.75))' : 'none',
                   }}
                 />
 
@@ -3827,13 +3831,26 @@ export default function CompactWhiteMarketplacePage() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Cabecera con imagen del negocio */}
-            <div style={{ position: 'relative', height: '180px', width: '100%', background: '#000' }}>
+            <div style={{
+              position: 'relative',
+              height: '180px',
+              width: '100%',
+              background: selectedVitrinaAd.id === 'ad-el-ganador-oficial'
+                ? 'radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%)'
+                : '#000'
+            }}>
               <img
                 src={selectedVitrinaAd.image}
                 alt={selectedVitrinaAd.brand}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: selectedVitrinaAd.id === 'ad-el-ganador-oficial' ? 'contain' : 'cover',
+                  padding: selectedVitrinaAd.id === 'ad-el-ganador-oficial' ? '10px 14px' : '0',
+                  filter: selectedVitrinaAd.id === 'ad-el-ganador-oficial' ? 'drop-shadow(0 8px 18px rgba(0,0,0,0.75))' : 'none',
+                }}
               />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)' }} />
+              <div style={{ position: 'absolute', inset: 0, background: selectedVitrinaAd.id === 'ad-el-ganador-oficial' ? 'none' : 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)' }} />
               <button
                 type="button"
                 onClick={() => setSelectedVitrinaAd(null)}

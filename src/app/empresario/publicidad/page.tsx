@@ -92,7 +92,7 @@ export default function PlanesPublicitariosPage() {
   const [adDescription, setAdDescription] = useState('Promoción exclusiva para la comunidad de El Ganador. Envíos a toda Colombia.');
   const [adCoupon, setAdCoupon] = useState('ELGANADOR20');
   const [adCtaLink, setAdCtaLink] = useState('https://wa.me/573001234567');
-  const [adImage, setAdImage] = useState('/banner-el-ganador-oficial.jpg');
+  const [adImage, setAdImage] = useState('/banner-el-ganador-oficial.png');
   const [adActive, setAdActive] = useState(true);
   const [bannerSaved, setBannerSaved] = useState(false);
   const [activeSubInfo, setActiveSubInfo] = useState<{ planName: string; cycle: string; expiresAt: string; reference: string; clicks?: number } | null>(null);
@@ -113,7 +113,7 @@ export default function PlanesPublicitariosPage() {
       const descVal = (draftOverride?.description ?? adDescription).trim() || 'Patrocinador verificado con suscripción mensual activa en El Ganador.';
       const couponRaw = (draftOverride?.coupon ?? adCoupon).trim();
       const ctaLinkVal = (draftOverride?.ctaLink ?? adCtaLink).trim() || '/empresario/publicidad';
-      const imageVal = draftOverride?.image || adImage || '/banner-el-ganador-oficial.jpg';
+      const imageVal = draftOverride?.image || adImage || '/banner-el-ganador-oficial.png';
 
       const publishedAd = {
         id: `ad-sub-${reference}`,
@@ -982,7 +982,20 @@ export default function PlanesPublicitariosPage() {
                 👁️ Vista Previa en Carrusel de Vitrina {activeSubInfo ? `· Suscripción ${activeSubInfo.cycle} activa` : '· Se publica automáticamente al pagar tu plan mensual'}:
               </span>
               <div style={{ background: isDark ? '#0f172a' : '#ffffff', borderRadius: '12px', overflow: 'hidden', border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid #e2e8f0' }}>
-                <img src={adImage || '/banner-el-ganador-oficial.jpg'} alt="Vista previa del banner" style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block' }} />
+                <div style={{ width: '100%', height: '170px', background: 'radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                  <img
+                    src={adImage || '/banner-el-ganador-oficial.png'}
+                    alt="Vista previa del banner"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain',
+                      padding: '8px 12px',
+                      filter: 'drop-shadow(0 8px 18px rgba(0,0,0,0.75))',
+                      display: 'block'
+                    }}
+                  />
+                </div>
                 <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
                   <div>
                     <span style={{ fontSize: '10.5px', fontWeight: 800, color: '#f59e0b', background: isDark ? 'rgba(245, 158, 11, 0.18)' : '#fef3c7', padding: '2px 8px', borderRadius: '4px', textTransform: 'uppercase', display: 'inline-block', marginBottom: '4px' }}>

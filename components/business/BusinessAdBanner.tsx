@@ -22,7 +22,7 @@ export default function BusinessAdBanner() {
       businessName: 'El Ganador Oficial',
       headline: 'Impulsa tu Marca y Tus Sorteos en El Ganador',
       description: 'Anuncia tu negocio en el banner principal de toda la app con planes desde $49.900/mes y llega a miles de participantes.',
-      imageUrl: '/banner-el-ganador-oficial.jpg',
+      imageUrl: '/banner-el-ganador-oficial.png',
       ctaText: '📢 Publicar Mi Anuncio',
       ctaLink: '/empresario/publicidad',
       badge: 'OFICIAL · PAUTA ACTIVA',
@@ -42,7 +42,7 @@ export default function BusinessAdBanner() {
           businessName: ad.businessName || 'Aliado Comercial',
           headline: ad.headline || 'Promoción Activa',
           description: ad.description || 'Campaña verificada en la vitrina oficial de El Ganador.',
-          imageUrl: ad.imageUrl || '/banner-el-ganador-oficial.jpg',
+          imageUrl: ad.imageUrl || '/banner-el-ganador-oficial.png',
           ctaText: ad.ctaText || 'Ver Promoción',
           ctaLink: ad.ctaLink || '/empresario/publicidad',
           badge: ad.planTier ? `PAUTA ${String(ad.planTier).toUpperCase()}` : 'ANUNCIO ACTIVO',
@@ -96,7 +96,9 @@ export default function BusinessAdBanner() {
                     position: 'relative',
                     width: '100%',
                     height: '180px',
-                    background: '#000000',
+                    background: currentAd.imageUrl?.includes('banner-el-ganador-oficial')
+                      ? 'radial-gradient(ellipse at center, rgba(16, 185, 129, 0.28) 0%, rgba(6, 78, 59, 0.42) 45%, #030a06 100%)'
+                      : '#000000',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -110,6 +112,8 @@ export default function BusinessAdBanner() {
                       width: '100%',
                       height: '100%',
                       objectFit: 'contain',
+                      padding: currentAd.imageUrl?.includes('banner-el-ganador-oficial') ? '8px 12px' : '0',
+                      filter: currentAd.imageUrl?.includes('banner-el-ganador-oficial') ? 'drop-shadow(0 8px 18px rgba(0,0,0,0.75))' : 'none',
                       display: 'block',
                     }}
                   />
