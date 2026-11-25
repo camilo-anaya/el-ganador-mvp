@@ -966,10 +966,24 @@ export default function CompactWhiteMarketplacePage() {
         const rawList = localStorage.getItem('elganador_raffles_list');
         const parsedCustom = rawCustom ? JSON.parse(rawCustom) : [];
         const parsedList = rawList ? JSON.parse(rawList) : [];
-        const combined = [
-          ...(Array.isArray(parsedCustom) ? parsedCustom : []),
-          ...(Array.isArray(parsedList) ? parsedList : []),
-        ];
+
+        // Limpiar automáticamente cualquier rifa de prueba no deseada del almacenamiento local
+        const filteredCustom = (Array.isArray(parsedCustom) ? parsedCustom : []).filter(
+          (item: { title?: string }) =>
+            !item.title?.toLowerCase().includes('dormil') && !item.title?.toLowerCase().includes('perro')
+        );
+        const filteredList = (Array.isArray(parsedList) ? parsedList : []).filter(
+          (item: { title?: string }) =>
+            !item.title?.toLowerCase().includes('dormil') && !item.title?.toLowerCase().includes('perro')
+        );
+        if (filteredCustom.length !== parsedCustom.length) {
+          localStorage.setItem('elganador_custom_raffles', JSON.stringify(filteredCustom));
+        }
+        if (filteredList.length !== parsedList.length) {
+          localStorage.setItem('elganador_raffles_list', JSON.stringify(filteredList));
+        }
+
+        const combined = [...filteredCustom, ...filteredList];
 
         const map = new Map<string, CompactRaffleItem>();
         for (const item of combined) {
