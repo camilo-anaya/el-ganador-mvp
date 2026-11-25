@@ -15,6 +15,17 @@ const config: CapacitorConfig = {
     ...({ adjustMarginsForEdgeToEdge: "auto" } as any),
   },
   plugins: {
+    SplashScreen: {
+      launchShowDuration: 1800,
+      launchAutoHide: true,
+      launchFadeOutDuration: 400,
+      backgroundColor: "#000000",
+      androidSplashResourceName: "splash",
+      androidScaleType: "CENTER_CROP",
+      showSpinner: false,
+      splashFullScreen: true,
+      splashImmersive: true,
+    },
     StatusBar: {
       overlaysWebView: true,
       style: "DARK" as any, // Usa "LIGHT" si tu barra superior es muy clara
