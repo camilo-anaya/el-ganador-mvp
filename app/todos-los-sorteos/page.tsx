@@ -169,7 +169,7 @@ export default function TodosLosSorteosPage() {
   });
 
   return (
-    <div className="todos-los-sorteos-page" style={{ minHeight: '100vh', background: '#0b1320', color: '#ffffff', padding: '24px 20px 100px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+    <div className="todos-los-sorteos-page native-bottom-safe-space" style={{ minHeight: '100vh', background: '#0b1320', color: '#ffffff', padding: '24px 20px calc(96px + env(safe-area-inset-bottom, 0px))', fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       {/* Cabecera */}
       <div
         style={{

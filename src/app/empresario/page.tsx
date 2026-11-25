@@ -1062,7 +1062,7 @@ function PanelEmpresarioContent() {
 
       <div className="desktop-workspace-grid" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: 0, boxSizing: 'border-box' }}>
         <BusinessSidebar activeKey={activeTab} />
-        <main className="app-scroll-canvas" style={{ width: '100%', maxWidth: '100%', paddingLeft: 0, paddingRight: 0, margin: 0, paddingBottom: '112px', boxSizing: 'border-box' }}>
+        <main className="app-scroll-canvas business-scroll-safe-area" style={{ width: '100%', maxWidth: '100%', paddingLeft: 0, paddingRight: 0, margin: 0, boxSizing: 'border-box' }}>
           {/* AVISO DE ESTADO KYB */}
           {!kybApproved && (
             <div

@@ -156,7 +156,7 @@ export default function PerfilClientePage() {
 
       <div className="desktop-workspace-grid">
         <DesktopSidebar />
-        <main className="app-scroll-canvas">
+        <main className="app-scroll-canvas native-bottom-safe-space">
           {/* TARJETA DE CABECERA DE PERFIL CON 6 EMOJIS TIPO IPHONE */}
           <section className="station-block-premium">
             <div className="client-profile-hero" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>

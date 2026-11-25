@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { readSurface } from '@/lib/auth-role';
+import { triggerHapticSelection } from '@/lib/native-haptics';
 
 interface BottomNavProps {
   currentTab?: 'explorar' | 'favoritos' | 'envivo' | 'boletas' | 'perfil';
@@ -232,6 +233,7 @@ export default function BottomNav({ currentTab: propTab, onExploreClick }: Botto
             href={item.href}
             aria-label={item.label}
             onClick={(e) => {
+              triggerHapticSelection();
               setActiveTab(item.id);
               if (item.id === 'explorar' && onExploreClick && pathname === '/') {
                 e.preventDefault();

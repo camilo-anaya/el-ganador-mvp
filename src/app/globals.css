@@ -22938,6 +22938,19 @@ html[data-theme='dark'] .marketplace-legal-footer,
   box-shadow: none !important;
 }
 
+/* Espaciado nativo seguro para pantallas secundarias con barra flotante inferior */
+.native-bottom-safe-space {
+  padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+}
+
+/* Espaciado nativo seguro para el panel empresarial */
+.business-scroll-safe-area {
+  padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
+  box-sizing: border-box !important;
+}
+
+
 
 
 

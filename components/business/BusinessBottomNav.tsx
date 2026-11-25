@@ -6,6 +6,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { triggerHapticSelection } from '@/lib/native-haptics';
 import type { BusinessNavKey } from './BusinessSidebar';
 
 type Props = { activeKey?: BusinessNavKey | string };
@@ -112,6 +113,7 @@ export default function BusinessBottomNav({ activeKey }: Props) {
             href={item.href}
             aria-label={item.label}
             title={item.label}
+            onClick={() => triggerHapticSelection()}
             style={{
               position: 'relative',
               width: '46px',

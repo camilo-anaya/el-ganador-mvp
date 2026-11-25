@@ -381,7 +381,7 @@ export default function FavoritosPage() {
       </header>
 
       {/* Main Content */}
-      <main style={{ maxWidth: '1280px', margin: '24px auto', padding: '0 16px' }}>
+      <main className="native-bottom-safe-space" style={{ maxWidth: '1280px', margin: '24px auto', padding: '0 16px' }}>
         {/* ========================================================================= */}
         {/* TAB 1: CLIENTES - EMPRESAS SEGUIDAS Y SORTEOS FAVORITOS                   */}
         {/* ========================================================================= */}

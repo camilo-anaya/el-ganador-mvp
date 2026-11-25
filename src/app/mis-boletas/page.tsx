@@ -428,7 +428,7 @@ export default function MisBoletasClientePage() {
           </nav>
 
           {/* LISTADO DE BOLETAS ESTRUCTURADAS EN RECUADROS */}
-          <section style={{ padding: '8px 16px', maxWidth: '780px', margin: '0 auto' }}>
+          <section className="native-bottom-safe-space" style={{ padding: '8px 16px', maxWidth: '780px', margin: '0 auto' }}>
             {visibleTickets.length === 0 ? (
               <div
                 style={{
