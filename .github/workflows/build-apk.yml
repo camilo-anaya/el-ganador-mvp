@@ -45,6 +45,11 @@ jobs:
       - name: Dar permisos de ejecución a Gradlew
         run: chmod +x android/gradlew
 
+      - name: Asegurar dependencias de Android SDK 36
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-36" || true
+
       - name: Compilar APK Android (Debug)
         run: |
           cd android
