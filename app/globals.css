@@ -21641,7 +21641,7 @@ header h1,
 
   /* 7. Pie de página legal optimizado con espacio exacto para la cápsula flotante */
   .marketplace-legal-footer {
-    padding: 18px 16px calc(92px + env(safe-area-inset-bottom, 0px)) 16px !important;
+    padding: 18px 16px calc(112px + env(safe-area-inset-bottom, 0px)) 16px !important;
     margin-top: 14px !important;
     margin-bottom: 0 !important;
     text-align: center !important;
@@ -22916,7 +22916,7 @@ html[data-theme='light'] .marketplace-legal-footer,
   border-bottom: none !important;
   border-radius: 0 !important;
   margin: 12px 0 0 0 !important;
-  padding: 16px 16px calc(76px + env(safe-area-inset-bottom, 0px)) 16px !important;
+  padding: 16px 16px calc(112px + env(safe-area-inset-bottom, 0px)) 16px !important;
   box-sizing: border-box !important;
   text-align: center !important;
   box-shadow: none !important;
@@ -22932,7 +22932,7 @@ html[data-theme='dark'] .marketplace-legal-footer,
   border-bottom: none !important;
   border-radius: 0 !important;
   margin: 12px 0 0 0 !important;
-  padding: 16px 16px calc(76px + env(safe-area-inset-bottom, 0px)) 16px !important;
+  padding: 16px 16px calc(112px + env(safe-area-inset-bottom, 0px)) 16px !important;
   box-sizing: border-box !important;
   text-align: center !important;
   box-shadow: none !important;
