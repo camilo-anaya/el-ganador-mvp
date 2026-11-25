@@ -2187,23 +2187,28 @@ export default function CompactWhiteMarketplacePage() {
                   );
                 })}
 
-                {/* BADGE FLOTANTE DE PATROCINADOR VIP */}
+                {/* BADGE FLOTANTE DE PATROCINADOR VIP (SIEMPRE VISIBLE POR ENCIMA DE LAS FOTOS) */}
                 <div
                   style={{
                     position: 'absolute',
-                    top: '8px',
-                    left: '8px',
-                    background: 'rgba(0, 0, 0, 0.75)',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    top: '10px',
+                    left: '10px',
+                    zIndex: 25,
+                    background: 'rgba(5, 7, 10, 0.88)',
+                    border: '1px solid rgba(255, 215, 0, 0.65)',
                     color: '#ffd700',
-                    fontSize: '10.5px',
+                    fontSize: '11px',
                     fontWeight: 900,
-                    padding: '3px 8px',
-                    borderRadius: '6px',
+                    padding: '4px 10px',
+                    borderRadius: '8px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px',
-                    letterSpacing: '0.3px',
+                    gap: '5px',
+                    letterSpacing: '0.35px',
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.7)',
+                    backdropFilter: 'blur(6px)',
+                    WebkitBackdropFilter: 'blur(6px)',
+                    pointerEvents: 'none',
                   }}
                 >
                   🔥 PATROCINADOR VIP

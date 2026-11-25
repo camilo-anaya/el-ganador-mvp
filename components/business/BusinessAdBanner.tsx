@@ -148,14 +148,17 @@ export default function BusinessAdBanner() {
                       position: 'absolute',
                       top: '10px',
                       left: '10px',
+                      zIndex: 25,
                       padding: '4px 10px',
                       borderRadius: '999px',
-                      background: 'rgba(5, 7, 10, 0.82)',
+                      background: 'rgba(5, 7, 10, 0.88)',
                       border: '1px solid rgba(245, 184, 46, 0.65)',
                       color: '#fde047',
                       fontSize: '10px',
                       fontWeight: 800,
                       letterSpacing: '0.06em',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.65)',
+                      pointerEvents: 'none',
                     }}
                   >
                     {currentAd.badge || 'PUBLICIDAD ACTIVA'}
