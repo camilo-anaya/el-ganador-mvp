@@ -25,6 +25,8 @@ import {
   JEWEL_BEZEL_COLORS,
 } from "../../lib/draw-engine/wheel-physics";
 import { useTheme } from "../../context/ThemeContext";
+import { addWonPrize, getNotificationPrefs } from "../../lib/notifications";
+import { showNativeNotification } from "../../lib/nativeNotifications";
 import "./page.css";
 
 type GameMode = "balotas" | "ruleta";
@@ -498,34 +500,39 @@ export default function LiveDrawDemoPage() {
     }
     setAutoCloseCountdown(null);
 
-    // 2. REGISTRO DE PREMIOS GANADOS ACUMULADOS EN localStorage (elganador_won_prizes)
-    try {
-      const wonPrize = {
-        id: `prize-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        drawId: activeDrawId || "RIF-2026-000184",
-        title: activeDrawTitle || (mode === "balotas" ? "El Círculo Dorado" : "La ruleta de tu comunidad"),
-        winnerNumber: String(winner),
-        merchant: sponsorBumper.brand || "TechStore Colombia",
-        date: new Date().toLocaleDateString("es-CO", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        sha256Hash: auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        status: "Pendiente de entrega" as const,
-        createdAt: Date.now(),
-      };
-      const raw = localStorage.getItem("elganador_won_prizes");
-      const list = raw ? JSON.parse(raw) : [];
-      if (!list.some((p: any) => p.drawId === wonPrize.drawId && p.winnerNumber === wonPrize.winnerNumber)) {
-        list.unshift(wonPrize);
-        localStorage.setItem("elganador_won_prizes", JSON.stringify(list));
-        window.dispatchEvent(new Event("elganador_prizes_updated"));
+    // 2. REGISTRO DE PREMIO GANADO (elganador_won_prizes) — SOLO si el usuario es el ganador real
+    if (isUserWinner) {
+      try {
+        const wonTitle = activeDrawTitle || (mode === "balotas" ? "El Círculo Dorado" : "La ruleta de tu comunidad");
+        const wonMerchant = sponsorBumper.brand || "TechStore Colombia";
+        const added = addWonPrize({
+          id: `prize-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+          drawId: activeDrawId || "RIF-2026-000184",
+          title: wonTitle,
+          winnerNumber: String(winner),
+          merchant: wonMerchant,
+          date: new Date().toLocaleDateString("es-CO", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          sha256Hash: auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          status: "Pendiente de entrega",
+          createdAt: Date.now(),
+        });
+        // Aviso nativo del dispositivo solo la primera vez y si el usuario lo permite en Perfil
+        if (added && getNotificationPrefs().notifyLiveDraws) {
+          void showNativeNotification({
+            title: "🏆 ¡Ganaste un premio!",
+            body: `Tu boleta #${winner} fue la ganadora de ${wonTitle}. Toca para ver tu certificado.`,
+            url: "/mis-boletas",
+          });
+        }
+      } catch (e) {
+        console.error("Error guardando premio ganado:", e);
       }
-    } catch (e) {
-      console.error("Error guardando premio ganado:", e);
     }
 
     return () => {

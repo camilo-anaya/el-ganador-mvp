@@ -15668,7 +15668,7 @@ html[data-theme='dark'] .btn-share-card-compact {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(226, 176, 74, 0.2), rgba(16, 185, 129, 0.2));
+  background: rgba(0, 122, 255, 0.15);
   border: 1.5px solid #e2b04a;
   display: grid;
   place-items: center;
@@ -15720,17 +15720,18 @@ html[data-theme='dark'] .btn-share-card-compact {
   gap: 5px;
   padding: 5px 10px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #004d25, #007038);
-  color: #ffe082;
+  background: #007AFF;
+  color: #ffffff;
   font-size: 0.72rem;
   font-weight: 800;
   text-decoration: none;
-  border: 1px solid rgba(226, 176, 74, 0.4);
+  border: none;
+  cursor: pointer;
   width: fit-content;
 }
 
 .notif-claim-btn:hover {
-  background: #007038;
+  background: #0062cc;
 }
 
 .notif-empty-state {

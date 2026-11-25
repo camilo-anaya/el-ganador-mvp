@@ -224,8 +224,9 @@ export default function FavoritosPage() {
   };
 
   const handleSendBroadcastNotification = (merchantName: string) => {
+    // Vista previa: los seguidores no están registrados en servidor, por lo que NO se envía nada real.
     setNotificationSent(merchantName);
-    showToast(`📢 Notificación enviada con éxito a todos los seguidores de ${merchantName}`);
+    showToast(`👁️ Vista previa del aviso a seguidores de ${merchantName}. El envío real se habilita desde el panel CRM de tu plan.`);
     setTimeout(() => setNotificationSent(null), 4000);
   };
 
@@ -1182,7 +1183,7 @@ export default function FavoritosPage() {
                 >
                   <span>{notificationSent === currentBiz.name ? '✓' : '🚀'}</span>
                   <span>
-                    {notificationSent === currentBiz.name ? '¡Notificación Emitida!' : 'Enviar Aviso a Seguidores'}
+                    {notificationSent === currentBiz.name ? 'Vista previa mostrada' : 'Probar Aviso a Seguidores (vista previa)'}
                   </span>
                 </button>
                 <Link

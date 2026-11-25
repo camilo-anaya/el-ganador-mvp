@@ -3,6 +3,8 @@
  * Soporta envío directo por WhatsApp y preparación de correo electrónico para compradores.
  */
 
+import { showNativeNotification } from './nativeNotifications';
+
 export interface TicketNotificationData {
   buyerName: string;
   buyerPhone?: string;
@@ -109,6 +111,12 @@ export function addBusinessNotification(
       const updated = [newItem, ...current].slice(0, 50);
       localStorage.setItem('elganador_business_notifications', JSON.stringify(updated));
       window.dispatchEvent(new Event('elganador_notification_update'));
+      // Aviso nativo del dispositivo (no-op en navegador web)
+      void showNativeNotification({
+        title: newItem.title,
+        body: newItem.message.slice(0, 180),
+        url: newItem.link,
+      });
     } catch (e) {
       console.warn('Error al guardar notificación empresarial:', e);
     }
@@ -125,4 +133,143 @@ export function markBusinessNotificationsAsRead(): void {
     localStorage.setItem('elganador_business_notifications', JSON.stringify(updated));
     window.dispatchEvent(new Event('elganador_notification_update'));
   } catch {}
+}
+
+function saveBusinessNotifications(list: BusinessNotification[]): void {
+  localStorage.setItem('elganador_business_notifications', JSON.stringify(list));
+  window.dispatchEvent(new Event('elganador_notification_update'));
+}
+
+/** Descarta (elimina) una notificación empresarial concreta. */
+export function dismissBusinessNotification(id: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    saveBusinessNotifications(getBusinessNotifications().filter((n) => n.id !== id));
+  } catch {}
+}
+
+/** Elimina todas las notificaciones empresariales. */
+export function clearBusinessNotifications(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    saveBusinessNotifications([]);
+  } catch {}
+}
+
+/**
+ * ============================================================================
+ * NOTIFICACIONES DEL CLIENTE: PREMIOS GANADOS (campana de la vitrina)
+ * ============================================================================
+ */
+export const WON_PRIZES_KEY = 'elganador_won_prizes';
+
+export interface WonPrizeNotification {
+  id: string;
+  drawId: string;
+  title: string;
+  winnerNumber: string;
+  merchant: string;
+  date: string;
+  sha256Hash: string;
+  status: 'Pendiente de entrega' | 'Reclamado';
+  createdAt: number;
+  /** undefined se considera NO leído (compatibilidad con premios guardados antes). */
+  read?: boolean;
+  /** Descartado por el usuario: se oculta pero se conserva para evitar duplicados. */
+  dismissed?: boolean;
+}
+
+function readAllWonPrizes(): WonPrizeNotification[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(WON_PRIZES_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeAllWonPrizes(list: WonPrizeNotification[]): void {
+  localStorage.setItem(WON_PRIZES_KEY, JSON.stringify(list.slice(0, 100)));
+  window.dispatchEvent(new Event('elganador_prizes_updated'));
+}
+
+/** Premios visibles en la campana (excluye los descartados). */
+export function getWonPrizes(): WonPrizeNotification[] {
+  return readAllWonPrizes().filter((p) => !p.dismissed);
+}
+
+/** Registra un premio ganado. Devuelve false si ya existía (mismo sorteo + número). */
+export function addWonPrize(
+  prize: Omit<WonPrizeNotification, 'read' | 'dismissed'>
+): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const list = readAllWonPrizes();
+    if (list.some((p) => p.drawId === prize.drawId && p.winnerNumber === prize.winnerNumber)) {
+      return false;
+    }
+    writeAllWonPrizes([{ ...prize, read: false }, ...list]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function markWonPrizesAsRead(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    writeAllWonPrizes(readAllWonPrizes().map((p) => ({ ...p, read: true })));
+  } catch {}
+}
+
+export function dismissWonPrize(id: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    writeAllWonPrizes(readAllWonPrizes().map((p) => (p.id === id ? { ...p, dismissed: true, read: true } : p)));
+  } catch {}
+}
+
+export function dismissAllWonPrizes(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    writeAllWonPrizes(readAllWonPrizes().map((p) => ({ ...p, dismissed: true, read: true })));
+  } catch {}
+}
+
+/** Marca el premio como reclamado y leído. */
+export function claimWonPrize(id: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    writeAllWonPrizes(
+      readAllWonPrizes().map((p) => (p.id === id ? { ...p, status: 'Reclamado' as const, read: true } : p))
+    );
+  } catch {}
+}
+
+/**
+ * ============================================================================
+ * PREFERENCIAS DE NOTIFICACIÓN DEL CLIENTE (guardadas desde /perfil)
+ * ============================================================================
+ */
+export interface NotificationPrefs {
+  notifyWhatsapp: boolean;
+  notifyLiveDraws: boolean;
+}
+
+export function getNotificationPrefs(): NotificationPrefs {
+  const defaults: NotificationPrefs = { notifyWhatsapp: true, notifyLiveDraws: true };
+  if (typeof window === 'undefined') return defaults;
+  try {
+    const raw = localStorage.getItem('elganador_client_profile');
+    if (!raw) return defaults;
+    const p = JSON.parse(raw);
+    return {
+      notifyWhatsapp: typeof p.notifyWhatsapp === 'boolean' ? p.notifyWhatsapp : true,
+      notifyLiveDraws: typeof p.notifyLiveDraws === 'boolean' ? p.notifyLiveDraws : true,
+    };
+  } catch {
+    return defaults;
+  }
 }

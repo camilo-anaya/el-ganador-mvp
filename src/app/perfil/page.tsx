@@ -10,6 +10,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { getUserSession } from '@/lib/nativeActions';
 import { supabase } from '@/lib/supabase';
 import { performLogout } from '@/lib/logout';
+import { ensureNativeNotificationPermission } from '@/lib/nativeNotifications';
 
 const IPHONE_AVATARS = ['👑', '🦁', '⚡', '💎', '🚀', '🏆'];
 
@@ -291,7 +292,7 @@ export default function PerfilClientePage() {
 
               <div className="settings-toggles-box">
                 <label className="toggle-setting-row">
-                  <span>📲 Recibir comprobantes y boletas por WhatsApp</span>
+                  <span>📲 Recibir comprobantes y boletas por WhatsApp <small style={{ opacity: 0.7 }}>(próximamente)</small></span>
                   <input
                     type="checkbox"
                     checked={notifyWhatsapp}
@@ -303,7 +304,11 @@ export default function PerfilClientePage() {
                   <input
                     type="checkbox"
                     checked={notifyLiveDraws}
-                    onChange={(e) => setNotifyLiveDraws(e.target.checked)}
+                    onChange={(e) => {
+                      setNotifyLiveDraws(e.target.checked);
+                      // Al activar, se solicita el permiso de notificaciones del dispositivo (solo app nativa)
+                      if (e.target.checked) void ensureNativeNotificationPermission();
+                    }}
                   />
                 </label>
                 <div

@@ -14,6 +14,15 @@ import { useTheme } from '@/context/ThemeContext';
 import StoryViewer from '@/components/StoryViewer';
 import { performLogout } from '@/lib/logout';
 import { readSurface } from '@/lib/auth-role';
+import {
+  getWonPrizes,
+  markWonPrizesAsRead,
+  dismissWonPrize,
+  dismissAllWonPrizes,
+  claimWonPrize,
+  getNotificationPrefs,
+} from '@/lib/notifications';
+import { scheduleLiveDrawReminder } from '@/lib/nativeNotifications';
 
 interface MerchantStory {
   id: string;
@@ -550,6 +559,8 @@ interface WonPrize {
   sha256Hash: string;
   status: 'Pendiente de entrega' | 'Reclamado';
   createdAt: number;
+  read?: boolean;
+  dismissed?: boolean;
 }
 
 const VIBRANT_AD_THEMES = [
@@ -1159,6 +1170,15 @@ export default function CompactWhiteMarketplacePage() {
       console.warn('Aviso registrando intención de pago:', intentErr);
     }
 
+    // 1.6. Recordatorio nativo 15 min antes del sorteo (solo app nativa, si el usuario lo activó en Perfil y hay fecha válida)
+    try {
+      if (getNotificationPrefs().notifyLiveDraws) {
+        const raffleMeta = ticketModalRaffle as unknown as Record<string, unknown>;
+        const drawAt = (raffleMeta.draw_date || raffleMeta.scheduledAt || raffleMeta.scheduled_at) as string | undefined;
+        void scheduleLiveDrawReminder(ticketModalRaffle.title, drawAt);
+      }
+    } catch {}
+
     // 2. Integración Oficial Wompi (Web Checkout directo en móvil para evitar bloqueo táctil de iframe iOS + Widget limpio en escritorio)
     const configuredKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || process.env.NEXT_PUBLIC_WOMPI_PUB_KEY || '';
     const publicKey = (configuredKey && configuredKey.startsWith('pub_prod_'))
@@ -1341,13 +1361,10 @@ export default function CompactWhiteMarketplacePage() {
   useEffect(() => {
     const loadWonPrizes = () => {
       try {
-        const raw = localStorage.getItem('elganador_won_prizes');
-        if (raw) {
-          setWonPrizes(JSON.parse(raw));
-        } else {
-          setWonPrizes([]);
-        }
-      } catch {}
+        setWonPrizes(getWonPrizes());
+      } catch {
+        setWonPrizes([]);
+      }
     };
     loadWonPrizes();
     window.addEventListener('storage', loadWonPrizes);
@@ -1673,7 +1690,11 @@ export default function CompactWhiteMarketplacePage() {
             <button
               type="button"
               className="notif-bell-btn"
-              onClick={() => setShowNotifDropdown((prev) => !prev)}
+              onClick={() => {
+                // Al cerrar la bandeja, lo visto queda como leído y el contador baja
+                if (showNotifDropdown) markWonPrizesAsRead();
+                setShowNotifDropdown((prev) => !prev);
+              }}
               title="Premios Ganados y Notificaciones"
               aria-label="Notificaciones"
               style={{
@@ -1701,8 +1722,8 @@ export default function CompactWhiteMarketplacePage() {
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                 <path d="M13.73 21a2 2 0 0 1-3.46 0" />
               </svg>
-              {wonPrizes.length > 0 && (
-                <span className="notif-badge-count">{wonPrizes.length}</span>
+              {wonPrizes.some((p) => !p.read) && (
+                <span className="notif-badge-count">{wonPrizes.filter((p) => !p.read).length}</span>
               )}
             </button>
 
@@ -1711,14 +1732,40 @@ export default function CompactWhiteMarketplacePage() {
               <div className="notif-fb-dropdown" role="dialog" aria-label="Bandeja de Premios Ganados">
                 <div className="notif-fb-header">
                   <h3>🔔 Premios Ganados</h3>
-                  <button
-                    type="button"
-                    className="notif-fb-close-btn"
-                    onClick={() => setShowNotifDropdown(false)}
-                    aria-label="Cerrar notificaciones"
-                  >
-                    ✕
-                  </button>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    {wonPrizes.length > 0 && (
+                      <>
+                        <button
+                          type="button"
+                          className="notif-fb-close-btn"
+                          style={{ fontSize: '0.7rem', fontWeight: 700 }}
+                          onClick={() => markWonPrizesAsRead()}
+                          disabled={!wonPrizes.some((p) => !p.read)}
+                        >
+                          Marcar leídas
+                        </button>
+                        <button
+                          type="button"
+                          className="notif-fb-close-btn"
+                          style={{ fontSize: '0.7rem', fontWeight: 700 }}
+                          onClick={() => dismissAllWonPrizes()}
+                        >
+                          Borrar todo
+                        </button>
+                      </>
+                    )}
+                    <button
+                      type="button"
+                      className="notif-fb-close-btn"
+                      onClick={() => {
+                        markWonPrizesAsRead();
+                        setShowNotifDropdown(false);
+                      }}
+                      aria-label="Cerrar notificaciones"
+                    >
+                      ✕
+                    </button>
+                  </div>
                 </div>
 
                 {wonPrizes.length === 0 ? (
@@ -1732,7 +1779,11 @@ export default function CompactWhiteMarketplacePage() {
                 ) : (
                   <div className="notif-fb-list">
                     {wonPrizes.map((prize) => (
-                      <div key={prize.id} className="notif-fb-item">
+                      <div
+                        key={prize.id}
+                        className="notif-fb-item"
+                        style={prize.read ? { opacity: 0.72 } : { background: 'rgba(0, 122, 255, 0.08)' }}
+                      >
                         <div className="notif-fb-icon">🏆</div>
                         <div className="notif-fb-body">
                           <strong className="notif-fb-title">{prize.title}</strong>
@@ -1752,11 +1803,24 @@ export default function CompactWhiteMarketplacePage() {
                           <Link
                             href="/mis-boletas"
                             className="notif-claim-btn"
-                            onClick={() => setShowNotifDropdown(false)}
+                            onClick={() => {
+                              claimWonPrize(prize.id);
+                              setShowNotifDropdown(false);
+                            }}
                           >
                             Ver Certificado y Reclamar →
                           </Link>
                         </div>
+                        <button
+                          type="button"
+                          className="notif-fb-close-btn"
+                          aria-label="Descartar notificación"
+                          title="Descartar"
+                          style={{ alignSelf: 'flex-start' }}
+                          onClick={() => dismissWonPrize(prize.id)}
+                        >
+                          ✕
+                        </button>
                       </div>
                     ))}
                   </div>

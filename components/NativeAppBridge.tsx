@@ -52,10 +52,26 @@ export function NativeAppBridge() {
       });
     } catch {}
 
+    // 4. Al tocar una notificación local, abrir la ruta indicada (ej. /mis-boletas)
+    let notifTapSub: any = null;
+    (async () => {
+      try {
+        const { LocalNotifications } = await import("@capacitor/local-notifications");
+        notifTapSub = await LocalNotifications.addListener(
+          "localNotificationActionPerformed",
+          (event) => {
+            const url = (event.notification.extra as { url?: string } | undefined)?.url;
+            if (url && url.startsWith("/")) router.push(url);
+          }
+        );
+      } catch {}
+    })();
+
     return () => {
       showSub?.then((h: any) => h.remove()).catch(() => {});
       hideSub?.then((h: any) => h.remove()).catch(() => {});
       backSub?.then((h: any) => h.remove()).catch(() => {});
+      notifTapSub?.remove?.();
     };
   }, [pathname, router]);
 

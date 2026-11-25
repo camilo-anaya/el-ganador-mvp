@@ -2375,7 +2375,7 @@ export default function AdminPage() {
                     <div>
                       <strong>✓ {crmBroadcastResult.message}</strong>
                       <p style={{ margin: "4px 0 0", fontSize: "11px" }}>
-                        Canales impactados: WhatsApp Directo + Plantilla transaccional de Correo Electrónico. Tasa de interacción proyectada: {crmStats.avgOpenRate}.
+                        Estado: en cola. Los destinatarios se calculan con compras confirmadas; no se muestran tasas de entrega ni de apertura hasta conectar WhatsApp Business / correo.
                       </p>
                     </div>
                   ) : (

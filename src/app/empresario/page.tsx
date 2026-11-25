@@ -12,7 +12,7 @@ import { performLogout } from '@/lib/logout';
 import RegionalPermitSelectorWithTime, { LegalScope, REGIONAL_DEPARTMENTS } from '@/components/RegionalPermitSelectorWithTime';
 import { fileToDataUrl, compressImageFileToDataUrl, shareRaffleLink } from '@/lib/nativeActions';
 import { supabase, uploadStoryToSupabase, uploadKybDocumentToSupabase, uploadLegalDocument } from '@/lib/supabase';
-import { getBusinessNotifications, markBusinessNotificationsAsRead, addBusinessNotification, BusinessNotification } from '@/lib/notifications';
+import { getBusinessNotifications, markBusinessNotificationsAsRead, addBusinessNotification, dismissBusinessNotification, clearBusinessNotifications, BusinessNotification } from '@/lib/notifications';
 import { useTheme } from '@/context/ThemeContext';
 import Formulario8Modal from '@/components/Formulario8Modal';
 
@@ -840,6 +840,144 @@ function PanelEmpresarioContent() {
           </div>
         </div>
         <div className="topbar-actions" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap', flexShrink: 0 }}>
+          {/* CAMPANA DE NOTIFICACIONES EMPRESARIALES (Secretaria Legal IA, trámites y ventas) */}
+          <div className="notif-bell-container" style={{ position: 'relative' }}>
+            <button
+              type="button"
+              className="notif-bell-btn"
+              aria-label="Notificaciones empresariales"
+              title="Notificaciones del expediente y ventas"
+              onClick={() => {
+                // Al cerrar la bandeja, lo visto queda como leído y el contador baja
+                if (showBusinessNotifDropdown) markBusinessNotificationsAsRead();
+                setShowBusinessNotifDropdown((prev) => !prev);
+              }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '4px',
+                position: 'relative',
+              }}
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={isDark ? '#ffffff' : '#000000'}
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ display: 'block' }}
+              >
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+              </svg>
+              {unreadBusinessNotifsCount > 0 && (
+                <span className="notif-badge-count">{unreadBusinessNotifsCount}</span>
+              )}
+            </button>
+
+            {showBusinessNotifDropdown && (
+              <div className="notif-fb-dropdown" role="dialog" aria-label="Bandeja de notificaciones empresariales">
+                <div className="notif-fb-header">
+                  <h3>🔔 Notificaciones</h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    {businessNotifs.length > 0 && (
+                      <>
+                        <button
+                          type="button"
+                          className="notif-fb-close-btn"
+                          style={{ fontSize: '0.7rem', fontWeight: 700 }}
+                          onClick={() => markBusinessNotificationsAsRead()}
+                          disabled={unreadBusinessNotifsCount === 0}
+                        >
+                          Marcar leídas
+                        </button>
+                        <button
+                          type="button"
+                          className="notif-fb-close-btn"
+                          style={{ fontSize: '0.7rem', fontWeight: 700 }}
+                          onClick={() => clearBusinessNotifications()}
+                        >
+                          Borrar todo
+                        </button>
+                      </>
+                    )}
+                    <button
+                      type="button"
+                      className="notif-fb-close-btn"
+                      aria-label="Cerrar notificaciones"
+                      onClick={() => {
+                        markBusinessNotificationsAsRead();
+                        setShowBusinessNotifDropdown(false);
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+
+                {businessNotifs.length === 0 ? (
+                  <div className="notif-empty-state">
+                    <span style={{ fontSize: '2rem', display: 'block', marginBottom: '6px' }}>📭</span>
+                    <p style={{ margin: '0 0 4px', fontWeight: 700 }}>No tienes notificaciones</p>
+                    <small style={{ color: 'var(--text-secondary)' }}>
+                      Aquí verás el avance de tus expedientes, vouchers y ventas.
+                    </small>
+                  </div>
+                ) : (
+                  <div className="notif-fb-list">
+                    {businessNotifs.map((n) => (
+                      <div
+                        key={n.id}
+                        className="notif-fb-item"
+                        style={n.read ? { opacity: 0.72 } : { background: 'rgba(0, 122, 255, 0.08)' }}
+                      >
+                        <div className="notif-fb-body">
+                          <strong className="notif-fb-title">{n.title}</strong>
+                          <span className="notif-fb-meta" style={{ whiteSpace: 'normal' }}>
+                            {n.message.length > 160 ? `${n.message.slice(0, 160)}…` : n.message}
+                          </span>
+                          <span className="notif-fb-meta" style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
+                            {n.dateStr}
+                            {n.badge ? ` · ${n.badge}` : ''}
+                          </span>
+                          {n.link && (
+                            <button
+                              type="button"
+                              className="notif-claim-btn"
+                              onClick={() => {
+                                markBusinessNotificationsAsRead();
+                                setShowBusinessNotifDropdown(false);
+                                router.push(n.link as string);
+                              }}
+                            >
+                              Ver detalle →
+                            </button>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          className="notif-fb-close-btn"
+                          aria-label="Descartar notificación"
+                          title="Descartar"
+                          style={{ alignSelf: 'flex-start' }}
+                          onClick={() => dismissBusinessNotification(n.id)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
           <Link
             href="/"
             className="btn-topbar-action btn-topbar-vitrina"
