@@ -935,7 +935,7 @@ export default function CustomerAccountPage() {
                 <div className="customerBoxHeading">
                   <div className="customerBoxIcon blue">🏦</div>
                   <div>
-                    <h3>Cuenta para Recibir Cobros & Premios</h3>
+                    <h3>Cuenta para recibir cobros y premios</h3>
                     <p>Registra tu cuenta personal para transferirte directamente tus premios ganados sin intermediarios.</p>
                   </div>
                 </div>

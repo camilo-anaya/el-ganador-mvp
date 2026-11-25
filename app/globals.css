@@ -15620,7 +15620,9 @@ html[data-theme='dark'] .btn-share-card-compact {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 14px;
+  gap: 8px;
+  flex-wrap: nowrap;
+  padding: 10px 14px;
   border-bottom: 1px solid var(--border-subtle);
   background: var(--surface-subtle);
   border-radius: 16px 16px 0 0;

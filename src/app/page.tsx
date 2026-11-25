@@ -1695,8 +1695,7 @@ export default function CompactWhiteMarketplacePage() {
                 if (showNotifDropdown) markWonPrizesAsRead();
                 setShowNotifDropdown((prev) => !prev);
               }}
-              title="Premios Ganados y Notificaciones"
-              aria-label="Notificaciones"
+              aria-label="Premios ganados y notificaciones"
               style={{
                 background: 'transparent',
                 border: 'none',
@@ -1729,28 +1728,33 @@ export default function CompactWhiteMarketplacePage() {
 
             {/* BANDEJA FLOTANTE ESTILO FACEBOOK */}
             {showNotifDropdown && (
-              <div className="notif-fb-dropdown" role="dialog" aria-label="Bandeja de Premios Ganados">
+              <div className="notif-fb-dropdown" role="dialog" aria-label="Bandeja de premios ganados">
                 <div className="notif-fb-header">
-                  <h3>🔔 Premios Ganados</h3>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <h3 style={{ margin: 0, fontSize: '0.84rem', fontWeight: 800, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>🔔</span>
+                    <span>Premios ganados</span>
+                  </h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
                     {wonPrizes.length > 0 && (
                       <>
                         <button
                           type="button"
                           className="notif-fb-close-btn"
-                          style={{ fontSize: '0.7rem', fontWeight: 700 }}
+                          style={{ fontSize: '0.68rem', fontWeight: 700, padding: '3px 6px', borderRadius: '6px', background: 'rgba(0, 122, 255, 0.12)', color: '#007AFF', whiteSpace: 'nowrap' }}
                           onClick={() => markWonPrizesAsRead()}
                           disabled={!wonPrizes.some((p) => !p.read)}
+                          title="Marcar todas como leídas"
                         >
-                          Marcar leídas
+                          Leídas
                         </button>
                         <button
                           type="button"
                           className="notif-fb-close-btn"
-                          style={{ fontSize: '0.7rem', fontWeight: 700 }}
+                          style={{ fontSize: '0.68rem', fontWeight: 700, padding: '3px 6px', borderRadius: '6px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', whiteSpace: 'nowrap' }}
                           onClick={() => dismissAllWonPrizes()}
+                          title="Borrar todas las notificaciones"
                         >
-                          Borrar todo
+                          Borrar
                         </button>
                       </>
                     )}
