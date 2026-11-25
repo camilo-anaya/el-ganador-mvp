@@ -2793,13 +2793,61 @@ export default function CompactWhiteMarketplacePage() {
           </DesktopScrollStrip>
         </section>
 
-        {/* PIE DE PÁGINA LEGAL BLANCO IMPECABLE */}
+        {/* PIE DE PÁGINA LEGAL CON SELLO DE MARCA OFICIAL COMO RELLENO */}
         <footer className="marketplace-legal-footer">
           <strong>EL GANADOR · Colombia (+18)</strong>
           <p>
             Sorteos promocionales operados conforme a la Ley 643 de 2001 y Decreto 1486 de 2024.
             Apple Inc. y Google LLC no son patrocinadores ni tienen relación alguna con los sorteos o premios publicados en esta aplicación.
           </p>
+
+          {/* SELLO DE MARCA CON LOGO EL GANADOR EN PEQUEÑO */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '4px',
+              marginTop: '14px',
+              paddingTop: '12px',
+              borderTop: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #f1f5f9',
+            }}
+          >
+            <img
+              src="/el-ganador-logo.png"
+              alt="Logo El Ganador"
+              style={{
+                width: '44px',
+                height: '44px',
+                objectFit: 'contain',
+                filter: theme === 'dark'
+                  ? 'drop-shadow(0 0 12px rgba(255, 215, 0, 0.45))'
+                  : 'drop-shadow(0 3px 8px rgba(0, 0, 0, 0.15))',
+                userSelect: 'none',
+              }}
+            />
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 900,
+                letterSpacing: '1px',
+                color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                textTransform: 'uppercase',
+              }}
+            >
+              EL GANADOR · APP OFICIAL COLOMBIA
+            </span>
+            <small
+              style={{
+                fontSize: '10px',
+                color: theme === 'dark' ? '#64748b' : '#94a3b8',
+                fontWeight: 600,
+              }}
+            >
+              Tecnología & Transparencia Notarial · Sorteos 100% Verificables
+            </small>
+          </div>
         </footer>
       </main>
       </div>
