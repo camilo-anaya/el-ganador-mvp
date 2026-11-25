@@ -565,14 +565,14 @@ interface WonPrize {
 
 const VIBRANT_AD_THEMES = [
   {
-    bg: 'linear-gradient(135deg, #09090b 0%, #18181b 50%, #27272a 100%)', // Negro Obsidiana y Platino Real · El Ganador Oficial
-    border: 'rgba(255, 255, 255, 0.35)',
-    shadow: '0 12px 36px rgba(0, 0, 0, 0.65)',
-    tagBg: 'rgba(255, 255, 255, 0.12)',
-    tagBorder: 'rgba(255, 255, 255, 0.4)',
-    btnBg: 'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)',
-    btnText: '#09090b',
-    couponBg: 'rgba(255, 255, 255, 0.15)',
+    bg: 'linear-gradient(135deg, #0a2540 0%, #0052cc 38%, #007AFF 72%, #0284c7 100%)', // Azul Zafiro Real & Eléctrico Vibrante · El Ganador Oficial
+    border: 'rgba(56, 189, 248, 0.85)',
+    shadow: '0 16px 42px rgba(0, 122, 255, 0.45)',
+    tagBg: 'rgba(0, 0, 0, 0.45)',
+    tagBorder: 'rgba(56, 189, 248, 0.85)',
+    btnBg: 'linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%)',
+    btnText: '#0052cc',
+    couponBg: 'rgba(0, 0, 0, 0.38)',
     couponColor: '#ffffff',
   },
   {
@@ -2127,19 +2127,19 @@ export default function CompactWhiteMarketplacePage() {
         >
           <div className="carousel-ad-wrapper" style={{ padding: '0 0 14px 0', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', boxSizing: 'border-box' }}>
             {/* CONTENIDO CENTRADO Y UNIFORME */}
-            <div className="official-ad-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '0', width: '100%' }}>
+            <div className="official-ad-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '8px', width: '100%' }}>
               
-              {/* FOTO GRANDE Y DESTACADA CON TODO EL TEXTO Y ACCIONES SUPERPUESTOS ENCIMA DE LA FOTO */}
+              {/* FOTO GRANDE Y DESTACADA CON TRANSICIÓN CROSSFADE (CERO DESTELLO NEGRO) */}
               <div
                 className="official-ad-media"
                 style={{
                   position: 'relative',
                   width: '100%',
-                  height: '330px',
-                  borderRadius: '12px',
+                  height: '255px',
+                  borderRadius: '0px',
                   overflow: 'hidden',
                   background: '#000000',
-                  boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
                   margin: '0',
                 }}
               >
@@ -2177,7 +2177,7 @@ export default function CompactWhiteMarketplacePage() {
                           objectFit: isOfficial ? 'contain' : 'cover',
                           borderRadius: '0px',
                           background: 'transparent',
-                          padding: isOfficial ? '8px 14px 100px 14px' : '0',
+                          padding: isOfficial ? '8px 14px' : '0',
                           filter: isOfficial
                             ? 'drop-shadow(0 0 28px rgba(255, 255, 255, 0.38)) drop-shadow(0 10px 22px rgba(0,0,0,0.85))'
                             : 'none',
@@ -2187,179 +2187,155 @@ export default function CompactWhiteMarketplacePage() {
                   );
                 })}
 
-                {/* BADGES SUPERIORES FLOTANTES (PATROCINADOR VIP & TAG OFICIAL) */}
+                {/* BADGE FLOTANTE DE PATROCINADOR VIP (SIEMPRE VISIBLE POR ENCIMA DE LAS FOTOS) */}
                 <div
                   style={{
                     position: 'absolute',
-                    top: '12px',
-                    left: '12px',
-                    right: '12px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
+                    top: '10px',
+                    left: '10px',
                     zIndex: 25,
+                    background: 'rgba(5, 7, 10, 0.88)',
+                    border: '1px solid rgba(255, 215, 0, 0.65)',
+                    color: '#ffd700',
+                    fontSize: '11px',
+                    fontWeight: 900,
+                    padding: '4px 10px',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    letterSpacing: '0.35px',
+                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.7)',
+                    backdropFilter: 'blur(6px)',
+                    WebkitBackdropFilter: 'blur(6px)',
                     pointerEvents: 'none',
                   }}
                 >
-                  <div
-                    style={{
-                      background: 'rgba(5, 7, 10, 0.92)',
-                      border: '1.5px solid rgba(255, 215, 0, 0.85)',
-                      color: '#ffd700',
-                      fontSize: '11px',
-                      fontWeight: 900,
-                      padding: '5px 12px',
-                      borderRadius: '8px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      letterSpacing: '0.4px',
-                      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.85)',
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
-                    }}
-                  >
-                    🔥 PATROCINADOR VIP
-                  </div>
+                  🔥 PATROCINADOR VIP
+                </div>
+              </div>
 
+              {/* INFORMACIÓN COMPACTA Y COMERCIAL DE ALTO IMPACTO */}
+              <div className="official-ad-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '4px', width: '100%', padding: '14px 14px 2px 14px', boxSizing: 'border-box' }}>
+                <div className="ad-pill-and-counter" style={{ marginBottom: '1px' }}>
                   <span
                     className="official-ad-pill"
                     style={{
                       background: currentAdTheme.tagBg,
                       border: `1px solid ${currentAdTheme.tagBorder}`,
                       color: '#ffffff',
-                      fontSize: '0.7rem',
-                      padding: '4px 10px',
+                      fontSize: '0.68rem',
+                      padding: '2px 10px',
                       borderRadius: '999px',
                       fontWeight: 800,
-                      backdropFilter: 'blur(8px)',
-                      WebkitBackdropFilter: 'blur(8px)',
-                      boxShadow: '0 2px 10px rgba(0,0,0,0.5)',
                     }}
                   >
                     {currentAd.tag}
                   </span>
                 </div>
 
-                {/* TEXTO, DESCRIPCIÓN Y ACCIONES COMPLETAS DIRECTAMENTE ENCIMA DE LA FOTO */}
-                <div
-                  className="official-ad-overlay-text"
+                <h3
                   style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    zIndex: 22,
-                    padding: '30px 14px 14px 14px',
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.85) 55%, rgba(0,0,0,0.45) 80%, transparent 100%)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
+                    fontSize: '1.02rem',
+                    fontWeight: 900,
+                    margin: '1px 0',
+                    lineHeight: 1.2,
                     textAlign: 'center',
-                    gap: '4px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '100%',
+                    color: '#ffffff',
+                    letterSpacing: '-0.2px',
                   }}
                 >
-                  <h3
+                  {currentAd.title}
+                </h3>
+
+                <p
+                  style={{
+                    fontSize: '0.74rem',
+                    lineHeight: 1.35,
+                    margin: 0,
+                    textAlign: 'center',
+                    height: '2.6em',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    opacity: 0.95,
+                    color: '#ffffff',
+                    maxWidth: '92%',
+                  }}
+                >
+                  {currentAd.description}
+                </p>
+
+                {/* MÉTRICA EN VIVO Y BOTÓN SEGUIR CENTRADOS */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '3px 0' }}>
+                  <span suppressHydrationWarning style={{ fontSize: '0.7rem', color: '#ffffff', background: 'rgba(0,0,0,0.35)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    👥 {(brandFollowerCounts[currentAd.brand] || 1580).toLocaleString()} pendientes
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleToggleFollow(currentAd.brand);
+                    }}
                     style={{
-                      fontSize: '1.1rem',
-                      fontWeight: 900,
-                      margin: '0',
-                      lineHeight: 1.25,
-                      textAlign: 'center',
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      border: '1px solid #ffffff',
+                      background: followedBrands[currentAd.brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
                       color: '#ffffff',
-                      letterSpacing: '-0.2px',
-                      textShadow: '0 2px 10px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.9)',
+                      fontSize: '0.7rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
                     }}
+                    title="Seguir empresa para recibir alertas de sus rifas y descuentos"
                   >
-                    {currentAd.title}
-                  </h3>
+                    {followedBrands[currentAd.brand] ? '✓ Siguiendo' : '🔔 Seguir'}
+                  </button>
+                </div>
 
-                  <p
+                {/* ACCIONES DEL PATROCINADOR CENTRADAS */}
+                <div className="official-ad-actions" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '3px' }}>
+                  <button
+                    type="button"
+                    className="btn-ad-emerald"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedVitrinaAd(currentAd);
+                    }}
                     style={{
-                      fontSize: '0.76rem',
-                      lineHeight: 1.35,
-                      margin: 0,
-                      textAlign: 'center',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      color: '#f1f5f9',
-                      maxWidth: '96%',
-                      textShadow: '0 1px 6px rgba(0,0,0,0.9)',
+                      background: currentAdTheme.btnBg,
+                      color: currentAdTheme.btnText,
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      border: 'none',
+                      fontSize: '0.78rem',
+                      padding: '6px 14px',
+                      borderRadius: '8px',
+                      boxShadow: '0 3px 10px rgba(0,0,0,0.25)',
                     }}
                   >
-                    {currentAd.description}
-                  </p>
-
-                  {/* MÉTRICA EN VIVO Y BOTÓN SEGUIR */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '2px 0' }}>
-                    <span suppressHydrationWarning style={{ fontSize: '0.68rem', color: '#ffffff', background: 'rgba(0,0,0,0.45)', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px', backdropFilter: 'blur(6px)' }}>
-                      👥 {(brandFollowerCounts[currentAd.brand] || 1580).toLocaleString()} pendientes
-                    </span>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleToggleFollow(currentAd.brand);
-                      }}
-                      style={{
-                        padding: '2px 8px',
-                        borderRadius: '6px',
-                        border: '1px solid rgba(255,255,255,0.7)',
-                        background: followedBrands[currentAd.brand] ? '#10b981' : 'rgba(255,255,255,0.22)',
-                        color: '#ffffff',
-                        fontSize: '0.68rem',
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        backdropFilter: 'blur(6px)',
-                        transition: 'all 0.2s ease',
-                      }}
-                      title="Seguir empresa para recibir alertas de sus rifas y descuentos"
-                    >
-                      {followedBrands[currentAd.brand] ? '✓ Siguiendo' : '🔔 Seguir'}
-                    </button>
-                  </div>
-
-                  {/* ACCIONES DEL PATROCINADOR CENTRADAS */}
-                  <div className="official-ad-actions" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '2px', flexWrap: 'wrap' }}>
-                    <button
-                      type="button"
-                      className="btn-ad-emerald"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedVitrinaAd(currentAd);
-                      }}
-                      style={{
-                        background: currentAdTheme.btnBg,
-                        color: currentAdTheme.btnText,
-                        fontWeight: 900,
-                        cursor: 'pointer',
-                        border: 'none',
-                        fontSize: '0.78rem',
-                        padding: '6px 14px',
-                        borderRadius: '8px',
-                        boxShadow: '0 3px 12px rgba(0,0,0,0.6)',
-                      }}
-                    >
-                      ⚡ Ver Vitrina & Sorteo →
-                    </button>
-                    <span
-                      className="ad-coupon-tag"
-                      style={{
-                        background: currentAdTheme.couponBg,
-                        color: currentAdTheme.couponColor,
-                        border: '1px dashed rgba(255, 255, 255, 0.75)',
-                        fontSize: '0.7rem',
-                        padding: '4px 8px',
-                        borderRadius: '6px',
-                        fontWeight: 800,
-                        backdropFilter: 'blur(6px)',
-                      }}
-                    >
-                      {currentAd.coupon}
-                    </span>
-                  </div>
+                    ⚡ Ver Vitrina & Sorteo →
+                  </button>
+                  <span
+                    className="ad-coupon-tag"
+                    style={{
+                      background: currentAdTheme.couponBg,
+                      color: currentAdTheme.couponColor,
+                      border: '1px dashed rgba(255, 255, 255, 0.7)',
+                      fontSize: '0.7rem',
+                      padding: '4px 8px',
+                      borderRadius: '6px',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {currentAd.coupon}
+                  </span>
                 </div>
               </div>
             </div>
@@ -2663,159 +2639,31 @@ export default function CompactWhiteMarketplacePage() {
           </div>
 
           <DesktopScrollStrip ariaLabel="Vitrina Comercial y Marcas">
-            {/* 1. PRIMERA TARJETA: MARCA PAUTANTE DESTACADA - TODO EL TEXTO Y BADGE PATROCINADOR VIP ENCIMA DE LA FOTO */}
-            <article
-              className="promo-brand-card tier-sponsor"
-              style={{
-                position: 'relative',
-                minWidth: '285px',
-                maxWidth: '320px',
-                height: '350px',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                border: '1.5px solid rgba(255, 215, 0, 0.5)',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.45)',
-                background: '#0f172a',
-              }}
-            >
-              <img
-                src="/galeria-premios-hogar-moda-viajes-portrait.jpg"
-                alt="TechStore Colombia"
-                loading="lazy"
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.85) 68%, rgba(0,0,0,0.98) 100%)',
-                  pointerEvents: 'none',
-                }}
-              />
-
-              {/* BADGES EN LA PARTE SUPERIOR SOBRE LA FOTO */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '12px',
-                  left: '12px',
-                  right: '12px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  zIndex: 10,
-                  pointerEvents: 'none',
-                }}
-              >
-                <span
-                  style={{
-                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                    color: '#000000',
-                    fontSize: '11px',
-                    fontWeight: 900,
-                    padding: '4px 10px',
-                    borderRadius: '999px',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
-                    letterSpacing: '0.4px',
-                  }}
-                >
-                  ⚡ PATROCINADOR VIP
-                </span>
-                <span
-                  style={{
-                    background: 'rgba(0,0,0,0.75)',
-                    border: '1px dashed rgba(255,215,0,0.8)',
-                    color: '#fef08a',
-                    fontSize: '10.5px',
-                    fontWeight: 800,
-                    padding: '3px 8px',
-                    borderRadius: '6px',
-                    backdropFilter: 'blur(6px)',
-                  }}
-                >
-                  🎁 15% OFF Cupón: ELGANADOR
-                </span>
+            {/* 1. PRIMERA TARJETA: MARCA PAUTANTE DESTACADA */}
+            <article className="promo-brand-card tier-sponsor">
+              <div className="promo-brand-media">
+                <img src="/galeria-premios-hogar-moda-viajes-portrait.jpg" alt="TechStore Colombia" loading="lazy" />
+                <div className="promo-media-gradient" />
+                <span className="promo-top-badge gold">⚡ PATROCINADOR VIP</span>
+                <span className="promo-offer-ribbon">🎁 15% OFF Cupón: ELGANADOR</span>
               </div>
 
-              {/* TEXTO Y ACCIONES SUPERPUESTOS DIRECTAMENTE ENCIMA DE LA FOTO */}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  padding: '16px 14px 14px 14px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '8px',
-                  zIndex: 10,
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span
-                    style={{
-                      fontSize: '16px',
-                      background: 'rgba(255,255,255,0.2)',
-                      borderRadius: '50%',
-                      width: '30px',
-                      height: '30px',
-                      display: 'grid',
-                      placeItems: 'center',
-                      flexShrink: 0,
-                      backdropFilter: 'blur(4px)',
-                    }}
-                  >
-                    ⚡
-                  </span>
+              <div className="promo-brand-body">
+                <div className="promo-brand-identity">
+                  <span className="promo-avatar-icon">⚡</span>
                   <div>
-                    <strong style={{ color: '#ffffff', fontSize: '15px', fontWeight: 900, display: 'block', textShadow: '0 2px 6px rgba(0,0,0,0.9)' }}>
-                      TechStore Colombia
-                    </strong>
-                    <small style={{ color: '#38bdf8', fontSize: '11px', fontWeight: 700 }}>
-                      Tecnología & Gadgets · Bogotá
-                    </small>
+                    <strong style={{ color: '#ffffff' }}>TechStore Colombia</strong>
+                    <small style={{ color: '#38bdf8' }}>Tecnología & Gadgets · Bogotá</small>
                   </div>
                 </div>
 
-                <p
-                  style={{
-                    color: '#f1f5f9',
-                    fontSize: '11.5px',
-                    margin: 0,
-                    lineHeight: 1.4,
-                    textShadow: '0 1px 4px rgba(0,0,0,0.9)',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                  }}
-                >
+                <p className="promo-brand-copy" style={{ color: '#e2e8f0' }}>
                   Distribuidor tecnológico verificado. Beneficios y descuentos exclusivos en tienda para toda la comunidad de El Ganador.
                 </p>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2px' }}>
-                  <span style={{ color: '#cbd5e1', fontSize: '11px', fontWeight: 700 }}>
-                    ⭐ 4.9 · Marca Verificada
-                  </span>
-                  <Link
-                    href="/novedades"
-                    style={{
-                      padding: '5px 12px',
-                      borderRadius: '8px',
-                      background: '#ffffff',
-                      color: '#000000',
-                      fontSize: '11.5px',
-                      fontWeight: 800,
-                      textDecoration: 'none',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-                    }}
-                  >
+                <div className="promo-brand-footer">
+                  <span className="promo-metric" style={{ color: '#cbd5e1' }}>⭐ 4.9 · Marca Verificada</span>
+                  <Link className="promo-visit-btn" href="/novedades">
                     Ver Vitrina ↗
                   </Link>
                 </div>
@@ -4345,10 +4193,10 @@ export default function CompactWhiteMarketplacePage() {
                 alt={selectedRaffleDetail.title}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
-              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.7) 45%, rgba(0,0,0,0.15) 75%, transparent 100%)' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 45%)' }} />
 
               {/* BADGES SOBRE LA IMAGEN */}
-              <div style={{ position: 'absolute', top: '12px', left: '16px', display: 'flex', gap: '6px', flexWrap: 'wrap', zIndex: 10 }}>
+              <div style={{ position: 'absolute', top: '12px', left: '16px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 <span style={{ fontSize: '11px', fontWeight: 800, background: 'rgba(0,0,0,0.7)', color: '#ffffff', padding: '4px 10px', borderRadius: '6px', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.2)' }}>
                   {selectedRaffleDetail.category === 'autos' ? '🚗 Vehículos 4x4' : selectedRaffleDetail.category === 'motos' ? '🏍️ Motocicletas' : selectedRaffleDetail.category === 'joyas' ? '⌚ Relojes & Joyería' : selectedRaffleDetail.category === 'tech' ? '⚡ Tecnología' : selectedRaffleDetail.category === 'hogar' ? '🏠 Hogar & Viajes' : '🎁 Sorteo VIP'}
                 </span>
@@ -4357,11 +4205,11 @@ export default function CompactWhiteMarketplacePage() {
                 </span>
               </div>
 
-              <div style={{ position: 'absolute', bottom: '14px', left: '16px', right: '16px', zIndex: 10 }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#0284c7', color: '#ffffff', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', marginBottom: '6px', boxShadow: '0 2px 6px rgba(0,0,0,0.5)' }}>
+              <div style={{ position: 'absolute', bottom: '14px', left: '16px', right: '16px' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#0284c7', color: '#ffffff', fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '4px', marginBottom: '6px' }}>
                   <span>🏢</span> {selectedRaffleDetail.merchant}
                 </div>
-                <h2 style={{ fontSize: '1.35rem', fontWeight: 900, color: '#ffffff', WebkitTextFillColor: '#ffffff', margin: 0, lineHeight: 1.25, textShadow: '0 2px 12px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.9)' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', margin: 0, lineHeight: 1.25, textShadow: '0 2px 8px rgba(0,0,0,0.8)' }}>
                   {selectedRaffleDetail.title}
                 </h2>
               </div>
