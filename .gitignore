@@ -26,3 +26,5 @@ _backups/
 *.bak
 local.db
 scratch/
+dist-apk/
+*.zip
