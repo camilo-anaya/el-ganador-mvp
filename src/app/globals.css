@@ -20589,11 +20589,11 @@ html[data-theme='dark'] .notif-fb-header h3,
   }
 
   body {
-    padding-bottom: calc(75px + env(safe-area-inset-bottom, 20px)) !important;
+    padding-bottom: 0 !important;
   }
 
   .app-shell, main {
-    padding-bottom: calc(75px + env(safe-area-inset-bottom, 20px)) !important;
+    padding-bottom: 0 !important;
   }
 }
 
@@ -20622,7 +20622,7 @@ body {
   padding: 0;
   /* El espaciado seguro superior lo gestiona la cabecera para integración fluida con la Dynamic Island */
   padding-top: 0 !important;
-  padding-bottom: 75px !important;
+  padding-bottom: 0 !important;
   overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -22915,8 +22915,8 @@ html[data-theme='light'] .marketplace-legal-footer,
   border-right: none !important;
   border-bottom: none !important;
   border-radius: 0 !important;
-  margin: 20px 0 0 0 !important;
-  padding: 24px 16px calc(96px + env(safe-area-inset-bottom, 0px)) 16px !important;
+  margin: 12px 0 0 0 !important;
+  padding: 16px 16px calc(76px + env(safe-area-inset-bottom, 0px)) 16px !important;
   box-sizing: border-box !important;
   text-align: center !important;
   box-shadow: none !important;
@@ -22931,8 +22931,8 @@ html[data-theme='dark'] .marketplace-legal-footer,
   border-right: none !important;
   border-bottom: none !important;
   border-radius: 0 !important;
-  margin: 20px 0 0 0 !important;
-  padding: 24px 16px calc(96px + env(safe-area-inset-bottom, 0px)) 16px !important;
+  margin: 12px 0 0 0 !important;
+  padding: 16px 16px calc(76px + env(safe-area-inset-bottom, 0px)) 16px !important;
   box-sizing: border-box !important;
   text-align: center !important;
   box-shadow: none !important;
