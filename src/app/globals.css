@@ -22955,3 +22955,228 @@ html[data-theme='dark'] .marketplace-legal-footer,
 
 
 
+
+/* ==========================================================================
+   ACTUALIZACIÓN NATIVA MÓVIL Y ELIMINACIÓN DE NUBE BLANCA (VERCEL PRODUCCIÓN)
+   ========================================================================== */
+
+/* 1. Eliminación radical de la nube blanca o efecto lechoso translúcido en cabecera */
+header,
+.app-topbar,
+.siteHeader,
+.main-header,
+.native-topbar,
+.luxuryGlassHeader,
+.brand-cluster,
+header.app-topbar,
+[data-theme='light'] .app-topbar,
+html[data-theme='light'] .app-topbar,
+[data-theme='dark'] .app-topbar,
+html[data-theme='dark'] .app-topbar,
+html.dark .app-topbar {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* Forzar fondo 100% sólido, nítido y opaco sin transparencias que causen niebla */
+[data-theme='light'] .app-topbar,
+html[data-theme='light'] .app-topbar,
+.app-topbar {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme='dark'] .app-topbar,
+html[data-theme='dark'] .app-topbar,
+html.dark .app-topbar {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Safe area superior calibrada sin desbordes ni huecos blancos */
+@media (max-width: 768px) {
+  header.app-topbar,
+  .app-topbar {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+    padding-bottom: 8px !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    min-height: calc(env(safe-area-inset-top, 0px) + 52px) !important;
+  }
+}
+
+/* 2. Gestos y Sensación Táctil Nativa (Mobile Native Feel) */
+html, body {
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: pan-x pan-y !important;
+  overscroll-behavior-y: none !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Evitar selección de texto accidental al interactuar con botones y barras */
+button,
+a,
+nav,
+header,
+.chip-btn,
+.brand-cluster,
+.native-tab-item,
+.profile-avatar-btn {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  touch-action: manipulation !important;
+}
+
+/* Microinteracciones táctiles con rebote háptico visual (Active State) */
+button:active,
+a:active,
+.chip-btn:active,
+.profile-avatar-btn:active,
+.profile-btn-action:active,
+.compact-raffle-card:active,
+.native-tab-item:active {
+  transform: scale(0.96) !important;
+  transition: transform 0.12s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Prevenir zoom involuntario en iPhone al enfocar inputs */
+input, textarea, select {
+  font-size: 16px !important;
+}
+
+/* 3. Organización y Estructura Impecable de "Mi Perfil" (/perfil) */
+.profile-card-premium {
+  border-radius: 20px !important;
+  padding: 20px 18px !important;
+  margin-bottom: 18px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  transition: box-shadow 0.2s ease !important;
+}
+
+[data-theme='light'] .profile-card-premium,
+html[data-theme='light'] .profile-card-premium {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+  color: #0f172a !important;
+}
+
+[data-theme='dark'] .profile-card-premium,
+html[data-theme='dark'] .profile-card-premium {
+  background: #0d121d !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+  color: #f8fafc !important;
+}
+
+.profile-card-premium h2,
+.profile-card-premium h3 {
+  letter-spacing: -0.3px !important;
+}
+
+[data-theme='light'] .profile-card-premium h2,
+[data-theme='light'] .profile-card-premium h3,
+[data-theme='light'] .profile-card-premium strong,
+[data-theme='light'] .profile-card-premium label {
+  color: #0f172a !important;
+}
+
+[data-theme='dark'] .profile-card-premium h2,
+[data-theme='dark'] .profile-card-premium h3,
+[data-theme='dark'] .profile-card-premium strong,
+[data-theme='dark'] .profile-card-premium label {
+  color: #f8fafc !important;
+}
+
+/* Inputs de perfil de alta definición */
+.profile-input-premium {
+  width: 100% !important;
+  font-size: 16px !important;
+  padding: 13px 15px !important;
+  border-radius: 12px !important;
+  box-sizing: border-box !important;
+  outline: none !important;
+  font-weight: 500 !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease !important;
+}
+
+[data-theme='light'] .profile-input-premium {
+  background: #f8fafc !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+[data-theme='light'] .profile-input-premium:focus {
+  background: #ffffff !important;
+  border-color: #007AFF !important;
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.12) !important;
+}
+
+[data-theme='dark'] .profile-input-premium {
+  background: #151c2c !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+}
+
+[data-theme='dark'] .profile-input-premium:focus {
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15) !important;
+}
+
+/* Fila de avatares equilibrada y circular */
+.profile-avatar-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-top: 10px !important;
+  width: 100% !important;
+}
+
+.profile-avatar-btn {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  border: 2px solid transparent !important;
+  background: rgba(148, 163, 184, 0.12) !important;
+  transition: transform 0.12s ease, border-color 0.15s ease !important;
+}
+
+.profile-avatar-btn.selected {
+  border-color: #007AFF !important;
+  background: rgba(0, 122, 255, 0.15) !important;
+  transform: scale(1.08) !important;
+}
+
+/* Botones de acción organizados */
+.profile-btn-action {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  padding: 13px 20px !important;
+  border-radius: 14px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  border: none !important;
+  transition: opacity 0.15s ease, transform 0.12s ease !important;
+}
+
+.profile-btn-action:hover {
+  opacity: 0.94 !important;
+}

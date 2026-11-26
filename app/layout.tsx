@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   applicationName: "El Ganador",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "El Ganador",
   },
   icons: {
@@ -28,7 +28,10 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  themeColor: "#0a0a0c", // Color insignia oficial: Negro profundo (evita el verde en la barra superior nativa)
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
 };
 
 export default function RootLayout({

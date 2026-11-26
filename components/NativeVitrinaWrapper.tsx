@@ -21,7 +21,7 @@ interface NativeVitrinaWrapperProps {
 export function NativeVitrinaWrapper({
   children,
   statusBarStyle = "dark",
-  themeColor = "#0a0a0c", // Color insignia oficial: Negro profundo (evita el color verde en la barra nativa)
+  themeColor = "#ffffff", // Fondo blanco predeterminado
   className = "",
 }: NativeVitrinaWrapperProps) {
   const router = useRouter();

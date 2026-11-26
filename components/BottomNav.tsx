@@ -256,6 +256,9 @@ export default function BottomNav({ currentTab: propTab, onExploreClick }: Botto
               transform: isActive ? 'scale(1.06)' : 'scale(1)',
               userSelect: 'none',
               WebkitTapHighlightColor: 'transparent',
+              flexShrink: 0,
+              padding: 0,
+              margin: 0,
             }}
           >
             {item.renderIcon(isActive)}

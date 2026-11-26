@@ -15,7 +15,7 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType>({
   theme: 'light',
-  themePreference: 'system',
+  themePreference: 'light',
   setThemePreference: () => {},
   toggleTheme: () => {},
   isMobile: false,
@@ -23,7 +23,7 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<ThemeMode>('light');
-  const [themePreference, setThemePreferenceState] = useState<ThemePreference>('system');
+  const [themePreference, setThemePreferenceState] = useState<ThemePreference>('light');
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   // Helper para aplicar el tema de forma integral y atómica
@@ -104,8 +104,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const mobile = checkIsMobile();
     setIsMobile(mobile);
 
-    // 2. Cargar preferencia guardada
-    let savedPref: ThemePreference = 'system';
+    // 2. Cargar preferencia guardada (predeterminado modo claro / fondo blanco)
+    let savedPref: ThemePreference = 'light';
     try {
       const stored = localStorage.getItem('elganador_theme_preference') as ThemePreference | null;
       if (stored === 'light' || stored === 'dark' || stored === 'system') {

@@ -29,7 +29,7 @@ export default function PerfilClientePage() {
   const { theme, themePreference, setThemePreference } = useTheme();
   const [showThemeModal, setShowThemeModal] = useState(false);
 
-  // 1. Carga inicial desde localStorage (Cero pérdida de datos)
+  // 1. Carga inicial desde localStorage
   useEffect(() => {
     try {
       const savedProfile = localStorage.getItem('elganador_client_profile');
@@ -120,199 +120,485 @@ export default function PerfilClientePage() {
     setTimeout(() => setSavedNotice(false), 2500);
   };
 
-  // Función para eliminar cuenta permanentemente
   const handleDeleteAccount = async () => {
-    const confirmed = window.confirm("¿Estás seguro de que deseas eliminar tu cuenta? Esta acción borrará tus datos, tiquetes y perfil de forma permanente.");
+    const confirmed = window.confirm(
+      '¿Estás seguro de que deseas eliminar tu cuenta? Esta acción borrará tus datos, tiquetes y perfil de forma permanente.'
+    );
     if (!confirmed) return;
 
     try {
-      // Nota: La eliminación real del usuario en auth requiere una función admin o llamada segura, 
-      // pero aquí limpiamos la sesión local y el registro del cliente:
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      
       localStorage.clear();
-      alert("Tu cuenta ha sido eliminada exitosamente.");
+      alert('Tu cuenta ha sido eliminada exitosamente.');
       window.location.href = '/ingreso';
     } catch (err) {
-      console.error("Error al eliminar la cuenta:", err);
+      console.error('Error al eliminar la cuenta:', err);
       localStorage.clear();
-      alert("Tu cuenta ha sido eliminada exitosamente.");
+      alert('Tu cuenta ha sido eliminada exitosamente.');
       window.location.href = '/ingreso';
     }
   };
 
+  const isDark = theme === 'dark';
+  const cardBg = isDark ? '#121620' : '#ffffff';
+  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.12)' : '#e2e8f0';
+  const textColor = isDark ? '#ffffff' : '#0f172a';
+  const subtextColor = isDark ? '#94a3b8' : '#64748b';
+  const inputBg = isDark ? '#1a2230' : '#f8fafc';
+  const inputBorder = isDark ? 'rgba(255, 255, 255, 0.16)' : '#cbd5e1';
+
   return (
-    <div className="app-shell">
-      <header className="app-topbar">
-        <div className="brand-cluster">
-          <Link aria-label="Volver al Marketplace" className="profile-icon-btn" href="/">←</Link>
+    <div
+      className="app-shell"
+      style={{
+        minHeight: '100vh',
+        backgroundColor: isDark ? '#080c14' : '#f8fafc',
+        color: textColor,
+        paddingBottom: 'calc(88px + env(safe-area-inset-bottom, 20px))',
+      }}
+    >
+      {/* CABECERA CRISTALINA Y TOTALMENTE SÓLIDA (SIN NUBE BLANCA) */}
+      <header
+        className="app-topbar"
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: 'calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px 16px',
+          backgroundColor: isDark ? '#000000' : '#ffffff',
+          borderBottom: `1px solid ${cardBorder}`,
+          width: '100%',
+          boxSizing: 'border-box',
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Link
+            aria-label="Volver al Marketplace"
+            href="/"
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: isDark ? 'rgba(255, 255, 255, 0.08)' : '#f1f5f9',
+              color: textColor,
+              textDecoration: 'none',
+              fontSize: '18px',
+              fontWeight: 700,
+              border: `1px solid ${inputBorder}`,
+              transition: 'transform 0.15s ease',
+              flexShrink: 0,
+            }}
+          >
+            ←
+          </Link>
           <div>
-            <span className="brand-title">MI PERFIL Y AJUSTES</span>
-            <small className="brand-subtitle">Cuenta de Comprador · Colombia (+18)</small>
+            <h1
+              style={{
+                fontSize: '17px',
+                fontWeight: 900,
+                margin: 0,
+                color: textColor,
+                lineHeight: 1.2,
+                letterSpacing: '-0.3px',
+              }}
+            >
+              Mi Perfil & Ajustes
+            </h1>
+            <small style={{ fontSize: '11px', color: '#007AFF', fontWeight: 700, display: 'block' }}>
+              Cuenta de Comprador · Colombia (+18)
+            </small>
           </div>
         </div>
       </header>
 
-      <div className="desktop-workspace-grid">
+      <div className="desktop-workspace-grid" style={{ maxWidth: '680px', margin: '0 auto', padding: '14px 0' }}>
         <DesktopSidebar />
-        <main className="app-scroll-canvas native-bottom-safe-space">
-          {/* TARJETA DE CABECERA DE PERFIL CON 6 EMOJIS TIPO IPHONE */}
-          <section className="station-block-premium">
-            <div className="client-profile-hero" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <main
+          className="app-scroll-canvas native-bottom-safe-space"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '14px',
+            padding: '0 14px',
+            boxSizing: 'border-box',
+            width: '100%',
+          }}
+        >
+          {/* TARJETA 1: HERO DE IDENTIDAD & AVATAR EMOJI */}
+          <section
+            className="profile-card-premium"
+            style={{
+              background: cardBg,
+              border: `1px solid ${cardBorder}`,
+              borderRadius: '20px',
+              padding: '18px 16px',
+              boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.45)' : '0 4px 18px rgba(15,23,42,0.06)',
+              boxSizing: 'border-box',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <div
-                className="client-avatar-box"
                 style={{
-                  width: 72,
-                  height: 72,
+                  width: '72px',
+                  height: '72px',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '2.5rem',
-                  background: 'linear-gradient(135deg, rgba(0, 122, 255, 0.25), rgba(0, 122, 255, 0.08))',
-                  border: '2px solid #007AFF',
-                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)',
+                  background: isDark
+                    ? 'linear-gradient(135deg, rgba(0, 122, 255, 0.35), rgba(0, 122, 255, 0.12))'
+                    : 'linear-gradient(135deg, #e0f2fe, #bae6fd)',
+                  border: '2.5px solid #007AFF',
+                  boxShadow: '0 4px 14px rgba(0, 122, 255, 0.25)',
                   flexShrink: 0,
                 }}
               >
                 <span>{avatarEmoji}</span>
               </div>
-              <div className="client-profile-meta">
-                <h2 style={{ margin: '0 0 4px', fontSize: '1.35rem', color: '#ffffff' }}>{name}</h2>
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>📍 {city} · ✅ Identidad Verificada (+18)</p>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h2
+                  style={{
+                    margin: '0 0 3px',
+                    fontSize: '1.25rem',
+                    fontWeight: 900,
+                    color: textColor,
+                    letterSpacing: '-0.3px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {name}
+                </h2>
+                <p style={{ margin: 0, fontSize: '0.82rem', color: subtextColor, fontWeight: 600 }}>
+                  📍 {city}
+                </p>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    marginTop: '6px',
+                    fontSize: '0.72rem',
+                    fontWeight: 800,
+                    color: '#059669',
+                    background: isDark ? 'rgba(5, 150, 105, 0.2)' : '#ecfdf5',
+                    padding: '2px 8px',
+                    borderRadius: '999px',
+                    border: '1px solid rgba(5, 150, 105, 0.35)',
+                  }}
+                >
+                  ✅ Identidad Verificada (+18)
+                </span>
               </div>
             </div>
 
             {/* SELECTOR DE 6 EMOJIS TIPO IPHONE PREDEFINIDOS */}
-            <div className="avatar-picker-wrapper" style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid rgba(255, 255, 255, 0.12)' }}>
-              <span className="avatar-picker-label" style={{ fontSize: '0.85rem', fontWeight: 700, display: 'block', marginBottom: 10, color: 'var(--text-primary, #ffffff)' }}>
+            <div
+              style={{
+                marginTop: '16px',
+                paddingTop: '14px',
+                borderTop: `1px solid ${cardBorder}`,
+              }}
+            >
+              <span
+                style={{
+                  fontSize: '0.82rem',
+                  fontWeight: 800,
+                  display: 'block',
+                  marginBottom: '10px',
+                  color: textColor,
+                }}
+              >
                 Elige tu Imagen de Perfil:
               </span>
-              <div className="avatar-emoji-row" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', padding: '4px 0' }}>
-                {IPHONE_AVATARS.map((emoji) => (
-                  <button
-                    key={emoji}
-                    type="button"
-                    onClick={() => handleSelectEmoji(emoji)}
-                    className={`avatar-emoji-btn ${avatarEmoji === emoji ? 'active' : ''}`}
-                    style={{
-                      fontSize: '1.85rem',
-                      width: 54,
-                      height: 54,
-                      minWidth: 54,
-                      minHeight: 54,
-                      padding: 0,
-                      borderRadius: '50%',
-                      border: avatarEmoji === emoji ? '2px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.15)',
-                      background: avatarEmoji === emoji ? 'rgba(0, 122, 255, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease',
-                      transform: avatarEmoji === emoji ? 'scale(1.08)' : 'scale(1)',
-                      boxShadow: avatarEmoji === emoji ? '0 0 14px rgba(0, 122, 255, 0.45)' : 'none',
-                    }}
-                    title={`Seleccionar emoji ${emoji}`}
-                    aria-label={`Seleccionar emoji ${emoji}`}
-                  >
-                    <span>{emoji}</span>
-                  </button>
-                ))}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: '6px',
+                  width: '100%',
+                }}
+              >
+                {IPHONE_AVATARS.map((emoji) => {
+                  const isSelected = avatarEmoji === emoji;
+                  return (
+                    <button
+                      key={emoji}
+                      type="button"
+                      onClick={() => handleSelectEmoji(emoji)}
+                      style={{
+                        fontSize: '1.75rem',
+                        width: '46px',
+                        height: '46px',
+                        minWidth: '46px',
+                        minHeight: '46px',
+                        padding: 0,
+                        borderRadius: '50%',
+                        border: isSelected ? '2.5px solid #007AFF' : `1.5px solid ${cardBorder}`,
+                        background: isSelected
+                          ? isDark
+                            ? 'rgba(0, 122, 255, 0.28)'
+                            : '#dbeafe'
+                          : isDark
+                          ? 'rgba(255, 255, 255, 0.05)'
+                          : '#f1f5f9',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                        transform: isSelected ? 'scale(1.1)' : 'scale(1)',
+                        boxShadow: isSelected ? '0 0 12px rgba(0, 122, 255, 0.45)' : 'none',
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
+                      title={`Seleccionar emoji ${emoji}`}
+                      aria-label={`Seleccionar emoji ${emoji}`}
+                    >
+                      <span>{emoji}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </section>
 
-          {/* FORMULARIO DE DATOS Y AJUSTES PREDETERMINADOS */}
-          <section className="station-block-premium">
-            <div className="compact-section-title">
-              <h2>⚙️ Ajustes Predeterminados de Cuenta</h2>
+          {/* TARJETA 2: AJUSTES DE CUENTA Y DATOS PERSONALES */}
+          <section
+            className="profile-card-premium"
+            style={{
+              background: cardBg,
+              border: `1px solid ${cardBorder}`,
+              borderRadius: '20px',
+              padding: '18px 16px',
+              boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.45)' : '0 4px 18px rgba(15,23,42,0.06)',
+              boxSizing: 'border-box',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                paddingBottom: '12px',
+                borderBottom: `1px solid ${cardBorder}`,
+                marginBottom: '14px',
+              }}
+            >
+              <span style={{ fontSize: '18px' }}>⚙️</span>
+              <h2 style={{ fontSize: '1.02rem', fontWeight: 800, margin: 0, color: textColor }}>
+                Ajustes de la Cuenta
+              </h2>
             </div>
 
-            <form onSubmit={handleSaveSettings} className="auth-form">
-              <label className="input-group">
-                <span>Nombre completo</span>
+            <form onSubmit={handleSaveSettings} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, color: subtextColor }}>
+                  Nombre completo
+                </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Tu nombre completo"
                   required
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    padding: '0 14px',
+                    borderRadius: '12px',
+                    background: inputBg,
+                    border: `1.5px solid ${inputBorder}`,
+                    color: textColor,
+                    fontSize: '16px',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    fontWeight: 600,
+                  }}
                 />
-              </label>
+              </div>
 
-              <div className="b2b-two-cols">
-                <label className="input-group">
-                  <span>Celular WhatsApp</span>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: subtextColor }}>
+                    Celular WhatsApp
+                  </label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+57 300 123 4567"
                     required
+                    style={{
+                      width: '100%',
+                      height: '46px',
+                      padding: '0 14px',
+                      borderRadius: '12px',
+                      background: inputBg,
+                      border: `1.5px solid ${inputBorder}`,
+                      color: textColor,
+                      fontSize: '16px',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                      fontWeight: 600,
+                    }}
                   />
-                </label>
-                <label className="input-group">
-                  <span>Ciudad</span>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label style={{ fontSize: '0.8rem', fontWeight: 700, color: subtextColor }}>
+                    Ciudad
+                  </label>
                   <input
                     type="text"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    placeholder="Tu ciudad"
+                    placeholder="Tu ciudad (ej. Barranquilla)"
                     required
+                    style={{
+                      width: '100%',
+                      height: '46px',
+                      padding: '0 14px',
+                      borderRadius: '12px',
+                      background: inputBg,
+                      border: `1.5px solid ${inputBorder}`,
+                      color: textColor,
+                      fontSize: '16px',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                      fontWeight: 600,
+                    }}
                   />
-                </label>
+                </div>
               </div>
 
-              <div className="b2b-two-cols">
-                <label className="input-group">
-                  <span>Correo electrónico</span>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="correo@ejemplo.com"
-                    required
-                  />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, color: subtextColor }}>
+                  Correo electrónico
                 </label>
-
-                <label className="input-group">
-                  <span>Método de pago predeterminado</span>
-                  <select
-                    value={defaultPayment}
-                    onChange={(e) => setDefaultPayment(e.target.value as 'nequi' | 'pse' | 'tarjeta')}
-                  >
-                    <option value="nequi">📱 Nequi / Daviplata Express</option>
-                    <option value="pse">🏦 PSE (Transferencia Bancaria Colombia)</option>
-                    <option value="tarjeta">💳 Tarjeta Débito / Crédito</option>
-                  </select>
-                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="correo@ejemplo.com"
+                  required
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    padding: '0 14px',
+                    borderRadius: '12px',
+                    background: inputBg,
+                    border: `1.5px solid ${inputBorder}`,
+                    color: textColor,
+                    fontSize: '16px',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    fontWeight: 600,
+                  }}
+                />
               </div>
 
-              <div className="settings-toggles-box">
-                <label className="toggle-setting-row">
-                  <span>📲 Recibir comprobantes y boletas por WhatsApp <small style={{ opacity: 0.7 }}>(próximamente)</small></span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, color: subtextColor }}>
+                  Método de pago predeterminado
+                </label>
+                <select
+                  value={defaultPayment}
+                  onChange={(e) => setDefaultPayment(e.target.value as 'nequi' | 'pse' | 'tarjeta')}
+                  style={{
+                    width: '100%',
+                    height: '46px',
+                    padding: '0 14px',
+                    borderRadius: '12px',
+                    background: inputBg,
+                    border: `1.5px solid ${inputBorder}`,
+                    color: textColor,
+                    fontSize: '15px',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    fontWeight: 600,
+                  }}
+                >
+                  <option value="nequi">📱 Nequi / Daviplata Express</option>
+                  <option value="pse">🏦 PSE (Transferencia Bancaria Colombia)</option>
+                  <option value="tarjeta">💳 Tarjeta Débito / Crédito</option>
+                </select>
+              </div>
+
+              {/* SECCIÓN PREFERENCIAS & TEMA DE PANTALLA */}
+              <div
+                style={{
+                  marginTop: '6px',
+                  padding: '12px',
+                  borderRadius: '14px',
+                  background: isDark ? 'rgba(255, 255, 255, 0.03)' : '#f8fafc',
+                  border: `1px solid ${cardBorder}`,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                }}
+              >
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    color: textColor,
+                  }}
+                >
+                  <span>📲 Comprobantes y boletas por WhatsApp</span>
                   <input
                     type="checkbox"
                     checked={notifyWhatsapp}
                     onChange={(e) => setNotifyWhatsapp(e.target.checked)}
+                    style={{ width: '18px', height: '18px', accentColor: '#007AFF' }}
                   />
                 </label>
-                <label className="toggle-setting-row">
-                  <span>🔴 Avisarme 15 min antes de iniciar Sala 3D en Vivo</span>
+
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    color: textColor,
+                  }}
+                >
+                  <span>🔴 Alerta 15 min antes de Sala en Vivo</span>
                   <input
                     type="checkbox"
                     checked={notifyLiveDraws}
-                    onChange={(e) => {
-                      setNotifyLiveDraws(e.target.checked);
-                      // Al activar, se solicita el permiso de notificaciones del dispositivo (solo app nativa)
-                      if (e.target.checked) void ensureNativeNotificationPermission();
+                    onChange={async (e) => {
+                      const val = e.target.checked;
+                      setNotifyLiveDraws(val);
+                      if (val) {
+                        try {
+                          await ensureNativeNotificationPermission();
+                        } catch {}
+                      }
                     }}
+                    style={{ width: '18px', height: '18px', accentColor: '#007AFF' }}
                   />
                 </label>
+
+                {/* SELECTOR DE TEMA CLARO / OSCURO */}
                 <div
-                  className="toggle-setting-row"
                   onClick={() => setShowThemeModal(true)}
                   role="button"
                   tabIndex={0}
@@ -324,109 +610,184 @@ export default function PerfilClientePage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '12px 14px',
-                    borderRadius: '12px',
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    transition: 'background 0.2s ease',
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    background: isDark ? 'rgba(255, 255, 255, 0.06)' : '#ffffff',
+                    border: `1px solid ${cardBorder}`,
+                    marginTop: '2px',
+                    WebkitTapHighlightColor: 'transparent',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ fontSize: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '18px' }}>
                       {themePreference === 'light' ? '☀️' : themePreference === 'dark' ? '🌙' : '🌓'}
                     </span>
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: '14px', color: '#ffffff' }}>Tema de Pantalla</div>
-                      <small style={{ color: '#94a3b8', fontSize: '11px', display: 'block' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.84rem', color: textColor }}>
+                        Tema de Pantalla
+                      </div>
+                      <small style={{ color: subtextColor, fontSize: '0.72rem', display: 'block' }}>
                         {themePreference === 'system'
-                          ? 'Automático (según tu celular)'
+                          ? 'Automático (del sistema)'
                           : themePreference === 'dark'
-                          ? 'Modo Oscuro (Dark Luxury)'
-                          : 'Modo Claro (Limpio)'}
+                          ? 'Modo Oscuro (Dark)'
+                          : 'Modo Claro (Fondo Blanco)'}
                       </small>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <span
                       style={{
                         fontSize: '11px',
-                        fontWeight: 700,
-                        background: 'rgba(212, 175, 55, 0.16)',
-                        color: '#d4af37',
-                        padding: '4px 10px',
+                        fontWeight: 800,
+                        background: '#007AFF',
+                        color: '#ffffff',
+                        padding: '3px 8px',
                         borderRadius: '999px',
-                        border: '1px solid rgba(212, 175, 55, 0.35)',
                       }}
                     >
-                      {themePreference === 'system' ? '📱 Automático' : themePreference === 'dark' ? '🌙 Oscuro' : '☀️ Claro'}
+                      {themePreference === 'system' ? 'Automático' : themePreference === 'dark' ? 'Oscuro' : 'Claro'}
                     </span>
-                    <span style={{ color: '#94a3b8', fontSize: '18px' }}>›</span>
+                    <span style={{ color: subtextColor, fontSize: '16px' }}>›</span>
                   </div>
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="btn-submit-gold"
-                style={{ marginTop: 10, height: 48, fontSize: '0.95rem', fontWeight: 700 }}
+                style={{
+                  marginTop: '8px',
+                  height: '48px',
+                  fontSize: '0.92rem',
+                  fontWeight: 800,
+                  borderRadius: '12px',
+                  background: savedNotice
+                    ? '#10b981'
+                    : 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                  color: '#ffffff',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(0, 122, 255, 0.3)',
+                  transition: 'background 0.2s ease, transform 0.1s ease',
+                  WebkitTapHighlightColor: 'transparent',
+                }}
               >
-                {savedNotice ? '✅ Ajustes Guardados Correctamente' : 'Guardar Cambios de Perfil'}
+                {savedNotice ? '✅ ¡Cambios Guardados Correctamente!' : 'Guardar Cambios de Perfil'}
               </button>
             </form>
           </section>
 
-          {/* ACCESOS DIRECTOS DE CUENTA */}
-          <section className="station-block-premium">
-            <div className="profile-quick-links">
-              <Link className="profile-nav-row" href="/mis-boletas">
-                <span>🎟️ Mis Boletas y Certificados SHA-256</span>
-                <span>›</span>
-              </Link>
-              <Link className="profile-nav-row" href="/sorteo-en-vivo">
-                <span>🎱 Sorteo en Vivo (Balotera y Ruleta)</span>
-                <span>›</span>
-              </Link>
-              <button
-                type="button"
-                className="profile-nav-row danger"
-                onClick={() => void performLogout()}
-                style={{
-                  width: '100%',
-                  background: 'none',
-                  border: 'none',
-                  textAlign: 'left',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <span>🚪 Cerrar Sesión / Cambiar Cuenta</span>
-                <span>›</span>
-              </button>
-              <button
-                type="button"
-                className="profile-nav-row danger"
-                onClick={handleDeleteAccount}
-                style={{
-                  width: '100%',
-                  background: 'none',
-                  border: 'none',
-                  textAlign: 'left',
-                  cursor: 'pointer',
-                  color: '#ef4444',
-                  fontWeight: 700,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '14px 16px',
-                  borderTop: '1px solid rgba(239, 68, 68, 0.2)'
-                }}
-              >
-                <span>🗑️ Eliminar Cuenta Definitivamente</span>
-                <span>›</span>
-              </button>
+          {/* TARJETA 3: ACCESOS RÁPIDOS Y SEGURIDAD */}
+          <section
+            className="profile-card-premium"
+            style={{
+              background: cardBg,
+              border: `1px solid ${cardBorder}`,
+              borderRadius: '20px',
+              padding: '16px 18px',
+              boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.45)' : '0 4px 18px rgba(15,23,42,0.06)',
+              boxSizing: 'border-box',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                paddingBottom: '10px',
+                borderBottom: `1px solid ${cardBorder}`,
+                marginBottom: '4px',
+              }}
+            >
+              <span style={{ fontSize: '18px' }}>🎟️</span>
+              <h2 style={{ fontSize: '1.02rem', fontWeight: 800, margin: 0, color: textColor }}>
+                Mis Accesos Rápidos
+              </h2>
             </div>
+
+            <Link
+              href="/mis-boletas"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '12px 6px',
+                borderBottom: `1px solid ${cardBorder}`,
+                textDecoration: 'none',
+                color: textColor,
+                fontWeight: 700,
+                fontSize: '0.88rem',
+              }}
+            >
+              <span>🎟️ Mis Boletas y Certificados SHA-256</span>
+              <span style={{ color: subtextColor, fontSize: '16px' }}>›</span>
+            </Link>
+
+            <Link
+              href="/sorteo-en-vivo"
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '12px 6px',
+                borderBottom: `1px solid ${cardBorder}`,
+                textDecoration: 'none',
+                color: textColor,
+                fontWeight: 700,
+                fontSize: '0.88rem',
+              }}
+            >
+              <span>🎱 Sorteo en Vivo (Balotera y Ruleta)</span>
+              <span style={{ color: subtextColor, fontSize: '16px' }}>›</span>
+            </Link>
+
+            <button
+              type="button"
+              onClick={() => void performLogout()}
+              style={{
+                width: '100%',
+                background: 'transparent',
+                border: 'none',
+                borderBottom: `1px solid ${cardBorder}`,
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '12px 6px',
+                color: '#f59e0b',
+                fontWeight: 700,
+                fontSize: '0.88rem',
+                textAlign: 'left',
+              }}
+            >
+              <span>🚪 Cerrar Sesión / Cambiar Cuenta</span>
+              <span style={{ color: '#f59e0b', fontSize: '16px' }}>›</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleDeleteAccount}
+              style={{
+                width: '100%',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '12px 6px 4px 6px',
+                color: '#ef4444',
+                fontWeight: 700,
+                fontSize: '0.88rem',
+                textAlign: 'left',
+              }}
+            >
+              <span>🗑️ Eliminar Cuenta Definitivamente</span>
+              <span style={{ color: '#ef4444', fontSize: '16px' }}>›</span>
+            </button>
           </section>
         </main>
       </div>
@@ -441,9 +802,9 @@ export default function PerfilClientePage() {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.78)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.65)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             zIndex: 10000,
             display: 'flex',
             alignItems: 'flex-end',
@@ -457,19 +818,26 @@ export default function PerfilClientePage() {
             style={{
               width: '92%',
               maxWidth: '440px',
-              backgroundColor: '#121216',
+              backgroundColor: cardBg,
               borderRadius: '24px',
-              border: '1px solid rgba(255, 255, 255, 0.16)',
-              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.85)',
+              border: `1px solid ${cardBorder}`,
+              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.6)',
               padding: '22px 20px',
-              color: '#ffffff',
+              color: textColor,
               boxSizing: 'border-box',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '14px',
+              }}
+            >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ fontSize: '20px' }}>🌓</span>
-                <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: '#ffffff' }}>
+                <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 800, color: textColor }}>
                   Tema de Pantalla
                 </h3>
               </div>
@@ -478,9 +846,9 @@ export default function PerfilClientePage() {
                 aria-label="Cerrar modal de tema"
                 onClick={() => setShowThemeModal(false)}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
+                  background: isDark ? 'rgba(255, 255, 255, 0.1)' : '#f1f5f9',
                   border: 'none',
-                  color: '#ffffff',
+                  color: textColor,
                   width: '30px',
                   height: '30px',
                   borderRadius: '50%',
@@ -495,12 +863,12 @@ export default function PerfilClientePage() {
               </button>
             </div>
 
-            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#94a3b8', lineHeight: 1.4 }}>
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: subtextColor, lineHeight: 1.4 }}>
               Personaliza el estilo visual de El Ganador en este dispositivo:
             </p>
 
             <div style={{ display: 'grid', gap: '10px' }}>
-              {/* Opción 1: Modo Claro */}
+              {/* Opción 1: Modo Claro (Fondo Blanco) */}
               <button
                 type="button"
                 onClick={() => {
@@ -514,9 +882,15 @@ export default function PerfilClientePage() {
                   justifyContent: 'space-between',
                   padding: '14px 16px',
                   borderRadius: '14px',
-                  border: themePreference === 'light' ? '1.5px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.1)',
-                  background: themePreference === 'light' ? 'rgba(0, 122, 255, 0.15)' : 'rgba(255, 255, 255, 0.04)',
-                  color: '#ffffff',
+                  border: themePreference === 'light' ? '2px solid #007AFF' : `1px solid ${cardBorder}`,
+                  background: themePreference === 'light'
+                    ? isDark
+                      ? 'rgba(0, 122, 255, 0.2)'
+                      : '#eff6ff'
+                    : isDark
+                    ? 'rgba(255, 255, 255, 0.04)'
+                    : '#f8fafc',
+                  color: textColor,
                   cursor: 'pointer',
                   textAlign: 'left',
                 }}
@@ -524,12 +898,12 @@ export default function PerfilClientePage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ fontSize: '24px' }}>☀️</span>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '14px', color: '#ffffff' }}>Modo Claro</div>
-                    <div style={{ fontSize: '12px', color: '#94a3b8' }}>Fondo blanco para luz de día</div>
+                    <div style={{ fontWeight: 800, fontSize: '14px', color: textColor }}>Modo Claro</div>
+                    <div style={{ fontSize: '12px', color: subtextColor }}>Fondo blanco impecable</div>
                   </div>
                 </div>
                 {themePreference === 'light' && (
-                  <span style={{ color: '#007AFF', fontWeight: 800, fontSize: '16px' }}>✓</span>
+                  <span style={{ color: '#007AFF', fontWeight: 800, fontSize: '18px' }}>✓</span>
                 )}
               </button>
 
@@ -547,9 +921,15 @@ export default function PerfilClientePage() {
                   justifyContent: 'space-between',
                   padding: '14px 16px',
                   borderRadius: '14px',
-                  border: themePreference === 'dark' ? '1.5px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.1)',
-                  background: themePreference === 'dark' ? 'rgba(0, 122, 255, 0.15)' : 'rgba(255, 255, 255, 0.04)',
-                  color: '#ffffff',
+                  border: themePreference === 'dark' ? '2px solid #007AFF' : `1px solid ${cardBorder}`,
+                  background: themePreference === 'dark'
+                    ? isDark
+                      ? 'rgba(0, 122, 255, 0.2)'
+                      : '#eff6ff'
+                    : isDark
+                    ? 'rgba(255, 255, 255, 0.04)'
+                    : '#f8fafc',
+                  color: textColor,
                   cursor: 'pointer',
                   textAlign: 'left',
                 }}
@@ -557,12 +937,12 @@ export default function PerfilClientePage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ fontSize: '24px' }}>🌙</span>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '14px', color: '#ffffff' }}>Modo Oscuro (Dark Luxury)</div>
-                    <div style={{ fontSize: '12px', color: '#94a3b8' }}>Fondo carbón y detalles azules</div>
+                    <div style={{ fontWeight: 800, fontSize: '14px', color: textColor }}>Modo Oscuro</div>
+                    <div style={{ fontSize: '12px', color: subtextColor }}>Fondo negro de lujo</div>
                   </div>
                 </div>
                 {themePreference === 'dark' && (
-                  <span style={{ color: '#007AFF', fontWeight: 800, fontSize: '16px' }}>✓</span>
+                  <span style={{ color: '#007AFF', fontWeight: 800, fontSize: '18px' }}>✓</span>
                 )}
               </button>
 
@@ -580,9 +960,15 @@ export default function PerfilClientePage() {
                   justifyContent: 'space-between',
                   padding: '14px 16px',
                   borderRadius: '14px',
-                  border: themePreference === 'system' ? '1.5px solid #007AFF' : '1px solid rgba(255, 255, 255, 0.1)',
-                  background: themePreference === 'system' ? 'rgba(0, 122, 255, 0.15)' : 'rgba(255, 255, 255, 0.04)',
-                  color: '#ffffff',
+                  border: themePreference === 'system' ? '2px solid #007AFF' : `1px solid ${cardBorder}`,
+                  background: themePreference === 'system'
+                    ? isDark
+                      ? 'rgba(0, 122, 255, 0.2)'
+                      : '#eff6ff'
+                    : isDark
+                    ? 'rgba(255, 255, 255, 0.04)'
+                    : '#f8fafc',
+                  color: textColor,
                   cursor: 'pointer',
                   textAlign: 'left',
                 }}
@@ -590,12 +976,16 @@ export default function PerfilClientePage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ fontSize: '24px' }}>📱</span>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '14px', color: '#ffffff' }}>Automático del Sistema</div>
-                    <div style={{ fontSize: '12px', color: '#94a3b8' }}>Sincroniza con el tema de tu teléfono</div>
+                    <div style={{ fontWeight: 800, fontSize: '14px', color: textColor }}>
+                      Automático del Sistema
+                    </div>
+                    <div style={{ fontSize: '12px', color: subtextColor }}>
+                      Sincroniza con los ajustes de tu teléfono
+                    </div>
                   </div>
                 </div>
                 {themePreference === 'system' && (
-                  <span style={{ color: '#007AFF', fontWeight: 800, fontSize: '16px' }}>✓</span>
+                  <span style={{ color: '#007AFF', fontWeight: 800, fontSize: '18px' }}>✓</span>
                 )}
               </button>
             </div>
@@ -603,6 +993,7 @@ export default function PerfilClientePage() {
         </div>
       )}
 
+      {/* ISLA INFERIOR FLOTANTE */}
       <BottomNav currentTab="perfil" />
     </div>
   );
