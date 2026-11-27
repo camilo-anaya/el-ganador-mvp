@@ -826,7 +826,6 @@ export default function PerfilClientePage() {
 
           {/* ESPACIADOR INFERIOR SEGURO PARA QUE LA ISLA FLOTANTE NUNCA TAPE NADA */}
           <div style={{ height: 'calc(110px + env(safe-area-inset-bottom, 24px))', width: '100%', flexShrink: 0 }} aria-hidden="true" />
-          </section>
         </main>
       </div>
 
