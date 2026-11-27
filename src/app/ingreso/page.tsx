@@ -623,641 +623,425 @@ function IngresoContent() {
 
   // =========================================================================
   // VISTA MÓVIL 2: INICIAR SESIÓN (view === 'login')
+  // Directo para poner datos: Sin menús repetidos ni saludo redundante
   // =========================================================================
   const renderLoginView = () => (
-    <div className="mobileSheetViewScreen animateSlideUp">
-      {/* Barra superior de navegación */}
-      <header className="mobileSheetTopBar">
-        <button
-          type="button"
-          className="mobileHeaderBackBtn"
-          onClick={() => switchMode("welcome")}
-          aria-label="Volver a la portada"
-        >
-          <BackArrowIcon />
-          <span>Volver</span>
-        </button>
+    <section
+      className={`portada-2030-shell ${theme === "dark" ? "is-dark" : "is-light"}`}
+      aria-label="Iniciar Sesión El Ganador"
+    >
+      <picture className="portada-2030-bg">
+        <source
+          srcSet="/assets/portada-2030-oscuro.png?v=4"
+          media="(prefers-color-scheme: dark)"
+        />
+        <img
+          src={
+            theme === "dark"
+              ? "/assets/portada-2030-oscuro.png?v=4"
+              : "/assets/portada-2030-claro.png?v=4"
+          }
+          alt="El Ganador"
+          draggable={false}
+        />
+      </picture>
 
-        <CrownBrandBadge />
+      <div className="portada-2030-interactive-layer" style={{ maxWidth: '280px', width: '88%', margin: '0 auto', gap: '7px' }}>
+        {/* Cabecera compacta: Volver y Título */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '2px' }}>
+          <button
+            type="button"
+            onClick={() => switchMode("welcome")}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#d4af37',
+              fontSize: '12px',
+              fontWeight: 800,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              cursor: 'pointer',
+              padding: '4px 0'
+            }}
+          >
+            <BackArrowIcon />
+            <span>Volver</span>
+          </button>
+          <span style={{ fontSize: '13px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+            Inicia Sesión
+          </span>
+          <button
+            type="button"
+            onClick={() => setRole(role === "customer" ? "business" : "customer")}
+            style={{
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.16)',
+              borderRadius: '999px',
+              color: '#cbd5e1',
+              fontSize: '10px',
+              fontWeight: 700,
+              padding: '3px 8px',
+              cursor: 'pointer'
+            }}
+          >
+            {role === "business" ? "🏪 Empresa" : "🎟️ Comprador"}
+          </button>
+        </div>
 
-        <Link className="explore-guest-link" href="/">
-          Explorar →
-        </Link>
-      </header>
+        {authError && <div className="mobileNoticeBox error" style={{ fontSize: '11px', padding: '5px 10px', margin: '1px 0' }}>⚠️ {authError}</div>}
+        {authSuccess && <div className="mobileNoticeBox success" style={{ fontSize: '11px', padding: '5px 10px', margin: '1px 0' }}>✓ {authSuccess}</div>}
 
-      {/* Cabecera con tipografía y mensaje de bienvenida */}
-      <div className="mobileSheetHeaderHero" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-        <div
-          style={{
-            width: '84px',
-            height: '62px',
-            margin: '0 auto 8px',
+        <form onSubmit={handleMobileLogin} style={{ display: 'flex', flexDirection: 'column', gap: '7px', width: '100%' }}>
+          {/* Campo Correo o Celular */}
+          <div style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '16px',
-            background: theme === 'dark'
-              ? 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 40%, rgba(0,0,0,0.4) 80%)'
-              : 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.6) 50%, transparent 100%)',
-            boxShadow: theme === 'dark'
-              ? '0 6px 18px rgba(0,0,0,0.5)'
-              : '0 4px 14px rgba(0,0,0,0.06)',
-          }}
-        >
-          <img
-            src="/banner-el-ganador-oficial.png?v=4"
-            alt="Logo Oficial El Ganador"
-            style={{
-              width: '84px',
-              height: 'auto',
-              maxHeight: '62px',
-              objectFit: 'contain',
-              display: 'block',
-              filter: theme === 'dark'
-                ? 'drop-shadow(0 0 16px rgba(255, 255, 255, 0.45)) drop-shadow(0 4px 10px rgba(0,0,0,0.8))'
-                : 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.85)) drop-shadow(0 3px 8px rgba(0,0,0,0.18))',
-            }}
-          />
-        </div>
-        <p className="mobileScriptGreeting">¡Hola de nuevo!</p>
-        <h1 className="mobileSansTitle" style={{ color: "#ffffff" }}>Inicia Sesión</h1>
-        <p className="mobileSubNotice">
-          Entra a tu cuenta para jugar, consultar boletas y reclamar premios.
-        </p>
-      </div>
-
-      {/* Contenedor blanco tipo Bottom Sheet con tarjetas de input */}
-      <div className="mobileWhiteBottomSheet">
-        <div className="mobileSheetDragHandle" aria-hidden="true" />
-
-        <div className="role-selector">
-          <button
-            type="button"
-            className={role === "customer" ? "role-active" : ""}
-            onClick={() => setRole("customer")}
-          >
-            🎟️ Comprador
-          </button>
-          <button
-            type="button"
-            className={role === "business" ? "role-active" : ""}
-            onClick={() => setRole("business")}
-          >
-            🏪 Comercio Aliado
-          </button>
-        </div>
-
-        {authError && <div className="mobileNoticeBox error">⚠️ {authError}</div>}
-        {authSuccess && <div className="mobileNoticeBox success">✓ {authSuccess}</div>}
-
-        <form onSubmit={handleMobileLogin} className="mobileAuthForm">
-          {/* Campo: Correo, WhatsApp o Celular */}
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">Correo, WhatsApp o Celular</label>
-            <div className="mobileInputCard">
-              <span className="mobileInputLeadIcon"><PhoneOutlineIcon /></span>
-              <input
-                type="text"
-                className="mobileInputClean"
-                placeholder="Correo o teléfono (Ej: 312 458 9021)"
-                value={mobilePhone}
-                onChange={(e) => setMobilePhone(e.target.value)}
-                required
-              />
-            </div>
+            background: 'rgba(18, 20, 19, 0.94)',
+            border: '1.2px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '12px',
+            padding: '0 10px',
+            height: '38px',
+            boxSizing: 'border-box'
+          }}>
+            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+              <PhoneOutlineIcon />
+            </span>
+            <input
+              type="text"
+              placeholder="Correo o Celular"
+              value={mobilePhone}
+              onChange={(e) => setMobilePhone(e.target.value)}
+              required
+              style={{
+                background: 'transparent',
+                border: 'none',
+                outline: 'none',
+                color: '#ffffff',
+                fontSize: '12.5px',
+                width: '100%'
+              }}
+            />
           </div>
 
-          {/* Campo: Contraseña */}
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">Contraseña</label>
-            <div className="mobileInputCard">
-              <span className="mobileInputLeadIcon"><PadlockOutlineIcon /></span>
-              <input
-                type={showLoginPassword ? "text" : "password"}
-                className="mobileInputClean"
-                placeholder="Tu contraseña secreta"
-                value={mobileLoginPassword}
-                onChange={(e) => setMobileLoginPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="mobileInputEyeBtn"
-                onClick={() => setShowLoginPassword(!showLoginPassword)}
-                aria-label="Ver u ocultar contraseña"
-              >
-                <EyeToggleIcon hide={!showLoginPassword} />
-              </button>
-            </div>
+          {/* Campo Contraseña */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: 'rgba(18, 20, 19, 0.94)',
+            border: '1.2px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '12px',
+            padding: '0 10px',
+            height: '38px',
+            boxSizing: 'border-box'
+          }}>
+            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+              <PadlockOutlineIcon />
+            </span>
+            <input
+              type={showLoginPassword ? "text" : "password"}
+              placeholder="Contraseña"
+              value={mobileLoginPassword}
+              onChange={(e) => setMobileLoginPassword(e.target.value)}
+              required
+              style={{
+                background: 'transparent',
+                border: 'none',
+                outline: 'none',
+                color: '#ffffff',
+                fontSize: '12.5px',
+                width: '100%'
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowLoginPassword(!showLoginPassword)}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+              aria-label="Ver u ocultar contraseña"
+            >
+              <EyeToggleIcon hide={!showLoginPassword} />
+            </button>
           </div>
 
-          {/* Enlace: ¿Olvidaste tu contraseña? */}
-          <div className="mobileForgotLinkRight">
+          {/* Enlace Olvidaste tu contraseña */}
+          <div style={{ textAlign: 'right', marginTop: '-2px' }}>
             <button
               type="button"
               onClick={() => alert("Te enviaremos un código de recuperación a tu WhatsApp.")}
+              style={{ background: 'none', border: 'none', color: '#cbd5e1', fontSize: '10.5px', cursor: 'pointer', padding: 0 }}
             >
               ¿Olvidaste tu contraseña?
             </button>
           </div>
 
-          {/* Botón: INICIAR SESIÓN (verde esmeralda lujo con bisel dorado 3D) */}
-          <button type="submit" className="mobileBtnEmeraldGoldLuxury" disabled={authBusy}>
+          {/* Botón Iniciar Sesión (Negro Obsidiana Compacto) */}
+          <button
+            type="submit"
+            className="btn-2030-login"
+            disabled={authBusy}
+            style={{ width: '100%', height: '38px', fontSize: '13px', marginTop: '2px' }}
+          >
             <span>{authBusy ? "ENTRANDO…" : "INICIAR SESIÓN"}</span>
-            <ChevronRightIcon />
+            <span className="chevron-right">›</span>
           </button>
-
-          {/* Botón: Autenticación Biométrica (Huella / Face ID) */}
-          <div style={{ marginTop: '12px' }}>
-            <button 
-              type="button"
-              onClick={handleBiometricLogin}
-              style={{
-                width: '100%',
-                padding: '13px',
-                background: '#1a1a1a',
-                color: '#ffffff',
-                border: '1px solid #333333',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '600',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
-              }}
-            >
-              🧬 Usar Huella / Face ID
-            </button>
-          </div>
         </form>
 
-        {/* Acceso Rápido Demo con 1 Clic */}
-        <div className="mobileQuickAccessSection">
-          <button
-            type="button"
-            className="mobileBtnQuickDemo"
-            onClick={() =>
-              executeAuth(
-                "login",
-                role === "business" ? "admin@tiendaxyz.com" : "cliente@elganador.com",
-                "Demo123456*",
-                role,
-                role === "business" ? "Tienda XYZ" : "Alejandro Morales"
-              )
-            }
-            disabled={authBusy}
-          >
-            ⚡ Entrar directo con 1 Clic ({role === "business" ? "Comercio Demo" : "Cliente Demo"})
-          </button>
-        </div>
+        {/* Acceso Rápido Demo 1 Clic */}
+        <button
+          type="button"
+          onClick={() =>
+            executeAuth(
+              "login",
+              role === "business" ? "admin@tiendaxyz.com" : "cliente@elganador.com",
+              "Demo123456*",
+              role,
+              role === "business" ? "Tienda XYZ" : "Alejandro Morales"
+            )
+          }
+          style={{
+            background: 'rgba(255, 255, 255, 0.06)',
+            border: '1px solid rgba(255, 255, 255, 0.14)',
+            borderRadius: '999px',
+            color: '#fde68a',
+            fontSize: '11px',
+            fontWeight: 700,
+            padding: '6px 12px',
+            cursor: 'pointer',
+            marginTop: '2px',
+            textAlign: 'center'
+          }}
+        >
+          ⚡ Entrar directo con 1 Clic (Demo)
+        </button>
 
-        {/* Footer: ¿No tienes cuenta? Regístrate */}
-        <div className="mobileSwitchFooter">
+        {/* Switch a Registro */}
+        <div style={{ textAlign: 'center', fontSize: '11px', color: '#94a3b8', marginTop: '3px' }}>
           ¿No tienes cuenta aún?{" "}
           <button
             type="button"
-            className="mobileSwitchFooterLink"
             onClick={() => switchMode("register")}
+            style={{ background: 'none', border: 'none', color: '#d4af37', fontWeight: 800, cursor: 'pointer', fontSize: '11px', textDecoration: 'underline' }}
           >
             Regístrate gratis
           </button>
         </div>
-
-        {/* Garantía de Seguridad */}
-        <div className="mobileTrustBadgeBottom">
-          <span>🛡️</span> Seguro · Confiable · Transparente
-        </div>
-
-        {/* Aviso Legal y Cumplimiento App Store / Google Play */}
-        <footer className="store-compliance-footer">
-          <p>
-            Operación regulada en Colombia bajo la Ley 643 de 2001 y el Decreto 1486 de 2024 con verificación geográfica de cobertura jurisdiccional. Solo para mayores de 18 años (+18).
-          </p>
-          <p className="apple-google-disclaimer">
-            <strong>Aviso oficial de tiendas digitales:</strong> Apple Inc. y Google LLC no son patrocinadores, avalistas ni tienen vinculación alguna con El Ganador, sus comercios aliados ni con los sorteos o premios publicados en esta aplicación.
-          </p>
-        </footer>
       </div>
-    </div>
+    </section>
   );
 
   // =========================================================================
   // VISTA MÓVIL 3: REGISTRARSE (view === 'register')
+  // Directo para poner datos: Sin menús repetidos ni presentaciones redundantes
   // =========================================================================
   const renderRegisterView = () => (
-    <div className="mobileSheetViewScreen animateSlideUp">
-      {/* Barra superior de navegación */}
-      <header className="mobileSheetTopBar">
-        <button
-          type="button"
-          className="mobileHeaderBackBtn"
-          onClick={() => switchMode("welcome")}
-          aria-label="Volver a la portada"
-        >
-          <BackArrowIcon />
-          <span>Volver</span>
-        </button>
+    <section
+      className={`portada-2030-shell ${theme === "dark" ? "is-dark" : "is-light"}`}
+      aria-label="Crear Cuenta El Ganador"
+    >
+      <picture className="portada-2030-bg">
+        <source
+          srcSet="/assets/portada-2030-oscuro.png?v=4"
+          media="(prefers-color-scheme: dark)"
+        />
+        <img
+          src={
+            theme === "dark"
+              ? "/assets/portada-2030-oscuro.png?v=4"
+              : "/assets/portada-2030-claro.png?v=4"
+          }
+          alt="El Ganador"
+          draggable={false}
+        />
+      </picture>
 
-        <CrownBrandBadge />
+      <div className="portada-2030-interactive-layer" style={{ maxWidth: '280px', width: '88%', margin: '0 auto', gap: '6px', maxHeight: '82vh', overflowY: 'auto' }}>
+        {/* Cabecera compacta: Volver y Título */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '2px' }}>
+          <button
+            type="button"
+            onClick={() => switchMode("welcome")}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#d4af37',
+              fontSize: '12px',
+              fontWeight: 800,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              cursor: 'pointer',
+              padding: '4px 0'
+            }}
+          >
+            <BackArrowIcon />
+            <span>Volver</span>
+          </button>
+          <span style={{ fontSize: '13px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
+            {role === "business" ? "Registro Empresa" : "Crear Cuenta"}
+          </span>
+          <button
+            type="button"
+            onClick={() => setRole(role === "customer" ? "business" : "customer")}
+            style={{
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.16)',
+              borderRadius: '999px',
+              color: '#cbd5e1',
+              fontSize: '10px',
+              fontWeight: 700,
+              padding: '3px 8px',
+              cursor: 'pointer'
+            }}
+          >
+            {role === "business" ? "Comprador" : "Empresa"}
+          </button>
+        </div>
 
-        <Link className="explore-guest-link" href="/">
-          Explorar →
-        </Link>
-      </header>
+        {authError && <div className="mobileNoticeBox error" style={{ fontSize: '11px', padding: '5px 10px', margin: '1px 0' }}>⚠️ {authError}</div>}
+        {authSuccess && <div className="mobileNoticeBox success" style={{ fontSize: '11px', padding: '5px 10px', margin: '1px 0' }}>✓ {authSuccess}</div>}
 
-      {/* Cabecera con tipografía y mensaje de bienvenida */}
-      <div className="mobileSheetHeaderHero" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-        <div
-          style={{
-            width: '84px',
-            height: '62px',
-            margin: '0 auto 8px',
+        <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
+          {/* Nombre */}
+          <div style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '16px',
-            background: theme === 'dark'
-              ? 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 40%, rgba(0,0,0,0.4) 80%)'
-              : 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.6) 50%, transparent 100%)',
-            boxShadow: theme === 'dark'
-              ? '0 6px 18px rgba(0,0,0,0.5)'
-              : '0 4px 14px rgba(0,0,0,0.06)',
-          }}
-        >
-          <img
-            src="/banner-el-ganador-oficial.png?v=4"
-            alt="Logo Oficial El Ganador"
-            style={{
-              width: '84px',
-              height: 'auto',
-              maxHeight: '62px',
-              objectFit: 'contain',
-              display: 'block',
-              filter: theme === 'dark'
-                ? 'drop-shadow(0 0 16px rgba(255, 255, 255, 0.45)) drop-shadow(0 4px 10px rgba(0,0,0,0.8))'
-                : 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.85)) drop-shadow(0 3px 8px rgba(0,0,0,0.18))',
-            }}
-          />
-        </div>
-        <p className="mobileScriptGreeting">¡Bienvenido!</p>
-        <h1 className="mobileSansTitle" style={{ color: "#ffffff" }}>Crea tu Cuenta</h1>
-        <p className="mobileSubNotice">
-          Únete a El Ganador y participa en las mejores rifas de Colombia.
-        </p>
-      </div>
-
-      {/* Contenedor blanco tipo Bottom Sheet con tarjetas de input */}
-      <div className="mobileWhiteBottomSheet">
-        <div className="mobileSheetDragHandle" aria-hidden="true" />
-
-        <div className="role-selector">
-          <button
-            type="button"
-            className={role === "customer" ? "role-active" : ""}
-            onClick={() => setRole("customer")}
-          >
-            🎟️ Comprador
-          </button>
-          <button
-            type="button"
-            className={role === "business" ? "role-active" : ""}
-            onClick={() => setRole("business")}
-          >
-            🏪 Comercio Aliado
-          </button>
-        </div>
-
-        {authError && <div className="mobileNoticeBox error">⚠️ {authError}</div>}
-        {authSuccess && <div className="mobileNoticeBox success">✓ {authSuccess}</div>}
-
-        <form onSubmit={handleMobileRegister} className="mobileAuthForm">
-          {/* 1. Nombre completo */}
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">
-              {role === "business" ? "Nombre comercial o Razón Social" : "Nombre completo"}
-            </label>
-            <div className="mobileInputCard">
-              <span className="mobileInputLeadIcon"><UserOutlineIcon /></span>
-              <input
-                type="text"
-                className="mobileInputClean"
-                placeholder={role === "business" ? "Ej: Tienda XYZ" : "Ej: Alejandro Morales"}
-                value={regName}
-                onChange={(e) => setRegName(e.target.value)}
-                required
-              />
-            </div>
+            background: 'rgba(18, 20, 19, 0.94)',
+            border: '1.2px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '12px',
+            padding: '0 10px',
+            height: '36px',
+            boxSizing: 'border-box'
+          }}>
+            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+              <UserOutlineIcon />
+            </span>
+            <input
+              type="text"
+              placeholder={role === "business" ? "Nombre comercial" : "Nombre completo"}
+              value={regName}
+              onChange={(e) => setRegName(e.target.value)}
+              required
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+            />
           </div>
 
-          {/* 2. Teléfono / WhatsApp (+57) */}
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">WhatsApp o Celular (+57)</label>
-            <div className="mobileInputCard">
-              <span className="mobileInputLeadIcon"><HandsetOutlineIcon /></span>
-              <input
-                type="tel"
-                className="mobileInputClean"
-                placeholder="Ej: 312 458 9021"
-                value={regPhone}
-                onChange={(e) => setRegPhone(e.target.value)}
-                required
-              />
-            </div>
+          {/* Celular */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: 'rgba(18, 20, 19, 0.94)',
+            border: '1.2px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '12px',
+            padding: '0 10px',
+            height: '36px',
+            boxSizing: 'border-box'
+          }}>
+            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+              <HandsetOutlineIcon />
+            </span>
+            <input
+              type="tel"
+              placeholder="Celular / WhatsApp (Ej: 312 458 9021)"
+              value={regPhone}
+              onChange={(e) => setRegPhone(e.target.value)}
+              required
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+            />
           </div>
 
-          {/* 3. Correo electrónico */}
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">Correo electrónico</label>
-            <div className="mobileInputCard">
-              <span className="mobileInputLeadIcon"><MailOutlineIcon /></span>
-              <input
-                type="email"
-                className="mobileInputClean"
-                placeholder="tu@correo.com"
-                value={regEmail}
-                onChange={(e) => setRegEmail(e.target.value)}
-                required
-              />
-            </div>
+          {/* Correo */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: 'rgba(18, 20, 19, 0.94)',
+            border: '1.2px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '12px',
+            padding: '0 10px',
+            height: '36px',
+            boxSizing: 'border-box'
+          }}>
+            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+              <PhoneOutlineIcon />
+            </span>
+            <input
+              type="email"
+              placeholder="Correo electrónico"
+              value={regEmail}
+              onChange={(e) => setRegEmail(e.target.value)}
+              required
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+            />
           </div>
 
-          {/* 4. Contraseña */}
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">Contraseña</label>
-            <div className="mobileInputCard">
-              <span className="mobileInputLeadIcon"><PadlockOutlineIcon /></span>
-              <input
-                type={showRegPassword ? "text" : "password"}
-                className="mobileInputClean"
-                placeholder="Mínimo 8 caracteres"
-                minLength={8}
-                value={regPassword}
-                onChange={(e) => setRegPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="mobileInputEyeBtn"
-                onClick={() => setShowRegPassword(!showRegPassword)}
-                aria-label="Ver u ocultar contraseña"
-              >
-                <EyeToggleIcon hide={!showRegPassword} />
-              </button>
-            </div>
+          {/* Contraseña */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: 'rgba(18, 20, 19, 0.94)',
+            border: '1.2px solid rgba(255, 255, 255, 0.18)',
+            borderRadius: '12px',
+            padding: '0 10px',
+            height: '36px',
+            boxSizing: 'border-box'
+          }}>
+            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+              <PadlockOutlineIcon />
+            </span>
+            <input
+              type={showRegPassword ? "text" : "password"}
+              placeholder="Contraseña (mín 6 caracteres)"
+              value={regPassword}
+              onChange={(e) => setRegPassword(e.target.value)}
+              required
+              style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowRegPassword(!showRegPassword)}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+              aria-label="Ver u ocultar contraseña"
+            >
+              <EyeToggleIcon hide={!showRegPassword} />
+            </button>
           </div>
 
-          {/* 5. Confirmar contraseña */}
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">Confirmar contraseña</label>
-            <div className="mobileInputCard">
-              <span className="mobileInputLeadIcon"><PadlockOutlineIcon /></span>
-              <input
-                type={showRegConfirm ? "text" : "password"}
-                className="mobileInputClean"
-                placeholder="Repite tu contraseña"
-                minLength={8}
-                value={regConfirmPassword}
-                onChange={(e) => setRegConfirmPassword(e.target.value)}
-                required
-              />
-              <button
-                type="button"
-                className="mobileInputEyeBtn"
-                onClick={() => setShowRegConfirm(!showRegConfirm)}
-                aria-label="Ver u ocultar confirmación de contraseña"
-              >
-                <EyeToggleIcon hide={!showRegConfirm} />
-              </button>
-            </div>
-          </div>
-
-          {/* Confirmación legal +18 y jurisdicción Colombia */}
-          
-          {/* Cédula y Datos de Verificación */}
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">Documento de Identidad (Opcional)</label>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <select
-                className="mobileInputClean"
-                style={{ width: '90px', padding: '10px 8px', borderRadius: '12px', background: 'rgba(255,255,255,0.08)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.18)' }}
-                value={docType}
-                onChange={(e) => setDocType(e.target.value)}
-              >
-                <option value="CC" style={{ color: '#000' }}>C.C.</option>
-                <option value="CE" style={{ color: '#000' }}>C.E.</option>
-                <option value="NIT" style={{ color: '#000' }}>NIT</option>
-                <option value="PP" style={{ color: '#000' }}>Pasap.</option>
-              </select>
-              <div className="mobileInputCard" style={{ flex: 1 }}>
-                <input
-                  type="text"
-                  className="mobileInputClean"
-                  placeholder="Número de Cédula (opcional)"
-                  value={docNumber}
-                  onChange={(e) => setDocNumber(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">Fecha de Nacimiento (+18)</label>
-            <div className="mobileInputCard">
-              <input
-                type="date"
-                className="mobileInputClean"
-                value={birthDate}
-                onChange={(e) => setBirthDate(e.target.value)}
-              />
-            </div>
-          </div>
-
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">Ciudad de Residencia</label>
-            <div className="mobileInputCard">
-              <input
-                type="text"
-                className="mobileInputClean"
-                placeholder="Ej: Bogotá, Medellín, Cali..."
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* DOCUMENTOS OBLIGATORIOS PARA VERIFICACIÓN DE LOCAL COMERCIAL (EMPRESARIOS) */}
-          {role === "business" && (
-            <div style={{ padding: '14px', borderRadius: '14px', background: 'rgba(0, 122, 255, 0.1)', border: '1px solid rgba(56, 189, 248, 0.35)', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '6px' }}>
-              <div style={{ fontSize: '0.84rem', fontWeight: 900, color: '#38bdf8' }}>
-                🏢 Documentos Obligatorios de Verificación del Local
-              </div>
-              <small style={{ fontSize: '0.72rem', color: '#cbd5e1', lineHeight: 1.35 }}>
-                Requeridos para avalar tu comercio aliado, habilitar sorteos y pagos con Wompi en Colombia.
-              </small>
-
-              <div className="mobileFieldGroup" style={{ margin: 0 }}>
-                <label className="mobileFieldLabel">NIT del Comercio *</label>
-                <div className="mobileInputCard">
-                  <input type="text" className="mobileInputClean" placeholder="Ej: 901.884.221-5" value={nit} onChange={(e) => setNit(e.target.value)} required />
-                </div>
-              </div>
-
-              <div className="mobileFieldGroup" style={{ margin: 0 }}>
-                <label className="mobileFieldLabel">Propietario / Representante Legal *</label>
-                <div className="mobileInputCard">
-                  <input type="text" className="mobileInputClean" placeholder="Nombre completo del propietario" value={legalRepName} onChange={(e) => setLegalRepName(e.target.value)} required />
-                </div>
-              </div>
-
-              <div className="mobileFieldGroup" style={{ margin: 0 }}>
-                <label className="mobileFieldLabel">Dirección Física del Local *</label>
-                <div className="mobileInputCard">
-                  <input type="text" className="mobileInputClean" placeholder="Ej: Cra 15 # 85-20 Local 102" value={businessAddress} onChange={(e) => setBusinessAddress(e.target.value)} required />
-                </div>
-              </div>
-
-              <div className="mobileFieldGroup" style={{ margin: 0 }}>
-                <label className="mobileFieldLabel">📄 RUT Actualizado (DIAN · PDF o Foto) *</label>
-                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: rutFileName ? '1px solid #4ade80' : '1px dashed rgba(56,189,248,0.5)', cursor: 'pointer' }}>
-                  <span style={{ fontSize: '0.8rem', color: rutFileName ? '#4ade80' : '#e2e8f0' }}>
-                    {rutFileName ? '✓ ' + rutFileName : '📁 Adjuntar RUT actualizado *'}
-                  </span>
-                  <input type="file" accept="image/*,.pdf" style={{ display: 'none' }} onChange={(e) => { if (e.target.files?.[0]) setRutFileName(e.target.files[0].name); }} />
-                </label>
-              </div>
-
-              <div className="mobileFieldGroup" style={{ margin: 0 }}>
-                <label className="mobileFieldLabel">🏛️ Cámara de Comercio Vigente (≤ 30 días) *</label>
-                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: camaraComercioFileName ? '1px solid #4ade80' : '1px dashed rgba(56,189,248,0.5)', cursor: 'pointer' }}>
-                  <span style={{ fontSize: '0.8rem', color: camaraComercioFileName ? '#4ade80' : '#e2e8f0' }}>
-                    {camaraComercioFileName ? '✓ ' + camaraComercioFileName : '📁 Adjuntar Cámara de Comercio *'}
-                  </span>
-                  <input type="file" accept="image/*,.pdf" style={{ display: 'none' }} onChange={(e) => { if (e.target.files?.[0]) setCamaraComercioFileName(e.target.files[0].name); }} />
-                </label>
-              </div>
-
-              <div className="mobileFieldGroup" style={{ margin: 0 }}>
-                <label className="mobileFieldLabel">📅 Fecha de Expedición Cámara de Comercio</label>
-                <div className="mobileInputCard">
-                  <input type="date" className="mobileInputClean" value={camaraComercioDate} onChange={(e) => setCamaraComercioDate(e.target.value)} />
-                </div>
-              </div>
-
-              <div className="mobileFieldGroup" style={{ margin: 0 }}>
-                <label className="mobileFieldLabel">🏪 Foto de la Fachada del Local Físico *</label>
-                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: storeFrontFileName ? '1px solid #4ade80' : '1px dashed rgba(56,189,248,0.5)', cursor: 'pointer' }}>
-                  <span style={{ fontSize: '0.8rem', color: storeFrontFileName ? '#4ade80' : '#e2e8f0' }}>
-                    {storeFrontFileName ? '✓ ' + storeFrontFileName : '📸 Subir foto de fachada del local *'}
-                  </span>
-                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={(e) => { if (e.target.files?.[0]) setStoreFrontFileName(e.target.files[0].name); }} />
-                </label>
-              </div>
-
-              <div className="mobileFieldGroup" style={{ margin: 0 }}>
-                <label className="mobileFieldLabel">🏦 Certificado Bancario (Opcional · para dispersión de ventas)</label>
-                <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.04)', border: '1px dashed rgba(255,255,255,0.22)', cursor: 'pointer' }}>
-                  <span style={{ fontSize: '0.78rem', color: bankCertFileName ? '#4ade80' : '#cbd5e1' }}>
-                    {bankCertFileName ? '✓ ' + bankCertFileName : '📁 Adjuntar certificado bancario (opcional)'}
-                  </span>
-                  <input type="file" accept="image/*,.pdf" style={{ display: 'none' }} onChange={(e) => { if (e.target.files?.[0]) setBankCertFileName(e.target.files[0].name); }} />
-                </label>
-              </div>
-            </div>
-          )}
-
-          {/* Adjuntar Foto Cédula Frontal y Trasera */}
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">
-              {role === "business" ? "🪪 Fotocopia / Foto Cédula del Propietario (Cara Frontal) *" : "📸 Cédula Frontal (Opcional - solo para premios)"}
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: idFrontFileName ? '1px solid #4ade80' : '1px dashed rgba(255,255,255,0.25)', cursor: 'pointer' }}>
-              <span style={{ fontSize: '0.82rem', color: idFrontFileName ? '#4ade80' : '#cbd5e1' }}>
-                {idFrontFileName ? '✓ ' + idFrontFileName : (role === "business" ? '📁 Subir cédula propietario frontal *' : '📁 Subir foto cara frontal (opcional)')}
-              </span>
-              <input
-                type="file"
-                accept="image/*,.pdf"
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]) {
-                    setIdFrontFileName(e.target.files[0].name);
-                  }
-                }}
-              />
-            </label>
-          </div>
-
-          <div className="mobileFieldGroup">
-            <label className="mobileFieldLabel">
-              {role === "business" ? "🪪 Fotocopia / Foto Cédula del Propietario (Cara Trasera) *" : "📸 Cédula Trasera (Opcional)"}
-            </label>
-            <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: '12px', background: 'rgba(255,255,255,0.06)', border: idBackFileName ? '1px solid #4ade80' : '1px dashed rgba(255,255,255,0.25)', cursor: 'pointer' }}>
-              <span style={{ fontSize: '0.82rem', color: idBackFileName ? '#4ade80' : '#cbd5e1' }}>
-                {idBackFileName ? '✓ ' + idBackFileName : (role === "business" ? '📁 Subir cédula propietario trasera *' : '📁 Subir foto cara trasera (opcional)')}
-              </span>
-              <input
-                type="file"
-                accept="image/*,.pdf"
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]) {
-                    setIdBackFileName(e.target.files[0].name);
-                  }
-                }}
-              />
-            </label>
-          </div>
-
-          <label className="legal-checkbox">
+          {/* Checkbox Términos */}
+          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', cursor: 'pointer', fontSize: '10px', color: '#cbd5e1', lineHeight: '1.25', marginTop: '2px' }}>
             <input
               type="checkbox"
               checked={ageConfirmed}
               onChange={(e) => setAgeConfirmed(e.target.checked)}
               required
+              style={{ marginTop: '1px' }}
             />
-            <span>
-              Confirmo que soy <strong>mayor de 18 años</strong>, me encuentro ubicado en Colombia dentro del alcance territorial autorizado del sorteo y acepto los Términos y Condiciones (Ley 643 de 2001 y Decreto 1486 de 2024).
-            </span>
+            <span>Soy <strong>mayor de 18 años (+18)</strong> y acepto los términos de juego responsable (Ley 643/2001).</span>
           </label>
 
-          {/* Botón: REGISTRARME (verde esmeralda lujo con bisel dorado 3D) */}
-          <button type="submit" className="mobileBtnEmeraldGoldLuxury" disabled={authBusy}>
-            <span>{authBusy ? "CREANDO CUENTA…" : "REGISTRARME AHORA"}</span>
-            <ChevronRightIcon />
+          {/* Botón Crear Cuenta */}
+          <button
+            type="submit"
+            className="btn-2030-login"
+            disabled={authBusy}
+            style={{ width: '100%', height: '38px', fontSize: '13px', marginTop: '2px' }}
+          >
+            <span>{authBusy ? "CREANDO CUENTA…" : "CREAR CUENTA GRATIS"}</span>
+            <span className="chevron-right">›</span>
           </button>
         </form>
 
-        {/* Footer: ¿Ya tienes cuenta? Inicia sesión */}
-        <div className="mobileSwitchFooter">
-          ¿Ya tienes una cuenta registrada?{" "}
+        {/* Switch a Login */}
+        <div style={{ textAlign: 'center', fontSize: '11px', color: '#94a3b8', marginTop: '3px' }}>
+          ¿Ya tienes cuenta?{" "}
           <button
             type="button"
-            className="mobileSwitchFooterLink"
             onClick={() => switchMode("login")}
+            style={{ background: 'none', border: 'none', color: '#d4af37', fontWeight: 800, cursor: 'pointer', fontSize: '11px', textDecoration: 'underline' }}
           >
-            Inicia sesión
+            Inicia sesión aquí
           </button>
         </div>
-
-        {/* Garantía de Seguridad */}
-        <div className="mobileTrustBadgeBottom">
-          <span>🛡️</span> Seguro · Confiable · Transparente
-        </div>
-
-        {/* Aviso Legal y Cumplimiento App Store / Google Play */}
-        <footer className="store-compliance-footer">
-          <p>
-            Operación regulada en Colombia bajo la Ley 643 de 2001 y el Decreto 1486 de 2024 con verificación geográfica de cobertura jurisdiccional. Solo para mayores de 18 años (+18).
-          </p>
-          <p className="apple-google-disclaimer">
-            <strong>Aviso oficial de tiendas digitales:</strong> Apple Inc. y Google LLC no son patrocinadores, avalistas ni tienen vinculación alguna con El Ganador, sus comercios aliados ni con los sorteos o premios publicados en esta aplicación.
-          </p>
-        </footer>
       </div>
-    </div>
+    </section>
   );
 
   return (
