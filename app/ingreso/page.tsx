@@ -59,6 +59,7 @@ function IngresoContent() {
   const [nit, setNit] = useState("");
   const [legalRepName, setLegalRepName] = useState("");
   const [businessAddress, setBusinessAddress] = useState("");
+  const [businessCategory, setBusinessCategory] = useState("Motos & 4x4");
   const [rutFileName, setRutFileName] = useState("");
   const [camaraComercioFileName, setCamaraComercioFileName] = useState("");
   const [camaraComercioDate, setCamaraComercioDate] = useState("");
@@ -240,9 +241,15 @@ function IngresoContent() {
           JSON.stringify({
             role: storedRole,
             name: effectiveName,
+            businessName: effectiveName,
             email: effectiveEmail,
             phone: regPhone.trim() || pcPhone.trim() || mobilePhone.trim() || "+57 312 458 9021",
             city: city.trim() || "Bogotá D.C.",
+            nit: nit.trim(),
+            legalRepName: legalRepName.trim(),
+            businessAddress: businessAddress.trim(),
+            category: businessCategory,
+            docNumber: docNumber.trim(),
             loggedIn: true,
             updatedAt: new Date().toISOString(),
           })
@@ -335,16 +342,11 @@ function IngresoContent() {
 
   const validateBusinessDocs = (): string | null => {
     const missing: string[] = [];
-    if (!nit.trim()) missing.push("NIT del comercio");
-    if (!legalRepName.trim()) missing.push("Nombre del propietario / rep. legal");
+    if (!nit.trim()) missing.push("NIT o RUT del comercio");
+    if (!legalRepName.trim()) missing.push("Nombre del representante legal");
     if (!businessAddress.trim()) missing.push("Dirección física del local");
-    if (!rutFileName) missing.push("RUT actualizado (DIAN)");
-    if (!camaraComercioFileName) missing.push("Cámara de Comercio vigente");
-    if (!idFrontFileName) missing.push("Fotocopia Cédula del propietario (frontal)");
-    if (!idBackFileName) missing.push("Fotocopia Cédula del propietario (trasera)");
-    if (!storeFrontFileName) missing.push("Foto de la fachada del local");
     if (missing.length > 0) {
-      return `Para verificar tu local comercial debes completar y adjuntar: ${missing.join(", ")}.`;
+      return `Por favor completa los siguientes datos obligatorios de tu empresa: ${missing.join(", ")}.`;
     }
     return null;
   };
@@ -831,12 +833,13 @@ function IngresoContent() {
 
   // =========================================================================
   // VISTA MÓVIL 3: REGISTRARSE (view === 'register')
-  // Directo para poner datos: Sin menús repetidos ni presentaciones redundantes
+  // - Modo Cliente: Registro personal rápido y compacto
+  // - Modo Empresa: Ventana desplegable con la lista completa de datos requeridos
   // =========================================================================
   const renderRegisterView = () => (
     <section
       className={`portada-2030-shell ${theme === "dark" ? "is-dark" : "is-light"}`}
-      aria-label="Crear Cuenta El Ganador"
+      aria-label="Registro El Ganador"
     >
       <picture className="portada-2030-bg">
         <source
@@ -854,8 +857,19 @@ function IngresoContent() {
         />
       </picture>
 
-      <div className="portada-2030-interactive-layer" style={{ maxWidth: '280px', width: '88%', margin: '0 auto', gap: '6px', maxHeight: '82vh', overflowY: 'auto' }}>
-        {/* Cabecera compacta: Volver y Título */}
+      <div
+        className="portada-2030-interactive-layer"
+        style={{
+          maxWidth: role === "business" ? '320px' : '280px',
+          width: '92%',
+          margin: '0 auto',
+          gap: '6px',
+          maxHeight: '84vh',
+          overflowY: 'auto',
+          paddingBottom: '16px'
+        }}
+      >
+        {/* Barra superior con volver y switch de rol */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: '2px' }}>
           <button
             type="button"
@@ -879,158 +893,487 @@ function IngresoContent() {
           <span style={{ fontSize: '13px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
             {role === "business" ? "Registro Empresa" : "Crear Cuenta"}
           </span>
+          <div style={{ width: '40px' }} />
+        </div>
+
+        {/* Selector de Pestañas Segmentadas: Comprador vs Empresa */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '4px',
+          background: 'rgba(0, 0, 0, 0.45)',
+          padding: '3px',
+          borderRadius: '999px',
+          border: '1px solid rgba(255, 255, 255, 0.14)',
+          marginBottom: '4px'
+        }}>
           <button
             type="button"
-            onClick={() => setRole(role === "customer" ? "business" : "customer")}
+            onClick={() => setRole("customer")}
             style={{
-              background: 'rgba(255, 255, 255, 0.08)',
-              border: '1px solid rgba(255, 255, 255, 0.16)',
+              border: 'none',
               borderRadius: '999px',
-              color: '#cbd5e1',
-              fontSize: '10px',
-              fontWeight: 700,
-              padding: '3px 8px',
-              cursor: 'pointer'
+              padding: '6px 8px',
+              fontSize: '11px',
+              fontWeight: 800,
+              cursor: 'pointer',
+              background: role === "customer" ? '#222523' : 'transparent',
+              color: role === "customer" ? '#ffffff' : '#94a3b8',
+              border: role === "customer" ? '1px solid rgba(226, 176, 74, 0.5)' : 'none',
+              transition: 'all 0.15s ease'
             }}
           >
-            {role === "business" ? "Comprador" : "Empresa"}
+            🎟️ Comprador
+          </button>
+          <button
+            type="button"
+            onClick={() => setRole("business")}
+            style={{
+              border: 'none',
+              borderRadius: '999px',
+              padding: '6px 8px',
+              fontSize: '11px',
+              fontWeight: 800,
+              cursor: 'pointer',
+              background: role === "business" ? '#222523' : 'transparent',
+              color: role === "business" ? '#ffffff' : '#94a3b8',
+              border: role === "business" ? '1px solid rgba(226, 176, 74, 0.5)' : 'none',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            🏪 Empresa
           </button>
         </div>
 
         {authError && <div className="mobileNoticeBox error" style={{ fontSize: '11px', padding: '5px 10px', margin: '1px 0' }}>⚠️ {authError}</div>}
         {authSuccess && <div className="mobileNoticeBox success" style={{ fontSize: '11px', padding: '5px 10px', margin: '1px 0' }}>✓ {authSuccess}</div>}
 
-        <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
-          {/* Nombre */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            background: 'rgba(18, 20, 19, 0.94)',
-            border: '1.2px solid rgba(255, 255, 255, 0.18)',
-            borderRadius: '12px',
-            padding: '0 10px',
-            height: '36px',
-            boxSizing: 'border-box'
-          }}>
-            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
-              <UserOutlineIcon />
-            </span>
-            <input
-              type="text"
-              placeholder={role === "business" ? "Nombre comercial" : "Nombre completo"}
-              value={regName}
-              onChange={(e) => setRegName(e.target.value)}
-              required
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-            />
-          </div>
+        {/* ===================================================================
+            A. FORMULARIO CLIENTE (Comprador)
+            =================================================================== */}
+        {role === "customer" ? (
+          <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
+            {/* Nombre */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: 'rgba(18, 20, 19, 0.94)',
+              border: '1.2px solid rgba(255, 255, 255, 0.18)',
+              borderRadius: '12px',
+              padding: '0 10px',
+              height: '36px',
+              boxSizing: 'border-box'
+            }}>
+              <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+                <UserOutlineIcon />
+              </span>
+              <input
+                type="text"
+                placeholder="Nombre completo"
+                value={regName}
+                onChange={(e) => setRegName(e.target.value)}
+                required
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+              />
+            </div>
 
-          {/* Celular */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            background: 'rgba(18, 20, 19, 0.94)',
-            border: '1.2px solid rgba(255, 255, 255, 0.18)',
-            borderRadius: '12px',
-            padding: '0 10px',
-            height: '36px',
-            boxSizing: 'border-box'
-          }}>
-            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
-              <HandsetOutlineIcon />
-            </span>
-            <input
-              type="tel"
-              placeholder="Celular / WhatsApp (Ej: 312 458 9021)"
-              value={regPhone}
-              onChange={(e) => setRegPhone(e.target.value)}
-              required
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-            />
-          </div>
+            {/* Celular */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: 'rgba(18, 20, 19, 0.94)',
+              border: '1.2px solid rgba(255, 255, 255, 0.18)',
+              borderRadius: '12px',
+              padding: '0 10px',
+              height: '36px',
+              boxSizing: 'border-box'
+            }}>
+              <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+                <HandsetOutlineIcon />
+              </span>
+              <input
+                type="tel"
+                placeholder="Celular / WhatsApp (Ej: 312 458 9021)"
+                value={regPhone}
+                onChange={(e) => setRegPhone(e.target.value)}
+                required
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+              />
+            </div>
 
-          {/* Correo */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            background: 'rgba(18, 20, 19, 0.94)',
-            border: '1.2px solid rgba(255, 255, 255, 0.18)',
-            borderRadius: '12px',
-            padding: '0 10px',
-            height: '36px',
-            boxSizing: 'border-box'
-          }}>
-            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
-              <PhoneOutlineIcon />
-            </span>
-            <input
-              type="email"
-              placeholder="Correo electrónico"
-              value={regEmail}
-              onChange={(e) => setRegEmail(e.target.value)}
-              required
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-            />
-          </div>
+            {/* Correo */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: 'rgba(18, 20, 19, 0.94)',
+              border: '1.2px solid rgba(255, 255, 255, 0.18)',
+              borderRadius: '12px',
+              padding: '0 10px',
+              height: '36px',
+              boxSizing: 'border-box'
+            }}>
+              <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+                <PhoneOutlineIcon />
+              </span>
+              <input
+                type="email"
+                placeholder="Correo electrónico"
+                value={regEmail}
+                onChange={(e) => setRegEmail(e.target.value)}
+                required
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+              />
+            </div>
 
-          {/* Contraseña */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            background: 'rgba(18, 20, 19, 0.94)',
-            border: '1.2px solid rgba(255, 255, 255, 0.18)',
-            borderRadius: '12px',
-            padding: '0 10px',
-            height: '36px',
-            boxSizing: 'border-box'
-          }}>
-            <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
-              <PadlockOutlineIcon />
-            </span>
-            <input
-              type={showRegPassword ? "text" : "password"}
-              placeholder="Contraseña (mín 6 caracteres)"
-              value={regPassword}
-              onChange={(e) => setRegPassword(e.target.value)}
-              required
-              style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-            />
+            {/* Contraseña */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: 'rgba(18, 20, 19, 0.94)',
+              border: '1.2px solid rgba(255, 255, 255, 0.18)',
+              borderRadius: '12px',
+              padding: '0 10px',
+              height: '36px',
+              boxSizing: 'border-box'
+            }}>
+              <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+                <PadlockOutlineIcon />
+              </span>
+              <input
+                type={showRegPassword ? "text" : "password"}
+                placeholder="Contraseña (mín 6 caracteres)"
+                value={regPassword}
+                onChange={(e) => setRegPassword(e.target.value)}
+                required
+                style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowRegPassword(!showRegPassword)}
+                style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+                aria-label="Ver u ocultar contraseña"
+              >
+                <EyeToggleIcon hide={!showRegPassword} />
+              </button>
+            </div>
+
+            {/* Checkbox Términos */}
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', cursor: 'pointer', fontSize: '10px', color: '#cbd5e1', lineHeight: '1.25', marginTop: '2px' }}>
+              <input
+                type="checkbox"
+                checked={ageConfirmed}
+                onChange={(e) => setAgeConfirmed(e.target.checked)}
+                required
+                style={{ marginTop: '1px' }}
+              />
+              <span>Soy <strong>mayor de 18 años (+18)</strong> y acepto los términos de juego responsable (Ley 643/2001).</span>
+            </label>
+
+            {/* Botón Crear Cuenta */}
             <button
-              type="button"
-              onClick={() => setShowRegPassword(!showRegPassword)}
-              style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
-              aria-label="Ver u ocultar contraseña"
+              type="submit"
+              className="btn-2030-login"
+              disabled={authBusy}
+              style={{ width: '100%', height: '38px', fontSize: '13px', marginTop: '2px' }}
             >
-              <EyeToggleIcon hide={!showRegPassword} />
+              <span>{authBusy ? "CREANDO CUENTA…" : "CREAR CUENTA GRATIS"}</span>
+              <span className="chevron-right">›</span>
             </button>
-          </div>
+          </form>
+        ) : (
+          /* ===================================================================
+              B. VENTANA DESPLEGABLE: LISTA COMPLETA DE DATOS DE EMPRESA
+              =================================================================== */
+          <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
+            <div style={{
+              background: 'rgba(212, 175, 55, 0.1)',
+              border: '1px solid rgba(212, 175, 55, 0.3)',
+              borderRadius: '8px',
+              padding: '6px 8px',
+              fontSize: '10px',
+              color: '#fef08a',
+              lineHeight: '1.3'
+            }}>
+              📋 <strong>Lista de datos requeridos por la Ley 643</strong> para habilitar la publicación de rifas y publicidad de tu local.
+            </div>
 
-          {/* Checkbox Términos */}
-          <label style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', cursor: 'pointer', fontSize: '10px', color: '#cbd5e1', lineHeight: '1.25', marginTop: '2px' }}>
-            <input
-              type="checkbox"
-              checked={ageConfirmed}
-              onChange={(e) => setAgeConfirmed(e.target.checked)}
-              required
-              style={{ marginTop: '1px' }}
-            />
-            <span>Soy <strong>mayor de 18 años (+18)</strong> y acepto los términos de juego responsable (Ley 643/2001).</span>
-          </label>
+            {/* 1. Nombre Comercial */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>1. NOMBRE COMERCIAL / RAZÓN SOCIAL *</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '35px'
+              }}>
+                <input
+                  type="text"
+                  placeholder="Ej: Motos y Accesorios del Caribe S.A.S."
+                  value={regName}
+                  onChange={(e) => setRegName(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                />
+              </div>
+            </div>
 
-          {/* Botón Crear Cuenta */}
-          <button
-            type="submit"
-            className="btn-2030-login"
-            disabled={authBusy}
-            style={{ width: '100%', height: '38px', fontSize: '13px', marginTop: '2px' }}
-          >
-            <span>{authBusy ? "CREANDO CUENTA…" : "CREAR CUENTA GRATIS"}</span>
-            <span className="chevron-right">›</span>
-          </button>
-        </form>
+            {/* 2. NIT del Comercio */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>2. NIT O RUT DE LA EMPRESA *</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '35px'
+              }}>
+                <input
+                  type="text"
+                  placeholder="Ej: 901.458.789-3"
+                  value={nit}
+                  onChange={(e) => setNit(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 3. Categoría Comercial */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>3. CATEGORÍA COMERCIAL DEL LOCAL *</span>
+              <div style={{
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 8px',
+                height: '35px',
+                display: 'flex',
+                alignItems: 'center'
+              }}>
+                <select
+                  value={businessCategory}
+                  onChange={(e) => setBusinessCategory(e.target.value)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    outline: 'none',
+                    color: '#ffffff',
+                    fontSize: '12px',
+                    width: '100%',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="Motos & 4x4" style={{ background: '#121413', color: '#fff' }}>🏍️ Motos & 4x4</option>
+                  <option value="Tecnología & Celulares" style={{ background: '#121413', color: '#fff' }}>📱 Tecnología & Celulares</option>
+                  <option value="Joyas & Relojes" style={{ background: '#121413', color: '#fff' }}>💎 Joyas & Relojes de Alta Gama</option>
+                  <option value="Moda & Calzado" style={{ background: '#121413', color: '#fff' }}>👗 Moda, Ropa & Calzado</option>
+                  <option value="Hogar & Muebles" style={{ background: '#121413', color: '#fff' }}>🏠 Hogar & Electrodomésticos</option>
+                  <option value="Comercio General" style={{ background: '#121413', color: '#fff' }}>🏪 Comercio / Otro Sector</option>
+                </select>
+              </div>
+            </div>
+
+            {/* 4. Dirección Física del Local */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>4. DIRECCIÓN FÍSICA EXACTA DEL LOCAL *</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '35px'
+              }}>
+                <input
+                  type="text"
+                  placeholder="Ej: Cra 15 # 85-20 Local 102"
+                  value={businessAddress}
+                  onChange={(e) => setBusinessAddress(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 5. Ciudad y Departamento */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>5. CIUDAD / DEPARTAMENTO *</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '35px'
+              }}>
+                <input
+                  type="text"
+                  placeholder="Ej: Barranquilla, Atlántico"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 6. Representante Legal */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>6. REPRESENTANTE LEGAL / PROPIETARIO *</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '35px'
+              }}>
+                <input
+                  type="text"
+                  placeholder="Nombre y apellidos del propietario"
+                  value={legalRepName}
+                  onChange={(e) => setLegalRepName(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 7. Cédula del Representante */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>7. CÉDULA DE CIUDADANÍA DEL PROPIETARIO *</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '35px'
+              }}>
+                <input
+                  type="text"
+                  placeholder="Ej: 1.045.678.901"
+                  value={docNumber}
+                  onChange={(e) => setDocNumber(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 8. WhatsApp / Teléfono del Negocio */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>8. TELÉFONO / WHATSAPP DEL LOCAL *</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '35px'
+              }}>
+                <input
+                  type="tel"
+                  placeholder="Ej: 312 458 9021"
+                  value={regPhone}
+                  onChange={(e) => setRegPhone(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 9. Correo Corporativo */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>9. CORREO ELECTRÓNICO CORPORATIVO *</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '35px'
+              }}>
+                <input
+                  type="email"
+                  placeholder="Ej: contacto@motoscaribe.com"
+                  value={regEmail}
+                  onChange={(e) => setRegEmail(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 10. Contraseña */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>10. CONTRASEÑA DEL PANEL EMPRESARIAL *</span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(18, 20, 19, 0.94)',
+                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '35px'
+              }}>
+                <input
+                  type={showRegPassword ? "text" : "password"}
+                  placeholder="Crea una contraseña segura"
+                  value={regPassword}
+                  onChange={(e) => setRegPassword(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowRegPassword(!showRegPassword)}
+                  style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+                  aria-label="Ver u ocultar contraseña"
+                >
+                  <EyeToggleIcon hide={!showRegPassword} />
+                </button>
+              </div>
+            </div>
+
+            {/* Declaración Legal */}
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', cursor: 'pointer', fontSize: '10px', color: '#cbd5e1', lineHeight: '1.25', marginTop: '2px' }}>
+              <input
+                type="checkbox"
+                checked={ageConfirmed}
+                onChange={(e) => setAgeConfirmed(e.target.checked)}
+                required
+                style={{ marginTop: '1px' }}
+              />
+              <span>Declaro ser el <strong>propietario o representante legal</strong> del establecimiento de comercio y acepto los términos de Ley 643 de 2001.</span>
+            </label>
+
+            {/* Botón Registrar Empresa */}
+            <button
+              type="submit"
+              className="btn-2030-login"
+              disabled={authBusy}
+              style={{ width: '100%', height: '40px', fontSize: '13px', marginTop: '4px' }}
+            >
+              <span>{authBusy ? "REGISTRANDO EMPRESA…" : "REGISTRAR MI EMPRESA"}</span>
+              <span className="chevron-right">›</span>
+            </button>
+          </form>
+        )}
 
         {/* Switch a Login */}
-        <div style={{ textAlign: 'center', fontSize: '11px', color: '#94a3b8', marginTop: '3px' }}>
+        <div style={{ textAlign: 'center', fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>
           ¿Ya tienes cuenta?{" "}
           <button
             type="button"
