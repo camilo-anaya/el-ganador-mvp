@@ -1662,7 +1662,7 @@ export default function CompactWhiteMarketplacePage() {
             title="Volver al inicio y actualizar"
           >
             <img
-              src="/banner-el-ganador-oficial.png"
+              src="/banner-el-ganador-oficial.png?v=4"
               alt="Logo El Ganador"
               style={{
                 height: '32px',

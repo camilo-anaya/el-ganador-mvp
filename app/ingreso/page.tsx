@@ -472,7 +472,7 @@ function IngresoContent() {
   const CrownBrandBadge = () => (
     <div className="mobileTopBrandBadge" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
       <img
-        src="/banner-el-ganador-oficial.png"
+        src="/banner-el-ganador-oficial.png?v=4"
         alt="Logo El Ganador"
         style={{
           height: '28px',
@@ -550,14 +550,14 @@ function IngresoContent() {
       {/* Imagen de portada adaptable según modo claro / oscuro del celular */}
       <picture className="portada-2030-bg">
         <source
-          srcSet="/assets/portada-2030-oscuro.png?v=3"
+          srcSet="/assets/portada-2030-oscuro.png?v=4"
           media="(prefers-color-scheme: dark)"
         />
         <img
           src={
             theme === "dark"
-              ? "/assets/portada-2030-oscuro.png?v=3"
-              : "/assets/portada-2030-claro.png?v=2"
+              ? "/assets/portada-2030-oscuro.png?v=4"
+              : "/assets/portada-2030-claro.png?v=4"
           }
           alt="El Ganador - Rifas Online. Sueña, participa y gana"
           draggable={false}
@@ -665,12 +665,12 @@ function IngresoContent() {
           }}
         >
           <img
-            src="/banner-el-ganador-oficial.png"
+            src="/banner-el-ganador-oficial.png?v=4"
             alt="Logo Oficial El Ganador"
             style={{
-              width: '76px',
+              width: '84px',
               height: 'auto',
-              maxHeight: '56px',
+              maxHeight: '62px',
               objectFit: 'contain',
               display: 'block',
               filter: theme === 'dark'
@@ -888,12 +888,12 @@ function IngresoContent() {
           }}
         >
           <img
-            src="/banner-el-ganador-oficial.png"
+            src="/banner-el-ganador-oficial.png?v=4"
             alt="Logo Oficial El Ganador"
             style={{
-              width: '76px',
+              width: '84px',
               height: 'auto',
-              maxHeight: '56px',
+              maxHeight: '62px',
               objectFit: 'contain',
               display: 'block',
               filter: theme === 'dark'
