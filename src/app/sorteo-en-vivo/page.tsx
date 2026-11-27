@@ -2941,16 +2941,6 @@ export default function LiveDrawDemoPage() {
           {/* MÁQUINA DE BALOTAS / RULETA (Se adueña de toda la pantalla durante el sorteo) */}
           <div
             className={`liveDemoMachine ${mode === "ruleta" ? "modeWheel" : ""} ${phase === "spinning" ? "isSpinning" : ""} ${phase === "winner" ? "hasWinner" : ""} stage_${stage} ${isCinemaFullscreen ? "cinemaFullscreenActive" : ""}`}
-            onClick={(e) => {
-              const target = e.target as HTMLElement;
-              if (target.closest('button') || target.closest('a') || target.closest('input') || target.closest('select') || target.closest('textarea') || target.closest('form')) {
-                return;
-              }
-              if (!isCinemaFullscreen) {
-                enterCinemaFullscreen();
-              }
-            }}
-            title={!isCinemaFullscreen ? "Toca el área para pantalla completa Infinity Display" : undefined}
           >
             {/* Stream HUD Superior: EN DIRECTO + Rating CRM + Control de Audio (MINIMIZABLE) */}
             <div className={`cinemaStageTopHud ${isHudCollapsed ? "isCollapsed" : ""}`}>
@@ -3345,34 +3335,7 @@ export default function LiveDrawDemoPage() {
                 {/* CHASIS MECÁNICO INDUSTRIAL Y ESFERA DE CRISTAL 3D */}
                 <div
                   className="globeChassis"
-                  onTouchStart={() => triggerHaptic(15)}
-                  onTouchEnd={(e) => {
-                    e.stopPropagation();
-                    triggerHaptic([25, 15, 25]);
-                    if (phase === "winner") {
-                      resetDemo();
-                    } else if (phase !== "spinning") {
-                      playDemo();
-                    }
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    triggerHaptic(20);
-                    if (phase === "winner") {
-                      resetDemo();
-                    } else if (phase !== "spinning") {
-                      playDemo();
-                    }
-                  }}
-                  title={phase === "spinning" ? "Sorteo en curso" : "Toca la balotera para iniciar"}
                 >
-                  {/* Prompt táctil visible cuando está lista para sortear */}
-                  {phase !== "spinning" && phase !== "winner" && (
-                    <div className="globeTouchPrompt" aria-hidden="true">
-                      <span className="touchHand">👆</span>
-                      <span>Toca la balotera para iniciar</span>
-                    </div>
-                  )}
                   {/* Micropartículas luminosas doradas aleatorias en el aire exterior (r > 53%, cero contacto con el cristal) */}
                   <div className="baloteraSparkleHalo" aria-hidden="true">
                     {BALOTERA_EXTERIOR_SPARKS.map((sp, idx) => {
@@ -3693,34 +3656,7 @@ export default function LiveDrawDemoPage() {
               <div
                 className="wheelCasinoWrapper"
                 data-wheel-size={wheelSize}
-                onTouchStart={() => triggerHaptic(15)}
-                onTouchEnd={(e) => {
-                  e.stopPropagation();
-                  triggerHaptic([30, 20, 30]);
-                  if (phase === "winner") {
-                    resetDemo();
-                  } else if (phase !== "spinning") {
-                    playDemo();
-                  }
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  triggerHaptic(20);
-                  if (phase === "winner") {
-                    resetDemo();
-                  } else if (phase !== "spinning") {
-                    playDemo();
-                  }
-                }}
-                title={phase === "spinning" ? "Ruleta girando" : "Toca o desliza para girar"}
               >
-                {/* Prompt táctil visible en la ruleta */}
-                {phase !== "spinning" && phase !== "winner" && (
-                  <div className="wheelTouchPrompt" aria-hidden="true">
-                    <span className="touchHand">👆</span>
-                    <span>Toca o desliza para girar</span>
-                  </div>
-                )}
                 {/* 1. Flapper / Puntero Superior Triángulo Dorado con Flecha Rubí */}
                 <div
                   ref={flapperDomRef}
@@ -4437,8 +4373,8 @@ export default function LiveDrawDemoPage() {
                 <span>🧪</span>
                 <span>
                   {phase === "spinning"
-                    ? "🌀 DEMOSTRACIÓN EN TRANSMISIÓN..."
-                    : "PROBAR DEMOSTRACIÓN (MODO DE PRUEBA)"}
+                    ? "🌀 SIMULACIÓN EN TRANSMISIÓN..."
+                    : "VER SIMULACIÓN (MODO DE PRUEBA)"}
                 </span>
               </button>
               <small className="demoDisclaimText">

@@ -8752,7 +8752,7 @@ body {
 /* Esfera de balotera táctil */
 .globeChassis,
 .pneumaticCageWrapper {
-  cursor: pointer !important;
+  cursor: default !important;
   user-select: none !important;
   -webkit-user-select: none !important;
 }
@@ -8761,7 +8761,7 @@ body {
 .wheelCasinoWrapper,
 .wheelBoard,
 .wheelDrumCasing {
-  cursor: pointer !important;
+  cursor: default !important;
   user-select: none !important;
   -webkit-user-select: none !important;
 }
@@ -9160,3 +9160,5 @@ body {
   gap: 8px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
 }
+
+.globeTouchPrompt, .wheelTouchPrompt { display: none !important; pointer-events: none !important; }
