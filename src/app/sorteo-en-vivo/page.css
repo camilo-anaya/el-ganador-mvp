@@ -8840,7 +8840,6 @@ html {
 
 body {
   overflow: visible !important;
-  overflow-x: hidden !important;
   height: auto !important;
   min-height: 100% !important;
   touch-action: auto !important;

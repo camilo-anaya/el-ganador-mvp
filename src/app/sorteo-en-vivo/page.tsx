@@ -385,14 +385,16 @@ export default function LiveDrawDemoPage() {
   const [winnerChatMessages, setWinnerChatMessages] = useState<Array<{ sender: "merchant" | "client"; text: string; time: string }>>([]);
   const [winnerChatInput, setWinnerChatInput] = useState<string>("");
 
-  // Bloqueo de scroll inteligente: sólo en móviles (< 768px) en fullscreen; en portátiles permite navegar libremente
+  // Desbloqueo nativo absoluto para pad mouse y touchpad de portátil
   useEffect(() => {
     if (typeof document !== "undefined") {
+      document.documentElement.style.setProperty("overflow-y", "auto", "important");
+      document.documentElement.style.setProperty("overflow-x", "hidden", "important");
+      document.body.style.setProperty("overflow", "visible", "important");
+      document.body.style.setProperty("touch-action", "auto", "important");
       const isMobileScreen = typeof window !== "undefined" && window.innerWidth < 768;
       if (isCinemaFullscreen && isMobileScreen) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "";
+        document.body.style.setProperty("overflow", "hidden", "important");
       }
     }
     return () => {
