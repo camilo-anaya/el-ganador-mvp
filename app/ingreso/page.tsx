@@ -846,41 +846,23 @@ function IngresoContent() {
     <section
       className={`portada-2030-shell ${theme === "dark" ? "is-dark" : "is-light"}`}
       aria-label="Registro El Ganador"
-      style={role === "business" ? {
+      style={{
         background: '#042217',
         backgroundImage: 'linear-gradient(180deg, #052c1e 0%, #031c13 100%)',
         justifyContent: 'flex-start',
-        paddingTop: 'calc(env(safe-area-inset-top, 12px) + 8px)',
-        paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 12px)'
-      } : undefined}
+        paddingTop: 'calc(env(safe-area-inset-top, 12px) + 10px)',
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 16px)'
+      }}
     >
-      {/* Fondo liso sin imagen para empresa (elimina la imagen de la corona/logo detrás que hacía ver todo engorroso) */}
-      {role !== "business" && (
-        <picture className="portada-2030-bg">
-          <source
-            srcSet="/assets/portada-2030-oscuro.png?v=5"
-            media="(prefers-color-scheme: dark)"
-          />
-          <img
-            src={
-              theme === "dark"
-                ? "/assets/portada-2030-oscuro.png?v=5"
-                : "/assets/portada-2030-claro.png?v=4"
-            }
-            alt="El Ganador"
-            draggable={false}
-          />
-        </picture>
-      )}
-
+      {/* Pantalla limpia con fondo liso para cliente y empresa (sin el logo detrás para que nada se vea engorroso) */}
       <div
         className="portada-2030-interactive-layer"
         style={{
-          maxWidth: role === "business" ? '340px' : '280px',
+          maxWidth: '340px',
           width: '92%',
           margin: '0 auto',
-          gap: '6px',
-          maxHeight: role === "business" ? '92vh' : '84vh',
+          gap: '7px',
+          maxHeight: '90vh',
           overflowY: 'auto',
           paddingBottom: '24px'
         }}
@@ -907,7 +889,7 @@ function IngresoContent() {
             <span>Volver</span>
           </button>
           <span style={{ fontSize: '13px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
-            {role === "business" ? "Registro Empresa" : "Crear Cuenta"}
+            {role === "business" ? "Registro Oficial Empresa" : "Registro de Comprador"}
           </span>
           <div style={{ width: '40px' }} />
         </div>
@@ -966,77 +948,104 @@ function IngresoContent() {
             A. FORMULARIO CLIENTE (Comprador)
             =================================================================== */}
         {role === "customer" ? (
-          <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
-            {/* Nombre */}
+          <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              background: 'rgba(3, 38, 25, 0.90)',
-              border: '1.2px solid rgba(226, 176, 74, 0.35)',
-              borderRadius: '12px',
-              padding: '0 10px',
-              height: '36px',
-              boxSizing: 'border-box'
+              background: 'rgba(16, 185, 129, 0.14)',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
+              borderRadius: '8px',
+              padding: '6px 9px',
+              fontSize: '10.5px',
+              color: '#ffffff',
+              lineHeight: '1.3'
             }}>
-              <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
-                <UserOutlineIcon />
-              </span>
-              <input
-                type="text"
-                placeholder="Nombre completo"
-                value={regName}
-                onChange={(e) => setRegName(e.target.value)}
-                required
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-              />
+              🎟️ <strong>Registro Personal de Comprador</strong>: Crea tu cuenta para participar en rifas oficiales y recibir tus boletas de inmediato.
             </div>
 
-            {/* Celular */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              background: 'rgba(3, 38, 25, 0.90)',
-              border: '1.2px solid rgba(226, 176, 74, 0.35)',
-              borderRadius: '12px',
-              padding: '0 10px',
-              height: '36px',
-              boxSizing: 'border-box'
-            }}>
-              <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
-                <HandsetOutlineIcon />
+            {/* 1. Nombre Completo */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                1. TU NOMBRE COMPLETO *
               </span>
-              <input
-                type="tel"
-                placeholder="Celular / WhatsApp (Ej: 312 458 9021)"
-                value={regPhone}
-                onChange={(e) => setRegPhone(e.target.value)}
-                required
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-              />
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <span style={{ color: '#ffffff', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+                  <UserOutlineIcon />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Ej: Camilo Andrés Morales"
+                  value={regName}
+                  onChange={(e) => setRegName(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
+                />
+              </div>
             </div>
 
-            {/* Correo */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              background: 'rgba(3, 38, 25, 0.90)',
-              border: '1.2px solid rgba(226, 176, 74, 0.35)',
-              borderRadius: '12px',
-              padding: '0 10px',
-              height: '36px',
-              boxSizing: 'border-box'
-            }}>
-              <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
-                <PhoneOutlineIcon />
+            {/* 2. Celular */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                2. NÚMERO CELULAR / WHATSAPP *
               </span>
-              <input
-                type="email"
-                placeholder="Correo electrónico"
-                value={regEmail}
-                onChange={(e) => setRegEmail(e.target.value)}
-                required
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-              />
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <span style={{ color: '#ffffff', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+                  <HandsetOutlineIcon />
+                </span>
+                <input
+                  type="tel"
+                  placeholder="Ej: 312 458 9021"
+                  value={regPhone}
+                  onChange={(e) => setRegPhone(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 3. Correo Electrónico */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                3. CORREO ELECTRÓNICO *
+              </span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <span style={{ color: '#ffffff', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+                  <PhoneOutlineIcon />
+                </span>
+                <input
+                  type="email"
+                  placeholder="Ej: micorreo@gmail.com"
+                  value={regEmail}
+                  onChange={(e) => setRegEmail(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
+                />
+              </div>
             </div>
 
             {/* Contraseña Personal Cliente */}
