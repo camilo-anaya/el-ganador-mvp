@@ -12,6 +12,8 @@ interface Story {
   timeAgo: string;
   ctaText: string;
   videoUrl?: string; // Opcional: si existe, se reproduce como video de hasta 2 min
+  textColor?: string;
+  textBgColor?: string;
 }
 
 interface StoryViewerProps {
@@ -66,7 +68,7 @@ export default function StoryViewer({ stories, initialIndex, onClose }: StoryVie
     setProgress(0);
   }, [initialIndex]);
 
-  // Progreso automático (5s por imagen estilo Instagram; video controlado por timeupdate)
+  // Progreso automático (10s por imagen estilo Instagram/WhatsApp; video controlado por timeupdate)
   useEffect(() => {
     if (!currentStory) return;
     if (isVideo) {
@@ -75,7 +77,7 @@ export default function StoryViewer({ stories, initialIndex, onClose }: StoryVie
     }
 
     setProgress(0);
-    const duration = 5000;
+    const duration = 10000; // 10 segundos
     const interval = 50;
     const step = (interval / duration) * 100;
 
@@ -342,8 +344,21 @@ export default function StoryViewer({ stories, initialIndex, onClose }: StoryVie
             }}
           >
             <span className="story-icon-pill">🔥 Lanzamiento Verificado</span>
-            <h3>{currentStory.headline}</h3>
-            <p>{currentStory.caption}</p>
+            <h3 style={{ color: currentStory.textColor || '#ffffff' }}>{currentStory.headline}</h3>
+            <p
+              style={{
+                color: currentStory.textColor || 'rgba(255,255,255,0.95)',
+                background: currentStory.textBgColor || 'rgba(0,0,0,0.45)',
+                padding: '6px 12px',
+                borderRadius: '8px',
+                backdropFilter: 'blur(4px)',
+                display: 'inline-block',
+                margin: '6px 0 12px 0',
+                lineHeight: 1.4,
+              }}
+            >
+              {currentStory.caption}
+            </p>
             <a
               href="/comprar"
               className="btn-story-cta"

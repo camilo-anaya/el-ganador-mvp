@@ -273,15 +273,14 @@ export default function FavoritosPage() {
 
       {/* Top Header */}
       <header
+        className="app-topbar"
         style={{
-          background: isDark
-            ? 'linear-gradient(180deg, #111e33 0%, #0b1320 100%)'
-            : 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%)',
-          borderBottom: isDark ? '1px solid #1e293b' : '1px solid #e2e8f0',
-          padding: 'max(calc(env(safe-area-inset-top, 0px) + 16px), 54px) 16px 14px 16px',
           position: 'sticky',
           top: 0,
           zIndex: 40,
+          backgroundColor: isDark ? '#000000' : '#ffffff',
+          borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #e2e8f0',
+          padding: 'max(calc(env(safe-area-inset-top, 0px) + 12px), 50px) 16px 14px 16px',
           boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.5)' : '0 2px 10px rgba(0,0,0,0.05)',
         }}
       >
@@ -292,40 +291,49 @@ export default function FavoritosPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            flexWrap: 'wrap',
             gap: '12px',
           }}
         >
-          <div
-            style={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
-              alignItems: 'center', 
-              marginBottom: '20px', 
-              padding: '0 4px',
-              width: '100%',
-              boxSizing: 'border-box'
-            }}
-          >
-            <Link 
-              href="/" 
-              style={{ 
-                color: '#d4af37', 
-                textDecoration: 'none', 
-                fontSize: '13px', 
-                fontWeight: 'bold',
-                background: '#1a1a1a',
-                padding: '8px 12px',
-                borderRadius: '8px',
-                border: '1px solid #333'
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Link
+              aria-label="Volver al Inicio"
+              href="/"
+              style={{
+                width: '38px',
+                height: '38px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: isDark ? 'rgba(255, 255, 255, 0.08)' : '#f1f5f9',
+                color: isDark ? '#ffffff' : '#0f172a',
+                textDecoration: 'none',
+                fontSize: '18px',
+                fontWeight: 700,
+                border: isDark ? '1px solid #334155' : '1px solid #cbd5e1',
+                flexShrink: 0,
+                transition: 'transform 0.15s ease',
               }}
             >
-              ← Volver al Inicio
+              ←
             </Link>
-
-            <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: isDark ? '#fff' : '#0f172a', margin: 0, textAlign: 'right' }}>
-              Mis Favoritos & Seguidos
-            </h2>
+            <div>
+              <h1
+                style={{
+                  fontSize: '17px',
+                  fontWeight: 900,
+                  margin: 0,
+                  color: isDark ? '#ffffff' : '#0f172a',
+                  lineHeight: 1.2,
+                  letterSpacing: '-0.3px',
+                }}
+              >
+                Mis Favoritos & Seguidos
+              </h1>
+              <small style={{ fontSize: '11px', color: '#007AFF', fontWeight: 700, display: 'block' }}>
+                Tus comercios verificados y sorteos guardados
+              </small>
+            </div>
           </div>
 
           {/* Selector de Perfil: Cliente vs Empresario */}
@@ -342,39 +350,39 @@ export default function FavoritosPage() {
               onClick={() => setActiveTab('clientes')}
               style={{
                 border: 'none',
-                background: activeTab === 'clientes' ? '#0284c7' : 'transparent',
+                background: activeTab === 'clientes' ? '#007AFF' : 'transparent',
                 color: activeTab === 'clientes' ? '#ffffff' : isDark ? '#94a3b8' : '#64748b',
-                padding: '8px 16px',
+                padding: '7px 14px',
                 borderRadius: '9px',
                 fontWeight: 800,
-                fontSize: '13px',
+                fontSize: '12px',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '5px',
               }}
             >
-              <span>👤</span> Modo Cliente
+              <span>👤</span> Clientes
             </button>
             <button
               onClick={() => setActiveTab('empresarios')}
               style={{
                 border: 'none',
-                background: activeTab === 'empresarios' ? '#0284c7' : 'transparent',
+                background: activeTab === 'empresarios' ? '#007AFF' : 'transparent',
                 color: activeTab === 'empresarios' ? '#ffffff' : isDark ? '#94a3b8' : '#64748b',
-                padding: '8px 16px',
+                padding: '7px 14px',
                 borderRadius: '9px',
                 fontWeight: 800,
-                fontSize: '13px',
+                fontSize: '12px',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '5px',
               }}
             >
-              <span>🏢</span> Modo Empresario
+              <span>🏢</span> Empresarios
             </button>
           </div>
         </div>
@@ -537,7 +545,7 @@ export default function FavoritosPage() {
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
                     gap: '16px',
                   }}
                 >
@@ -738,7 +746,7 @@ export default function FavoritosPage() {
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
                     gap: '16px',
                   }}
                 >
@@ -1303,6 +1311,9 @@ export default function FavoritosPage() {
             </section>
           </div>
         )}
+
+        {/* Espaciador de seguridad para evitar solapamiento con la barra de navegación flotante */}
+        <div style={{ height: 'calc(110px + env(safe-area-inset-bottom, 24px))', width: '100%' }} />
       </main>
 
       {/* Bottom Bar Flotante para Mobile */}

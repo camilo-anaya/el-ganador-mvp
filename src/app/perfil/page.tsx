@@ -155,7 +155,7 @@ export default function PerfilClientePage() {
         minHeight: '100vh',
         backgroundColor: isDark ? '#080c14' : '#f8fafc',
         color: textColor,
-        paddingBottom: 'calc(88px + env(safe-area-inset-bottom, 20px))',
+        paddingBottom: 'calc(140px + env(safe-area-inset-bottom, 24px))',
       }}
     >
       {/* CABECERA CRISTALINA Y TOTALMENTE SÓLIDA (SIN NUBE BLANCA) */}
@@ -733,7 +733,6 @@ export default function PerfilClientePage() {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: '12px 6px',
-                borderBottom: `1px solid ${cardBorder}`,
                 textDecoration: 'none',
                 color: textColor,
                 fontWeight: 700,
@@ -743,51 +742,90 @@ export default function PerfilClientePage() {
               <span>🎱 Sorteo en Vivo (Balotera y Ruleta)</span>
               <span style={{ color: subtextColor, fontSize: '16px' }}>›</span>
             </Link>
+          </section>
+
+          {/* TARJETA 4: SESIÓN Y GESTIÓN DE CUENTA (NUNCA TIERRA NI TAPA LA ISLA) */}
+          <section
+            className="profile-card-premium"
+            style={{
+              background: cardBg,
+              border: `1px solid ${cardBorder}`,
+              borderRadius: '20px',
+              padding: '18px 16px',
+              boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.45)' : '0 4px 18px rgba(15,23,42,0.06)',
+              boxSizing: 'border-box',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                paddingBottom: '10px',
+                borderBottom: `1px solid ${cardBorder}`,
+              }}
+            >
+              <span style={{ fontSize: '18px' }}>🔐</span>
+              <h2 style={{ fontSize: '1.02rem', fontWeight: 800, margin: 0, color: textColor }}>
+                Seguridad & Sesión
+              </h2>
+            </div>
 
             <button
               type="button"
               onClick={() => void performLogout()}
+              className="profile-btn-action"
               style={{
-                width: '100%',
-                background: 'transparent',
-                border: 'none',
-                borderBottom: `1px solid ${cardBorder}`,
+                background: 'rgba(239, 68, 68, 0.08)',
+                border: '1.5px solid rgba(239, 68, 68, 0.28)',
+                color: '#ef4444',
+                padding: '14px 16px',
+                borderRadius: '14px',
+                fontWeight: 800,
+                fontSize: '0.95rem',
                 cursor: 'pointer',
                 display: 'flex',
-                justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '12px 6px',
-                color: '#f59e0b',
-                fontWeight: 700,
-                fontSize: '0.88rem',
-                textAlign: 'left',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%',
+                transition: 'all 0.15s ease',
               }}
             >
-              <span>🚪 Cerrar Sesión / Cambiar Cuenta</span>
-              <span style={{ color: '#f59e0b', fontSize: '16px' }}>›</span>
+              <span>🚪</span>
+              <span>Cerrar Sesión / Salir</span>
             </button>
 
             <button
               type="button"
               onClick={handleDeleteAccount}
               style={{
-                width: '100%',
                 background: 'transparent',
                 border: 'none',
+                color: subtextColor,
+                padding: '8px 12px',
+                borderRadius: '10px',
+                fontWeight: 600,
+                fontSize: '0.78rem',
                 cursor: 'pointer',
                 display: 'flex',
-                justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '12px 6px 4px 6px',
-                color: '#ef4444',
-                fontWeight: 700,
-                fontSize: '0.88rem',
-                textAlign: 'left',
+                justifyContent: 'center',
+                gap: '6px',
+                width: '100%',
+                textAlign: 'center',
               }}
             >
-              <span>🗑️ Eliminar Cuenta Definitivamente</span>
-              <span style={{ color: '#ef4444', fontSize: '16px' }}>›</span>
+              <span>🗑️</span>
+              <span>Eliminar cuenta y datos permanentemente</span>
             </button>
+          </section>
+
+          {/* ESPACIADOR INFERIOR SEGURO PARA QUE LA ISLA FLOTANTE NUNCA TAPE NADA */}
+          <div style={{ height: 'calc(110px + env(safe-area-inset-bottom, 24px))', width: '100%', flexShrink: 0 }} aria-hidden="true" />
           </section>
         </main>
       </div>

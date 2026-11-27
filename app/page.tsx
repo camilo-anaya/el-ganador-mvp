@@ -32,10 +32,13 @@ interface MerchantStory {
   avatar: string;
   storyImage: string;
   mediaType?: 'image' | 'video';
+  videoUrl?: string;
   headline: string;
   caption: string;
   timeAgo: string;
   ctaText: string;
+  textColor?: string;
+  textBgColor?: string;
   createdAt?: number;
   expiresAt?: number;
 }
@@ -1061,6 +1064,66 @@ export default function CompactWhiteMarketplacePage() {
   const [activeStory, setActiveStory] = useState<MerchantStory | null>(null);
   const [activeStoryIndex, setActiveStoryIndex] = useState<number | null>(null);
 
+  // Estados y lógica para creación nativa de historias con cámara y texto con color
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
+  const [storyDraft, setStoryDraft] = useState<{ mediaUrl: string; isVideo: boolean } | null>(null);
+  const [storyHeadline, setStoryHeadline] = useState('¡Mi Gran Oportunidad!');
+  const [storyCaption, setStoryCaption] = useState('Participando en los sorteos legales de Colombia ✨');
+  const [storyTextColor, setStoryTextColor] = useState('#ffffff');
+  const [storyTextBg, setStoryTextBg] = useState('rgba(0, 0, 0, 0.65)');
+
+  const handleStoryMediaCaptured = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const isVideo = file.type.startsWith('video');
+    const reader = new FileReader();
+    reader.onload = (uploadEvent) => {
+      const dataUrl = uploadEvent.target?.result as string;
+      if (dataUrl) {
+        setStoryDraft({ mediaUrl: dataUrl, isVideo });
+      }
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  const handlePublishStory = () => {
+    if (!storyDraft) return;
+    const newStory: MerchantStory = {
+      id: `story-user-${Date.now()}`,
+      merchant: 'Tu Historia',
+      shortName: 'Tú',
+      icon: '✨',
+      avatar: storyDraft.mediaUrl,
+      storyImage: storyDraft.mediaUrl,
+      mediaType: storyDraft.isVideo ? 'video' : 'image',
+      videoUrl: storyDraft.isVideo ? storyDraft.mediaUrl : undefined,
+      headline: storyHeadline.trim() || '¡Mi Gran Oportunidad!',
+      caption: storyCaption.trim() || 'Participando en los sorteos legales de Colombia ✨',
+      timeAgo: 'Justo ahora',
+      ctaText: 'Ver Sorteos Activos →',
+      textColor: storyTextColor,
+      textBgColor: storyTextBg,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + 86400000,
+    };
+
+    try {
+      const raw = localStorage.getItem('elganador_custom_stories');
+      const customList = raw ? JSON.parse(raw) : [];
+      const updatedList = [newStory, ...customList];
+      localStorage.setItem('elganador_custom_stories', JSON.stringify(updatedList));
+      window.dispatchEvent(new Event('elganador_stories_updated'));
+    } catch {}
+
+    setActiveStoriesList((prev) => [newStory, ...prev]);
+    setStoryDraft(null);
+    setActiveStory(newStory);
+    setActiveStoryIndex(0);
+    setVitrinaToast('🎉 ¡Tu historia se publicó con éxito! Visible durante 24h (10 seg por vista).');
+    setTimeout(() => setVitrinaToast(null), 4000);
+  };
+
   // Estado del Recuadro "Ver todo" (Catálogo completo por bloques en cuadros, escalable a +1000 sorteos)
   const [allRafflesModal, setAllRafflesModal] = useState<{
     title: string;
@@ -2068,9 +2131,78 @@ export default function CompactWhiteMarketplacePage() {
       <div className="desktop-workspace-grid">
         <DesktopSidebar />
         <main className="app-scroll-canvas">
-          {/* HISTORIAS INTERACTIVAS DE COMERCIOS ALIADOS */}
+          {/* HISTORIAS INTERACTIVAS DE COMERCIOS ALIADOS & CREACIÓN NATIVA CON CÁMARA */}
           <section id="estacion-historias" className="stories-section-white" aria-label="Historias de comercios">
           <DesktopScrollStrip ariaLabel="Historias de tiendas">
+            {/* Input nativo de cámara oculta */}
+            <input
+              type="file"
+              ref={cameraInputRef}
+              accept="image/*,video/*"
+              capture="environment"
+              style={{ display: 'none' }}
+              onChange={handleStoryMediaCaptured}
+            />
+
+            {/* Botón Nativo: Tu Historia / Activar Cámara */}
+            <button
+              type="button"
+              onClick={() => cameraInputRef.current?.click()}
+              className="story-bubble-btn"
+              title="Tomar foto o subir video para tu historia"
+              style={{ flexShrink: 0 }}
+            >
+              <div
+                className="story-gradient-ring"
+                style={{
+                  background: 'linear-gradient(135deg, #007AFF 0%, #00c6ff 100%)',
+                  position: 'relative',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%',
+                    background: theme === 'dark' ? '#0f172a' : '#f8fafc',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '22px',
+                  }}
+                >
+                  📸
+                </div>
+                <span
+                  style={{
+                    position: 'absolute',
+                    bottom: '0px',
+                    right: '0px',
+                    width: '20px',
+                    height: '20px',
+                    borderRadius: '50%',
+                    background: '#007AFF',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '13px',
+                    fontWeight: 900,
+                    border: '2px solid #ffffff',
+                    boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  +
+                </span>
+              </div>
+              <span className="story-name-dark" style={{ fontWeight: 800, color: '#007AFF' }}>
+                Tu Historia
+              </span>
+            </button>
+
             {activeStoriesList.map((story, idx) => (
               <button
                 key={story.id}
@@ -3392,7 +3524,7 @@ export default function CompactWhiteMarketplacePage() {
         );
       })()}
 
-      {/* VISOR MODAL DE HISTORIAS MULTI-SEGMENTO ESTILO INSTAGRAM */}
+      {/* VISOR MODAL DE HISTORIAS MULTI-SEGMENTO ESTILO INSTAGRAM (10s) */}
       {activeStoryIndex !== null && (
         <StoryViewer
           stories={activeStoriesList}
@@ -3402,6 +3534,388 @@ export default function CompactWhiteMarketplacePage() {
             setActiveStory(null);
           }}
         />
+      )}
+
+      {/* MODAL CREADOR DE HISTORIAS NATIVAS (CÁMARA + TEXTO CON COLOR) */}
+      {storyDraft && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 10000,
+            background: 'rgba(0, 0, 0, 0.88)',
+            backdropFilter: 'blur(10px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+            boxSizing: 'border-box',
+          }}
+        >
+          <div
+            style={{
+              width: '100%',
+              maxWidth: '440px',
+              maxHeight: '92vh',
+              background: theme === 'dark' ? '#0f172a' : '#ffffff',
+              borderRadius: '24px',
+              border: theme === 'dark' ? '1px solid rgba(255,255,255,0.12)' : '1px solid #cbd5e1',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              boxSizing: 'border-box',
+            }}
+          >
+            {/* Header del Creador */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '16px 20px',
+                borderBottom: theme === 'dark' ? '1px solid rgba(255,255,255,0.08)' : '1px solid #e2e8f0',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '20px' }}>📸</span>
+                <div>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontSize: '16px',
+                      fontWeight: 900,
+                      color: theme === 'dark' ? '#ffffff' : '#0f172a',
+                    }}
+                  >
+                    Crear Historia (10s)
+                  </h3>
+                  <small style={{ fontSize: '11px', color: '#007AFF', fontWeight: 700 }}>
+                    Foto o video con texto y color personalizable
+                  </small>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setStoryDraft(null)}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  border: 'none',
+                  background: theme === 'dark' ? 'rgba(255,255,255,0.1)' : '#f1f5f9',
+                  color: theme === 'dark' ? '#ffffff' : '#0f172a',
+                  fontSize: '16px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Vista Previa Interactiva en Tiempo Real */}
+            <div style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div
+                style={{
+                  position: 'relative',
+                  width: '100%',
+                  height: '240px',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  background: '#000000',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                }}
+              >
+                {storyDraft.isVideo ? (
+                  <video
+                    src={storyDraft.mediaUrl}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <img
+                    src={storyDraft.mediaUrl}
+                    alt="Preview de historia"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                )}
+
+                {/* Overlay de texto en vivo sobre la foto */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 40%, rgba(0,0,0,0.7) 100%)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    padding: '14px',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span
+                      style={{
+                        background: '#007AFF',
+                        color: '#ffffff',
+                        fontSize: '10px',
+                        fontWeight: 900,
+                        padding: '3px 8px',
+                        borderRadius: '99px',
+                        letterSpacing: '0.4px',
+                      }}
+                    >
+                      ✨ TU HISTORIA · 10s
+                    </span>
+                    <span
+                      style={{
+                        background: 'rgba(0,0,0,0.5)',
+                        color: '#ffffff',
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        padding: '3px 6px',
+                        borderRadius: '6px',
+                      }}
+                    >
+                      24h
+                    </span>
+                  </div>
+
+                  <div>
+                    <h4
+                      style={{
+                        margin: '0 0 4px',
+                        fontSize: '15px',
+                        fontWeight: 900,
+                        color: storyTextColor,
+                        textShadow: '0 2px 8px rgba(0,0,0,0.8)',
+                        lineHeight: 1.25,
+                      }}
+                    >
+                      {storyHeadline || '¡Mi Gran Oportunidad!'}
+                    </h4>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        color: storyTextColor,
+                        background: storyTextBg,
+                        padding: '4px 8px',
+                        borderRadius: '6px',
+                        display: 'inline-block',
+                        lineHeight: 1.35,
+                      }}
+                    >
+                      {storyCaption || 'Escribe tu dedicatoria o mensaje aquí...'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Formulario de Configuración del Texto */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div>
+                  <label
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 800,
+                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      display: 'block',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    Título de la Historia
+                  </label>
+                  <input
+                    type="text"
+                    value={storyHeadline}
+                    onChange={(e) => setStoryHeadline(e.target.value)}
+                    maxLength={40}
+                    placeholder="Ej: ¡Hoy me gano la moto!"
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '10px',
+                      background: theme === 'dark' ? '#1e293b' : '#f8fafc',
+                      color: theme === 'dark' ? '#ffffff' : '#0f172a',
+                      border: theme === 'dark' ? '1px solid #334155' : '1px solid #cbd5e1',
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 800,
+                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      display: 'block',
+                      marginBottom: '4px',
+                    }}
+                  >
+                    Mensaje o Dedicatoria
+                  </label>
+                  <input
+                    type="text"
+                    value={storyCaption}
+                    onChange={(e) => setStoryCaption(e.target.value)}
+                    maxLength={75}
+                    placeholder="Ej: Apoyando a Motos Caribe con mi número de la suerte 🍀"
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '10px',
+                      background: theme === 'dark' ? '#1e293b' : '#f8fafc',
+                      color: theme === 'dark' ? '#ffffff' : '#0f172a',
+                      border: theme === 'dark' ? '1px solid #334155' : '1px solid #cbd5e1',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+
+                {/* Paleta de Colores de Texto */}
+                <div>
+                  <label
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 800,
+                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      display: 'block',
+                      marginBottom: '6px',
+                    }}
+                  >
+                    🎨 Color del Texto
+                  </label>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                    {[
+                      { color: '#ffffff', label: 'Blanco' },
+                      { color: '#f5b82e', label: 'Oro' },
+                      { color: '#10b981', label: 'Esmeralda' },
+                      { color: '#38bdf8', label: 'Azul' },
+                      { color: '#f43f5e', label: 'Rosa' },
+                      { color: '#a855f7', label: 'Púrpura' },
+                      { color: '#000000', label: 'Negro' },
+                    ].map((item) => (
+                      <button
+                        key={item.color}
+                        type="button"
+                        onClick={() => setStoryTextColor(item.color)}
+                        title={item.label}
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '50%',
+                          background: item.color,
+                          border: storyTextColor === item.color ? '3px solid #007AFF' : '2px solid rgba(128,128,128,0.4)',
+                          cursor: 'pointer',
+                          boxShadow: storyTextColor === item.color ? '0 0 10px rgba(0, 122, 255, 0.6)' : 'none',
+                          transform: storyTextColor === item.color ? 'scale(1.15)' : 'scale(1)',
+                          transition: 'all 0.15s ease',
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Estilo de Fondo del Texto */}
+                <div>
+                  <label
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: 800,
+                      color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                      display: 'block',
+                      marginBottom: '6px',
+                    }}
+                  >
+                    🔲 Fondo de Contraste
+                  </label>
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    {[
+                      { bg: 'rgba(0, 0, 0, 0.65)', label: 'Sombra Oscura' },
+                      { bg: 'rgba(180, 120, 20, 0.7)', label: 'Fondo Dorado' },
+                      { bg: 'transparent', label: 'Sin Fondo' },
+                    ].map((opt) => (
+                      <button
+                        key={opt.label}
+                        type="button"
+                        onClick={() => setStoryTextBg(opt.bg)}
+                        style={{
+                          flex: 1,
+                          padding: '6px 8px',
+                          borderRadius: '8px',
+                          border: storyTextBg === opt.bg ? '1.5px solid #007AFF' : '1px solid rgba(128,128,128,0.3)',
+                          background: storyTextBg === opt.bg ? (theme === 'dark' ? '#1e293b' : '#e0f2fe') : 'transparent',
+                          color: storyTextBg === opt.bg ? '#007AFF' : (theme === 'dark' ? '#94a3b8' : '#64748b'),
+                          fontWeight: 700,
+                          fontSize: '11px',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Botones de Acción */}
+              <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
+                <button
+                  type="button"
+                  onClick={() => cameraInputRef.current?.click()}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '12px',
+                    border: theme === 'dark' ? '1px solid #334155' : '1px solid #cbd5e1',
+                    background: theme === 'dark' ? '#1e293b' : '#f1f5f9',
+                    color: theme === 'dark' ? '#ffffff' : '#0f172a',
+                    fontWeight: 800,
+                    fontSize: '12.5px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  📸 Tomar Otra
+                </button>
+                <button
+                  type="button"
+                  onClick={handlePublishStory}
+                  style={{
+                    flex: 1.5,
+                    padding: '12px',
+                    borderRadius: '12px',
+                    border: 'none',
+                    background: 'linear-gradient(135deg, #007AFF 0%, #0051d4 100%)',
+                    color: '#ffffff',
+                    fontWeight: 900,
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 15px rgba(0, 122, 255, 0.4)',
+                  }}
+                >
+                  🚀 Publicar Historia (10s)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* RECUADRO MODAL "VER TODO" — TODAS LAS RIFAS POR BLOQUES EN CUADROS (ESCALABLE A +1000) */}
