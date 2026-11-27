@@ -2707,108 +2707,6 @@ export default function LiveDrawDemoPage() {
           </div>
         )}
 
-        <div className="liveGameModes" role="group" aria-label="Modo de sorteo">
-          <button
-            type="button"
-            className={mode === "balotas" ? "isSelected" : ""}
-            disabled={phase === "spinning"}
-            onClick={() => {
-              if (phase === "spinning") return;
-              setMode("balotas");
-              resetDemo();
-            }}
-          >
-            <RealisticBalotaIcon size={28} number="77" />
-            <span><b>El Círculo Dorado</b><small>Cartones de 100, 200, 500 y 1.000 números</small></span>
-          </button>
-          <button
-            type="button"
-            className={mode === "ruleta" ? "isSelected" : ""}
-            disabled={phase === "spinning"}
-            onClick={() => {
-              if (phase === "spinning") return;
-              setMode("ruleta");
-              resetDemo();
-            }}
-          >
-            <span>🎡</span>
-            <span><b>Ruleta Comunitaria</b><small>Sorteos rápidos de 10 a 50 números</small></span>
-          </button>
-        </div>
-
-        {/* CARTÓN OFICIAL AMARRADO AL SORTEO EN JUEGO (INMODIFICABLE) */}
-        <div className="cartonSelectorBar" style={{ width: '100%', boxSizing: 'border-box' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              <span className="cartonSelectorLabel" style={{ fontWeight: 800 }}>
-                {mode === "balotas" ? "🎟️ Cartón Oficial Vinculado:" : "🎯 Ruleta Oficial:"}
-              </span>
-              <span
-                className="cartonBoundBadge"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 14px',
-                  borderRadius: '10px',
-                  background: 'rgba(245, 184, 46, 0.16)',
-                  border: '1.5px solid #f5b82e',
-                  color: '#ffe082',
-                  fontWeight: 800,
-                  fontSize: '0.86rem'
-                }}
-              >
-                🔒 {mode === "balotas" ? `01 a ${cartonSize} (${cartonSize} Balotas Oficiales)` : `01 a ${wheelSize} Casillas`} · {activeDrawTitle}
-              </span>
-            </div>
-            <small style={{ color: '#94a3b8', fontSize: '0.74rem' }}>
-              ✓ Balotas amarradas a la publicación de este sorteo (Inmodificables por seguridad y transparencia)
-            </small>
-          </div>
-        </div>
-
-        {/* BARRA DE CANALES Y MÚLTIPLES SALAS EN VIVO */}
-        {availableDraws.length > 0 && (
-          <div className="liveChannelsBar">
-            <div className="liveChannelsHeading">
-              <span className="liveSignalPulseSmall" />
-              <span className="liveChannelsLabel">
-                🔴 MÚLTIPLES SALAS EN VIVO ({availableDraws.filter((d) => d.live).length || availableDraws.length} TRANSMISIONES SIMULTÁNEAS):
-              </span>
-            </div>
-            <div className="liveChannelsList">
-              {availableDraws.map((d, index) => {
-                const isSelected = activeDrawId === d.id;
-                const specCount = index === 0 ? "1.482" : index === 1 ? "890" : index === 2 ? "645" : "410";
-                const dUnitPrice = Number(d.unit_price || 35000);
-                const dSold = Number(d.sold !== undefined ? d.sold : (index === 0 ? 842 : index === 1 ? 168 : index === 2 ? 390 : 120));
-                const dRev = dSold * dUnitPrice;
-                return (
-                  <button
-                    key={d.id}
-                    type="button"
-                    className={`liveChannelPill ${isSelected ? "active" : ""}`}
-                    onClick={() => switchLiveDraw(d)}
-                    title={`Sintonizar Sala ${index + 1}: ${d.title} · Venta total: $${dRev.toLocaleString("es-CO")} COP`}
-                  >
-                    <span className="channelRoomIndex" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>SALA {index + 1}</span>
-                    <span className="channelEmoji">{d.emoji}</span>
-                    <strong className="channelTitle" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>{d.title}</strong>
-                    <span style={{ fontSize: "10px", color: "#f5b82e", fontWeight: 700, padding: "1px 6px", borderRadius: "4px", background: "rgba(245, 184, 46, 0.15)" }}>
-                      💰 ${(dRev / 1000000).toFixed(1)}M
-                    </span>
-                    {isSelected ? (
-                      <span className="channelLiveDot activeBadge">✓ SINTONIZADA</span>
-                    ) : (
-                      <span className="channelLiveDot">🔴 EN VIVO · {specCount} 👁️</span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
         <div className="liveDemoStageGrid">
           {/* MÁQUINA DE BALOTAS / RULETA (Se adueña de toda la pantalla durante el sorteo) */}
           <div
@@ -4254,6 +4152,112 @@ export default function LiveDrawDemoPage() {
               </small>
             </div>
           </div>
+
+          {/* ===================================================================
+              MODALIDAD, CARTÓN VINCULADO Y SALAS EN VIVO (UBICADAS DEBAJO DE LA BALOTERA)
+              =================================================================== */}
+        <div className="liveGameModes" role="group" aria-label="Modo de sorteo">
+          <button
+            type="button"
+            className={mode === "balotas" ? "isSelected" : ""}
+            disabled={phase === "spinning"}
+            onClick={() => {
+              if (phase === "spinning") return;
+              setMode("balotas");
+              resetDemo();
+            }}
+          >
+            <RealisticBalotaIcon size={28} number="77" />
+            <span><b>El Círculo Dorado</b><small>Cartones de 100, 200, 500 y 1.000 números</small></span>
+          </button>
+          <button
+            type="button"
+            className={mode === "ruleta" ? "isSelected" : ""}
+            disabled={phase === "spinning"}
+            onClick={() => {
+              if (phase === "spinning") return;
+              setMode("ruleta");
+              resetDemo();
+            }}
+          >
+            <span>🎡</span>
+            <span><b>Ruleta Comunitaria</b><small>Sorteos rápidos de 10 a 50 números</small></span>
+          </button>
+        </div>
+
+        {/* CARTÓN OFICIAL AMARRADO AL SORTEO EN JUEGO (INMODIFICABLE) */}
+        <div className="cartonSelectorBar" style={{ width: '100%', boxSizing: 'border-box' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <span className="cartonSelectorLabel" style={{ fontWeight: 800 }}>
+                {mode === "balotas" ? "🎟️ Cartón Oficial Vinculado:" : "🎯 Ruleta Oficial:"}
+              </span>
+              <span
+                className="cartonBoundBadge"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 14px',
+                  borderRadius: '10px',
+                  background: 'rgba(245, 184, 46, 0.16)',
+                  border: '1.5px solid #f5b82e',
+                  color: '#ffe082',
+                  fontWeight: 800,
+                  fontSize: '0.86rem'
+                }}
+              >
+                🔒 {mode === "balotas" ? `01 a ${cartonSize} (${cartonSize} Balotas Oficiales)` : `01 a ${wheelSize} Casillas`} · {activeDrawTitle}
+              </span>
+            </div>
+            <small style={{ color: '#94a3b8', fontSize: '0.74rem' }}>
+              ✓ Balotas amarradas a la publicación de este sorteo (Inmodificables por seguridad y transparencia)
+            </small>
+          </div>
+        </div>
+
+        {/* BARRA DE CANALES Y MÚLTIPLES SALAS EN VIVO */}
+        {availableDraws.length > 0 && (
+          <div className="liveChannelsBar">
+            <div className="liveChannelsHeading">
+              <span className="liveSignalPulseSmall" />
+              <span className="liveChannelsLabel">
+                🔴 MÚLTIPLES SALAS EN VIVO ({availableDraws.filter((d) => d.live).length || availableDraws.length} TRANSMISIONES SIMULTÁNEAS):
+              </span>
+            </div>
+            <div className="liveChannelsList">
+              {availableDraws.map((d, index) => {
+                const isSelected = activeDrawId === d.id;
+                const specCount = index === 0 ? "1.482" : index === 1 ? "890" : index === 2 ? "645" : "410";
+                const dUnitPrice = Number(d.unit_price || 35000);
+                const dSold = Number(d.sold !== undefined ? d.sold : (index === 0 ? 842 : index === 1 ? 168 : index === 2 ? 390 : 120));
+                const dRev = dSold * dUnitPrice;
+                return (
+                  <button
+                    key={d.id}
+                    type="button"
+                    className={`liveChannelPill ${isSelected ? "active" : ""}`}
+                    onClick={() => switchLiveDraw(d)}
+                    title={`Sintonizar Sala ${index + 1}: ${d.title} · Venta total: $${dRev.toLocaleString("es-CO")} COP`}
+                  >
+                    <span className="channelRoomIndex" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>SALA {index + 1}</span>
+                    <span className="channelEmoji">{d.emoji}</span>
+                    <strong className="channelTitle" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>{d.title}</strong>
+                    <span style={{ fontSize: "10px", color: "#f5b82e", fontWeight: 700, padding: "1px 6px", borderRadius: "4px", background: "rgba(245, 184, 46, 0.15)" }}>
+                      💰 ${(dRev / 1000000).toFixed(1)}M
+                    </span>
+                    {isSelected ? (
+                      <span className="channelLiveDot activeBadge">✓ SINTONIZADA</span>
+                    ) : (
+                      <span className="channelLiveDot">🔴 EN VIVO · {specCount} 👁️</span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
 
           {/* ===================================================================
               BLOQUES MINIMIZADOS PLEGABLES (CERO RECUADRO BLANCO GIGANTE)

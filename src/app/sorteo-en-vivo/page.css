@@ -2765,26 +2765,34 @@
     font-size: 9.5px;
   }
   .liveDemoHero {
-    margin: 8px auto 10px;
-    padding: 0 12px;
+    margin: 4px auto 4px !important;
+    padding: 0 8px !important;
   }
   .liveDemoEyebrow {
-    font-size: 8.5px;
-    letter-spacing: 1.5px;
-    margin-bottom: 3px;
+    font-size: 8px !important;
+    letter-spacing: 1.2px !important;
+    margin-bottom: 2px !important;
   }
   .liveDemoHero h1 {
-    font-size: clamp(20px, 5.5vw, 28px);
-    letter-spacing: -0.7px;
-    margin-bottom: 4px;
+    font-size: clamp(17px, 4.8vw, 23px) !important;
+    letter-spacing: -0.6px !important;
+    margin: 0 !important;
+    line-height: 1.15 !important;
   }
   .liveDemoHero > p:last-child {
-    display: block !important;
-    font-size: 12px !important;
-    line-height: 1.45 !important;
-    color: #cbd5e1 !important;
-    margin: 4px auto 0 !important;
-    max-width: 95% !important;
+    display: none !important;
+  }
+  .liveDemoStage {
+    margin-top: 4px !important;
+    padding-top: 4px !important;
+  }
+  .liveDemoStageTop {
+    padding: 4px 10px !important;
+    margin-bottom: 2px !important;
+  }
+  .globeChassis {
+    width: min(84vw, 320px) !important;
+    margin: 0 auto !important;
   }
   .liveDemoStage {
     border-radius: 18px;
