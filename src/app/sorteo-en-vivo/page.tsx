@@ -433,10 +433,6 @@ export default function LiveDrawDemoPage() {
 
   // Perfil del usuario y autorización de controles de operador vs espectador
   const [clientAccount, setClientAccount] = useState<{ displayName: string; email: string; role: string } | null>(null);
-  const isOperator = Boolean(
-    clientAccount?.role === "business" ||
-    (typeof window !== "undefined" && readSurface() === "business")
-  );
   const [isViewerMode, setIsViewerMode] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
     const params = new URLSearchParams(window.location.search);
@@ -446,6 +442,11 @@ export default function LiveDrawDemoPage() {
     if (typeof window !== "undefined" && window.innerWidth >= 768) return false;
     return readSurface() !== "business";
   });
+  const isOperator = Boolean(
+    !isViewerMode ||
+    clientAccount?.role === "business" ||
+    (typeof window !== "undefined" && readSurface() === "business")
+  );
   const [userTicketNumber, setUserTicketNumber] = useState<string>("");
   const [ticketSaveFeedback, setTicketSaveFeedback] = useState<string>("");
   const [copiedClientLink, setCopiedClientLink] = useState<boolean>(false);
@@ -2570,7 +2571,14 @@ export default function LiveDrawDemoPage() {
                   className={`btnDeviceMode ${!isViewerMode ? "isActive" : ""}`}
                   onClick={() => {
                     setIsViewerMode(false);
+                    setIsCinemaFullscreen(false);
                     triggerHaptic(15);
+                    if (typeof window !== "undefined") {
+                      const url = new URL(window.location.href);
+                      url.searchParams.set("modo", "portatil");
+                      url.searchParams.delete("viewer");
+                      window.history.pushState({}, "", url.toString());
+                    }
                   }}
                   title="Navegar en Modo Portátil con controles completos y libre movimiento"
                 >
@@ -2581,7 +2589,14 @@ export default function LiveDrawDemoPage() {
                   className={`btnDeviceMode ${isViewerMode ? "isActive" : ""}`}
                   onClick={() => {
                     setIsViewerMode(true);
+                    setIsCinemaFullscreen(false);
                     triggerHaptic(15);
+                    if (typeof window !== "undefined") {
+                      const url = new URL(window.location.href);
+                      url.searchParams.set("modo", "celular");
+                      url.searchParams.set("viewer", "1");
+                      window.history.pushState({}, "", url.toString());
+                    }
                   }}
                   title="Navegar en Modo Celular (Espectador)"
                 >

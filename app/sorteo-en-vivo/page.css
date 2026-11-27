@@ -8663,9 +8663,13 @@ button, a, input, select, textarea, .btnInfinityDisplayToggle, .cinemaInfinityDi
   -webkit-tap-highlight-color: transparent !important;
 }
 
-html, body {
+html {
   touch-action: auto !important;
   overflow-y: auto !important;
+}
+body {
+  touch-action: auto !important;
+  overflow: visible !important;
 }
 
 /* En portátiles (>= 768px), permitir siempre scroll libre con mouse y trackpad */
@@ -8826,12 +8830,27 @@ html, body {
    ========================================================================== */
 
 /* 1. Desbloqueo absoluto de scroll para touchpad de portátil y mouse */
-html, body {
+html {
   overflow-y: auto !important;
   overflow-x: hidden !important;
   height: auto !important;
   min-height: 100% !important;
   touch-action: auto !important;
+}
+
+body {
+  overflow: visible !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100% !important;
+  touch-action: auto !important;
+}
+
+@media (min-width: 768px) {
+  .globeChassis {
+    width: min(85vw, 420px) !important;
+    max-height: 420px !important;
+  }
 }
 
 .liveDemoPage {
