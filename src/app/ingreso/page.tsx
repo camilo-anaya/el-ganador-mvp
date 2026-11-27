@@ -345,8 +345,10 @@ function IngresoContent() {
     if (!nit.trim()) missing.push("NIT o RUT del comercio");
     if (!legalRepName.trim()) missing.push("Nombre del representante legal");
     if (!businessAddress.trim()) missing.push("Dirección física del local");
+    if (!rutFileName) missing.push("RUT actualizado (DIAN)");
+    if (!camaraComercioFileName) missing.push("Cámara de Comercio vigente");
     if (missing.length > 0) {
-      return `Por favor completa los siguientes datos obligatorios de tu empresa: ${missing.join(", ")}.`;
+      return `Requisitos Coljuegos obligatorios pendientes: ${missing.join(", ")}. Por favor adjúntalos para autorizar tu local.`;
     }
     return null;
   };
@@ -1084,15 +1086,15 @@ function IngresoContent() {
               =================================================================== */
           <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
             <div style={{
-              background: 'rgba(212, 175, 55, 0.1)',
-              border: '1px solid rgba(212, 175, 55, 0.3)',
+              background: 'rgba(212, 175, 55, 0.12)',
+              border: '1px solid rgba(212, 175, 55, 0.4)',
               borderRadius: '8px',
-              padding: '6px 8px',
+              padding: '7px 9px',
               fontSize: '10px',
               color: '#fef08a',
-              lineHeight: '1.3'
+              lineHeight: '1.35'
             }}>
-              📋 <strong>Lista de datos requeridos por la Ley 643</strong> para habilitar la publicación de rifas y publicidad de tu local.
+              ⚖️ <strong>Requisitos obligatorios de Coljuegos (Ley 643/2001 & Dcto 1486/2024)</strong>: Debes aportar NIT, RUT y Cámara de Comercio para registrar y habilitar legalmente tu establecimiento.
             </div>
 
             {/* 1. Nombre Comercial */}
@@ -1141,9 +1143,97 @@ function IngresoContent() {
               </div>
             </div>
 
+            {/* 3. RUT DIAN (Coljuegos) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>3. RUT ACTUALIZADO (DIAN · PDF O FOTO) *</span>
+                {rutFileName ? (
+                  <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
+                ) : (
+                  <span style={{ fontSize: '9px', color: '#f87171', fontWeight: 700 }}>Obligatorio Coljuegos</span>
+                )}
+              </div>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: rutFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.90)',
+                  border: rutFileName ? '1.2px solid rgba(16, 185, 129, 0.6)' : '1.2px dashed rgba(226, 176, 74, 0.45)',
+                  borderRadius: '10px',
+                  padding: '0 10px',
+                  height: '38px',
+                  cursor: 'pointer',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
+                  <span style={{ fontSize: '14px' }}>📄</span>
+                  <span style={{ fontSize: '11px', color: rutFileName ? '#ffffff' : '#94a3b8', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '190px' }}>
+                    {rutFileName ? rutFileName : "Subir RUT (PDF o Foto)"}
+                  </span>
+                </div>
+                <span style={{ fontSize: '10px', background: 'rgba(212, 175, 55, 0.25)', border: '1px solid #d4af37', color: '#fef08a', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
+                  {rutFileName ? "Cambiar" : "Examinar"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) setRutFileName(e.target.files[0].name);
+                  }}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+
+            {/* 4. Cámara de Comercio Vigente (Coljuegos) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>4. CÁMARA DE COMERCIO VIGENTE (≤ 30 DÍAS) *</span>
+                {camaraComercioFileName ? (
+                  <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
+                ) : (
+                  <span style={{ fontSize: '9px', color: '#f87171', fontWeight: 700 }}>Obligatorio Coljuegos</span>
+                )}
+              </div>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: camaraComercioFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.90)',
+                  border: camaraComercioFileName ? '1.2px solid rgba(16, 185, 129, 0.6)' : '1.2px dashed rgba(226, 176, 74, 0.45)',
+                  borderRadius: '10px',
+                  padding: '0 10px',
+                  height: '38px',
+                  cursor: 'pointer',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
+                  <span style={{ fontSize: '14px' }}>🏛️</span>
+                  <span style={{ fontSize: '11px', color: camaraComercioFileName ? '#ffffff' : '#94a3b8', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '190px' }}>
+                    {camaraComercioFileName ? camaraComercioFileName : "Subir Certificado de Existencia"}
+                  </span>
+                </div>
+                <span style={{ fontSize: '10px', background: 'rgba(212, 175, 55, 0.25)', border: '1px solid #d4af37', color: '#fef08a', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
+                  {camaraComercioFileName ? "Cambiar" : "Examinar"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) setCamaraComercioFileName(e.target.files[0].name);
+                  }}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+
             {/* 3. Categoría Comercial */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>3. CATEGORÍA COMERCIAL DEL LOCAL *</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>5. CATEGORÍA COMERCIAL DEL LOCAL *</span>
               <div style={{
                 background: 'rgba(3, 38, 25, 0.90)',
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
@@ -1178,7 +1268,7 @@ function IngresoContent() {
 
             {/* 4. Dirección Física del Local */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>4. DIRECCIÓN FÍSICA EXACTA DEL LOCAL *</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>6. DIRECCIÓN FÍSICA EXACTA DEL LOCAL *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1201,7 +1291,7 @@ function IngresoContent() {
 
             {/* 5. Ciudad y Departamento */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>5. CIUDAD / DEPARTAMENTO *</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>7. CIUDAD / DEPARTAMENTO *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1224,7 +1314,7 @@ function IngresoContent() {
 
             {/* 6. Representante Legal */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>6. REPRESENTANTE LEGAL / PROPIETARIO *</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>8. REPRESENTANTE LEGAL / PROPIETARIO *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1247,7 +1337,7 @@ function IngresoContent() {
 
             {/* 7. Cédula del Representante */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>7. CÉDULA DE CIUDADANÍA DEL PROPIETARIO *</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>9. CÉDULA DE CIUDADANÍA DEL PROPIETARIO *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1270,7 +1360,7 @@ function IngresoContent() {
 
             {/* 8. WhatsApp / Teléfono del Negocio */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>8. TELÉFONO / WHATSAPP DEL LOCAL *</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>10. TELÉFONO / WHATSAPP DEL LOCAL *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1293,7 +1383,7 @@ function IngresoContent() {
 
             {/* 9. Correo Corporativo */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>9. CORREO ELECTRÓNICO CORPORATIVO *</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>11. CORREO ELECTRÓNICO CORPORATIVO *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1316,7 +1406,7 @@ function IngresoContent() {
 
             {/* 10. Contraseña */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>10. CONTRASEÑA DEL PANEL EMPRESARIAL *</span>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>12. CONTRASEÑA DEL PANEL EMPRESARIAL *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1354,7 +1444,7 @@ function IngresoContent() {
                 required
                 style={{ marginTop: '1px' }}
               />
-              <span>Declaro ser el <strong>propietario o representante legal</strong> del establecimiento de comercio y acepto los términos de Ley 643 de 2001.</span>
+              <span>Certifico bajo gravedad de juramento ser el <strong>representante legal / propietario</strong> del establecimiento, adjuntar RUT y Cámara verídicos, y cumplir con la regulación de Coljuegos (Ley 643/2001).</span>
             </label>
 
             {/* Botón Registrar Empresa */}
