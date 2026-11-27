@@ -1315,7 +1315,7 @@ export default function FavoritosPage() {
         )}
 
         {/* Espaciador de seguridad para evitar solapamiento con la barra de navegación flotante */}
-        <div style={{ height: 'calc(110px + env(safe-area-inset-bottom, 24px))', width: '100%' }} />
+        <div style={{ height: 'calc(140px + env(safe-area-inset-bottom, 34px))', width: '100%' }} />
       </main>
 
       {/* Bottom Bar Flotante para Mobile */}
