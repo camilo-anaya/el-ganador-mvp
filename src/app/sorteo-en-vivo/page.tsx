@@ -332,6 +332,8 @@ export default function LiveDrawDemoPage() {
   const [socialFeedback, setSocialFeedback] = useState<string>("");
   const [isGeneratingSocial, setIsGeneratingSocial] = useState<boolean>(false);
   const [isCinemaFullscreen, setIsCinemaFullscreen] = useState<boolean>(false);
+  const [activeResultTab, setActiveResultTab] = useState<"ganador" | "seguridad" | "detalles" | "auditoria">("ganador");
+  const [copiedHash, setCopiedHash] = useState<boolean>(false);
   const [showWinnerChatModal, setShowWinnerChatModal] = useState<boolean>(false);
   const [winnerChatMessages, setWinnerChatMessages] = useState<Array<{ sender: "merchant" | "client"; text: string; time: string }>>([]);
   const [winnerChatInput, setWinnerChatInput] = useState<string>("");
@@ -932,6 +934,7 @@ export default function LiveDrawDemoPage() {
           setWinner(bc.selected);
           setDisplayNumber(parsedSlot);
           setPhase("winner");
+      setActiveResultTab("ganador");
           setStage("reveal");
           setLatestAct(bc.actData);
           setShowCelebration(true);
@@ -2805,6 +2808,16 @@ export default function LiveDrawDemoPage() {
           {/* MÁQUINA DE BALOTAS / RULETA (Se adueña de toda la pantalla durante el sorteo) */}
           <div
             className={`liveDemoMachine ${mode === "ruleta" ? "modeWheel" : ""} ${phase === "spinning" ? "isSpinning" : ""} ${phase === "winner" ? "hasWinner" : ""} stage_${stage} ${isCinemaFullscreen ? "cinemaFullscreenActive" : ""}`}
+            onClick={(e) => {
+              const target = e.target as HTMLElement;
+              if (target.closest('button') || target.closest('a') || target.closest('input') || target.closest('select') || target.closest('textarea') || target.closest('form')) {
+                return;
+              }
+              if (!isCinemaFullscreen) {
+                enterCinemaFullscreen();
+              }
+            }}
+            title={!isCinemaFullscreen ? "Toca el área para pantalla completa Infinity Display" : undefined}
           >
             {/* Stream HUD Superior: EN DIRECTO + Rating CRM + Control de Audio (MINIMIZABLE) */}
             <div className={`cinemaStageTopHud ${isHudCollapsed ? "isCollapsed" : ""}`}>
@@ -4150,437 +4163,611 @@ export default function LiveDrawDemoPage() {
             )}
           </div>
 
-          {/* DETALLES Y CONTROLES DEL SORTEO (Solo para el empresario) */}
-          {!isViewerMode && isOperator && (
-            <div className="liveDemoDetails">
-            <div className="liveDemoPrizeIcon">
-              {mode === "balotas" ? (
-                <RealisticBalotaIcon size={64} number={winner || displayNumber || "77"} />
-              ) : (
-                "🎡"
-              )}
-            </div>
-            <p className="liveDemoEyebrow">{mode === "balotas" ? `EL CÍRCULO DORADO · CARTÓN DE ${cartonSize}` : "RULETA PERSONALIZABLE · MODO LOCAL"}</p>
-            <h2 id="liveDemoDrawTitle">{mode === "balotas" ? "El Círculo Dorado" : "La ruleta de tu comunidad"}</h2>
-            <p className="liveDemoPrizeDesc">
-              {mode === "balotas"
-                ? `Extracción oficial certificada con física en tiempo real. Los números van del ${eligibleNumbers[0]} al ${eligibleNumbers[eligibleNumbers.length - 1]} (${cartonSize} boletas en total).`
-                : `Organiza tu sorteo: selecciona del 01 al 10, 20, 30, 40 o 50. La ruleta frena con precisión sobre el número ganador.`}
-            </p>
-
-            {mode === "ruleta" && (
-              <div className="wheelSetup">
-                <label>
-                  Cantidad de números en la ruleta
-                  <select
-                    value={wheelSize}
-                    disabled={phase === "spinning"}
-                    onChange={(event) => {
-                      if (phase === "spinning") return;
-                      setWheelSize(Number(event.target.value));
-                      resetDemo();
-                    }}
-                  >
-                    {[10, 20, 30, 40, 50].map((size) => (
-                      <option key={size} value={size}>
-                        01 a {size} ({size} números)
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  Números de la ruleta (un número por línea)
-                  <textarea
-                    value={wheelDraft.split(/\r?\n/).slice(0, wheelSize).join("\n")}
-                    rows={4}
-                    maxLength={1800}
-                    disabled={phase === "spinning"}
-                    onChange={(event) => {
-                      if (phase === "spinning") return;
-                      setWheelDraft(`${event.target.value}\n${Array.from({ length: 50 }, (_, i) => String(i + 1).padStart(2, "0")).join("\n")}`);
-                      resetDemo();
-                    }}
-                  />
-                </label>
-                <small>{wheelPlayers.length} de {wheelSize} números listos · del 01 al {String(wheelSize).padStart(2, "0")}</small>
-              </div>
-            )}
-
-            <div className="liveDemoPrizeStats">
-              <div>
-                <b>{mode === "balotas" ? cartonSize : wheelPlayers.length}</b>
-                <span>{mode === "balotas" ? <>números elegibles<br />({eligibleNumbers[0]} a {eligibleNumbers[eligibleNumbers.length - 1]})</> : <>números en<br />la ruleta (01 a {wheelSize})</>}</span>
-              </div>
-              <div>
-                <b>100%</b>
-                <span>equiprobable<br />sin sesgo de módulo</span>
-              </div>
-            </div>
-
-            {/* BARRA DE PROGRESO DE FASES (Solo en Balotera; en Ruleta se omite para vista limpia) */}
-            {mode === "balotas" && (
-              <div className="drawPhaseIndicator">
-                <div className="phaseSteps">
-                  <span className={`pStep ${stage === "mixing" ? "active" : stage === "suction" || stage === "slowdown" || stage === "reveal" ? "done" : ""}`}>
-                    1. Agitación
-                  </span>
-                  <span className={`pStep ${stage === "suction" ? "active" : stage === "slowdown" || stage === "reveal" ? "done" : ""}`}>
-                    2. Succión
-                  </span>
-                  <span className={`pStep ${stage === "slowdown" ? "active" : stage === "reveal" ? "done" : ""}`}>
-                    3. Verificación
-                  </span>
-                  <span className={`pStep ${stage === "reveal" ? "active done" : ""}`}>
-                    4. Ganador
-                  </span>
-                </div>
-              </div>
-            )}
-
-            <div className="liveDemoDrawActions">
-              {phase !== "winner" ? (
-                <button
-                  className="liveDemoStart"
-                  onClick={playDemo}
-                  disabled={phase === "spinning"}
-                  type="button"
-                >
-                  {phase === "spinning"
-                    ? stage === "countdown"
-                      ? mode === "ruleta"
-                        ? "🎙️ Ruleta oficial · Transmisión en vivo..."
-                        : countdownNumber !== null
-                          ? `⏱️ Iniciando sorteo en ${countdownNumber}...`
-                          : "🎙️ Anuncio oficial en curso..."
-                      : stage === "mixing"
-                        ? mode === "balotas"
-                          ? `🌀 Agitando balotas (${stageSecondsLeft}s)...`
-                          : "🎡 Girando ruleta oficial en vivo..."
-                        : stage === "slowdown" && mode === "ruleta"
-                          ? "🎯 Frenando ruleta progresivamente..."
-                        : stage === "suction"
-                          ? `⚡ Succionando balota (${stageSecondsLeft}s)...`
-                          : "🎯 Verificando número ganador..."
-                    : mode === "balotas"
-                      ? `▶ Iniciar sorteo en El Círculo Dorado (${eligibleNumbers[0]} a ${eligibleNumbers[eligibleNumbers.length - 1]})`
-                      : "▶ Girar ruleta oficial"}
-                </button>
-              ) : (
-                <button className="liveDemoStart" onClick={resetDemo} type="button">↻ Nuevo sorteo</button>
-              )}
-              <a className="liveDemoMarketLink" href="/">← Volver al catálogo de rifas</a>
-            </div>
-
-            {audioStatus.message && (
-              <div className={`iosAudioStatusBanner state_${audioStatus.state}`} role="status">
-                <span>{audioStatus.message}</span>
-                {audioStatus.state === "blocked" && (
-                  <audio
-                    controls
-                    playsInline
-                    src={mode === "balotas" ? "/audio/master-balotas-v6.m4a?v=fv9" : "/audio/master-ruleta-v9.m4a?v=fv12"}
-                    className="iosFallbackPlayer"
-                  />
-                )}
-              </div>
-            )}
-
-            {demoError && <p className="wheelDemoError" role="alert">{demoError}</p>}
-
-            {/* TARJETA DEL RESULTADO: FONDO BLANCO Y ALTO CONTRASTE */}
-            {phase === "winner" && winner && (
-              <div
-                className={`liveDemoWinner epicWinnerCard ${
-                  isUserWinner ? "isRealWinnerCard" : "isSpectatorResultCard"
-                }`}
-                style={{
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '2px solid #007AFF',
-                  boxShadow: '0 16px 48px rgba(0, 122, 255, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08)',
-                  borderRadius: '16px',
-                }}
-                role="status"
+          {/* ===================================================================
+              PANEL ORGANIZADO POR BLOQUES (INFORMACIÓN DEL RESULTADO & SORTEO)
+              Organizado en 4 bloques para evitar desorden en móviles:
+              1. 🏆 Ganador & Entrega de Premio
+              2. 🔒 Seguridad Notarial & SHA-256
+              3. 📊 Sorteo & Historial de Balotas
+              4. 📜 Auditoría Coljuegos & Inmutabilidad
+              =================================================================== */}
+          <div id="draw-result-blocks" className="drawResultBlocksContainer">
+            {/* BARRA SELECTORA DE BLOQUES */}
+            <div className="drawResultBlocksNav" role="tablist" aria-label="Navegación de bloques de información">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeResultTab === "ganador"}
+                className={`resultBlockTabBtn ${activeResultTab === "ganador" ? "isActiveTab" : ""}`}
+                onClick={() => setActiveResultTab("ganador")}
               >
-                {/* 1. CASO GANADOR OFICIAL (DESACTIVA CIERRE AUTOMÁTICO, MUESTRA BANNER DORADO) */}
-                {isUserWinner ? (
-                  <div className="ganadorOficialCelebrationHero">
-                    <div className="ganasteRevealRibbon winnerGoldHeroRibbon">
-                      <span>🏆 ¡FELICIDADES, ERES EL GANADOR OFICIAL!</span>
-                      <small>Sorteo Oficial Adjudicado a tu Boleta</small>
+                <span className="tabIcon">🏆</span>
+                <span className="tabLabel">1. Ganador & Entrega</span>
+                {phase === "winner" && <span className="tabLivePulse">★</span>}
+              </button>
+
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeResultTab === "seguridad"}
+                className={`resultBlockTabBtn ${activeResultTab === "seguridad" ? "isActiveTab" : ""}`}
+                onClick={() => setActiveResultTab("seguridad")}
+              >
+                <span className="tabIcon">🔒</span>
+                <span className="tabLabel">2. Seguridad SHA-256</span>
+              </button>
+
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeResultTab === "detalles"}
+                className={`resultBlockTabBtn ${activeResultTab === "detalles" ? "isActiveTab" : ""}`}
+                onClick={() => setActiveResultTab("detalles")}
+              >
+                <span className="tabIcon">📊</span>
+                <span className="tabLabel">3. Sorteo & Historial</span>
+                {history.length > 0 && <span className="tabCountPill">{history.length}</span>}
+              </button>
+
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeResultTab === "auditoria"}
+                className={`resultBlockTabBtn ${activeResultTab === "auditoria" ? "isActiveTab" : ""}`}
+                onClick={() => setActiveResultTab("auditoria")}
+              >
+                <span className="tabIcon">📜</span>
+                <span className="tabLabel">4. Auditoría Coljuegos</span>
+              </button>
+            </div>
+
+            {/* CONTENIDO DE LA TARJETA DEL BLOQUE SELECCIONADO */}
+            <div className="drawResultBlockCard">
+              {/* =============================================================
+                  BLOQUE 1: GANADOR & ENTREGA DE PREMIO
+                  ============================================================= */}
+              {activeResultTab === "ganador" && (
+                <div className="blockContent blockGanador">
+                  <div className="drawBlockHeader">
+                    <div>
+                      <h3><span>🏆</span> Resultado Oficial y Adjudicación</h3>
+                      <p>Adjudicación verificada, canales directos de entrega y constancia del ganador.</p>
                     </div>
-
-                    <div className="winnerCardTopRow">
-                      <div className="winnerMainContent">
-                        <RealisticBalotaIcon size={64} number={mode === "balotas" ? winner : rouletteWinnerNum} />
-                        <div className="winnerCardInfo">
-                          <small className="winnerHighlightSubtitle">¡PREMIO MAYOR ADJUDICADO A TU CUENTA!</small>
-                          <div className="winnerNameRow">
-                            <strong className="winnerNumberLarge">
-                              {mode === "balotas"
-                                ? `BOLETA #${winner}`
-                                : `CASILLA #${rouletteWinnerNum}${rouletteWinnerCustomName ? ` · ${rouletteWinnerCustomName}` : ""}`}
-                            </strong>
-                            <span className="phoneticWinnerSpan">
-                              · {numberToSpanishWords(mode === "balotas" ? winner : rouletteWinnerNum)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="verifiedBadge goldBadge">
-                        <span>✓ AUDITADO</span>
-                        <small>SHA-256</small>
-                      </div>
-                    </div>
-
-                    {/* HASH SHA-256 VERIFICABLE */}
-                    <div className="winnerSha256Section">
-                      <div className="sha256LabelRow">
-                        <span>🔒 Sello Notarial Criptográfico (HMAC-SHA256):</span>
-                        <span className="coljuegosShieldPill">Supervisado Ley 643</span>
-                      </div>
-                      <code className="winnerShaCode">
-                        {auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
-                      </code>
-                    </div>
-
-                    {/* BOTÓN MANUAL PRINCIPAL DEL GANADOR (CIERRA ÚNICAMENTE CUANDO ÉL LO DECIDA) */}
-                    <div className="winnerExclusiveActions">
-                      <button
-                        type="button"
-                        className="btnWinnerChatCoordination"
-                        onClick={() => setShowWinnerChatModal(true)}
-                        title="Abrir chat en vivo con el comercio para coordinar la entrega"
-                      >
-                        💬 Coordinar Entrega del Premio con el Comercio (Chat en Vivo)
-                      </button>
-
-                      <button
-                        type="button"
-                        className="btnManualSaveAndHome"
-                        onClick={() => router.push("/")}
-                        title="Guardar premio en mis premios e ir al inicio"
-                      >
-                        🏆 Guardar en mis Premios e Ir al Inicio →
-                      </button>
-
-                      <div className="winnerSubActionsRow">
-                        <button
-                          className="winnerChatButton"
-                          onClick={() => setShowWinnerChatModal(true)}
-                          type="button"
-                          title="Abrir ventana de chat con el comercio"
-                        >
-                          💬 Chat Comercio
-                        </button>
-                        <button
-                          className="winnerSocialShareButton"
-                          onClick={handleDirectShareWinner}
-                          type="button"
-                          title="Compartir en redes sociales"
-                        >
-                          📤 Compartir
-                        </button>
-                        <button
-                          className="winnerVoiceButton"
-                          onClick={() => {
-                            playWinnerVoice(winner, false);
-                            setIsMuted(false);
-                          }}
-                          type="button"
-                        >
-                          🔊 Escuchar Voz
-                        </button>
-                        {winnerTicket && (
-                          <button
-                            className="winnerTicketButton"
-                            onClick={() => {
-                              clearRevealTicketTimers();
-                              setShowTicketModal(true);
-                            }}
-                            type="button"
-                          >
-                            🎟️ Ver Certificado
-                          </button>
-                        )}
-                        {latestAct && (
-                          <button
-                            className="winnerPdfButton"
-                            onClick={() => setShowPrintModal(true)}
-                            type="button"
-                          >
-                            📄 Acta PDF
-                          </button>
-                        )}
-                      </div>
-                    </div>
+                    {phase === "winner" && (
+                      <span style={{ fontSize: '11px', background: '#ecfdf5', color: '#059669', border: '1px solid #10b981', padding: '3px 8px', borderRadius: '6px', fontWeight: 800 }}>
+                        ✓ Finalizado
+                      </span>
+                    )}
                   </div>
-                ) : (
-                  /* 2. CASO ESPECTADOR O PARTICIPANTE NO GANADOR (FONDO BLANCO Y ALTO CONTRASTE) */
-                  <div className="spectatorResultBlock">
-                    <div className="ganasteRevealRibbon spectatorRibbon" style={{ background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)', color: '#ffffff', borderRadius: '10px', padding: '8px 14px' }}>
-                      <span style={{ color: '#ffffff', fontWeight: 900 }}>🎱 NÚMERO GANADOR OFICIAL</span>
-                      <small style={{ color: '#e0f2fe' }}>Certificado mediante acta criptográfica</small>
-                    </div>
 
-                    <div className="winnerCardTopRow">
-                      <div className="winnerMainContent">
-                        <RealisticBalotaIcon size={64} number={mode === "balotas" ? winner : rouletteWinnerNum} />
-                        <div className="winnerCardInfo">
-                          <small style={{ color: '#64748b', fontWeight: 800, textTransform: 'uppercase' }}>
-                            {mode === "balotas" ? "NÚMERO GANADOR DEL SORTEO" : "CASILLA GANADORA"}
-                          </small>
-                          <div className="winnerNameRow">
-                            <strong style={{ color: '#007AFF', fontWeight: 900, textShadow: 'none' }}>
-                              {mode === "balotas"
-                                ? `#${winner}`
-                                : `#${rouletteWinnerNum}${rouletteWinnerCustomName ? ` · ${rouletteWinnerCustomName}` : ""}`}
-                            </strong>
-                            <span className="phoneticWinnerSpan" style={{ color: '#0f172a', fontWeight: 800, textShadow: 'none' }}>
-                              · {numberToSpanishWords(mode === "balotas" ? winner : rouletteWinnerNum)}
-                            </span>
+                  {phase === "winner" && winner ? (
+                    <div
+                      className={`liveDemoWinner epicWinnerCard ${
+                        isUserWinner ? "isRealWinnerCard" : "isSpectatorResultCard"
+                      }`}
+                      style={{
+                        background: '#ffffff',
+                        color: '#0f172a',
+                        border: '2px solid #007AFF',
+                        boxShadow: '0 16px 48px rgba(0, 122, 255, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06)',
+                        borderRadius: '16px',
+                        padding: '16px',
+                        margin: '0',
+                      }}
+                      role="status"
+                    >
+                      {/* 1. CASO GANADOR OFICIAL (DESACTIVA CIERRE AUTOMÁTICO, MUESTRA BANNER DORADO) */}
+                      {isUserWinner ? (
+                        <div className="ganadorOficialCelebrationHero">
+                          <div className="ganasteRevealRibbon winnerGoldHeroRibbon">
+                            <span>🏆 ¡FELICIDADES, ERES EL GANADOR OFICIAL!</span>
+                            <small>Sorteo Oficial Adjudicado a tu Boleta</small>
+                          </div>
+
+                          <div className="winnerCardTopRow">
+                            <div className="winnerMainContent">
+                              <RealisticBalotaIcon size={64} number={mode === "balotas" ? winner : rouletteWinnerNum} />
+                              <div className="winnerCardInfo">
+                                <small className="winnerHighlightSubtitle">¡PREMIO MAYOR ADJUDICADO A TU CUENTA!</small>
+                                <div className="winnerNameRow">
+                                  <strong className="winnerNumberLarge">
+                                    {mode === "balotas"
+                                      ? `BOLETA #${winner}`
+                                      : `CASILLA #${rouletteWinnerNum}${rouletteWinnerCustomName ? ` · ${rouletteWinnerCustomName}` : ""}`}
+                                  </strong>
+                                  <span className="phoneticWinnerSpan">
+                                    · {numberToSpanishWords(mode === "balotas" ? winner : rouletteWinnerNum)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="verifiedBadge goldBadge">
+                              <span>✓ AUDITADO</span>
+                              <small>SHA-256</small>
+                            </div>
+                          </div>
+
+                          {/* ACCIONES DEL GANADOR */}
+                          <div className="winnerExclusiveActions" style={{ marginTop: '14px' }}>
+                            <button
+                              type="button"
+                              className="btnWinnerChatCoordination"
+                              onClick={() => setShowWinnerChatModal(true)}
+                              title="Abrir chat en vivo con el comercio para coordinar la entrega"
+                              style={{ width: '100%', marginBottom: '8px' }}
+                            >
+                              💬 Coordinar Entrega del Premio con el Comercio (Chat en Vivo)
+                            </button>
+
+                            <button
+                              type="button"
+                              className="btnManualSaveAndHome"
+                              onClick={() => router.push("/")}
+                              title="Guardar premio en mis premios e ir al inicio"
+                              style={{ width: '100%', marginBottom: '12px' }}
+                            >
+                              🏆 Guardar en mis Premios e Ir al Inicio →
+                            </button>
+
+                            <div className="winnerSubActionsRow">
+                              <button
+                                className="winnerChatButton"
+                                onClick={() => setShowWinnerChatModal(true)}
+                                type="button"
+                                title="Abrir ventana de chat con el comercio"
+                              >
+                                💬 Chat Comercio
+                              </button>
+                              <button
+                                className="winnerSocialShareButton"
+                                onClick={handleDirectShareWinner}
+                                type="button"
+                                title="Compartir en redes sociales"
+                              >
+                                📤 Compartir
+                              </button>
+                              <button
+                                className="winnerVoiceButton"
+                                onClick={() => {
+                                  playWinnerVoice(winner, false);
+                                  setIsMuted(false);
+                                }}
+                                type="button"
+                              >
+                                🔊 Escuchar Voz
+                              </button>
+                              {winnerTicket && (
+                                <button
+                                  className="winnerTicketButton"
+                                  onClick={() => {
+                                    clearRevealTicketTimers();
+                                    setShowTicketModal(true);
+                                  }}
+                                  type="button"
+                                >
+                                  🎟️ Ver Certificado
+                                </button>
+                              )}
+                              {latestAct && (
+                                <button
+                                  className="winnerPdfButton"
+                                  onClick={() => setShowPrintModal(true)}
+                                  type="button"
+                                >
+                                  📄 Acta PDF
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="verifiedBadge">
-                        <span style={{ background: '#ecfdf5', color: '#059669', border: '1px solid #10b981' }}>✓ ACTA SHA-256</span>
-                        <small style={{ color: '#047857' }}>OFICIAL</small>
+                      ) : (
+                        /* 2. CASO ESPECTADOR O PARTICIPANTE NO GANADOR */
+                        <div className="spectatorResultBlock">
+                          <div className="ganasteRevealRibbon spectatorRibbon" style={{ background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)', color: '#ffffff', borderRadius: '10px', padding: '8px 14px' }}>
+                            <span style={{ color: '#ffffff', fontWeight: 900 }}>🎱 NÚMERO GANADOR OFICIAL</span>
+                            <small style={{ color: '#e0f2fe' }}>Certificado mediante acta criptográfica</small>
+                          </div>
+
+                          <div className="winnerCardTopRow" style={{ marginTop: '12px' }}>
+                            <div className="winnerMainContent">
+                              <RealisticBalotaIcon size={64} number={mode === "balotas" ? winner : rouletteWinnerNum} />
+                              <div className="winnerCardInfo">
+                                <small style={{ color: '#64748b', fontWeight: 800, textTransform: 'uppercase' }}>
+                                  {mode === "balotas" ? "NÚMERO GANADOR DEL SORTEO" : "CASILLA GANADORA"}
+                                </small>
+                                <div className="winnerNameRow">
+                                  <strong style={{ color: '#007AFF', fontWeight: 900, textShadow: 'none' }}>
+                                    {mode === "balotas"
+                                      ? `#${winner}`
+                                      : `#${rouletteWinnerNum}${rouletteWinnerCustomName ? ` · ${rouletteWinnerCustomName}` : ""}`}
+                                  </strong>
+                                  <span className="phoneticWinnerSpan" style={{ color: '#0f172a', fontWeight: 800, textShadow: 'none' }}>
+                                    · {numberToSpanishWords(mode === "balotas" ? winner : rouletteWinnerNum)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="verifiedBadge">
+                              <span style={{ background: '#ecfdf5', color: '#059669', border: '1px solid #10b981' }}>✓ ACTA SHA-256</span>
+                              <small style={{ color: '#047857' }}>OFICIAL</small>
+                            </div>
+                          </div>
+
+                          {/* BOTONES DE ACCIÓN PARA EL ESPECTADOR */}
+                          <div className="winnerCardActionButtons" style={{ marginTop: '14px' }}>
+                            <button
+                              className="winnerChatButton"
+                              onClick={() => setShowWinnerChatModal(true)}
+                              type="button"
+                              style={{
+                                background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                                color: '#ffffff',
+                                border: 'none',
+                                fontWeight: 800,
+                                padding: '10px 16px',
+                                borderRadius: '10px',
+                                boxShadow: '0 4px 12px rgba(0, 122, 255, 0.25)',
+                                cursor: 'pointer',
+                              }}
+                              title="Abrir ventana de chat con el comercio"
+                            >
+                              💬 Chat Comercio
+                            </button>
+                            <button
+                              className="winnerSocialShareButton"
+                              onClick={handleDirectShareWinner}
+                              type="button"
+                              style={{
+                                background: '#f1f5f9',
+                                color: '#0f172a',
+                                border: '1px solid #cbd5e1',
+                                fontWeight: 800,
+                                padding: '10px 16px',
+                                borderRadius: '10px',
+                                cursor: 'pointer',
+                              }}
+                            >
+                              📤 Compartir
+                            </button>
+                            {winnerTicket && (
+                              <button
+                                className="winnerTicketButton"
+                                onClick={() => {
+                                  clearRevealTicketTimers();
+                                  setShowTicketModal(true);
+                                }}
+                                type="button"
+                                style={{
+                                  background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                                  color: '#ffffff',
+                                  border: 'none',
+                                  fontWeight: 800,
+                                  padding: '10px 16px',
+                                  borderRadius: '10px',
+                                  boxShadow: '0 4px 12px rgba(245, 158, 11, 0.25)',
+                                  cursor: 'pointer',
+                                }}
+                              >
+                                🎟️ Ver Acta Notarial
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* BOTÓN OFICIAL: QUITAR / CERRAR GANADOR */}
+                      <div style={{ marginTop: '14px' }}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            resetDemo();
+                            setShowTicketModal(false);
+                            setShowCelebration(false);
+                          }}
+                          style={{
+                            width: '100%',
+                            padding: '10px 16px',
+                            borderRadius: '10px',
+                            background: '#fff1f2',
+                            border: '1.5px solid #f87171',
+                            color: '#dc2626',
+                            fontWeight: 800,
+                            fontSize: '13px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                          }}
+                          title="Quitar tiquete y resultado del ganador"
+                        >
+                          ✕ Quitar Ganador / Continuar Sorteos
+                        </button>
                       </div>
                     </div>
-
-                    {/* Sello SHA-256 para el espectador */}
-                    <div className="winnerSha256Section compact" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px' }}>
-                      <div className="sha256LabelRow">
-                        <span style={{ color: '#475569', fontWeight: 800 }}>🔒 Hash Notarial Verificable:</span>
-                      </div>
-                      <code className="winnerShaCode" style={{ color: '#0284c7', background: '#f1f5f9' }}>
-                        {auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
-                      </code>
+                  ) : (
+                    <div className="blockEmptyState">
+                      <span className="emptyIcon">🎯</span>
+                      <h4>Sorteo en curso o preparación</h4>
+                      <p>
+                        Presiona el botón de inicio o toca el escenario para activar el modo <strong>Pantalla Completa Infinity Display</strong>. En cuanto la balota sea extraída por el tubo neumático, aquí verás la adjudicación completa y los accesos de entrega.
+                      </p>
+                      <button
+                        className="liveDemoStart"
+                        onClick={playDemo}
+                        disabled={phase === "spinning"}
+                        type="button"
+                        style={{ maxWidth: '300px', margin: '14px auto 0 auto', width: '100%' }}
+                      >
+                        {phase === "spinning" ? "🌀 Sorteo en transmisión..." : "▶ Iniciar sorteo"}
+                      </button>
                     </div>
+                  )}
+                </div>
+              )}
 
-                    {/* BOTÓN OFICIAL: QUITAR / CERRAR GANADOR (SOLO CUANDO EL USUARIO LO ACCIONA MANUALMENTE) */}
-                    <div style={{ marginTop: '14px', marginBottom: '14px' }}>
+              {/* =============================================================
+                  BLOQUE 2: SEGURIDAD NOTARIAL & SELLO CRIPTOGRÁFICO SHA-256
+                  ============================================================= */}
+              {activeResultTab === "seguridad" && (
+                <div className="blockContent blockSeguridad">
+                  <div className="drawBlockHeader">
+                    <div>
+                      <h3><span>🔒</span> Seguridad Notarial y Certificado SHA-256</h3>
+                      <p>Sello de inmutabilidad matemática y supervisión oficial según Ley 643/2001.</p>
+                    </div>
+                    <span className="coljuegosShieldPill">Supervisado Ley 643</span>
+                  </div>
+
+                  <div className="winnerSha256Section" style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '12px', padding: '16px', marginTop: '10px' }}>
+                    <div className="sha256LabelRow" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <span style={{ fontWeight: 800, color: '#0f172a', fontSize: '13px' }}>
+                        🔒 Sello Notarial Criptográfico (HMAC-SHA256):
+                      </span>
                       <button
                         type="button"
                         onClick={() => {
-                          resetDemo();
-                          setShowTicketModal(false);
-                          setShowCelebration(false);
+                          if (typeof navigator !== "undefined" && navigator.clipboard) {
+                            navigator.clipboard.writeText(auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
+                            setCopiedHash(true);
+                            setTimeout(() => setCopiedHash(false), 2500);
+                          }
                         }}
+                        style={{
+                          background: copiedHash ? '#ecfdf5' : '#ffffff',
+                          border: copiedHash ? '1px solid #10b981' : '1px solid #cbd5e1',
+                          color: copiedHash ? '#059669' : '#0f172a',
+                          padding: '3px 10px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          fontWeight: 800,
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {copiedHash ? "✓ Copiado" : "📋 Copiar Hash"}
+                      </button>
+                    </div>
+
+                    <code className="winnerShaCode" style={{
+                      display: 'block',
+                      background: '#0f172a',
+                      color: '#38bdf8',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                      fontFamily: 'monospace',
+                      wordBreak: 'break-all',
+                      lineHeight: '1.4'
+                    }}>
+                      {auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+                    </code>
+
+                    <div style={{ marginTop: '14px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+                      <div style={{ background: '#ffffff', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                        <span style={{ fontSize: '10.5px', color: '#64748b', fontWeight: 800, display: 'block', textTransform: 'uppercase' }}>Equiprobabilidad</span>
+                        <strong style={{ fontSize: '13px', color: '#059669' }}>100% Sin Sesgo de Módulo</strong>
+                      </div>
+                      <div style={{ background: '#ffffff', padding: '10px 12px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                        <span style={{ fontSize: '10.5px', color: '#64748b', fontWeight: 800, display: 'block', textTransform: 'uppercase' }}>Aleatoriedad</span>
+                        <strong style={{ fontSize: '13px', color: '#0284c7' }}>CSPRNG de Alta Resistencia</strong>
+                      </div>
+                    </div>
+
+                    <div style={{ marginTop: '14px' }}>
+                      <button
+                        type="button"
+                        onClick={() => setShowPrintModal(true)}
                         style={{
                           width: '100%',
-                          padding: '12px 18px',
-                          borderRadius: '12px',
-                          background: '#fff1f2',
-                          border: '1.5px solid #f87171',
-                          color: '#dc2626',
-                          fontWeight: 800,
-                          fontSize: '14px',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '8px',
-                          boxShadow: '0 4px 14px rgba(239, 68, 68, 0.15)',
-                          transition: 'all 0.2s ease',
-                        }}
-                        title="Quitar tiquete y resultado del ganador"
-                      >
-                        ✕ Quitar Ganador / Continuar Sorteos
-                      </button>
-                    </div>
-
-                    <div className="winnerCardActionButtons">
-                      <button
-                        className="winnerChatButton"
-                        onClick={() => setShowWinnerChatModal(true)}
-                        type="button"
-                        style={{
-                          background: 'linear-gradient(135deg, #007AFF 0%, #0284c7 100%)',
+                          padding: '10px 16px',
+                          borderRadius: '10px',
+                          background: 'linear-gradient(135deg, #053b22 0%, #032415 100%)',
+                          border: '1px solid #d4af37',
                           color: '#ffffff',
-                          border: 'none',
                           fontWeight: 800,
-                          padding: '10px 16px',
-                          borderRadius: '10px',
-                          boxShadow: '0 4px 12px rgba(0, 122, 255, 0.35)',
-                          cursor: 'pointer',
-                        }}
-                        title="Abrir ventana de chat con el comercio"
-                      >
-                        💬 Chat Comercio
-                      </button>
-                      <button
-                        className="winnerSocialShareButton"
-                        onClick={handleDirectShareWinner}
-                        type="button"
-                        style={{
-                          background: '#f1f5f9',
-                          color: '#0f172a',
-                          border: '1px solid #cbd5e1',
-                          fontWeight: 800,
-                          padding: '10px 16px',
-                          borderRadius: '10px',
-                          cursor: 'pointer',
+                          fontSize: '13px',
+                          cursor: 'pointer'
                         }}
                       >
-                        📤 Compartir
+                        📜 Ver y Descargar Constancia Notarial Oficial (PDF)
                       </button>
-                      {winnerTicket && (
-                        <button
-                          className="winnerTicketButton"
-                          onClick={() => {
-                            clearRevealTicketTimers();
-                            setShowTicketModal(true);
-                          }}
-                          type="button"
-                          style={{
-                            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                            color: '#ffffff',
-                            border: 'none',
-                            fontWeight: 800,
-                            padding: '10px 16px',
-                            borderRadius: '10px',
-                            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.35)',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          🎟️ Ver Acta Notarial
-                        </button>
-                      )}
                     </div>
                   </div>
-                )}
-
-                {/* SELECTOR DE MODO PRUEBA PARA VALIDAR GANADOR VS ESPECTADOR */}
-                <div className="testSimulateWinnerRow">
-                  <button
-                    type="button"
-                    className={`btnTestWinnerToggle ${simulateWinnerMode ? "active" : ""}`}
-                    onClick={() => setSimulateWinnerMode((prev) => !prev)}
-                    title="Alternar entre vista de ganador y espectador"
-                  >
-                    🧪 {simulateWinnerMode ? "✓ Modo Prueba: Eres el Ganador (Sin cierre)" : "Modo Prueba: Simular que soy el ganador"}
-                  </button>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* BANDEJA DE BALOTAS EXTRAÍDAS */}
-            {history.length > 0 && (
-              <div className="drawHistoryTray">
-                <span className="historyTitle">Bandeja Oficial de Balotas Extraídas:</span>
-                <div className="historyChips">
-                  {history.map((item, idx) => (
-                    <div key={idx} className="historyChip" title={`Cartón de ${item.carton} · ${item.time}`}>
-                      <span className="chipBall">{item.number}</span>
-                      <small>{item.time}</small>
+              {/* =============================================================
+                  BLOQUE 3: DETALLES DEL SORTEO & BANDEJA DE HISTORIAL
+                  ============================================================= */}
+              {activeResultTab === "detalles" && (
+                <div className="blockContent blockDetalles">
+                  <div className="drawBlockHeader">
+                    <div>
+                      <h3><span>📊</span> Detalles del Sorteo y Balotas Extraídas</h3>
+                      <p>Información del evento, números elegibles y registro histórico de extracción.</p>
                     </div>
-                  ))}
+                    <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 700 }}>
+                      {mode === "balotas" ? `Cartón de ${cartonSize}` : `Ruleta de ${wheelSize}`}
+                    </span>
+                  </div>
+
+                  <div className="liveDemoDetails" style={{ padding: '0', background: 'transparent', border: 'none', boxShadow: 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
+                      <div className="liveDemoPrizeIcon" style={{ flexShrink: 0 }}>
+                        {mode === "balotas" ? (
+                          <RealisticBalotaIcon size={54} number={winner || displayNumber || "77"} />
+                        ) : (
+                          "🎡"
+                        )}
+                      </div>
+                      <div>
+                        <h4 style={{ margin: '0 0 4px 0', fontSize: '16px', fontWeight: 900, color: '#0f172a' }}>
+                          {mode === "balotas" ? "El Círculo Dorado" : "La ruleta de tu comunidad"}
+                        </h4>
+                        <p style={{ margin: 0, fontSize: '12.5px', color: '#475569', lineHeight: '1.35' }}>
+                          {mode === "balotas"
+                            ? `Extracción oficial certificada con física en tiempo real. Del ${eligibleNumbers[0]} al ${eligibleNumbers[eligibleNumbers.length - 1]} (${cartonSize} boletas en total).`
+                            : "Organiza tu sorteo: selecciona del 01 al 10, 20, 30, 40 o 50."}
+                        </p>
+                      </div>
+                    </div>
+
+                    {mode === "ruleta" && (
+                      <div className="wheelSetup" style={{ marginBottom: '14px' }}>
+                        <label>
+                          Cantidad de números en la ruleta
+                          <select
+                            value={wheelSize}
+                            disabled={phase === "spinning"}
+                            onChange={(event) => {
+                              if (phase === "spinning") return;
+                              setWheelSize(Number(event.target.value));
+                              resetDemo();
+                            }}
+                          >
+                            {[10, 20, 30, 40, 50].map((size) => (
+                              <option key={size} value={size}>
+                                01 a {size} ({size} números)
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      </div>
+                    )}
+
+                    <div className="liveDemoPrizeStats" style={{ margin: '14px 0' }}>
+                      <div>
+                        <b>{mode === "balotas" ? cartonSize : wheelPlayers.length}</b>
+                        <span>{mode === "balotas" ? <>números elegibles<br />({eligibleNumbers[0]} a {eligibleNumbers[eligibleNumbers.length - 1]})</> : <>números en<br />la ruleta</>}</span>
+                      </div>
+                      <div>
+                        <b>100%</b>
+                        <span>equiprobable<br />sin sesgo de módulo</span>
+                      </div>
+                    </div>
+
+                    {/* BANDEJA DE BALOTAS EXTRAÍDAS */}
+                    {history.length > 0 ? (
+                      <div className="drawHistoryTray" style={{ margin: '16px 0 0 0' }}>
+                        <span className="historyTitle">Bandeja Oficial de Balotas Extraídas:</span>
+                        <div className="historyChips">
+                          {history.map((item, idx) => (
+                            <div key={idx} className="historyChip" title={`Cartón de ${item.carton} · ${item.time}`}>
+                              <span className="chipBall">{item.number}</span>
+                              <small>{item.time}</small>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <p style={{ fontSize: '12px', color: '#94a3b8', fontStyle: 'italic', margin: '12px 0' }}>
+                        Aún no se han extraído balotas en esta sesión.
+                      </p>
+                    )}
+
+                    <div className="liveDemoDrawActions" style={{ marginTop: '16px' }}>
+                      {phase === "winner" ? (
+                        <button className="liveDemoStart" onClick={resetDemo} type="button">↻ Nuevo sorteo</button>
+                      ) : (
+                        <button
+                          className="liveDemoStart"
+                          onClick={playDemo}
+                          disabled={phase === "spinning"}
+                          type="button"
+                        >
+                          {phase === "spinning" ? "🌀 Sorteo en curso..." : "▶ Iniciar sorteo"}
+                        </button>
+                      )}
+                      <a className="liveDemoMarketLink" href="/">← Volver al catálogo de rifas</a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+
+              {/* =============================================================
+                  BLOQUE 4: AUDITORÍA TÉCNICA COLJUEGOS & TRANSPARENCIA
+                  ============================================================= */}
+              {activeResultTab === "auditoria" && (
+                <div className="blockContent blockAuditoria">
+                  <div className="drawBlockHeader">
+                    <div>
+                      <h3><span>📜</span> Auditoría Técnica y Cumplimiento Legal</h3>
+                      <p>Protocolos de inmutabilidad, transparencia y supervisión regulatoria.</p>
+                    </div>
+                    <span style={{ fontSize: '11px', background: '#fef3c7', color: '#b45309', border: '1px solid #fde68a', padding: '3px 8px', borderRadius: '6px', fontWeight: 800 }}>
+                      Ley 643/2001
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px' }}>
+                    <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                      <strong style={{ fontSize: '13px', color: '#0f172a', display: 'block', marginBottom: '4px' }}>
+                        1. Generación de Aleatoriedad Criptográfica
+                      </strong>
+                      <p style={{ fontSize: '12px', color: '#475569', margin: 0, lineHeight: '1.4' }}>
+                        El motor utiliza CSPRNG (Generador de Números Pseudoaleatorios Criptográficamente Seguro) acoplado a un hash HMAC-SHA256 para garantizar que ningún participante o administrador pueda predecir ni modificar la balota extraída.
+                      </p>
+                    </div>
+
+                    <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                      <strong style={{ fontSize: '13px', color: '#0f172a', display: 'block', marginBottom: '4px' }}>
+                        2. Cero Retención / No Custodia de Fondos
+                      </strong>
+                      <p style={{ fontSize: '12px', color: '#475569', margin: 0, lineHeight: '1.4' }}>
+                        El Ganador opera estrictamente como plataforma de software tecnológico y canal de comunicación. No retenemos fondos ni premios; los premios son entregados y garantizados directamente por los comercios autorizados.
+                      </p>
+                    </div>
+
+                    <div style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                      <strong style={{ fontSize: '13px', color: '#0f172a', display: 'block', marginBottom: '4px' }}>
+                        3. Simulación de Pruebas de Operador
+                      </strong>
+                      <p style={{ fontSize: '12px', color: '#475569', margin: '0 0 10px 0', lineHeight: '1.4' }}>
+                        Puedes alternar la simulación para comprobar la experiencia tanto desde la perspectiva del comprador ganador como de un espectador general:
+                      </p>
+                      <button
+                        type="button"
+                        className={`btnTestWinnerToggle ${simulateWinnerMode ? "active" : ""}`}
+                        onClick={() => setSimulateWinnerMode((prev) => !prev)}
+                        style={{
+                          padding: '8px 14px',
+                          borderRadius: '8px',
+                          fontSize: '12px',
+                          fontWeight: 800,
+                          cursor: 'pointer',
+                          background: simulateWinnerMode ? '#ecfdf5' : '#f1f5f9',
+                          border: simulateWinnerMode ? '1px solid #10b981' : '1px solid #cbd5e1',
+                          color: simulateWinnerMode ? '#059669' : '#334155'
+                        }}
+                      >
+                        🧪 {simulateWinnerMode ? "✓ Modo Prueba: Eres el Ganador (Activo)" : "Modo Prueba: Simular que soy el ganador"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          )}
         </div>
 
         <div className="liveDemoStageFoot">
