@@ -280,27 +280,27 @@ export default function FavoritosPage() {
           zIndex: 40,
           backgroundColor: isDark ? '#000000' : '#ffffff',
           borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #e2e8f0',
-          padding: 'max(calc(env(safe-area-inset-top, 0px) + 12px), 50px) 16px 14px 16px',
-          boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.5)' : '0 2px 10px rgba(0,0,0,0.05)',
+          padding: 'max(calc(env(safe-area-inset-top, 0px) + 8px), 44px) 14px 10px 14px',
+          boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.5)' : '0 2px 8px rgba(0,0,0,0.04)',
         }}
       >
         <div
           style={{
-            maxWidth: '1280px',
+            maxWidth: '1200px',
             margin: '0 auto',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '12px',
+            gap: '10px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Link
               aria-label="Volver al Inicio"
               href="/"
               style={{
-                width: '38px',
-                height: '38px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
@@ -308,7 +308,7 @@ export default function FavoritosPage() {
                 background: isDark ? 'rgba(255, 255, 255, 0.08)' : '#f1f5f9',
                 color: isDark ? '#ffffff' : '#0f172a',
                 textDecoration: 'none',
-                fontSize: '18px',
+                fontSize: '15px',
                 fontWeight: 700,
                 border: isDark ? '1px solid #334155' : '1px solid #cbd5e1',
                 flexShrink: 0,
@@ -320,7 +320,7 @@ export default function FavoritosPage() {
             <div>
               <h1
                 style={{
-                  fontSize: '17px',
+                  fontSize: '15px',
                   fontWeight: 900,
                   margin: 0,
                   color: isDark ? '#ffffff' : '#0f172a',
@@ -330,7 +330,7 @@ export default function FavoritosPage() {
               >
                 Mis Favoritos & Seguidos
               </h1>
-              <small style={{ fontSize: '11px', color: '#007AFF', fontWeight: 700, display: 'block' }}>
+              <small style={{ fontSize: '10px', color: '#007AFF', fontWeight: 700, display: 'block' }}>
                 Tus comercios verificados y sorteos guardados
               </small>
             </div>
@@ -341,9 +341,9 @@ export default function FavoritosPage() {
             style={{
               display: 'flex',
               background: isDark ? '#1e293b' : '#e2e8f0',
-              padding: '4px',
-              borderRadius: '12px',
-              gap: '4px',
+              padding: '3px',
+              borderRadius: '10px',
+              gap: '3px',
             }}
           >
             <button
@@ -352,15 +352,15 @@ export default function FavoritosPage() {
                 border: 'none',
                 background: activeTab === 'clientes' ? '#007AFF' : 'transparent',
                 color: activeTab === 'clientes' ? '#ffffff' : isDark ? '#94a3b8' : '#64748b',
-                padding: '7px 14px',
-                borderRadius: '9px',
+                padding: '5px 10px',
+                borderRadius: '7px',
                 fontWeight: 800,
-                fontSize: '12px',
+                fontSize: '11px',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '5px',
+                gap: '4px',
               }}
             >
               <span>👤</span> Clientes
@@ -371,15 +371,15 @@ export default function FavoritosPage() {
                 border: 'none',
                 background: activeTab === 'empresarios' ? '#007AFF' : 'transparent',
                 color: activeTab === 'empresarios' ? '#ffffff' : isDark ? '#94a3b8' : '#64748b',
-                padding: '7px 14px',
-                borderRadius: '9px',
+                padding: '5px 10px',
+                borderRadius: '7px',
                 fontWeight: 800,
-                fontSize: '12px',
+                fontSize: '11px',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '5px',
+                gap: '4px',
               }}
             >
               <span>🏢</span> Empresarios
@@ -389,33 +389,33 @@ export default function FavoritosPage() {
       </header>
 
       {/* Main Content */}
-      <main className="native-bottom-safe-space" style={{ maxWidth: '1280px', margin: '24px auto', padding: '0 16px' }}>
+      <main className="native-bottom-safe-space" style={{ maxWidth: '1200px', margin: '14px auto', padding: '0 12px' }}>
         {/* ========================================================================= */}
         {/* TAB 1: CLIENTES - EMPRESAS SEGUIDAS Y SORTEOS FAVORITOS                   */}
         {/* ========================================================================= */}
         {activeTab === 'clientes' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Banner Informativo */}
             <div
               style={{
                 background: isDark
-                  ? 'linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(30, 41, 59, 0.8))'
+                  ? 'linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(30, 41, 59, 0.75))'
                   : 'linear-gradient(135deg, #e0f2fe, #f0fdf4)',
-                border: isDark ? '1px solid rgba(56, 189, 248, 0.3)' : '1px solid #bae6fd',
-                borderRadius: '18px',
-                padding: '20px 24px',
+                border: isDark ? '1px solid rgba(56, 189, 248, 0.25)' : '1px solid #bae6fd',
+                borderRadius: '14px',
+                padding: '12px 14px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                gap: '16px',
+                gap: '10px',
               }}
             >
               <div>
                 <h2
                   style={{
-                    margin: '0 0 6px',
-                    fontSize: '18px',
+                    margin: '0 0 3px',
+                    fontSize: '13.5px',
                     fontWeight: 800,
                     color: isDark ? '#38bdf8' : '#0369a1',
                   }}
@@ -425,46 +425,46 @@ export default function FavoritosPage() {
                 <p
                   style={{
                     margin: 0,
-                    fontSize: '13.5px',
+                    fontSize: '11px',
                     color: isDark ? '#cbd5e1' : '#334155',
-                    maxWidth: '780px',
-                    lineHeight: 1.5,
+                    maxWidth: '720px',
+                    lineHeight: 1.35,
                   }}
                 >
                   Al seguir a un negocio, cada vez que publique una rifa o active una promoción VIP, te aparecerá
                   priorizado en tu catálogo y recibirás acceso antes que el público general.
                 </p>
               </div>
-              <div style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <div
                   style={{
                     background: isDark ? '#0f172a' : '#ffffff',
-                    padding: '8px 16px',
-                    borderRadius: '12px',
+                    padding: '5px 10px',
+                    borderRadius: '8px',
                     border: isDark ? '1px solid #334155' : '1px solid #cbd5e1',
                     textAlign: 'center',
                   }}
                 >
-                  <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 700 }}>
-                    EMPRESAS SEGUIDAS
+                  <span style={{ fontSize: '9.5px', color: '#64748b', display: 'block', fontWeight: 700 }}>
+                    SEGUIDAS
                   </span>
-                  <strong style={{ fontSize: '20px', color: '#0284c7', fontWeight: 900 }}>
+                  <strong style={{ fontSize: '15px', color: '#0284c7', fontWeight: 900 }}>
                     {followedMerchants.length}
                   </strong>
                 </div>
                 <div
                   style={{
                     background: isDark ? '#0f172a' : '#ffffff',
-                    padding: '8px 16px',
-                    borderRadius: '12px',
+                    padding: '5px 10px',
+                    borderRadius: '8px',
                     border: isDark ? '1px solid #334155' : '1px solid #cbd5e1',
                     textAlign: 'center',
                   }}
                 >
-                  <span style={{ fontSize: '11px', color: '#64748b', display: 'block', fontWeight: 700 }}>
-                    SORTEOS GUARDADOS
+                  <span style={{ fontSize: '9.5px', color: '#64748b', display: 'block', fontWeight: 700 }}>
+                    GUARDADOS
                   </span>
-                  <strong style={{ fontSize: '20px', color: '#e11d48', fontWeight: 900 }}>
+                  <strong style={{ fontSize: '15px', color: '#e11d48', fontWeight: 900 }}>
                     {likedRaffles.length}
                   </strong>
                 </div>
@@ -478,24 +478,24 @@ export default function FavoritosPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  marginBottom: '16px',
+                  marginBottom: '10px',
                 }}
               >
                 <div>
                   <h2
                     style={{
                       margin: 0,
-                      fontSize: '20px',
+                      fontSize: '14.5px',
                       fontWeight: 800,
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '8px',
+                      gap: '6px',
                       color: isDark ? '#ffffff' : '#0f172a',
                     }}
                   >
                     <span>🏢</span> Empresas que Sigues ({followedMerchants.length})
                   </h2>
-                  <p style={{ margin: '4px 0 0', fontSize: '13px', color: isDark ? '#94a3b8' : '#64748b' }}>
+                  <p style={{ margin: '2px 0 0', fontSize: '11px', color: isDark ? '#94a3b8' : '#64748b' }}>
                     Negocios verificados con sorteos legales y respaldo oficial
                   </p>
                 </div>
@@ -505,17 +505,17 @@ export default function FavoritosPage() {
                 <div
                   style={{
                     background: isDark ? '#1e293b' : '#ffffff',
-                    padding: '36px 20px',
-                    borderRadius: '16px',
+                    padding: '24px 16px',
+                    borderRadius: '14px',
                     textAlign: 'center',
                     border: isDark ? '1px dashed #334155' : '1px dashed #cbd5e1',
                   }}
                 >
-                  <p style={{ fontSize: '32px', margin: '0 0 10px' }}>🏬</p>
-                  <h3 style={{ margin: '0 0 6px', fontSize: '16px', fontWeight: 800 }}>
+                  <p style={{ fontSize: '26px', margin: '0 0 6px' }}>🏬</p>
+                  <h3 style={{ margin: '0 0 4px', fontSize: '14px', fontWeight: 800 }}>
                     Aún no sigues a ninguna empresa
                   </h3>
-                  <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#64748b' }}>
+                  <p style={{ margin: '0 0 12px', fontSize: '11.5px', color: '#64748b' }}>
                     Sigue a los comercios para no perderte sus próximos sorteos y premios.
                   </p>
                   <button
@@ -531,10 +531,10 @@ export default function FavoritosPage() {
                       background: '#0284c7',
                       color: '#ffffff',
                       border: 'none',
-                      padding: '10px 20px',
-                      borderRadius: '10px',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
                       fontWeight: 700,
-                      fontSize: '13px',
+                      fontSize: '11.5px',
                       cursor: 'pointer',
                     }}
                   >
@@ -545,8 +545,8 @@ export default function FavoritosPage() {
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))',
-                    gap: '16px',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))',
+                    gap: '10px',
                   }}
                 >
                   {DEFAULT_MERCHANTS.filter((m) => followedMerchants.includes(m.name)).map((merchant) => (
@@ -555,27 +555,28 @@ export default function FavoritosPage() {
                       style={{
                         background: isDark ? '#1e293b' : '#ffffff',
                         border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
-                        borderRadius: '16px',
-                        padding: '18px 20px',
+                        borderRadius: '14px',
+                        padding: '10px 12px',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.04)',
+                        boxShadow: isDark ? '0 3px 8px rgba(0,0,0,0.25)' : '0 1px 4px rgba(0,0,0,0.03)',
                       }}
                     >
                       <div>
                         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <div
                               style={{
-                                width: '48px',
-                                height: '48px',
-                                borderRadius: '12px',
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '10px',
                                 background: isDark ? '#0f172a' : '#f0f9ff',
                                 display: 'grid',
                                 placeItems: 'center',
-                                fontSize: '24px',
+                                fontSize: '18px',
                                 border: '1px solid #bae6fd',
+                                flexShrink: 0,
                               }}
                             >
                               {merchant.avatar}
@@ -584,22 +585,22 @@ export default function FavoritosPage() {
                               <h3
                                 style={{
                                   margin: 0,
-                                  fontSize: '15px',
+                                  fontSize: '13px',
                                   fontWeight: 800,
                                   color: isDark ? '#ffffff' : '#0f172a',
                                   display: 'flex',
                                   alignItems: 'center',
-                                  gap: '4px',
+                                  gap: '3px',
                                 }}
                               >
                                 {merchant.name}
                                 {merchant.verified && (
-                                  <span title="Comercio Verificado" style={{ color: '#0284c7', fontSize: '14px' }}>
+                                  <span title="Comercio Verificado" style={{ color: '#0284c7', fontSize: '12px' }}>
                                     ✓
                                   </span>
                                 )}
                               </h3>
-                              <span style={{ fontSize: '12px', color: '#0284c7', fontWeight: 600 }}>
+                              <span style={{ fontSize: '10.5px', color: '#0284c7', fontWeight: 600 }}>
                                 {merchant.category}
                               </span>
                             </div>
@@ -608,10 +609,10 @@ export default function FavoritosPage() {
 
                         <p
                           style={{
-                            margin: '12px 0',
-                            fontSize: '12.5px',
+                            margin: '8px 0',
+                            fontSize: '11px',
                             color: isDark ? '#cbd5e1' : '#475569',
-                            lineHeight: 1.45,
+                            lineHeight: 1.35,
                           }}
                         >
                           {merchant.description}
@@ -621,15 +622,15 @@ export default function FavoritosPage() {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '12px',
-                            marginBottom: '14px',
-                            fontSize: '12px',
+                            gap: '8px',
+                            marginBottom: '10px',
+                            fontSize: '10px',
                             color: isDark ? '#94a3b8' : '#64748b',
                             fontWeight: 600,
                           }}
                         >
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            👥 <strong>{(merchant.baseFollowers + 1).toLocaleString('es-CO')}</strong> seguidores
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                            👥 <strong>{(merchant.baseFollowers + 1).toLocaleString('es-CO')}</strong> seg.
                           </span>
                           <span>•</span>
                           <span style={{ color: '#f59e0b', fontWeight: 700 }}>⭐ {merchant.rating}</span>
@@ -640,7 +641,7 @@ export default function FavoritosPage() {
                         </div>
                       </div>
 
-                      <div style={{ display: 'flex', gap: '8px' }}>
+                      <div style={{ display: 'flex', gap: '6px' }}>
                         <Link
                           href="/"
                           style={{
@@ -648,14 +649,14 @@ export default function FavoritosPage() {
                             textAlign: 'center',
                             background: '#0284c7',
                             color: '#ffffff',
-                            padding: '9px 12px',
-                            borderRadius: '10px',
+                            padding: '6px 10px',
+                            borderRadius: '8px',
                             fontWeight: 700,
-                            fontSize: '12.5px',
+                            fontSize: '11px',
                             textDecoration: 'none',
                           }}
                         >
-                          Ver Sorteos Activos →
+                          Ver Sorteos →
                         </Link>
                         <button
                           onClick={() => handleToggleFollow(merchant.name)}
@@ -663,10 +664,10 @@ export default function FavoritosPage() {
                             background: isDark ? '#334155' : '#f1f5f9',
                             color: isDark ? '#f8fafc' : '#475569',
                             border: isDark ? '1px solid #475569' : '1px solid #cbd5e1',
-                            padding: '9px 14px',
-                            borderRadius: '10px',
+                            padding: '6px 10px',
+                            borderRadius: '8px',
                             fontWeight: 700,
-                            fontSize: '12px',
+                            fontSize: '11px',
                             cursor: 'pointer',
                           }}
                         >
@@ -686,24 +687,24 @@ export default function FavoritosPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  marginBottom: '16px',
+                  marginBottom: '10px',
                 }}
               >
                 <div>
                   <h2
                     style={{
                       margin: 0,
-                      fontSize: '20px',
+                      fontSize: '14.5px',
                       fontWeight: 800,
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '8px',
+                      gap: '6px',
                       color: isDark ? '#ffffff' : '#0f172a',
                     }}
                   >
                     <span>❤️</span> Sorteos con "Me Gusta" ({likedRaffles.length})
                   </h2>
-                  <p style={{ margin: '4px 0 0', fontSize: '13px', color: isDark ? '#94a3b8' : '#64748b' }}>
+                  <p style={{ margin: '2px 0 0', fontSize: '11px', color: isDark ? '#94a3b8' : '#64748b' }}>
                     Tus rifas guardadas listas para apartar y seguir en vivo
                   </p>
                 </div>
@@ -713,17 +714,17 @@ export default function FavoritosPage() {
                 <div
                   style={{
                     background: isDark ? '#1e293b' : '#ffffff',
-                    padding: '36px 20px',
-                    borderRadius: '16px',
+                    padding: '24px 16px',
+                    borderRadius: '14px',
                     textAlign: 'center',
                     border: isDark ? '1px dashed #334155' : '1px dashed #cbd5e1',
                   }}
                 >
-                  <p style={{ fontSize: '32px', margin: '0 0 10px' }}>🤍</p>
-                  <h3 style={{ margin: '0 0 6px', fontSize: '16px', fontWeight: 800 }}>
+                  <p style={{ fontSize: '26px', margin: '0 0 6px' }}>🤍</p>
+                  <h3 style={{ margin: '0 0 4px', fontSize: '14px', fontWeight: 800 }}>
                     No tienes sorteos guardados en favoritos
                   </h3>
-                  <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#64748b' }}>
+                  <p style={{ margin: '0 0 12px', fontSize: '11.5px', color: '#64748b' }}>
                     En el catálogo principal, haz clic en el corazón ❤️ de cualquier sorteo para guardarlo aquí.
                   </p>
                   <Link
@@ -732,22 +733,22 @@ export default function FavoritosPage() {
                       display: 'inline-block',
                       background: '#0284c7',
                       color: '#ffffff',
-                      padding: '10px 20px',
-                      borderRadius: '10px',
+                      padding: '8px 16px',
+                      borderRadius: '8px',
                       fontWeight: 700,
-                      fontSize: '13px',
+                      fontSize: '11.5px',
                       textDecoration: 'none',
                     }}
                   >
-                    Explorar Catálogo de Sorteos →
+                    Explorar Catálogo →
                   </Link>
                 </div>
               ) : (
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))',
-                    gap: '16px',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 250px), 1fr))',
+                    gap: '10px',
                   }}
                 >
                   {likedRaffles.map((raffle) => {
@@ -759,15 +760,15 @@ export default function FavoritosPage() {
                         style={{
                           background: isDark ? '#1e293b' : '#ffffff',
                           border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
-                          borderRadius: '16px',
+                          borderRadius: '14px',
                           overflow: 'hidden',
-                          boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.04)',
+                          boxShadow: isDark ? '0 3px 8px rgba(0,0,0,0.25)' : '0 1px 4px rgba(0,0,0,0.03)',
                           display: 'flex',
                           flexDirection: 'column',
                           justifyContent: 'space-between',
                         }}
                       >
-                        <div style={{ position: 'relative', height: '170px', overflow: 'hidden' }}>
+                        <div style={{ position: 'relative', height: '130px', overflow: 'hidden' }}>
                           <img
                             src={raffle.image}
                             alt={raffle.title}
@@ -776,14 +777,14 @@ export default function FavoritosPage() {
                           <span
                             style={{
                               position: 'absolute',
-                              top: '10px',
-                              left: '10px',
+                              top: '8px',
+                              left: '8px',
                               background: 'rgba(15, 23, 42, 0.85)',
                               color: '#f8fafc',
-                              fontSize: '11px',
+                              fontSize: '9.5px',
                               fontWeight: 800,
-                              padding: '4px 8px',
-                              borderRadius: '6px',
+                              padding: '2px 6px',
+                              borderRadius: '5px',
                               backdropFilter: 'blur(4px)',
                             }}
                           >
@@ -792,29 +793,29 @@ export default function FavoritosPage() {
                           <span
                             style={{
                               position: 'absolute',
-                              top: '10px',
-                              right: '10px',
+                              top: '8px',
+                              right: '8px',
                               background: '#f59e0b',
                               color: '#000000',
-                              fontSize: '12px',
+                              fontSize: '11px',
                               fontWeight: 900,
-                              padding: '4px 8px',
-                              borderRadius: '6px',
+                              padding: '2px 6px',
+                              borderRadius: '5px',
                             }}
                           >
                             {raffle.priceCop}
                           </span>
                         </div>
 
-                        <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <div style={{ padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
                           <small
                             style={{
-                              fontSize: '12px',
+                              fontSize: '10px',
                               fontWeight: 700,
                               color: isDark ? '#38bdf8' : '#0284c7',
                               display: 'flex',
                               alignItems: 'center',
-                              gap: '4px',
+                              gap: '3px',
                             }}
                           >
                             🏪 {raffle.merchant}
@@ -822,25 +823,25 @@ export default function FavoritosPage() {
                           <h3
                             style={{
                               margin: 0,
-                              fontSize: '14.5px',
+                              fontSize: '12.5px',
                               fontWeight: 800,
                               color: isDark ? '#ffffff' : '#0f172a',
-                              lineHeight: 1.35,
+                              lineHeight: 1.25,
                             }}
                           >
                             {raffle.title}
                           </h3>
 
                           {/* Barra de Progreso */}
-                          <div style={{ marginTop: '4px' }}>
+                          <div style={{ marginTop: '2px' }}>
                             <div
                               style={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                fontSize: '11px',
+                                fontSize: '10px',
                                 fontWeight: 700,
                                 color: isDark ? '#cbd5e1' : '#64748b',
-                                marginBottom: '4px',
+                                marginBottom: '2px',
                               }}
                             >
                               <span>
@@ -853,7 +854,7 @@ export default function FavoritosPage() {
                             <div
                               style={{
                                 width: '100%',
-                                height: '6px',
+                                height: '5px',
                                 background: isDark ? '#334155' : '#e2e8f0',
                                 borderRadius: '99px',
                                 overflow: 'hidden',
@@ -871,7 +872,7 @@ export default function FavoritosPage() {
                           </div>
 
                           {/* Acciones */}
-                          <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                          <div style={{ display: 'flex', gap: '6px', marginTop: '4px' }}>
                             <Link
                               href="/"
                               style={{
@@ -879,10 +880,10 @@ export default function FavoritosPage() {
                                 textAlign: 'center',
                                 background: '#0284c7',
                                 color: '#ffffff',
-                                padding: '8px 12px',
-                                borderRadius: '8px',
+                                padding: '6px 10px',
+                                borderRadius: '7px',
                                 fontWeight: 700,
-                                fontSize: '12px',
+                                fontSize: '11px',
                                 textDecoration: 'none',
                               }}
                             >
@@ -895,10 +896,10 @@ export default function FavoritosPage() {
                                 background: isDark ? '#334155' : '#fee2e2',
                                 color: '#e11d48',
                                 border: 'none',
-                                padding: '8px 12px',
-                                borderRadius: '8px',
+                                padding: '6px 10px',
+                                borderRadius: '7px',
                                 fontWeight: 800,
-                                fontSize: '12px',
+                                fontSize: '11px',
                                 cursor: 'pointer',
                               }}
                             >
@@ -919,7 +920,7 @@ export default function FavoritosPage() {
         {/* TAB 2: EMPRESARIOS - PANEL DE POPULARIDAD, SEGUIDORES & DIFUSIÓN           */}
         {/* ========================================================================= */}
         {activeTab === 'empresarios' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Header del Panel Empresarial */}
             <div
               style={{
@@ -927,69 +928,70 @@ export default function FavoritosPage() {
                   ? 'linear-gradient(135deg, #1e293b, #0f172a)'
                   : 'linear-gradient(135deg, #ffffff, #f8fafc)',
                 border: isDark ? '1px solid #334155' : '1px solid #cbd5e1',
-                borderRadius: '20px',
-                padding: '24px',
+                borderRadius: '16px',
+                padding: '12px 14px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                gap: '16px',
-                boxShadow: isDark ? '0 8px 24px rgba(0,0,0,0.4)' : '0 4px 16px rgba(0,0,0,0.06)',
+                gap: '10px',
+                boxShadow: isDark ? '0 4px 14px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.04)',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div
                   style={{
-                    width: '64px',
-                    height: '64px',
-                    borderRadius: '16px',
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '12px',
                     background: '#0284c7',
                     color: '#ffffff',
                     display: 'grid',
                     placeItems: 'center',
-                    fontSize: '32px',
-                    boxShadow: '0 8px 20px rgba(2, 132, 199, 0.4)',
+                    fontSize: '22px',
+                    boxShadow: '0 4px 12px rgba(2, 132, 199, 0.35)',
+                    flexShrink: 0,
                   }}
                 >
                   {currentBiz.avatar}
                 </div>
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <h2 style={{ margin: 0, fontSize: '22px', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <h2 style={{ margin: 0, fontSize: '15px', fontWeight: 900, color: isDark ? '#ffffff' : '#0f172a' }}>
                       {currentBiz.name}
                     </h2>
                     <span
                       style={{
                         background: '#10b981',
                         color: '#ffffff',
-                        fontSize: '11px',
+                        fontSize: '9.5px',
                         fontWeight: 800,
-                        padding: '2px 8px',
+                        padding: '1px 6px',
                         borderRadius: '99px',
                       }}
                     >
                       ✓ Verificado
                     </span>
                   </div>
-                  <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#64748b' }}>
-                    {currentBiz.category} · Licencia y Sorteos Autorizados en Coljuegos / Beneficencia
+                  <p style={{ margin: '2px 0 0', fontSize: '10.5px', color: '#64748b' }}>
+                    {currentBiz.category} · Licencia y Sorteos Autorizados
                   </p>
                 </div>
               </div>
 
               {/* Selector de Empresa para Demostración */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '12px', fontWeight: 700, color: '#64748b' }}>Cambiar Empresa:</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: '#64748b' }}>Empresa:</span>
                 <select
                   value={selectedMerchantForBiz}
                   onChange={(e) => setSelectedMerchantForBiz(e.target.value)}
                   style={{
-                    padding: '8px 14px',
-                    borderRadius: '10px',
+                    padding: '5px 10px',
+                    borderRadius: '8px',
                     background: isDark ? '#0f172a' : '#ffffff',
                     color: isDark ? '#ffffff' : '#0f172a',
                     border: isDark ? '1px solid #334155' : '1px solid #cbd5e1',
-                    fontSize: '13px',
+                    fontSize: '11.5px',
                     fontWeight: 700,
                     outline: 'none',
                     cursor: 'pointer',
@@ -1008,36 +1010,36 @@ export default function FavoritosPage() {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                gap: '16px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                gap: '10px',
               }}
             >
               <div
                 style={{
                   background: isDark ? '#1e293b' : '#ffffff',
                   border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
-                  borderRadius: '16px',
-                  padding: '20px',
-                  boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.04)',
+                  borderRadius: '12px',
+                  padding: '12px 14px',
+                  boxShadow: isDark ? '0 3px 8px rgba(0,0,0,0.25)' : '0 1px 4px rgba(0,0,0,0.03)',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#0284c7' }}>👥 SEGUIDORES ACTIVOS</span>
-                  <span style={{ fontSize: '18px' }}>📈</span>
+                  <span style={{ fontSize: '10px', fontWeight: 800, color: '#0284c7' }}>👥 SEGUIDORES</span>
+                  <span style={{ fontSize: '14px' }}>📈</span>
                 </div>
                 <strong
                   style={{
-                    fontSize: '28px',
+                    fontSize: '18px',
                     fontWeight: 900,
                     display: 'block',
-                    margin: '8px 0 4px',
+                    margin: '4px 0 2px',
                     color: isDark ? '#ffffff' : '#0f172a',
                   }}
                 >
                   {totalFollowersCount.toLocaleString('es-CO')}
                 </strong>
-                <span style={{ fontSize: '12px', color: '#10b981', fontWeight: 700 }}>
-                  +14% nuevos clientes este mes
+                <span style={{ fontSize: '10px', color: '#10b981', fontWeight: 700 }}>
+                  +14% clientes nuevos
                 </span>
               </div>
 
@@ -1045,28 +1047,28 @@ export default function FavoritosPage() {
                 style={{
                   background: isDark ? '#1e293b' : '#ffffff',
                   border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
-                  borderRadius: '16px',
-                  padding: '20px',
-                  boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.04)',
+                  borderRadius: '12px',
+                  padding: '12px 14px',
+                  boxShadow: isDark ? '0 3px 8px rgba(0,0,0,0.25)' : '0 1px 4px rgba(0,0,0,0.03)',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#e11d48' }}>❤️ TOTAL ME GUSTA</span>
-                  <span style={{ fontSize: '18px' }}>🔥</span>
+                  <span style={{ fontSize: '10px', fontWeight: 800, color: '#e11d48' }}>❤️ ME GUSTA</span>
+                  <span style={{ fontSize: '14px' }}>🔥</span>
                 </div>
                 <strong
                   style={{
-                    fontSize: '28px',
+                    fontSize: '18px',
                     fontWeight: 900,
                     display: 'block',
-                    margin: '8px 0 4px',
+                    margin: '4px 0 2px',
                     color: isDark ? '#ffffff' : '#0f172a',
                   }}
                 >
                   {(currentBiz.baseFollowers * 3.4).toFixed(0)}
                 </strong>
-                <span style={{ fontSize: '12px', color: '#10b981', fontWeight: 700 }}>
-                  98.2% de aprobación de compradores
+                <span style={{ fontSize: '10px', color: '#10b981', fontWeight: 700 }}>
+                  98.2% aprobación
                 </span>
               </div>
 
@@ -1074,28 +1076,28 @@ export default function FavoritosPage() {
                 style={{
                   background: isDark ? '#1e293b' : '#ffffff',
                   border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
-                  borderRadius: '16px',
-                  padding: '20px',
-                  boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.04)',
+                  borderRadius: '12px',
+                  padding: '12px 14px',
+                  boxShadow: isDark ? '0 3px 8px rgba(0,0,0,0.25)' : '0 1px 4px rgba(0,0,0,0.03)',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#f59e0b' }}>⭐ NIVEL DE POPULARIDAD</span>
-                  <span style={{ fontSize: '18px' }}>🏆</span>
+                  <span style={{ fontSize: '10px', fontWeight: 800, color: '#f59e0b' }}>⭐ POPULARIDAD</span>
+                  <span style={{ fontSize: '14px' }}>🏆</span>
                 </div>
                 <strong
                   style={{
-                    fontSize: '28px',
+                    fontSize: '18px',
                     fontWeight: 900,
                     display: 'block',
-                    margin: '8px 0 4px',
+                    margin: '4px 0 2px',
                     color: isDark ? '#ffffff' : '#0f172a',
                   }}
                 >
                   {currentBiz.rating} / 5.0
                 </strong>
-                <span style={{ fontSize: '12px', color: '#f59e0b', fontWeight: 700 }}>
-                  Distintivo Comercio Diamante
+                <span style={{ fontSize: '10px', color: '#f59e0b', fontWeight: 700 }}>
+                  Comercio Diamante
                 </span>
               </div>
 
@@ -1103,28 +1105,28 @@ export default function FavoritosPage() {
                 style={{
                   background: isDark ? '#1e293b' : '#ffffff',
                   border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
-                  borderRadius: '16px',
-                  padding: '20px',
-                  boxShadow: isDark ? '0 4px 12px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.04)',
+                  borderRadius: '12px',
+                  padding: '12px 14px',
+                  boxShadow: isDark ? '0 3px 8px rgba(0,0,0,0.25)' : '0 1px 4px rgba(0,0,0,0.03)',
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#10b981' }}>🎯 EFECTIVIDAD DE PAUTA</span>
-                  <span style={{ fontSize: '18px' }}>⚡</span>
+                  <span style={{ fontSize: '10px', fontWeight: 800, color: '#10b981' }}>🎯 CONVERSIÓN</span>
+                  <span style={{ fontSize: '14px' }}>⚡</span>
                 </div>
                 <strong
                   style={{
-                    fontSize: '28px',
+                    fontSize: '18px',
                     fontWeight: 900,
                     display: 'block',
-                    margin: '8px 0 4px',
+                    margin: '4px 0 2px',
                     color: isDark ? '#ffffff' : '#0f172a',
                   }}
                 >
                   89.4%
                 </strong>
-                <span style={{ fontSize: '12px', color: '#10b981', fontWeight: 700 }}>
-                  Conversión de seguidor a boleto apartado
+                <span style={{ fontSize: '10px', color: '#10b981', fontWeight: 700 }}>
+                  De seguidor a boleto
                 </span>
               </div>
             </div>
@@ -1136,21 +1138,21 @@ export default function FavoritosPage() {
                   ? 'linear-gradient(135deg, #1e293b, #0f172a)'
                   : 'linear-gradient(135deg, #f0fdf4, #ffffff)',
                 border: isDark ? '1px solid #334155' : '1px solid #86efac',
-                borderRadius: '18px',
-                padding: '24px',
+                borderRadius: '14px',
+                padding: '12px 14px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                gap: '16px',
+                gap: '10px',
               }}
             >
               <div>
                 <h3
                   style={{
-                    margin: '0 0 6px',
-                    fontSize: '18px',
-                    fontWeight: 900,
+                    margin: '0 0 3px',
+                    fontSize: '13.5px',
+                    fontWeight: 800,
                     color: isDark ? '#34d399' : '#15803d',
                   }}
                 >
@@ -1159,18 +1161,18 @@ export default function FavoritosPage() {
                 <p
                   style={{
                     margin: 0,
-                    fontSize: '13.5px',
+                    fontSize: '11px',
                     color: isDark ? '#cbd5e1' : '#334155',
-                    maxWidth: '720px',
-                    lineHeight: 1.5,
+                    maxWidth: '700px',
+                    lineHeight: 1.35,
                   }}
                 >
                   Envía un aviso push instantáneo a todos los clientes que te han dado "Seguir". Perfecto cuando lances
-                  una nueva rifa, queden pocas balotas, o inicie la transmisión de balotera en vivo.
+                  una nueva rifa o inicie la transmisión en vivo.
                 </p>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ display: 'flex', gap: '8px' }}>
                 <button
                   onClick={() => handleSendBroadcastNotification(currentBiz.name)}
                   disabled={notificationSent === currentBiz.name}
@@ -1178,20 +1180,20 @@ export default function FavoritosPage() {
                     background: notificationSent === currentBiz.name ? '#10b981' : '#007AFF',
                     color: '#ffffff',
                     border: 'none',
-                    padding: '12px 20px',
-                    borderRadius: '12px',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
                     fontWeight: 800,
-                    fontSize: '13.5px',
+                    fontSize: '11.5px',
                     cursor: 'pointer',
-                    boxShadow: '0 6px 16px rgba(5, 150, 105, 0.35)',
+                    boxShadow: '0 4px 12px rgba(5, 150, 105, 0.3)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '6px',
                   }}
                 >
                   <span>{notificationSent === currentBiz.name ? '✓' : '🚀'}</span>
                   <span>
-                    {notificationSent === currentBiz.name ? 'Vista previa mostrada' : 'Probar Aviso a Seguidores (vista previa)'}
+                    {notificationSent === currentBiz.name ? 'Aviso enviado' : 'Probar Aviso a Seguidores'}
                   </span>
                 </button>
                 <Link
@@ -1200,17 +1202,17 @@ export default function FavoritosPage() {
                     background: isDark ? '#334155' : '#ffffff',
                     color: isDark ? '#38bdf8' : '#0284c7',
                     border: isDark ? '1px solid #475569' : '1px solid #bae6fd',
-                    padding: '12px 18px',
-                    borderRadius: '12px',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
                     fontWeight: 800,
-                    fontSize: '13.5px',
+                    fontSize: '11.5px',
                     textDecoration: 'none',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '6px',
+                    gap: '4px',
                   }}
                 >
-                  <span>⭐</span> Planes Publicitarios VIP
+                  <span>⭐</span> Planes Publicitarios
                 </Link>
               </div>
             </div>
@@ -1219,9 +1221,9 @@ export default function FavoritosPage() {
             <section>
               <h3
                 style={{
-                  fontSize: '18px',
+                  fontSize: '13.5px',
                   fontWeight: 800,
-                  margin: '0 0 14px',
+                  margin: '0 0 8px',
                   color: isDark ? '#ffffff' : '#0f172a',
                 }}
               >
@@ -1232,11 +1234,11 @@ export default function FavoritosPage() {
                 style={{
                   background: isDark ? '#1e293b' : '#ffffff',
                   border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
-                  borderRadius: '16px',
+                  borderRadius: '12px',
                   overflowX: 'auto',
                 }}
               >
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '550px' }}>
                   <thead>
                     <tr
                       style={{
@@ -1244,37 +1246,37 @@ export default function FavoritosPage() {
                         borderBottom: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
                       }}
                     >
-                      <th style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 800, color: '#64748b' }}>
+                      <th style={{ padding: '8px 12px', fontSize: '10.5px', fontWeight: 800, color: '#64748b' }}>
                         PREMIO / SORTEO
                       </th>
-                      <th style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 800, color: '#64748b' }}>
+                      <th style={{ padding: '8px 12px', fontSize: '10.5px', fontWeight: 800, color: '#64748b' }}>
                         VENTA DE BALOTAS
                       </th>
-                      <th style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 800, color: '#64748b' }}>
+                      <th style={{ padding: '8px 12px', fontSize: '10.5px', fontWeight: 800, color: '#64748b' }}>
                         INTERACCIONES
                       </th>
-                      <th style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 800, color: '#64748b' }}>
+                      <th style={{ padding: '8px 12px', fontSize: '10.5px', fontWeight: 800, color: '#64748b' }}>
                         ESTADO
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr style={{ borderBottom: isDark ? '1px solid #334155' : '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '14px 16px', fontWeight: 700, fontSize: '13.5px' }}>
+                      <td style={{ padding: '10px 12px', fontWeight: 700, fontSize: '11.5px' }}>
                         Smartphone 5G Pro Max + Smartwatch
                       </td>
-                      <td style={{ padding: '14px 16px', fontSize: '13px' }}>
-                        <span style={{ fontWeight: 800, color: '#10b981' }}>92%</span> (92 de 100 vendidas)
+                      <td style={{ padding: '10px 12px', fontSize: '11px' }}>
+                        <span style={{ fontWeight: 800, color: '#10b981' }}>92%</span> (92 de 100)
                       </td>
-                      <td style={{ padding: '14px 16px', fontSize: '13px' }}>❤️ 340 me gusta · 👁️ 1.450 vistas</td>
-                      <td style={{ padding: '14px 16px' }}>
+                      <td style={{ padding: '10px 12px', fontSize: '11px' }}>❤️ 340 me gusta · 👁️ 1.450 vistas</td>
+                      <td style={{ padding: '10px 12px' }}>
                         <span
                           style={{
                             background: '#dcfce7',
                             color: '#15803d',
-                            fontSize: '11px',
+                            fontSize: '9.5px',
                             fontWeight: 800,
-                            padding: '3px 8px',
+                            padding: '2px 6px',
                             borderRadius: '99px',
                           }}
                         >
@@ -1283,21 +1285,21 @@ export default function FavoritosPage() {
                       </td>
                     </tr>
                     <tr>
-                      <td style={{ padding: '14px 16px', fontWeight: 700, fontSize: '13.5px' }}>
+                      <td style={{ padding: '10px 12px', fontWeight: 700, fontSize: '11.5px' }}>
                         Combo Gamer: PlayStation 5 Pro + 2 Mandos
                       </td>
-                      <td style={{ padding: '14px 16px', fontSize: '13px' }}>
-                        <span style={{ fontWeight: 800, color: '#0284c7' }}>86%</span> (86 de 100 vendidas)
+                      <td style={{ padding: '10px 12px', fontSize: '11px' }}>
+                        <span style={{ fontWeight: 800, color: '#0284c7' }}>86%</span> (86 de 100)
                       </td>
-                      <td style={{ padding: '14px 16px', fontSize: '13px' }}>❤️ 280 me gusta · 👁️ 1.120 vistas</td>
-                      <td style={{ padding: '14px 16px' }}>
+                      <td style={{ padding: '10px 12px', fontSize: '11px' }}>❤️ 280 me gusta · 👁️ 1.120 vistas</td>
+                      <td style={{ padding: '10px 12px' }}>
                         <span
                           style={{
                             background: '#e0f2fe',
                             color: '#0369a1',
-                            fontSize: '11px',
+                            fontSize: '9.5px',
                             fontWeight: 800,
-                            padding: '3px 8px',
+                            padding: '2px 6px',
                             borderRadius: '99px',
                           }}
                         >
