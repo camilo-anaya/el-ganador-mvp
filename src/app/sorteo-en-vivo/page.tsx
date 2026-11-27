@@ -411,12 +411,14 @@ export default function LiveDrawDemoPage() {
         }
       } else if (e.key === "ArrowLeft") {
         const tabs: Array<"ganador" | "seguridad" | "detalles" | "auditoria"> = ["ganador", "seguridad", "detalles", "auditoria"];
-        const idx = tabs.indexOf(activeResultTab);
+        const idx = activeResultTab ? tabs.indexOf(activeResultTab) : -1;
         if (idx > 0) setActiveResultTab(tabs[idx - 1]);
+        else if (idx === -1) setActiveResultTab(tabs[tabs.length - 1]);
       } else if (e.key === "ArrowRight") {
         const tabs: Array<"ganador" | "seguridad" | "detalles" | "auditoria"> = ["ganador", "seguridad", "detalles", "auditoria"];
-        const idx = tabs.indexOf(activeResultTab);
-        if (idx < tabs.length - 1) setActiveResultTab(tabs[idx + 1]);
+        const idx = activeResultTab ? tabs.indexOf(activeResultTab) : -1;
+        if (idx >= 0 && idx < tabs.length - 1) setActiveResultTab(tabs[idx + 1]);
+        else if (idx === -1) setActiveResultTab(tabs[0]);
       }
     }
     if (typeof window !== "undefined") {
