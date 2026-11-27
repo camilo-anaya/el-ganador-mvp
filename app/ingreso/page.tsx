@@ -552,13 +552,13 @@ function IngresoContent() {
       {/* Imagen de portada adaptable según modo claro / oscuro del celular */}
       <picture className="portada-2030-bg">
         <source
-          srcSet="/assets/portada-2030-oscuro.png?v=4"
+          srcSet="/assets/portada-2030-oscuro.png?v=5"
           media="(prefers-color-scheme: dark)"
         />
         <img
           src={
             theme === "dark"
-              ? "/assets/portada-2030-oscuro.png?v=4"
+              ? "/assets/portada-2030-oscuro.png?v=5"
               : "/assets/portada-2030-claro.png?v=4"
           }
           alt="El Ganador - Rifas Online. Sueña, participa y gana"
@@ -634,13 +634,13 @@ function IngresoContent() {
     >
       <picture className="portada-2030-bg">
         <source
-          srcSet="/assets/portada-2030-oscuro.png?v=4"
+          srcSet="/assets/portada-2030-oscuro.png?v=5"
           media="(prefers-color-scheme: dark)"
         />
         <img
           src={
             theme === "dark"
-              ? "/assets/portada-2030-oscuro.png?v=4"
+              ? "/assets/portada-2030-oscuro.png?v=5"
               : "/assets/portada-2030-claro.png?v=4"
           }
           alt="El Ganador"
@@ -699,8 +699,8 @@ function IngresoContent() {
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            background: 'rgba(18, 20, 19, 0.94)',
-            border: '1.2px solid rgba(255, 255, 255, 0.18)',
+            background: 'rgba(3, 38, 25, 0.90)',
+            border: '1.2px solid rgba(226, 176, 74, 0.35)',
             borderRadius: '12px',
             padding: '0 10px',
             height: '38px',
@@ -730,8 +730,8 @@ function IngresoContent() {
           <div style={{
             display: 'flex',
             alignItems: 'center',
-            background: 'rgba(18, 20, 19, 0.94)',
-            border: '1.2px solid rgba(255, 255, 255, 0.18)',
+            background: 'rgba(3, 38, 25, 0.90)',
+            border: '1.2px solid rgba(226, 176, 74, 0.35)',
             borderRadius: '12px',
             padding: '0 10px',
             height: '38px',
@@ -843,13 +843,13 @@ function IngresoContent() {
     >
       <picture className="portada-2030-bg">
         <source
-          srcSet="/assets/portada-2030-oscuro.png?v=4"
+          srcSet="/assets/portada-2030-oscuro.png?v=5"
           media="(prefers-color-scheme: dark)"
         />
         <img
           src={
             theme === "dark"
-              ? "/assets/portada-2030-oscuro.png?v=4"
+              ? "/assets/portada-2030-oscuro.png?v=5"
               : "/assets/portada-2030-claro.png?v=4"
           }
           alt="El Ganador"
@@ -901,7 +901,7 @@ function IngresoContent() {
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: '4px',
-          background: 'rgba(0, 0, 0, 0.45)',
+          background: 'rgba(2, 28, 17, 0.75)',
           padding: '3px',
           borderRadius: '999px',
           border: '1px solid rgba(255, 255, 255, 0.14)',
@@ -917,7 +917,7 @@ function IngresoContent() {
               fontSize: '11px',
               fontWeight: 800,
               cursor: 'pointer',
-              background: role === "customer" ? '#222523' : 'transparent',
+              background: role === "customer" ? '#0d5f40' : 'transparent',
               color: role === "customer" ? '#ffffff' : '#94a3b8',
               transition: 'all 0.15s ease'
             }}
@@ -934,7 +934,7 @@ function IngresoContent() {
               fontSize: '11px',
               fontWeight: 800,
               cursor: 'pointer',
-              background: role === "business" ? '#222523' : 'transparent',
+              background: role === "business" ? '#0d5f40' : 'transparent',
               color: role === "business" ? '#ffffff' : '#94a3b8',
               transition: 'all 0.15s ease'
             }}
@@ -955,8 +955,8 @@ function IngresoContent() {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              background: 'rgba(18, 20, 19, 0.94)',
-              border: '1.2px solid rgba(255, 255, 255, 0.18)',
+              background: 'rgba(3, 38, 25, 0.90)',
+              border: '1.2px solid rgba(226, 176, 74, 0.35)',
               borderRadius: '12px',
               padding: '0 10px',
               height: '36px',
@@ -979,8 +979,8 @@ function IngresoContent() {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              background: 'rgba(18, 20, 19, 0.94)',
-              border: '1.2px solid rgba(255, 255, 255, 0.18)',
+              background: 'rgba(3, 38, 25, 0.90)',
+              border: '1.2px solid rgba(226, 176, 74, 0.35)',
               borderRadius: '12px',
               padding: '0 10px',
               height: '36px',
@@ -1003,8 +1003,8 @@ function IngresoContent() {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              background: 'rgba(18, 20, 19, 0.94)',
-              border: '1.2px solid rgba(255, 255, 255, 0.18)',
+              background: 'rgba(3, 38, 25, 0.90)',
+              border: '1.2px solid rgba(226, 176, 74, 0.35)',
               borderRadius: '12px',
               padding: '0 10px',
               height: '36px',
@@ -1027,8 +1027,8 @@ function IngresoContent() {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              background: 'rgba(18, 20, 19, 0.94)',
-              border: '1.2px solid rgba(255, 255, 255, 0.18)',
+              background: 'rgba(3, 38, 25, 0.90)',
+              border: '1.2px solid rgba(226, 176, 74, 0.35)',
               borderRadius: '12px',
               padding: '0 10px',
               height: '36px',
@@ -1101,8 +1101,8 @@ function IngresoContent() {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
                 height: '35px'
@@ -1124,8 +1124,8 @@ function IngresoContent() {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
                 height: '35px'
@@ -1145,8 +1145,8 @@ function IngresoContent() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>3. CATEGORÍA COMERCIAL DEL LOCAL *</span>
               <div style={{
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 8px',
                 height: '35px',
@@ -1182,8 +1182,8 @@ function IngresoContent() {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
                 height: '35px'
@@ -1205,8 +1205,8 @@ function IngresoContent() {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
                 height: '35px'
@@ -1228,8 +1228,8 @@ function IngresoContent() {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
                 height: '35px'
@@ -1251,8 +1251,8 @@ function IngresoContent() {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
                 height: '35px'
@@ -1274,8 +1274,8 @@ function IngresoContent() {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
                 height: '35px'
@@ -1297,8 +1297,8 @@ function IngresoContent() {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
                 height: '35px'
@@ -1320,8 +1320,8 @@ function IngresoContent() {
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(18, 20, 19, 0.94)',
-                border: '1.2px solid rgba(255, 255, 255, 0.18)',
+                background: 'rgba(3, 38, 25, 0.90)',
+                border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
                 height: '35px'

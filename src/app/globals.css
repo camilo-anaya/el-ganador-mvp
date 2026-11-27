@@ -14502,7 +14502,8 @@ html[data-theme='dark'] .tab-item.active {
 
 .portada-2030-shell.is-dark,
 [data-theme='dark'] .portada-2030-shell {
-  background-color: #060908;
+  background-color: #032b1c;
+  background: radial-gradient(circle at 50% 32%, #0f6e4a 0%, #064c33 45%, #022618 100%);
 }
 
 .portada-2030-bg {

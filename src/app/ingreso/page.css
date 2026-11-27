@@ -67,7 +67,7 @@
     min-height: 100svh;
     overflow: hidden;
     position: relative;
-    background: radial-gradient(circle at 45% 25%, #0f6c4b 0%, #06442e 50%, #022016 100%);
+    background: radial-gradient(circle at 50% 30%, #0f7654 0%, #064e3b 50%, #02281a 100%);
     color: #ffffff;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     box-sizing: border-box;
