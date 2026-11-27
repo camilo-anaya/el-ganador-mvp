@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   applicationName: "El Ganador",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
+    statusBarStyle: "black-translucent",
     title: "El Ganador",
   },
   icons: {

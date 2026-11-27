@@ -14496,7 +14496,7 @@ html[data-theme='dark'] .tab-item.active {
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  padding: env(safe-area-inset-top) 24px calc(clamp(44px, 11dvh, 120px) + env(safe-area-inset-bottom));
+  padding: env(safe-area-inset-top) 18px calc(clamp(16px, 4dvh, 32px) + env(safe-area-inset-bottom));
   background-color: #ffffff;
 }
 
@@ -14527,24 +14527,25 @@ html[data-theme='dark'] .tab-item.active {
 .portada-2030-interactive-layer {
   position: relative;
   z-index: 5;
-  width: 100%;
-  max-width: 360px;
+  width: 82%;
+  max-width: 250px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding-top: 16px;
+  gap: 8px;
+  padding-top: 4px;
+  margin: 0 auto;
 }
 
 /* Slogan vectorial nítido (centrado entre RIFAS ONLINE e Iniciar sesión) */
 .portada-2030-slogan {
-  margin: 0 0 clamp(44px, 7.6vh, 76px);
+  margin: 0 0 clamp(14px, 2.4vh, 22px);
   text-align: center;
-  font-size: clamp(1.14rem, 4.8vw, 1.4rem);
+  font-size: clamp(0.95rem, 3.8vw, 1.12rem);
   font-weight: 500;
   font-style: italic;
   letter-spacing: -0.01em;
-  line-height: 1.25;
-  color: #063d22;
+  line-height: 1.22;
+  color: #111827;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: geometricPrecision;
@@ -14594,72 +14595,76 @@ html[data-theme='dark'] .tab-item.active {
   color: #f4c752;
 }
 
-/* Botón Iniciar Sesión (Verde Esmeralda) */
+/* Botón Iniciar Sesión (Negro Obsidiana Compacto y Angosto) */
 .btn-2030-login {
   width: 100%;
-  height: 54px;
+  height: 38px;
   border-radius: 999px;
-  border: none;
-  background: linear-gradient(180deg, #046a38 0%, #004220 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #0f1110;
+  background: linear-gradient(180deg, #222523 0%, #0c0e0d 100%);
   color: #ffffff;
-  font-size: 1.05rem;
+  font-size: 0.86rem;
   font-weight: 700;
+  letter-spacing: 0.2px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   cursor: pointer;
-  box-shadow: 0 8px 22px rgba(0, 66, 32, 0.28);
-  transition: transform 0.15s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn-2030-login:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
 [data-theme='dark'] .btn-2030-login {
-  background: linear-gradient(180deg, #0d8f4e 0%, #035229 100%);
-  border: 1px solid rgba(52, 211, 153, 0.45);
-  box-shadow: 0 8px 26px rgba(4, 106, 56, 0.45);
+  background: linear-gradient(180deg, #242725 0%, #0a0c0b 100%);
+  border: 1px solid rgba(226, 176, 74, 0.42);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), 0 0 10px rgba(226, 176, 74, 0.12);
 }
 
 .btn-2030-login .chevron-right {
   position: absolute;
-  right: 22px;
-  font-size: 1.45rem;
+  right: 14px;
+  font-size: 1.1rem;
   line-height: 1;
+  color: #f4c752;
 }
 
-/* Botón Crear Cuenta (Blanco con borde verde en Claro / Negro con borde dorado en Oscuro) */
+/* Botón Crear Cuenta (Sleek Compacto y Angosto) */
 .btn-2030-register {
   width: 100%;
-  height: 54px;
+  height: 38px;
   border-radius: 999px;
   background: #ffffff;
-  border: 1.5px solid #004d25;
-  color: #004d25;
-  font-size: 1.02rem;
+  border: 1.2px solid #222523;
+  color: #111413;
+  font-size: 0.84rem;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: transform 0.15s ease;
 }
 
 .btn-2030-register:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
 .portada-2030-shell.is-dark .btn-2030-register,
 .portada-2030-shell.is-dark .btn-2030-register span,
 [data-theme='dark'] .btn-2030-register,
 [data-theme='dark'] .btn-2030-register span {
-  background: rgba(10, 14, 12, 0.92);
-  border: 1.5px solid #e2b04a;
+  background: rgba(14, 16, 15, 0.94);
+  border: 1.2px solid rgba(255, 255, 255, 0.18);
   color: #ffffff !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
 }
 
 .mobileSheetHeaderHero .mobileSansTitle,
@@ -14669,32 +14674,32 @@ h1.mobileSansTitle {
 
 /* Enlace inferior Explorar rifas */
 .portada-2030-explore {
-  margin-top: 6px;
+  margin-top: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .link-2030-explore {
-  font-size: 0.96rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  color: #004d25;
+  color: #374151;
   text-decoration: none;
-  padding-bottom: 3px;
-  border-bottom: 1.5px solid #e2b04a;
+  padding-bottom: 2px;
+  border-bottom: 1.2px solid #e2b04a;
 }
 
 [data-theme='dark'] .link-2030-explore {
-  color: #f8fafc;
+  color: #cbd5e1;
   border-bottom: none;
 }
 
 [data-theme='dark'] .explore-divider {
   flex: 1;
-  max-width: 68px;
+  max-width: 50px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* =========================================================
