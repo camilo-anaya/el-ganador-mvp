@@ -264,9 +264,11 @@ function IngresoContent() {
       setTimeout(() => {
         if (typeof window !== "undefined") {
           window.scrollTo(0, 0);
+          window.location.href = targetRoute;
+        } else {
+          router.replace(targetRoute);
         }
-        router.replace(targetRoute);
-      }, 250);
+      }, 150);
     } catch (err: any) {
       const targetRoute = effectiveRole === "business" ? "/empresario" : "/";
       if (typeof window !== "undefined") {
@@ -289,8 +291,10 @@ function IngresoContent() {
           })
         );
         window.scrollTo(0, 0);
+        window.location.href = targetRoute;
+      } else {
+        router.replace(targetRoute);
       }
-      router.replace(targetRoute);
     } finally {
       setAuthBusy(false);
     }
@@ -842,33 +846,43 @@ function IngresoContent() {
     <section
       className={`portada-2030-shell ${theme === "dark" ? "is-dark" : "is-light"}`}
       aria-label="Registro El Ganador"
+      style={role === "business" ? {
+        background: '#042217',
+        backgroundImage: 'linear-gradient(180deg, #052c1e 0%, #031c13 100%)',
+        justifyContent: 'flex-start',
+        paddingTop: 'calc(env(safe-area-inset-top, 12px) + 8px)',
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 12px)'
+      } : undefined}
     >
-      <picture className="portada-2030-bg">
-        <source
-          srcSet="/assets/portada-2030-oscuro.png?v=5"
-          media="(prefers-color-scheme: dark)"
-        />
-        <img
-          src={
-            theme === "dark"
-              ? "/assets/portada-2030-oscuro.png?v=5"
-              : "/assets/portada-2030-claro.png?v=4"
-          }
-          alt="El Ganador"
-          draggable={false}
-        />
-      </picture>
+      {/* Fondo liso sin imagen para empresa (elimina la imagen de la corona/logo detrás que hacía ver todo engorroso) */}
+      {role !== "business" && (
+        <picture className="portada-2030-bg">
+          <source
+            srcSet="/assets/portada-2030-oscuro.png?v=5"
+            media="(prefers-color-scheme: dark)"
+          />
+          <img
+            src={
+              theme === "dark"
+                ? "/assets/portada-2030-oscuro.png?v=5"
+                : "/assets/portada-2030-claro.png?v=4"
+            }
+            alt="El Ganador"
+            draggable={false}
+          />
+        </picture>
+      )}
 
       <div
         className="portada-2030-interactive-layer"
         style={{
-          maxWidth: role === "business" ? '320px' : '280px',
+          maxWidth: role === "business" ? '340px' : '280px',
           width: '92%',
           margin: '0 auto',
           gap: '6px',
-          maxHeight: '84vh',
+          maxHeight: role === "business" ? '92vh' : '84vh',
           overflowY: 'auto',
-          paddingBottom: '16px'
+          paddingBottom: '24px'
         }}
       >
         {/* Barra superior con volver y switch de rol */}
@@ -1076,7 +1090,7 @@ function IngresoContent() {
               disabled={authBusy}
               style={{ width: '100%', height: '38px', fontSize: '13px', marginTop: '2px' }}
             >
-              <span>{authBusy ? "CREANDO CUENTA…" : "CREAR CUENTA GRATIS"}</span>
+              <span>{authBusy ? "CREANDO Y ENTRANDO AL MENÚ…" : "CREAR CUENTA Y ENTRAR AL MENÚ"}</span>
               <span className="chevron-right">›</span>
             </button>
           </form>
@@ -1454,7 +1468,7 @@ function IngresoContent() {
               disabled={authBusy}
               style={{ width: '100%', height: '40px', fontSize: '13px', marginTop: '4px' }}
             >
-              <span>{authBusy ? "REGISTRANDO EMPRESA…" : "REGISTRAR MI EMPRESA"}</span>
+              <span>{authBusy ? "AUTORIZANDO Y ABRIENDO PANEL…" : "REGISTRAR MI EMPRESA Y ABRIR PANEL"}</span>
               <span className="chevron-right">›</span>
             </button>
           </form>
