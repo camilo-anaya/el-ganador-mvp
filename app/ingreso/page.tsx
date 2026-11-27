@@ -663,7 +663,7 @@ function IngresoContent() {
             style={{
               background: 'none',
               border: 'none',
-              color: '#d4af37',
+              color: '#ffffff',
               fontSize: '12px',
               fontWeight: 800,
               display: 'flex',
@@ -748,7 +748,7 @@ function IngresoContent() {
             </span>
             <input
               type={showLoginPassword ? "text" : "password"}
-              placeholder="Contraseña"
+              placeholder={role === "business" ? "Contraseña de la Empresa (Comercio)" : "Contraseña Personal (Cliente / Comprador)"}
               value={mobileLoginPassword}
               onChange={(e) => setMobileLoginPassword(e.target.value)}
               required
@@ -828,7 +828,7 @@ function IngresoContent() {
           <button
             type="button"
             onClick={() => switchMode("register")}
-            style={{ background: 'none', border: 'none', color: '#d4af37', fontWeight: 800, cursor: 'pointer', fontSize: '11px', textDecoration: 'underline' }}
+            style={{ background: 'none', border: 'none', color: '#ffffff', fontWeight: 800, cursor: 'pointer', fontSize: '11px', textDecoration: 'underline' }}
           >
             Regístrate gratis
           </button>
@@ -893,7 +893,7 @@ function IngresoContent() {
             style={{
               background: 'none',
               border: 'none',
-              color: '#d4af37',
+              color: '#ffffff',
               fontSize: '12px',
               fontWeight: 800,
               display: 'flex',
@@ -1039,36 +1039,44 @@ function IngresoContent() {
               />
             </div>
 
-            {/* Contraseña */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              background: 'rgba(3, 38, 25, 0.90)',
-              border: '1.2px solid rgba(226, 176, 74, 0.35)',
-              borderRadius: '12px',
-              padding: '0 10px',
-              height: '36px',
-              boxSizing: 'border-box'
-            }}>
-              <span style={{ color: '#94a3b8', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
-                <PadlockOutlineIcon />
+            {/* Contraseña Personal Cliente */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
+                🔑 CONTRASEÑA DE CUENTA PERSONAL (CLIENTE / COMPRADOR) *
               </span>
-              <input
-                type={showRegPassword ? "text" : "password"}
-                placeholder="Contraseña (mín 6 caracteres)"
-                value={regPassword}
-                onChange={(e) => setRegPassword(e.target.value)}
-                required
-                style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowRegPassword(!showRegPassword)}
-                style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
-                aria-label="Ver u ocultar contraseña"
-              >
-                <EyeToggleIcon hide={!showRegPassword} />
-              </button>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '12px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <span style={{ color: '#ffffff', marginRight: '8px', display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+                  <PadlockOutlineIcon />
+                </span>
+                <input
+                  type={showRegPassword ? "text" : "password"}
+                  placeholder="Crea tu contraseña para comprar boletas"
+                  value={regPassword}
+                  onChange={(e) => setRegPassword(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowRegPassword(!showRegPassword)}
+                  style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px' }}
+                  aria-label="Ver u ocultar contraseña"
+                >
+                  <EyeToggleIcon hide={!showRegPassword} />
+                </button>
+              </div>
+              <small style={{ fontSize: '9.5px', color: '#e2e8f0', lineHeight: '1.25' }}>
+                🔒 Esta clave protegerá tus boletas compradas y cobro de premios en tu perfil personal.
+              </small>
             </div>
 
             {/* Checkbox Términos */}
@@ -1100,12 +1108,12 @@ function IngresoContent() {
               =================================================================== */
           <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
             <div style={{
-              background: 'rgba(212, 175, 55, 0.12)',
-              border: '1px solid rgba(212, 175, 55, 0.4)',
+              background: 'rgba(16, 185, 129, 0.14)',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
               borderRadius: '8px',
               padding: '7px 9px',
               fontSize: '10px',
-              color: '#fef08a',
+              color: '#ffffff',
               lineHeight: '1.35'
             }}>
               ⚖️ <strong>Requisitos obligatorios de Coljuegos (Ley 643/2001 & Dcto 1486/2024)</strong>: Debes aportar NIT, RUT y Cámara de Comercio para registrar y habilitar legalmente tu establecimiento.
@@ -1113,7 +1121,7 @@ function IngresoContent() {
 
             {/* 1. Nombre Comercial */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>1. NOMBRE COMERCIAL / RAZÓN SOCIAL *</span>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>1. NOMBRE COMERCIAL / RAZÓN SOCIAL *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1136,7 +1144,7 @@ function IngresoContent() {
 
             {/* 2. NIT del Comercio */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>2. NIT O RUT DE LA EMPRESA *</span>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>2. NIT O RUT DE LA EMPRESA *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1160,7 +1168,7 @@ function IngresoContent() {
             {/* 3. RUT DIAN (Coljuegos) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>3. RUT ACTUALIZADO (DIAN · PDF O FOTO) *</span>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>3. RUT ACTUALIZADO (DIAN · PDF O FOTO) *</span>
                 {rutFileName ? (
                   <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
                 ) : (
@@ -1187,7 +1195,7 @@ function IngresoContent() {
                     {rutFileName ? rutFileName : "Subir RUT (PDF o Foto)"}
                   </span>
                 </div>
-                <span style={{ fontSize: '10px', background: 'rgba(212, 175, 55, 0.25)', border: '1px solid #d4af37', color: '#fef08a', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
+                <span style={{ fontSize: '10px', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
                   {rutFileName ? "Cambiar" : "Examinar"}
                 </span>
                 <input
@@ -1204,7 +1212,7 @@ function IngresoContent() {
             {/* 4. Cámara de Comercio Vigente (Coljuegos) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>4. CÁMARA DE COMERCIO VIGENTE (≤ 30 DÍAS) *</span>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>4. CÁMARA DE COMERCIO VIGENTE (≤ 30 DÍAS) *</span>
                 {camaraComercioFileName ? (
                   <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
                 ) : (
@@ -1231,7 +1239,7 @@ function IngresoContent() {
                     {camaraComercioFileName ? camaraComercioFileName : "Subir Certificado de Existencia"}
                   </span>
                 </div>
-                <span style={{ fontSize: '10px', background: 'rgba(212, 175, 55, 0.25)', border: '1px solid #d4af37', color: '#fef08a', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
+                <span style={{ fontSize: '10px', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
                   {camaraComercioFileName ? "Cambiar" : "Examinar"}
                 </span>
                 <input
@@ -1247,7 +1255,7 @@ function IngresoContent() {
 
             {/* 3. Categoría Comercial */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>5. CATEGORÍA COMERCIAL DEL LOCAL *</span>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>5. CATEGORÍA COMERCIAL DEL LOCAL *</span>
               <div style={{
                 background: 'rgba(3, 38, 25, 0.90)',
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
@@ -1282,7 +1290,7 @@ function IngresoContent() {
 
             {/* 4. Dirección Física del Local */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>6. DIRECCIÓN FÍSICA EXACTA DEL LOCAL *</span>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>6. DIRECCIÓN FÍSICA EXACTA DEL LOCAL *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1305,7 +1313,7 @@ function IngresoContent() {
 
             {/* 5. Ciudad y Departamento */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>7. CIUDAD / DEPARTAMENTO *</span>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>7. CIUDAD / DEPARTAMENTO *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1328,7 +1336,7 @@ function IngresoContent() {
 
             {/* 6. Representante Legal */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>8. REPRESENTANTE LEGAL / PROPIETARIO *</span>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>8. REPRESENTANTE LEGAL / PROPIETARIO *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1351,7 +1359,7 @@ function IngresoContent() {
 
             {/* 7. Cédula del Representante */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>9. CÉDULA DE CIUDADANÍA DEL PROPIETARIO *</span>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>9. CÉDULA DE CIUDADANÍA DEL PROPIETARIO *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1374,7 +1382,7 @@ function IngresoContent() {
 
             {/* 8. WhatsApp / Teléfono del Negocio */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>10. TELÉFONO / WHATSAPP DEL LOCAL *</span>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>10. TELÉFONO / WHATSAPP DEL LOCAL *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1397,7 +1405,7 @@ function IngresoContent() {
 
             {/* 9. Correo Corporativo */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>11. CORREO ELECTRÓNICO CORPORATIVO *</span>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>11. CORREO ELECTRÓNICO CORPORATIVO *</span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -1418,35 +1426,44 @@ function IngresoContent() {
               </div>
             </div>
 
-            {/* 10. Contraseña */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: '#d4af37' }}>12. CONTRASEÑA DEL PANEL EMPRESARIAL *</span>
+            {/* 12. Contraseña Empresa / Comercio */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
+                🔐 CONTRASEÑA DE ACCESO ADMINISTRATIVO (EMPRESA / COMERCIO) *
+              </span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '35px'
+                height: '38px',
+                boxSizing: 'border-box'
               }}>
+                <span style={{ color: '#ffffff', marginRight: '8px', display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+                  <PadlockOutlineIcon />
+                </span>
                 <input
                   type={showRegPassword ? "text" : "password"}
-                  placeholder="Crea una contraseña segura"
+                  placeholder="Crea la clave para administrar tu local"
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowRegPassword(!showRegPassword)}
-                  style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+                  style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px' }}
                   aria-label="Ver u ocultar contraseña"
                 >
                   <EyeToggleIcon hide={!showRegPassword} />
                 </button>
               </div>
+              <small style={{ fontSize: '9.5px', color: '#e2e8f0', lineHeight: '1.25' }}>
+                🛡️ Esta contraseña da acceso exclusivo al panel <strong>/empresario</strong> para publicar rifas y gestionar ventas.
+              </small>
             </div>
 
             {/* Declaración Legal */}
@@ -1480,7 +1497,7 @@ function IngresoContent() {
           <button
             type="button"
             onClick={() => switchMode("login")}
-            style={{ background: 'none', border: 'none', color: '#d4af37', fontWeight: 800, cursor: 'pointer', fontSize: '11px', textDecoration: 'underline' }}
+            style={{ background: 'none', border: 'none', color: '#ffffff', fontWeight: 800, cursor: 'pointer', fontSize: '11px', textDecoration: 'underline' }}
           >
             Inicia sesión aquí
           </button>
