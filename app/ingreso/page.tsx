@@ -945,7 +945,7 @@ function IngresoContent() {
         {authSuccess && <div className="mobileNoticeBox success" style={{ fontSize: '11px', padding: '5px 10px', margin: '1px 0' }}>✓ {authSuccess}</div>}
 
         {/* ===================================================================
-            A. FORMULARIO CLIENTE (Comprador)
+            A. FORMULARIO CLIENTE COMPLETO (Comprador - Listado Original)
             =================================================================== */}
         {role === "customer" ? (
           <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
@@ -953,12 +953,12 @@ function IngresoContent() {
               background: 'rgba(16, 185, 129, 0.14)',
               border: '1px solid rgba(255, 255, 255, 0.25)',
               borderRadius: '8px',
-              padding: '6px 9px',
-              fontSize: '10.5px',
+              padding: '7px 10px',
+              fontSize: '11px',
               color: '#ffffff',
-              lineHeight: '1.3'
+              lineHeight: '1.35'
             }}>
-              🎟️ <strong>Registro Personal de Comprador</strong>: Crea tu cuenta para participar en rifas oficiales y recibir tus boletas de inmediato.
+              🎟️ <strong>Registro Personal de Comprador</strong>: Completa tus datos para comprar boletas en rifas oficiales y recibir tus premios directamente.
             </div>
 
             {/* 1. Nombre Completo */}
@@ -985,7 +985,7 @@ function IngresoContent() {
                   value={regName}
                   onChange={(e) => setRegName(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
               </div>
             </div>
@@ -993,7 +993,7 @@ function IngresoContent() {
             {/* 2. Celular */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
-                2. NÚMERO CELULAR / WHATSAPP *
+                2. NÚMERO CELULAR / WHATSAPP (+57) *
               </span>
               <div style={{
                 display: 'flex',
@@ -1014,7 +1014,7 @@ function IngresoContent() {
                   value={regPhone}
                   onChange={(e) => setRegPhone(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
               </div>
             </div>
@@ -1039,26 +1039,127 @@ function IngresoContent() {
                 </span>
                 <input
                   type="email"
-                  placeholder="Ej: micorreo@gmail.com"
+                  placeholder="Ej: tu_correo@gmail.com"
                   value={regEmail}
                   onChange={(e) => setRegEmail(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
               </div>
             </div>
 
-            {/* Contraseña Personal Cliente */}
+            {/* 4. Documento de Identidad (Cédula de Ciudadanía / Extranjería) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
-                🔑 CONTRASEÑA DE CUENTA PERSONAL (CLIENTE / COMPRADOR) *
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                4. DOCUMENTO DE IDENTIDAD (PARA COBRO DE PREMIOS) *
+              </span>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                <select
+                  value={docType}
+                  onChange={(e) => setDocType(e.target.value)}
+                  style={{
+                    width: '88px',
+                    height: '38px',
+                    borderRadius: '10px',
+                    background: 'rgba(3, 38, 25, 0.92)',
+                    color: '#ffffff',
+                    border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    padding: '0 6px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <option value="CC" style={{ background: '#031c13', color: '#fff' }}>C.C.</option>
+                  <option value="CE" style={{ background: '#031c13', color: '#fff' }}>C.E.</option>
+                  <option value="NIT" style={{ background: '#031c13', color: '#fff' }}>NIT</option>
+                  <option value="PP" style={{ background: '#031c13', color: '#fff' }}>Pasap.</option>
+                </select>
+                <div style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  background: 'rgba(3, 38, 25, 0.92)',
+                  border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                  borderRadius: '10px',
+                  padding: '0 10px',
+                  height: '38px',
+                  boxSizing: 'border-box'
+                }}>
+                  <input
+                    type="text"
+                    placeholder="Número de documento (ej: 1.045.678.901)"
+                    value={docNumber}
+                    onChange={(e) => setDocNumber(e.target.value)}
+                    required
+                    style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 5. Fecha de Nacimiento (+18 Años) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                5. FECHA DE NACIMIENTO (MAYORÍA DE EDAD +18) *
               </span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
                 background: 'rgba(3, 38, 25, 0.92)',
                 border: '1.4px solid rgba(255, 255, 255, 0.32)',
-                borderRadius: '12px',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <input
+                  type="date"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%', colorScheme: 'dark' }}
+                />
+              </div>
+            </div>
+
+            {/* 6. Ciudad y Departamento de Residencia */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                6. CIUDAD / DEPARTAMENTO DE RESIDENCIA *
+              </span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <input
+                  type="text"
+                  placeholder="Ej: Bogotá, Barranquilla, Medellín..."
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 7. Contraseña Personal Cliente */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
+                7. 🔑 CONTRASEÑA DE CUENTA PERSONAL (CLIENTE / COMPRADOR) *
+              </span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
                 padding: '0 10px',
                 height: '38px',
                 boxSizing: 'border-box'
@@ -1068,11 +1169,12 @@ function IngresoContent() {
                 </span>
                 <input
                   type={showRegPassword ? "text" : "password"}
-                  placeholder="Crea tu contraseña para comprar boletas"
+                  placeholder="Crea tu contraseña (mínimo 6 caracteres)"
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
+                  minLength={6}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
                 <button
                   type="button"
@@ -1083,21 +1185,56 @@ function IngresoContent() {
                   <EyeToggleIcon hide={!showRegPassword} />
                 </button>
               </div>
-              <small style={{ fontSize: '9.5px', color: '#e2e8f0', lineHeight: '1.25' }}>
-                🔒 Esta clave protegerá tus boletas compradas y cobro de premios en tu perfil personal.
-              </small>
+            </div>
+
+            {/* 8. Confirmar Contraseña Cliente */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
+                8. 🔒 CONFIRMAR CONTRASEÑA PERSONAL *
+              </span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <span style={{ color: '#ffffff', marginRight: '8px', display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+                  <PadlockOutlineIcon />
+                </span>
+                <input
+                  type={showRegConfirm ? "text" : "password"}
+                  placeholder="Repite tu contraseña exactamente"
+                  value={regConfirmPassword}
+                  onChange={(e) => setRegConfirmPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowRegConfirm(!showRegConfirm)}
+                  style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px' }}
+                  aria-label="Ver u ocultar confirmación de contraseña"
+                >
+                  <EyeToggleIcon hide={!showRegConfirm} />
+                </button>
+              </div>
             </div>
 
             {/* Checkbox Términos */}
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', cursor: 'pointer', fontSize: '10px', color: '#cbd5e1', lineHeight: '1.25', marginTop: '2px' }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer', fontSize: '11px', color: '#ffffff', lineHeight: '1.3', marginTop: '4px' }}>
               <input
                 type="checkbox"
                 checked={ageConfirmed}
                 onChange={(e) => setAgeConfirmed(e.target.checked)}
                 required
-                style={{ marginTop: '1px' }}
+                style={{ marginTop: '2px', accentColor: '#10b981' }}
               />
-              <span>Soy <strong>mayor de 18 años (+18)</strong> y acepto los términos de juego responsable (Ley 643/2001).</span>
+              <span>Confirmo ser <strong>mayor de 18 años (+18)</strong>, residir en Colombia y aceptar las condiciones legales de juego responsable (Ley 643 de 2001).</span>
             </label>
 
             {/* Botón Crear Cuenta */}
@@ -1105,7 +1242,7 @@ function IngresoContent() {
               type="submit"
               className="btn-2030-login"
               disabled={authBusy}
-              style={{ width: '100%', height: '38px', fontSize: '13px', marginTop: '2px' }}
+              style={{ width: '100%', height: '42px', fontSize: '13.5px', marginTop: '6px' }}
             >
               <span>{authBusy ? "CREANDO Y ENTRANDO AL MENÚ…" : "CREAR CUENTA Y ENTRAR AL MENÚ"}</span>
               <span className="chevron-right">›</span>
@@ -1138,7 +1275,7 @@ function IngresoContent() {
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '35px'
+                height: '38px'
               }}>
                 <input
                   type="text"
@@ -1161,7 +1298,7 @@ function IngresoContent() {
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '35px'
+                height: '38px'
               }}>
                 <input
                   type="text"
@@ -1270,7 +1407,7 @@ function IngresoContent() {
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 8px',
-                height: '35px',
+                height: '38px',
                 display: 'flex',
                 alignItems: 'center'
               }}>
@@ -1307,7 +1444,7 @@ function IngresoContent() {
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '35px'
+                height: '38px'
               }}>
                 <input
                   type="text"
@@ -1330,7 +1467,7 @@ function IngresoContent() {
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '35px'
+                height: '38px'
               }}>
                 <input
                   type="text"
@@ -1353,7 +1490,7 @@ function IngresoContent() {
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '35px'
+                height: '38px'
               }}>
                 <input
                   type="text"
@@ -1376,7 +1513,7 @@ function IngresoContent() {
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '35px'
+                height: '38px'
               }}>
                 <input
                   type="text"
@@ -1399,7 +1536,7 @@ function IngresoContent() {
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '35px'
+                height: '38px'
               }}>
                 <input
                   type="tel"
@@ -1422,7 +1559,7 @@ function IngresoContent() {
                 border: '1.2px solid rgba(226, 176, 74, 0.35)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '35px'
+                height: '38px'
               }}>
                 <input
                   type="email"
@@ -1476,15 +1613,54 @@ function IngresoContent() {
             </div>
 
             {/* Declaración Legal */}
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', cursor: 'pointer', fontSize: '10px', color: '#cbd5e1', lineHeight: '1.25', marginTop: '2px' }}>
+            {/* 13. Confirmar Contraseña Empresa */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
+                13. 🔒 CONFIRMAR CONTRASEÑA EMPRESARIAL *
+              </span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <span style={{ color: '#ffffff', marginRight: '8px', display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+                  <PadlockOutlineIcon />
+                </span>
+                <input
+                  type={showRegConfirm ? "text" : "password"}
+                  placeholder="Repite la contraseña para tu panel empresarial"
+                  value={regConfirmPassword}
+                  onChange={(e) => setRegConfirmPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowRegConfirm(!showRegConfirm)}
+                  style={{ background: 'none', border: 'none', color: '#cbd5e1', cursor: 'pointer', padding: '4px' }}
+                  aria-label="Ver u ocultar confirmación de contraseña"
+                >
+                  <EyeToggleIcon hide={!showRegConfirm} />
+                </button>
+              </div>
+            </div>
+
+            {/* Declaración Legal Coljuegos */}
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer', fontSize: '11px', color: '#ffffff', lineHeight: '1.3', marginTop: '4px' }}>
               <input
                 type="checkbox"
                 checked={ageConfirmed}
                 onChange={(e) => setAgeConfirmed(e.target.checked)}
                 required
-                style={{ marginTop: '1px' }}
+                style={{ marginTop: '2px', accentColor: '#10b981' }}
               />
-              <span>Certifico bajo gravedad de juramento ser el <strong>representante legal / propietario</strong> del establecimiento, adjuntar RUT y Cámara verídicos, y cumplir con la regulación de Coljuegos (Ley 643/2001).</span>
+              <span>Certifico bajo gravedad de juramento ser el <strong>representante legal / propietario</strong> del establecimiento, adjuntar RUT y Cámara de Comercio verídicos, y cumplir con la regulación oficial de Coljuegos (Ley 643/2001 & Decreto 1486/2024).</span>
             </label>
 
             {/* Botón Registrar Empresa */}
