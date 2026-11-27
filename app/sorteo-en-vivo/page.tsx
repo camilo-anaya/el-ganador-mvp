@@ -2558,35 +2558,12 @@ export default function LiveDrawDemoPage() {
                 title="Volver al Inicio / Vitrina Principal"
               >
                 <span className="studioBackArrow">←</span>
-                <span className="studioBackLabel">Volver al Inicio</span>
+                <span className="studioBackLabel">Volver</span>
               </Link>
             </div>
 
             {/* DERECHA: CONTROLES DEL SISTEMA UNIFICADOS EN AMBOS EQUIPOS */}
             <div className="studioRightControls">
-              <div
-                className="studioThemeSegmented"
-                role="group"
-                aria-label="Selector de tema Claro y Oscuro"
-              >
-                <button
-                  type="button"
-                  className={theme === 'light' ? 'isActive' : ''}
-                  onClick={() => setThemePreference('light')}
-                  title="Activar Modo Claro"
-                >
-                  ☀️<span className="themeText"> Claro</span>
-                </button>
-                <button
-                  type="button"
-                  className={theme === 'dark' ? 'isActive' : ''}
-                  onClick={() => setThemePreference('dark')}
-                  title="Activar Modo Oscuro"
-                >
-                  🌙<span className="themeText"> Oscuro</span>
-                </button>
-              </div>
-
               {availableDraws.length > 1 && (
                 <button
                   type="button"

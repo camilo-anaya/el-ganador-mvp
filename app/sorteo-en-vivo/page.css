@@ -4175,67 +4175,92 @@
 
 @media (max-width: 680px) {
   .studioAppTopBar {
-    padding: 6px 10px;
-    min-height: 48px;
-    gap: 8px;
+    padding: 4px 8px !important;
+    min-height: 40px !important;
+    height: 40px !important;
+    gap: 6px !important;
   }
-  .studioBackLabel {
-    display: none;
+  .studioLeftGroup {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    flex-shrink: 0 !important;
   }
-  .studioBackBtn {
-    padding: 5px 10px;
-    height: 32px;
+  .studioBrandPill {
+    gap: 5px !important;
   }
   .studioBrandLogo {
-    width: 30px;
-    height: 30px;
-    font-size: 11px;
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 10px !important;
+    border-radius: 6px !important;
   }
   .studioBrandTag {
-    display: none;
+    display: none !important;
   }
   .studioBrandTitle {
-    font-size: 12px;
+    font-size: 11.5px !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.3px !important;
   }
   .studioOperatorLiveBadge {
-    display: none;
+    display: none !important;
   }
-  .studioRevenueWidget {
-    padding: 5px 12px;
-    gap: 8px;
+  .studioBackBtn {
+    padding: 3px 7px !important;
+    height: 26px !important;
+    font-size: 11px !important;
+    border-radius: 7px !important;
+    gap: 3px !important;
   }
-  .revenueCoinBadge {
-    font-size: 18px;
+  .studioBackLabel {
+    display: inline !important;
   }
-  .revenueTopMeta {
-    font-size: 9px;
-  }
-  .revenueAmount {
-    font-size: 14.5px;
-  }
-  .revenueProgressPill {
-    font-size: 9.5px;
-    padding: 2px 6px;
-  }
-  .themeText,
-  .roomSwitchText,
-  .audioTestText,
-  .audioToggleText {
-    display: none;
+  .studioRightControls {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    flex-shrink: 0 !important;
   }
   .studioRoomSwitchBtn,
   .studioAudioTestBtn,
   .studioAudioToggleBtn {
-    padding: 5px 10px;
-    height: 32px;
-    font-size: 12px;
+    padding: 3px 7px !important;
+    height: 26px !important;
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    border-radius: 7px !important;
+    gap: 3px !important;
+    white-space: nowrap !important;
+  }
+  .themeText {
+    display: none !important;
+  }
+  .roomSwitchText,
+  .audioTestText,
+  .audioToggleText {
+    display: inline !important;
+    font-size: 10px !important;
+  }
+  .studioRevenueWidget {
+    padding: 4px 10px;
+    gap: 6px;
+  }
+  .revenueCoinBadge {
+    font-size: 16px;
+  }
+  .revenueTopMeta {
+    font-size: 8.5px;
+  }
+  .revenueAmount {
+    font-size: 13.5px;
+  }
+  .revenueProgressPill {
+    font-size: 9px;
+    padding: 2px 5px;
   }
   .studioThemeSegmented {
-    height: 32px;
-  }
-  .studioThemeSegmented button {
-    padding: 3px 7px;
-    height: 26px;
+    display: none !important;
   }
   .revenueRaffleName {
     display: none;
