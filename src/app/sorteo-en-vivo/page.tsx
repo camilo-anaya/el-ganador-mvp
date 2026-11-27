@@ -331,6 +331,17 @@ export default function LiveDrawDemoPage() {
   const [socialCapture, setSocialCapture] = useState<RenderedSocialCapture | null>(null);
   const [socialFeedback, setSocialFeedback] = useState<string>("");
   const [isGeneratingSocial, setIsGeneratingSocial] = useState<boolean>(false);
+  
+  // Motor háptico y de gestos táctiles para la versión web móvil
+  function triggerHaptic(pattern: number | number[] = 20) {
+    if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+      try {
+        navigator.vibrate(pattern);
+      } catch {}
+    }
+  }
+
+  const touchSwipeRef = useRef<{ startX: number; startY: number }>({ startX: 0, startY: 0 });
   const [isCinemaFullscreen, setIsCinemaFullscreen] = useState<boolean>(false);
   const [activeResultTab, setActiveResultTab] = useState<"ganador" | "seguridad" | "detalles" | "auditoria">("ganador");
   const [copiedHash, setCopiedHash] = useState<boolean>(false);
@@ -3210,7 +3221,36 @@ export default function LiveDrawDemoPage() {
                 </div>
 
                 {/* CHASIS MECÁNICO INDUSTRIAL Y ESFERA DE CRISTAL 3D */}
-                <div className="globeChassis">
+                <div
+                  className="globeChassis"
+                  onTouchStart={() => triggerHaptic(15)}
+                  onTouchEnd={(e) => {
+                    e.stopPropagation();
+                    triggerHaptic([25, 15, 25]);
+                    if (phase === "winner") {
+                      resetDemo();
+                    } else if (phase !== "spinning") {
+                      playDemo();
+                    }
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    triggerHaptic(20);
+                    if (phase === "winner") {
+                      resetDemo();
+                    } else if (phase !== "spinning") {
+                      playDemo();
+                    }
+                  }}
+                  title={phase === "spinning" ? "Sorteo en curso" : "Toca la balotera para iniciar"}
+                >
+                  {/* Prompt táctil visible cuando está lista para sortear */}
+                  {phase !== "spinning" && phase !== "winner" && (
+                    <div className="globeTouchPrompt" aria-hidden="true">
+                      <span className="touchHand">👆</span>
+                      <span>Toca la balotera para iniciar</span>
+                    </div>
+                  )}
                   {/* Micropartículas luminosas doradas aleatorias en el aire exterior (r > 53%, cero contacto con el cristal) */}
                   <div className="baloteraSparkleHalo" aria-hidden="true">
                     {BALOTERA_EXTERIOR_SPARKS.map((sp, idx) => {
@@ -3528,7 +3568,37 @@ export default function LiveDrawDemoPage() {
                 </div>
               </div>
             ) : (
-              <div className="wheelCasinoWrapper" data-wheel-size={wheelSize}>
+              <div
+                className="wheelCasinoWrapper"
+                data-wheel-size={wheelSize}
+                onTouchStart={() => triggerHaptic(15)}
+                onTouchEnd={(e) => {
+                  e.stopPropagation();
+                  triggerHaptic([30, 20, 30]);
+                  if (phase === "winner") {
+                    resetDemo();
+                  } else if (phase !== "spinning") {
+                    playDemo();
+                  }
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  triggerHaptic(20);
+                  if (phase === "winner") {
+                    resetDemo();
+                  } else if (phase !== "spinning") {
+                    playDemo();
+                  }
+                }}
+                title={phase === "spinning" ? "Ruleta girando" : "Toca o desliza para girar"}
+              >
+                {/* Prompt táctil visible en la ruleta */}
+                {phase !== "spinning" && phase !== "winner" && (
+                  <div className="wheelTouchPrompt" aria-hidden="true">
+                    <span className="touchHand">👆</span>
+                    <span>Toca o desliza para girar</span>
+                  </div>
+                )}
                 {/* 1. Flapper / Puntero Superior Triángulo Dorado con Flecha Rubí */}
                 <div
                   ref={flapperDomRef}
@@ -3908,16 +3978,16 @@ export default function LiveDrawDemoPage() {
 
                 {/* BOTONES DE REACCIONES DEL ESPECTADOR EN VIVO */}
                 <div className="liveAudienceReactions" style={{ justifyContent: "center", margin: "14px 0" }}>
-                  <button type="button" className="reactionBtn" onClick={() => triggerReaction("👏")}>
+                  <button type="button" className="reactionBtn" onClick={() => { triggerHaptic(15); triggerReaction("👏"); }} onTouchStart={() => triggerHaptic(15)}>
                     👏 <small>{reactionCounts["👏"] || 489}</small>
                   </button>
-                  <button type="button" className="reactionBtn" onClick={() => triggerReaction("🔥")}>
+                  <button type="button" className="reactionBtn" onClick={() => { triggerHaptic(15); triggerReaction("🔥"); }} onTouchStart={() => triggerHaptic(15)}>
                     🔥 <small>{reactionCounts["🔥"] || 915}</small>
                   </button>
-                  <button type="button" className="reactionBtn" onClick={() => triggerReaction("🎉")}>
+                  <button type="button" className="reactionBtn" onClick={() => { triggerHaptic(15); triggerReaction("🎉"); }} onTouchStart={() => triggerHaptic(15)}>
                     🎉 <small>{reactionCounts["🎉"] || 630}</small>
                   </button>
-                  <button type="button" className="reactionBtn" onClick={() => triggerReaction("❤️")}>
+                  <button type="button" className="reactionBtn" onClick={() => { triggerHaptic(15); triggerReaction("❤️"); }} onTouchStart={() => triggerHaptic(15)}>
                     ❤️ <small>{reactionCounts["❤️"] || 1240}</small>
                   </button>
                 </div>
@@ -4171,7 +4241,35 @@ export default function LiveDrawDemoPage() {
               3. 📊 Sorteo & Historial de Balotas
               4. 📜 Auditoría Coljuegos & Inmutabilidad
               =================================================================== */}
-          <div id="draw-result-blocks" className="drawResultBlocksContainer">
+          <div
+            id="draw-result-blocks"
+            className="drawResultBlocksContainer"
+            onTouchStart={(e) => {
+              if (e.touches && e.touches[0]) {
+                touchSwipeRef.current = { startX: e.touches[0].clientX, startY: e.touches[0].clientY };
+              }
+            }}
+            onTouchEnd={(e) => {
+              if (e.changedTouches && e.changedTouches[0]) {
+                const diffX = e.changedTouches[0].clientX - touchSwipeRef.current.startX;
+                const diffY = e.changedTouches[0].clientY - touchSwipeRef.current.startY;
+                // Si el gesto fue predominantemente horizontal
+                if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY)) {
+                  const tabs: Array<"ganador" | "seguridad" | "detalles" | "auditoria"> = ["ganador", "seguridad", "detalles", "auditoria"];
+                  const currentIdx = tabs.indexOf(activeResultTab);
+                  if (diffX < 0 && currentIdx < tabs.length - 1) {
+                    // Swipe izquierda: siguiente pestaña
+                    triggerHaptic(15);
+                    setActiveResultTab(tabs[currentIdx + 1]);
+                  } else if (diffX > 0 && currentIdx > 0) {
+                    // Swipe derecha: pestaña previa
+                    triggerHaptic(15);
+                    setActiveResultTab(tabs[currentIdx - 1]);
+                  }
+                }
+              }
+            }}
+          >
             {/* BARRA SELECTORA DE BLOQUES */}
             <div className="drawResultBlocksNav" role="tablist" aria-label="Navegación de bloques de información">
               <button

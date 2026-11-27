@@ -8651,3 +8651,89 @@
     margin: 14px 0 0 0 !important;
   }
 }
+
+
+/* ==========================================================================
+   SOPORTE TÁCTIL NATIVO PARA LA VERSIÓN WEB MÓVIL Y TABLET
+   ========================================================================== */
+
+/* Eliminación total del retardo táctil de 300ms y resaltado gris en móviles */
+html, body, button, a, input, select, textarea, .liveDemoMachine, .drawResultBlocksNav, .drawResultBlockCard {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+/* Esfera de balotera táctil */
+.globeChassis,
+.pneumaticCageWrapper {
+  cursor: pointer !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Ruleta táctil */
+.wheelCasinoWrapper,
+.wheelBoard,
+.wheelDrumCasing {
+  cursor: pointer !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Avisos flotantes táctiles para invitar a tocar la balotera o ruleta */
+.globeTouchPrompt,
+.wheelTouchPrompt {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: rgba(3, 35, 20, 0.92) !important;
+  border: 1.5px solid #f5b82e !important;
+  color: #ffffff !important;
+  font-size: 12.5px !important;
+  font-weight: 800 !important;
+  padding: 8px 16px !important;
+  border-radius: 999px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  pointer-events: none !important;
+  z-index: 60 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(245, 184, 46, 0.4) !important;
+  animation: touchPromptPulse 1.8s infinite ease-in-out !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  white-space: nowrap !important;
+}
+
+.globeTouchPrompt .touchHand,
+.wheelTouchPrompt .touchHand {
+  font-size: 16px !important;
+  animation: touchHandTap 1.2s infinite ease-in-out !important;
+}
+
+@keyframes touchPromptPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.95; }
+  50% { transform: translate(-50%, -50%) scale(1.04); opacity: 1; }
+}
+
+@keyframes touchHandTap {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px) rotate(-10deg); }
+}
+
+/* Efecto háptico visual (Active state instantáneo al toque del dedo) */
+.btnInfinityDisplayToggle:active,
+.cinemaInfinityDisplayPill:active,
+.resultBlockTabBtn:active,
+.reactionBtn:active,
+.liveDemoStart:active,
+.btnWinnerChatCoordination:active,
+.btnManualSaveAndHome:active {
+  transform: scale(0.96) !important;
+  transition: transform 0.08s ease !important;
+}
+
+.drawResultBlocksContainer {
+  touch-action: pan-y !important;
+}
