@@ -2765,19 +2765,26 @@
     font-size: 9.5px;
   }
   .liveDemoHero {
-    margin: 6px auto 6px;
+    margin: 8px auto 10px;
+    padding: 0 12px;
   }
   .liveDemoEyebrow {
-    font-size: 8px;
-    letter-spacing: 1.3px;
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
     margin-bottom: 3px;
   }
   .liveDemoHero h1 {
-    font-size: clamp(20px, 5.5vw, 27px);
+    font-size: clamp(20px, 5.5vw, 28px);
     letter-spacing: -0.7px;
+    margin-bottom: 4px;
   }
   .liveDemoHero > p:last-child {
-    display: none;
+    display: block !important;
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+    color: #cbd5e1 !important;
+    margin: 4px auto 0 !important;
+    max-width: 95% !important;
   }
   .liveDemoStage {
     border-radius: 18px;

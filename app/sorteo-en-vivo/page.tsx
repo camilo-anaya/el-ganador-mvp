@@ -439,10 +439,7 @@ export default function LiveDrawDemoPage() {
     if (typeof window === "undefined") return false;
     const params = new URLSearchParams(window.location.search);
     if (params.get("viewer") === "1" || params.get("modo") === "cliente") return true;
-    if (params.get("portatil") === "1" || params.get("modo") === "portatil" || params.get("modo") === "empresario") return false;
-    // Si la pantalla es de portátil o computador (>= 768px), activar Modo Portátil con navegación completa por defecto
-    if (typeof window !== "undefined" && window.innerWidth >= 768) return false;
-    return readSurface() !== "business";
+    return false;
   });
   const isOperator = Boolean(
     !isViewerMode ||
@@ -2537,21 +2534,19 @@ export default function LiveDrawDemoPage() {
       {/* 👑 BARRA SUPERIOR INTEGRADA DE ESTUDIO Y NAVEGACIÓN UNIVERSAL */}
       {!isCinemaFullscreen && (
         <header className={`studioUnifiedHeader ${theme === 'dark' ? 'isDark' : 'isLight'}`}>
-          {/* FILA 1: BRANDING A LA IZQUIERDA + RECAUDO EN VIVO A LA DERECHA */}
+          {/* FILA 1: BRANDING A LA IZQUIERDA + CONTROLES DEL SISTEMA A LA DERECHA */}
           <div className="studioAppTopBar">
-            {/* GRUPO IZQUIERDO: BRANDING PEGADO AL LATERAL + BADGE + VOLVER A INICIO */}
+            {/* GRUPO IZQUIERDO: BRANDING + VOLVER A INICIO */}
             <div className="studioLeftGroup">
               <Link href="/" className="studioBrandPill" aria-label="El Ganador, ir al inicio">
                 <span className="studioBrandLogo">EG</span>
                 <div className="studioBrandText">
                   <span className="studioBrandTitle">EL GANADOR</span>
-                  <span className="studioBrandTag">
-                    {!isViewerMode && isOperator ? 'SALA DE EMISIÓN' : 'SALA OFICIAL'}
-                  </span>
+                  <span className="studioBrandTag">SALA OFICIAL</span>
                 </div>
               </Link>
 
-              {!isViewerMode && isOperator && (
+              {isOperator && (
                 <span className="studioOperatorLiveBadge">
                   <span className="pulseDot" /> MODO EMPRESARIO
                 </span>
@@ -2565,140 +2560,74 @@ export default function LiveDrawDemoPage() {
                 <span className="studioBackArrow">←</span>
                 <span className="studioBackLabel">Volver al Inicio</span>
               </Link>
-
-              {/* SELECTOR DE NAVEGACIÓN: PORTÁTIL VS CELULAR */}
-              <div className="deviceModeSelector" role="group" aria-label="Navegar con portátil o celular">
-                <button
-                  type="button"
-                  className={`btnDeviceMode ${!isViewerMode ? "isActive" : ""}`}
-                  onClick={() => {
-                    setIsViewerMode(false);
-                    setIsCinemaFullscreen(false);
-                    triggerHaptic(15);
-                    if (typeof window !== "undefined") {
-                      const url = new URL(window.location.href);
-                      url.searchParams.set("modo", "portatil");
-                      url.searchParams.delete("viewer");
-                      window.history.pushState({}, "", url.toString());
-                    }
-                  }}
-                  title="Navegar en Modo Portátil con controles completos y libre movimiento"
-                >
-                  💻 Portátil
-                </button>
-                <button
-                  type="button"
-                  className={`btnDeviceMode ${isViewerMode ? "isActive" : ""}`}
-                  onClick={() => {
-                    setIsViewerMode(true);
-                    setIsCinemaFullscreen(false);
-                    triggerHaptic(15);
-                    if (typeof window !== "undefined") {
-                      const url = new URL(window.location.href);
-                      url.searchParams.set("modo", "celular");
-                      url.searchParams.set("viewer", "1");
-                      window.history.pushState({}, "", url.toString());
-                    }
-                  }}
-                  title="Navegar en Modo Celular (Espectador)"
-                >
-                  📱 Celular
-                </button>
-              </div>
             </div>
 
-            {/* DERECHA: RECAUDO EN VIVO (EL RECUADRO GRANDE A LA DERECHA) */}
-            {!isViewerMode && isOperator ? (
+            {/* DERECHA: CONTROLES DEL SISTEMA UNIFICADOS EN AMBOS EQUIPOS */}
+            <div className="studioRightControls">
               <div
-                className="studioRevenueWidget"
-                title={`Recaudo oficial en vivo: ${activeDrawTitle}`}
-                style={{ color: '#ffffff' }}
+                className="studioThemeSegmented"
+                role="group"
+                aria-label="Selector de tema Claro y Oscuro"
               >
-                <span className="revenueCoinBadge">💰</span>
-                <div className="revenueDetails">
-                  <div className="revenueTopMeta" style={{ color: '#ffffff' }}>
-                    <span className="revenueLabel" style={{ color: '#ffffff' }}>RECAUDO EN VIVO</span>
-                    <span className="revenueRaffleName" style={{ color: '#ffffff' }}>· {activeDrawTitle}</span>
-                  </div>
-                  <div className="revenueNumberRow">
-                    <strong className="revenueAmount" style={{ color: '#ffffff' }}>
-                      ${activeTotalRevenue.toLocaleString('es-CO')}
-                      <span className="currencyText" style={{ color: '#ffffff' }}> COP</span>
-                    </strong>
-                    <span className="revenueProgressPill" style={{ color: '#ffffff' }}>
-                      ({activeSoldTickets} / {activeTotalTickets} balotas · {activeRevenuePct}%)
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              /* En modo espectador (sin recaudo), los controles de sala se muestran aquí */
-              <div className="studioRightControls">
-                <div
-                  className="studioThemeSegmented"
-                  role="group"
-                  aria-label="Selector de tema Claro y Oscuro"
-                >
-                  <button
-                    type="button"
-                    className={theme === 'light' ? 'isActive' : ''}
-                    onClick={() => setThemePreference('light')}
-                    title="Activar Modo Claro"
-                  >
-                    ☀️<span className="themeText"> Claro</span>
-                  </button>
-                  <button
-                    type="button"
-                    className={theme === 'dark' ? 'isActive' : ''}
-                    onClick={() => setThemePreference('dark')}
-                    title="Activar Modo Oscuro"
-                  >
-                    🌙<span className="themeText"> Oscuro</span>
-                  </button>
-                </div>
-
-                {availableDraws.length > 1 && (
-                  <button
-                    type="button"
-                    className="studioRoomSwitchBtn"
-                    onClick={() => {
-                      const currentIndex = availableDraws.findIndex((d) => d.id === activeDrawId);
-                      const nextIndex = (currentIndex + 1) % availableDraws.length;
-                      switchLiveDraw(availableDraws[nextIndex]);
-                    }}
-                    title="Cambiar a otra sala de sorteo en vivo"
-                  >
-                    🔄 <span className="roomSwitchText">Sala</span> ({availableDraws.length})
-                  </button>
-                )}
-
                 <button
                   type="button"
-                  className="studioAudioTestBtn"
+                  className={theme === 'light' ? 'isActive' : ''}
+                  onClick={() => setThemePreference('light')}
+                  title="Activar Modo Claro"
+                >
+                  ☀️<span className="themeText"> Claro</span>
+                </button>
+                <button
+                  type="button"
+                  className={theme === 'dark' ? 'isActive' : ''}
+                  onClick={() => setThemePreference('dark')}
+                  title="Activar Modo Oscuro"
+                >
+                  🌙<span className="themeText"> Oscuro</span>
+                </button>
+              </div>
+
+              {availableDraws.length > 1 && (
+                <button
+                  type="button"
+                  className="studioRoomSwitchBtn"
                   onClick={() => {
-                    drawAudio.playQuickSoundCheck();
-                    setIsMuted(false);
+                    const currentIndex = availableDraws.findIndex((d) => d.id === activeDrawId);
+                    const nextIndex = (currentIndex + 1) % availableDraws.length;
+                    switchLiveDraw(availableDraws[nextIndex]);
                   }}
-                  title="Probar sonido en celular / parlantes"
+                  title="Cambiar a otra sala de sorteo en vivo"
                 >
-                  🔔 <span className="audioTestText">Probar</span>
+                  🔄 <span className="roomSwitchText">Sala</span> ({availableDraws.length})
                 </button>
+              )}
 
-                <button
-                  type="button"
-                  className={`studioAudioToggleBtn ${isMuted ? 'isMuted' : 'isActive'}`}
-                  onClick={() => setIsMuted(drawAudio.toggleMute())}
-                  title={isMuted ? 'Activar audio del sorteo' : 'Silenciar audio'}
-                >
-                  <span>{isMuted ? '🔇' : '🔊'}</span>
-                  <span className="audioToggleText">{isMuted ? 'Silenciado' : 'Audio'}</span>
-                </button>
-              </div>
-            )}
+              <button
+                type="button"
+                className="studioAudioTestBtn"
+                onClick={() => {
+                  drawAudio.playQuickSoundCheck();
+                  setIsMuted(false);
+                }}
+                title="Probar sonido en celular / parlantes"
+              >
+                🔔 <span className="audioTestText">Probar</span>
+              </button>
+
+              <button
+                type="button"
+                className={`studioAudioToggleBtn ${isMuted ? 'isMuted' : 'isActive'}`}
+                onClick={() => setIsMuted(drawAudio.toggleMute())}
+                title={isMuted ? 'Activar audio del sorteo' : 'Silenciar audio'}
+              >
+                <span>{isMuted ? '🔇' : '🔊'}</span>
+                <span className="audioToggleText">{isMuted ? 'Silenciado' : 'Audio'}</span>
+              </button>
+            </div>
           </div>
 
-          {/* FILA 2: BARRA DE PRODUCCIÓN Y CONTROLES DEL SISTEMA (Solo visible para el empresario operador) */}
-          {!isViewerMode && isOperator && (
+          {/* FILA 2: BARRA DE PRODUCCIÓN Y RECAUDO (Visible si el usuario es empresario operador) */}
+          {isOperator && (
             <div className="studioProducerToolbar">
               <div className="studioProducerDeck">
                 {/* IZQUIERDA: HERRAMIENTAS DE EMISIÓN */}
@@ -2724,83 +2653,30 @@ export default function LiveDrawDemoPage() {
                     <span>📅</span>
                     <span>{copiedReminderLink ? '✓ ¡Link Calendar copiado!' : 'Link Google Calendar'}</span>
                   </button>
-
-                  <button
-                    type="button"
-                    className="studioToolChip isPreviewBtn"
-                    onClick={() => setIsViewerMode(true)}
-                    title="Ver cómo lo ve el cliente en su celular"
-                  >
-                    <span>👁️</span>
-                    <span>Ver como cliente (Móvil)</span>
-                  </button>
                 </div>
 
-                {/* DERECHA: CONTROLES DEL SISTEMA (TEMA, SALA, AUDIO) */}
-                <div className="studioRightControls">
-                  {/* SELECTOR SEGMENTADO DE TEMA (CLARO / OSCURO) */}
-                  <div
-                    className="studioThemeSegmented"
-                    role="group"
-                    aria-label="Selector de tema Claro y Oscuro"
-                  >
-                    <button
-                      type="button"
-                      className={theme === 'light' ? 'isActive' : ''}
-                      onClick={() => setThemePreference('light')}
-                      title="Activar Modo Claro"
-                    >
-                      ☀️<span className="themeText"> Claro</span>
-                    </button>
-                    <button
-                      type="button"
-                      className={theme === 'dark' ? 'isActive' : ''}
-                      onClick={() => setThemePreference('dark')}
-                      title="Activar Modo Oscuro"
-                    >
-                      🌙<span className="themeText"> Oscuro</span>
-                    </button>
+                {/* DERECHA: RECAUDO EN VIVO DEL EVENTO */}
+                <div
+                  className="studioRevenueWidget"
+                  title={`Recaudo oficial en vivo: ${activeDrawTitle}`}
+                  style={{ color: '#ffffff' }}
+                >
+                  <span className="revenueCoinBadge">💰</span>
+                  <div className="revenueDetails">
+                    <div className="revenueTopMeta" style={{ color: '#ffffff' }}>
+                      <span className="revenueLabel" style={{ color: '#ffffff' }}>RECAUDO EN VIVO</span>
+                      <span className="revenueRaffleName" style={{ color: '#ffffff' }}>· {activeDrawTitle}</span>
+                    </div>
+                    <div className="revenueNumberRow">
+                      <strong className="revenueAmount" style={{ color: '#ffffff' }}>
+                        ${activeTotalRevenue.toLocaleString('es-CO')}
+                        <span className="currencyText" style={{ color: '#ffffff' }}> COP</span>
+                      </strong>
+                      <span className="revenueProgressPill" style={{ color: '#ffffff' }}>
+                        ({activeSoldTickets} / {activeTotalTickets} balotas · {activeRevenuePct}%)
+                      </span>
+                    </div>
                   </div>
-
-                  {/* CAMBIO DE SALA DE SORTEO */}
-                  {availableDraws.length > 1 && (
-                    <button
-                      type="button"
-                      className="studioRoomSwitchBtn"
-                      onClick={() => {
-                        const currentIndex = availableDraws.findIndex((d) => d.id === activeDrawId);
-                        const nextIndex = (currentIndex + 1) % availableDraws.length;
-                        switchLiveDraw(availableDraws[nextIndex]);
-                      }}
-                      title="Cambiar a otra sala de sorteo en vivo"
-                    >
-                      🔄 <span className="roomSwitchText">Sala</span> ({availableDraws.length})
-                    </button>
-                  )}
-
-                  {/* PROBAR AUDIO */}
-                  <button
-                    type="button"
-                    className="studioAudioTestBtn"
-                    onClick={() => {
-                      drawAudio.playQuickSoundCheck();
-                      setIsMuted(false);
-                    }}
-                    title="Probar sonido en celular / parlantes"
-                  >
-                    🔔 <span className="audioTestText">Probar</span>
-                  </button>
-
-                  {/* SOUND TOGGLE */}
-                  <button
-                    type="button"
-                    className={`studioAudioToggleBtn ${isMuted ? 'isMuted' : 'isActive'}`}
-                    onClick={() => setIsMuted(drawAudio.toggleMute())}
-                    title={isMuted ? 'Activar audio del sorteo' : 'Silenciar audio'}
-                  >
-                    <span>{isMuted ? '🔇' : '🔊'}</span>
-                    <span className="audioToggleText">{isMuted ? 'Silenciado' : 'Audio'}</span>
-                  </button>
                 </div>
               </div>
             </div>
@@ -2809,13 +2685,11 @@ export default function LiveDrawDemoPage() {
       )}
 
       <div className="liveDemoContentContainer">
-        {!isViewerMode && isOperator && (
-          <section className="liveDemoHero">
-            <p className="liveDemoEyebrow">SISTEMA OFICIAL DE EXTRACCIÓN · EL GANADOR</p>
-            <h1>El sorteo se vive <span>en El Ganador.</span></h1>
-            <p>El Círculo Dorado con física en tiempo real y ruleta comunitaria. Configura el cartón y presiona el botón "Iniciar sorteo" para comenzar la extracción.</p>
-          </section>
-        )}
+        <section className="liveDemoHero">
+          <p className="liveDemoEyebrow">SISTEMA OFICIAL DE EXTRACCIÓN · EL GANADOR</p>
+          <h1>El sorteo se vive <span>en El Ganador.</span></h1>
+          <p>El Círculo Dorado con física en tiempo real y ruleta comunitaria. Extracción en directo con fe pública, balotera blindada y total transparencia.</p>
+        </section>
 
       <section className="liveDemoStage" aria-labelledby="liveDemoDrawTitle">
         <div className="liveDemoStageTop">
@@ -2833,36 +2707,34 @@ export default function LiveDrawDemoPage() {
           </div>
         )}
 
-        {!isViewerMode && isOperator && (
-          <div className="liveGameModes" role="group" aria-label="Modo de sorteo">
-            <button
-              type="button"
-              className={mode === "balotas" ? "isSelected" : ""}
-              disabled={phase === "spinning"}
-              onClick={() => {
-                if (phase === "spinning") return;
-                setMode("balotas");
-                resetDemo();
-              }}
-            >
-              <RealisticBalotaIcon size={28} number="77" />
-              <span><b>El Círculo Dorado</b><small>Cartones de 100, 200, 500 y 1.000 números</small></span>
-            </button>
-            <button
-              type="button"
-              className={mode === "ruleta" ? "isSelected" : ""}
-              disabled={phase === "spinning"}
-              onClick={() => {
-                if (phase === "spinning") return;
-                setMode("ruleta");
-                resetDemo();
-              }}
-            >
-              <span>🎡</span>
-              <span><b>Ruleta Comunitaria</b><small>Sorteos rápidos de 10 a 50 números</small></span>
-            </button>
-          </div>
-        )}
+        <div className="liveGameModes" role="group" aria-label="Modo de sorteo">
+          <button
+            type="button"
+            className={mode === "balotas" ? "isSelected" : ""}
+            disabled={phase === "spinning"}
+            onClick={() => {
+              if (phase === "spinning") return;
+              setMode("balotas");
+              resetDemo();
+            }}
+          >
+            <RealisticBalotaIcon size={28} number="77" />
+            <span><b>El Círculo Dorado</b><small>Cartones de 100, 200, 500 y 1.000 números</small></span>
+          </button>
+          <button
+            type="button"
+            className={mode === "ruleta" ? "isSelected" : ""}
+            disabled={phase === "spinning"}
+            onClick={() => {
+              if (phase === "spinning") return;
+              setMode("ruleta");
+              resetDemo();
+            }}
+          >
+            <span>🎡</span>
+            <span><b>Ruleta Comunitaria</b><small>Sorteos rápidos de 10 a 50 números</small></span>
+          </button>
+        </div>
 
         {/* CARTÓN OFICIAL AMARRADO AL SORTEO EN JUEGO (INMODIFICABLE) */}
         <div className="cartonSelectorBar" style={{ width: '100%', boxSizing: 'border-box' }}>
@@ -4557,9 +4429,7 @@ export default function LiveDrawDemoPage() {
         </div>
       </section>
 
-      {!isViewerMode && isOperator && (
-        <>
-          {/* Botón desplegable para optimizar la carga visual y móvil */}
+      {/* Botón desplegable para optimizar la carga visual y móvil */}
           <div className="auditToggleWrapper" style={{ maxWidth: "1180px", margin: "24px auto 12px auto", padding: "0 14px", width: "100%", boxSizing: "border-box" }}>
             <button
               type="button"
@@ -4802,8 +4672,6 @@ export default function LiveDrawDemoPage() {
         <span>Plataforma de sorteos verificables</span>
         <span>Modo demostración en tiempo real</span>
       </footer>
-      </>
-      )}
       </div> {/* Fin liveDemoContentContainer */}
 
       {/* MODAL DE ACTA OFICIAL NOTARIAL / CERTIFICADO IMPRIMIBLE */}
