@@ -65,6 +65,7 @@ function IngresoContent() {
   const [camaraComercioDate, setCamaraComercioDate] = useState("");
   const [storeFrontFileName, setStoreFrontFileName] = useState("");
   const [bankCertFileName, setBankCertFileName] = useState("");
+  const [enableBiometrics, setEnableBiometrics] = useState(true);
 
   // =========================================================================
   // 3. ESTADOS PARA LA VERSIÓN ORIGINAL EN PC Y TABLETS
@@ -346,13 +347,17 @@ function IngresoContent() {
 
   const validateBusinessDocs = (): string | null => {
     const missing: string[] = [];
+    if (!legalRepName.trim()) missing.push("Nombre del propietario / representante");
+    if (!docNumber.trim()) missing.push("Número de cédula del propietario");
+    if (!idFrontFileName) missing.push("Foto frontal de cédula del propietario");
+    if (!idBackFileName) missing.push("Foto trasera de cédula del propietario");
+    if (!regName.trim()) missing.push("Razón Social o Nombre Comercial");
     if (!nit.trim()) missing.push("NIT o RUT del comercio");
-    if (!legalRepName.trim()) missing.push("Nombre del representante legal");
-    if (!businessAddress.trim()) missing.push("Dirección física del local");
-    if (!rutFileName) missing.push("RUT actualizado (DIAN)");
+    if (!rutFileName) missing.push("Documento RUT (DIAN)");
     if (!camaraComercioFileName) missing.push("Cámara de Comercio vigente");
+    if (!businessAddress.trim()) missing.push("Dirección física exacta del local");
     if (missing.length > 0) {
-      return `Requisitos Coljuegos obligatorios pendientes: ${missing.join(", ")}. Por favor adjúntalos para autorizar tu local.`;
+      return `Requisitos obligatorios pendientes: ${missing.join(", ")}. Por favor completa y adjunta estos datos para habilitar tu establecimiento.`;
     }
     return null;
   };
@@ -364,8 +369,18 @@ function IngresoContent() {
       return;
     }
     if (regPassword && regConfirmPassword && regPassword !== regConfirmPassword) {
-      setAuthError("Las contraseñas no coinciden.");
+      setAuthError("Las contraseñas no coinciden. Por favor verifica que ambas sean idénticas.");
       return;
+    }
+    if (role === "customer") {
+      if (!idFrontFileName) {
+        setAuthError("Por favor adjunta la foto frontal de tu documento (cédula) para verificar que eres una persona real.");
+        return;
+      }
+      if (!idBackFileName) {
+        setAuthError("Por favor adjunta la foto trasera de tu documento (cédula) para verificar que eres una persona real.");
+        return;
+      }
     }
     if (role === "business") {
       const docErr = validateBusinessDocs();
@@ -839,8 +854,8 @@ function IngresoContent() {
 
   // =========================================================================
   // VISTA MÓVIL 3: REGISTRARSE (view === 'register')
-  // - Modo Cliente: Registro personal rápido y compacto
-  // - Modo Empresa: Ventana desplegable con la lista completa de datos requeridos
+  // - Modo Cliente: Registro con evidencia de persona real (Cédula frontal y trasera) y biometría
+  // - Modo Empresa: Requisitos separados por bloques (Propietario, Empresa, Dirección, Seguridad con Face ID / Cifrado)
   // =========================================================================
   const renderRegisterView = () => (
     <section
@@ -850,21 +865,26 @@ function IngresoContent() {
         background: '#042217',
         backgroundImage: 'linear-gradient(180deg, #052c1e 0%, #031c13 100%)',
         justifyContent: 'flex-start',
-        paddingTop: 'calc(env(safe-area-inset-top, 12px) + 10px)',
-        paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 16px)'
+        paddingLeft: '8px',
+        paddingRight: '8px',
+        paddingTop: 'calc(env(safe-area-inset-top, 12px) + 8px)',
+        paddingBottom: 'calc(env(safe-area-inset-bottom, 16px) + 16px)',
+        width: '100%',
+        boxSizing: 'border-box'
       }}
     >
-      {/* Pantalla limpia con fondo liso para cliente y empresa (sin el logo detrás para que nada se vea engorroso) */}
+      {/* Contenedor amplio pegado a los bordes sin verse encogido */}
       <div
         className="portada-2030-interactive-layer"
         style={{
-          maxWidth: '340px',
-          width: '92%',
+          width: '100%',
+          maxWidth: '460px',
           margin: '0 auto',
-          gap: '7px',
-          maxHeight: '90vh',
+          gap: '8px',
+          maxHeight: '92vh',
           overflowY: 'auto',
-          paddingBottom: '24px'
+          padding: '0 4px 24px 4px',
+          boxSizing: 'border-box'
         }}
       >
         {/* Barra superior con volver y switch de rol */}
@@ -945,7 +965,7 @@ function IngresoContent() {
         {authSuccess && <div className="mobileNoticeBox success" style={{ fontSize: '11px', padding: '5px 10px', margin: '1px 0' }}>✓ {authSuccess}</div>}
 
         {/* ===================================================================
-            A. FORMULARIO CLIENTE COMPLETO (Comprador - Listado Original)
+            A. FORMULARIO CLIENTE (Comprador) con Evidencia de Persona Real
             =================================================================== */}
         {role === "customer" ? (
           <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
@@ -958,7 +978,7 @@ function IngresoContent() {
               color: '#ffffff',
               lineHeight: '1.35'
             }}>
-              🎟️ <strong>Registro Personal de Comprador</strong>: Completa tus datos para comprar boletas en rifas oficiales y recibir tus premios directamente.
+              🎟️ <strong>Registro de Comprador</strong>: Completa tus datos y fotos de cédula para certificar que eres una persona real y asegurar el cobro de tus premios.
             </div>
 
             {/* 1. Nombre Completo */}
@@ -1048,10 +1068,10 @@ function IngresoContent() {
               </div>
             </div>
 
-            {/* 4. Documento de Identidad (Cédula de Ciudadanía / Extranjería) */}
+            {/* 4. Documento de Identidad */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
-                4. DOCUMENTO DE IDENTIDAD (PARA COBRO DE PREMIOS) *
+                4. DOCUMENTO DE IDENTIDAD (TIPO Y NÚMERO) *
               </span>
               <div style={{ display: 'flex', gap: '6px' }}>
                 <select
@@ -1088,7 +1108,7 @@ function IngresoContent() {
                 }}>
                   <input
                     type="text"
-                    placeholder="Número de documento (ej: 1.045.678.901)"
+                    placeholder="Número de cédula (ej: 1.045.678.901)"
                     value={docNumber}
                     onChange={(e) => setDocNumber(e.target.value)}
                     required
@@ -1098,10 +1118,102 @@ function IngresoContent() {
               </div>
             </div>
 
-            {/* 5. Fecha de Nacimiento (+18 Años) */}
+            {/* 5. Foto Cédula Frontal (Evidencia persona real) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                  5. 🪪 FOTO CÉDULA FRONTAL (CARA DELANTERA · EVIDENCIA REAL) *
+                </span>
+                {idFrontFileName ? (
+                  <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
+                ) : (
+                  <span style={{ fontSize: '9px', color: '#f87171', fontWeight: 700 }}>Requerido</span>
+                )}
+              </div>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: idFrontFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.92)',
+                  border: idFrontFileName ? '1.4px solid rgba(16, 185, 129, 0.6)' : '1.4px dashed rgba(255, 255, 255, 0.35)',
+                  borderRadius: '10px',
+                  padding: '0 10px',
+                  height: '38px',
+                  cursor: 'pointer',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
+                  <span style={{ fontSize: '14px' }}>📸</span>
+                  <span style={{ fontSize: '11.5px', color: idFrontFileName ? '#ffffff' : '#cbd5e1', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '240px' }}>
+                    {idFrontFileName ? idFrontFileName : "Tomar foto o subir cara frontal de la cédula"}
+                  </span>
+                </div>
+                <span style={{ fontSize: '10px', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
+                  {idFrontFileName ? "Cambiar" : "Examinar"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) setIdFrontFileName(e.target.files[0].name);
+                  }}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+
+            {/* 6. Foto Cédula Trasera */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                  6. 🪪 FOTO CÉDULA TRASERA (CARA POSTERIOR) *
+                </span>
+                {idBackFileName ? (
+                  <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
+                ) : (
+                  <span style={{ fontSize: '9px', color: '#f87171', fontWeight: 700 }}>Requerido</span>
+                )}
+              </div>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: idBackFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.92)',
+                  border: idBackFileName ? '1.4px solid rgba(16, 185, 129, 0.6)' : '1.4px dashed rgba(255, 255, 255, 0.35)',
+                  borderRadius: '10px',
+                  padding: '0 10px',
+                  height: '38px',
+                  cursor: 'pointer',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
+                  <span style={{ fontSize: '14px' }}>📸</span>
+                  <span style={{ fontSize: '11.5px', color: idBackFileName ? '#ffffff' : '#cbd5e1', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '240px' }}>
+                    {idBackFileName ? idBackFileName : "Tomar foto o subir cara trasera de la cédula"}
+                  </span>
+                </div>
+                <span style={{ fontSize: '10px', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
+                  {idBackFileName ? "Cambiar" : "Examinar"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) setIdBackFileName(e.target.files[0].name);
+                  }}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+
+            {/* 7. Fecha de Nacimiento */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
-                5. FECHA DE NACIMIENTO (MAYORÍA DE EDAD +18) *
+                7. FECHA DE NACIMIENTO (MAYORÍA DE EDAD +18) *
               </span>
               <div style={{
                 display: 'flex',
@@ -1123,10 +1235,10 @@ function IngresoContent() {
               </div>
             </div>
 
-            {/* 6. Ciudad y Departamento de Residencia */}
+            {/* 8. Ciudad de Residencia */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
-                6. CIUDAD / DEPARTAMENTO DE RESIDENCIA *
+                8. CIUDAD / DEPARTAMENTO DE RESIDENCIA *
               </span>
               <div style={{
                 display: 'flex',
@@ -1149,10 +1261,10 @@ function IngresoContent() {
               </div>
             </div>
 
-            {/* 7. Contraseña Personal Cliente */}
+            {/* 9. Contraseña Personal Cliente */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
-                7. 🔑 CONTRASEÑA DE CUENTA PERSONAL (CLIENTE / COMPRADOR) *
+                9. 🔑 CONTRASEÑA DE CUENTA PERSONAL (CLIENTE / COMPRADOR) *
               </span>
               <div style={{
                 display: 'flex',
@@ -1187,10 +1299,10 @@ function IngresoContent() {
               </div>
             </div>
 
-            {/* 8. Confirmar Contraseña Cliente */}
+            {/* 10. Confirmar Contraseña Cliente */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
-                8. 🔒 CONFIRMAR CONTRASEÑA PERSONAL *
+                10. 🔒 CONFIRMAR CONTRASEÑA PERSONAL *
               </span>
               <div style={{
                 display: 'flex',
@@ -1225,8 +1337,35 @@ function IngresoContent() {
               </div>
             </div>
 
+            {/* 11. Seguridad y Biometría (Face ID / Cifrado) */}
+            <label style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: '1.2px solid rgba(255, 255, 255, 0.22)',
+              borderRadius: '10px',
+              padding: '8px 10px',
+              cursor: 'pointer'
+            }}>
+              <input
+                type="checkbox"
+                checked={enableBiometrics}
+                onChange={(e) => setEnableBiometrics(e.target.checked)}
+                style={{ accentColor: '#10b981', width: '16px', height: '16px' }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff' }}>
+                  📱 Activar Face ID / Huella Dactilar & Cifrado AES-256
+                </span>
+                <span style={{ fontSize: '9.5px', color: '#cbd5e1' }}>
+                  Protege tu cuenta con autenticación biométrica nativa de tu teléfono.
+                </span>
+              </div>
+            </label>
+
             {/* Checkbox Términos */}
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer', fontSize: '11px', color: '#ffffff', lineHeight: '1.3', marginTop: '4px' }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer', fontSize: '11px', color: '#ffffff', lineHeight: '1.3', marginTop: '2px' }}>
               <input
                 type="checkbox"
                 checked={ageConfirmed}
@@ -1242,7 +1381,7 @@ function IngresoContent() {
               type="submit"
               className="btn-2030-login"
               disabled={authBusy}
-              style={{ width: '100%', height: '42px', fontSize: '13.5px', marginTop: '6px' }}
+              style={{ width: '100%', height: '42px', fontSize: '13.5px', marginTop: '4px' }}
             >
               <span>{authBusy ? "CREANDO Y ENTRANDO AL MENÚ…" : "CREAR CUENTA Y ENTRAR AL MENÚ"}</span>
               <span className="chevron-right">›</span>
@@ -1250,32 +1389,224 @@ function IngresoContent() {
           </form>
         ) : (
           /* ===================================================================
-              B. VENTANA DESPLEGABLE: LISTA COMPLETA DE DATOS DE EMPRESA
+              B. FORMULARIO EMPRESA ESTRUCTURADO EN 4 BLOQUES CLAROS
+              1. Datos del Propietario (Cédula Frontal y Trasera)
+              2. Datos de la Empresa (NIT, RUT DIAN, Cámara de Comercio)
+              3. Dirección y Ubicación Física del Negocio
+              4. Correo, Contraseña, Cifrado de Alta Seguridad y Face ID
               =================================================================== */
-          <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%' }}>
+          <form onSubmit={handleMobileRegister} style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
             <div style={{
               background: 'rgba(16, 185, 129, 0.14)',
               border: '1px solid rgba(255, 255, 255, 0.25)',
               borderRadius: '8px',
-              padding: '7px 9px',
-              fontSize: '10px',
+              padding: '7px 10px',
+              fontSize: '11px',
               color: '#ffffff',
               lineHeight: '1.35'
             }}>
-              ⚖️ <strong>Requisitos obligatorios de Coljuegos (Ley 643/2001 & Dcto 1486/2024)</strong>: Debes aportar NIT, RUT y Cámara de Comercio para registrar y habilitar legalmente tu establecimiento.
+              ⚖️ <strong>Registro Oficial de Establecimiento Comercial</strong>: Conforme a Coljuegos (Ley 643/2001 & Decreto 1486/2024), completa los 4 bloques para habilitar la emisión de rifas en tu local.
             </div>
 
-            {/* 1. Nombre Comercial */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>1. NOMBRE COMERCIAL / RAZÓN SOCIAL *</span>
+            {/* -------------------------------------------------------------
+                BLOQUE 1: DATOS PERSONALES DEL PROPIETARIO / REP. LEGAL
+                ------------------------------------------------------------- */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.16)',
+              borderRadius: '8px',
+              padding: '6px 10px',
+              marginTop: '4px'
+            }}>
+              <span style={{ fontSize: '13px' }}>👤</span>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                I. Datos Personales del Propietario / Rep. Legal
+              </span>
+            </div>
+
+            {/* 1.1 Nombre Propietario */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                1. NOMBRE COMPLETO DEL PROPIETARIO / REP. LEGAL *
+              </span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '38px'
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <span style={{ color: '#ffffff', marginRight: '8px', display: 'flex', alignItems: 'center' }}>
+                  <UserOutlineIcon />
+                </span>
+                <input
+                  type="text"
+                  placeholder="Nombre y apellidos del representante legal"
+                  value={legalRepName}
+                  onChange={(e) => setLegalRepName(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 1.2 Cédula Propietario */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                2. NÚMERO DE CÉDULA DEL PROPIETARIO *
+              </span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <input
+                  type="text"
+                  placeholder="Ej: 1.045.678.901 (C.C. o C.E.)"
+                  value={docNumber}
+                  onChange={(e) => setDocNumber(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 1.3 Foto Cédula Frontal Propietario */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                  3. 🪪 FOTO CÉDULA FRONTAL DEL PROPIETARIO (EVIDENCIA REAL) *
+                </span>
+                {idFrontFileName ? (
+                  <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
+                ) : (
+                  <span style={{ fontSize: '9px', color: '#f87171', fontWeight: 700 }}>Obligatorio</span>
+                )}
+              </div>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: idFrontFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.92)',
+                  border: idFrontFileName ? '1.4px solid rgba(16, 185, 129, 0.6)' : '1.4px dashed rgba(255, 255, 255, 0.35)',
+                  borderRadius: '10px',
+                  padding: '0 10px',
+                  height: '38px',
+                  cursor: 'pointer',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
+                  <span style={{ fontSize: '14px' }}>📸</span>
+                  <span style={{ fontSize: '11.5px', color: idFrontFileName ? '#ffffff' : '#cbd5e1', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '240px' }}>
+                    {idFrontFileName ? idFrontFileName : "Tomar foto o subir cara frontal de la cédula"}
+                  </span>
+                </div>
+                <span style={{ fontSize: '10px', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
+                  {idFrontFileName ? "Cambiar" : "Examinar"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) setIdFrontFileName(e.target.files[0].name);
+                  }}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+
+            {/* 1.4 Foto Cédula Trasera Propietario */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                  4. 🪪 FOTO CÉDULA TRASERA DEL PROPIETARIO *
+                </span>
+                {idBackFileName ? (
+                  <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
+                ) : (
+                  <span style={{ fontSize: '9px', color: '#f87171', fontWeight: 700 }}>Obligatorio</span>
+                )}
+              </div>
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  background: idBackFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.92)',
+                  border: idBackFileName ? '1.4px solid rgba(16, 185, 129, 0.6)' : '1.4px dashed rgba(255, 255, 255, 0.35)',
+                  borderRadius: '10px',
+                  padding: '0 10px',
+                  height: '38px',
+                  cursor: 'pointer',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
+                  <span style={{ fontSize: '14px' }}>📸</span>
+                  <span style={{ fontSize: '11.5px', color: idBackFileName ? '#ffffff' : '#cbd5e1', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '240px' }}>
+                    {idBackFileName ? idBackFileName : "Tomar foto o subir cara trasera de la cédula"}
+                  </span>
+                </div>
+                <span style={{ fontSize: '10px', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
+                  {idBackFileName ? "Cambiar" : "Examinar"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) setIdBackFileName(e.target.files[0].name);
+                  }}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+
+            {/* -------------------------------------------------------------
+                BLOQUE 2: DATOS DE LA EMPRESA (COLJUEGOS / TRIBUTARIO)
+                ------------------------------------------------------------- */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.16)',
+              borderRadius: '8px',
+              padding: '6px 10px',
+              marginTop: '4px'
+            }}>
+              <span style={{ fontSize: '13px' }}>🏢</span>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                II. Datos de la Empresa (Coljuegos / Legal)
+              </span>
+            </div>
+
+            {/* 2.1 Nombre Comercial */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                5. RAZÓN SOCIAL / NOMBRE COMERCIAL DEL LOCAL *
+              </span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
               }}>
                 <input
                   type="text"
@@ -1283,22 +1614,25 @@ function IngresoContent() {
                   value={regName}
                   onChange={(e) => setRegName(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
               </div>
             </div>
 
-            {/* 2. NIT del Comercio */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>2. NIT O RUT DE LA EMPRESA *</span>
+            {/* 2.2 NIT de la Empresa */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                6. NIT O RUT DE LA EMPRESA *
+              </span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '38px'
+                height: '38px',
+                boxSizing: 'border-box'
               }}>
                 <input
                   type="text"
@@ -1306,15 +1640,17 @@ function IngresoContent() {
                   value={nit}
                   onChange={(e) => setNit(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
               </div>
             </div>
 
-            {/* 3. RUT DIAN (Coljuegos) */}
+            {/* 2.3 RUT DIAN */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>3. RUT ACTUALIZADO (DIAN · PDF O FOTO) *</span>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                  7. 📄 RUT ACTUALIZADO (DIAN · PDF O FOTO) *
+                </span>
                 {rutFileName ? (
                   <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
                 ) : (
@@ -1326,8 +1662,8 @@ function IngresoContent() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  background: rutFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.90)',
-                  border: rutFileName ? '1.2px solid rgba(16, 185, 129, 0.6)' : '1.2px dashed rgba(226, 176, 74, 0.45)',
+                  background: rutFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.92)',
+                  border: rutFileName ? '1.4px solid rgba(16, 185, 129, 0.6)' : '1.4px dashed rgba(255, 255, 255, 0.35)',
                   borderRadius: '10px',
                   padding: '0 10px',
                   height: '38px',
@@ -1337,8 +1673,8 @@ function IngresoContent() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
                   <span style={{ fontSize: '14px' }}>📄</span>
-                  <span style={{ fontSize: '11px', color: rutFileName ? '#ffffff' : '#94a3b8', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '190px' }}>
-                    {rutFileName ? rutFileName : "Subir RUT (PDF o Foto)"}
+                  <span style={{ fontSize: '11.5px', color: rutFileName ? '#ffffff' : '#cbd5e1', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '240px' }}>
+                    {rutFileName ? rutFileName : "Subir RUT actualizado (PDF o Foto)"}
                   </span>
                 </div>
                 <span style={{ fontSize: '10px', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
@@ -1355,10 +1691,12 @@ function IngresoContent() {
               </label>
             </div>
 
-            {/* 4. Cámara de Comercio Vigente (Coljuegos) */}
+            {/* 2.4 Cámara de Comercio */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>4. CÁMARA DE COMERCIO VIGENTE (≤ 30 DÍAS) *</span>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                  8. 🏛️ CÁMARA DE COMERCIO VIGENTE (≤ 30 DÍAS) *
+                </span>
                 {camaraComercioFileName ? (
                   <span style={{ fontSize: '9px', color: '#10b981', fontWeight: 700 }}>✓ Adjuntado</span>
                 ) : (
@@ -1370,8 +1708,8 @@ function IngresoContent() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  background: camaraComercioFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.90)',
-                  border: camaraComercioFileName ? '1.2px solid rgba(16, 185, 129, 0.6)' : '1.2px dashed rgba(226, 176, 74, 0.45)',
+                  background: camaraComercioFileName ? 'rgba(16, 185, 129, 0.15)' : 'rgba(3, 38, 25, 0.92)',
+                  border: camaraComercioFileName ? '1.4px solid rgba(16, 185, 129, 0.6)' : '1.4px dashed rgba(255, 255, 255, 0.35)',
                   borderRadius: '10px',
                   padding: '0 10px',
                   height: '38px',
@@ -1381,8 +1719,8 @@ function IngresoContent() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
                   <span style={{ fontSize: '14px' }}>🏛️</span>
-                  <span style={{ fontSize: '11px', color: camaraComercioFileName ? '#ffffff' : '#94a3b8', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '190px' }}>
-                    {camaraComercioFileName ? camaraComercioFileName : "Subir Certificado de Existencia"}
+                  <span style={{ fontSize: '11.5px', color: camaraComercioFileName ? '#ffffff' : '#cbd5e1', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '240px' }}>
+                    {camaraComercioFileName ? camaraComercioFileName : "Subir Certificado Cámara de Comercio"}
                   </span>
                 </div>
                 <span style={{ fontSize: '10px', background: 'rgba(255, 255, 255, 0.14)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#ffffff', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, flexShrink: 0 }}>
@@ -1399,12 +1737,14 @@ function IngresoContent() {
               </label>
             </div>
 
-            {/* 3. Categoría Comercial */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>5. CATEGORÍA COMERCIAL DEL LOCAL *</span>
+            {/* 2.5 Categoría Comercial */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                9. CATEGORÍA COMERCIAL DEL LOCAL *
+              </span>
               <div style={{
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
                 borderRadius: '10px',
                 padding: '0 8px',
                 height: '38px',
@@ -1419,32 +1759,54 @@ function IngresoContent() {
                     border: 'none',
                     outline: 'none',
                     color: '#ffffff',
-                    fontSize: '12px',
+                    fontSize: '13px',
                     width: '100%',
                     cursor: 'pointer'
                   }}
                 >
-                  <option value="Motos & 4x4" style={{ background: '#121413', color: '#fff' }}>🏍️ Motos & 4x4</option>
-                  <option value="Tecnología & Celulares" style={{ background: '#121413', color: '#fff' }}>📱 Tecnología & Celulares</option>
-                  <option value="Joyas & Relojes" style={{ background: '#121413', color: '#fff' }}>💎 Joyas & Relojes de Alta Gama</option>
-                  <option value="Moda & Calzado" style={{ background: '#121413', color: '#fff' }}>👗 Moda, Ropa & Calzado</option>
-                  <option value="Hogar & Muebles" style={{ background: '#121413', color: '#fff' }}>🏠 Hogar & Electrodomésticos</option>
-                  <option value="Comercio General" style={{ background: '#121413', color: '#fff' }}>🏪 Comercio / Otro Sector</option>
+                  <option value="Motos & 4x4" style={{ background: '#031c13', color: '#fff' }}>🏍️ Motos & 4x4</option>
+                  <option value="Tecnología & Celulares" style={{ background: '#031c13', color: '#fff' }}>📱 Tecnología & Celulares</option>
+                  <option value="Joyas & Relojes" style={{ background: '#031c13', color: '#fff' }}>💎 Joyas & Relojes de Alta Gama</option>
+                  <option value="Moda & Calzado" style={{ background: '#031c13', color: '#fff' }}>👗 Moda, Ropa & Calzado</option>
+                  <option value="Hogar & Muebles" style={{ background: '#031c13', color: '#fff' }}>🏠 Hogar & Electrodomésticos</option>
+                  <option value="Comercio General" style={{ background: '#031c13', color: '#fff' }}>🏪 Comercio / Otro Sector</option>
                 </select>
               </div>
             </div>
 
-            {/* 4. Dirección Física del Local */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>6. DIRECCIÓN FÍSICA EXACTA DEL LOCAL *</span>
+            {/* -------------------------------------------------------------
+                BLOQUE 3: DIRECCIÓN Y UBICACIÓN FÍSICA DEL NEGOCIO
+                ------------------------------------------------------------- */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.16)',
+              borderRadius: '8px',
+              padding: '6px 10px',
+              marginTop: '4px'
+            }}>
+              <span style={{ fontSize: '13px' }}>📍</span>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                III. Ubicación Física del Negocio
+              </span>
+            </div>
+
+            {/* 3.1 Dirección Física */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                10. DIRECCIÓN FÍSICA EXACTA DEL LOCAL *
+              </span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '38px'
+                height: '38px',
+                boxSizing: 'border-box'
               }}>
                 <input
                   type="text"
@@ -1452,22 +1814,25 @@ function IngresoContent() {
                   value={businessAddress}
                   onChange={(e) => setBusinessAddress(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
               </div>
             </div>
 
-            {/* 5. Ciudad y Departamento */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>7. CIUDAD / DEPARTAMENTO *</span>
+            {/* 3.2 Ciudad y Departamento */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                11. CIUDAD / DEPARTAMENTO DEL LOCAL *
+              </span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '38px'
+                height: '38px',
+                boxSizing: 'border-box'
               }}>
                 <input
                   type="text"
@@ -1475,91 +1840,44 @@ function IngresoContent() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
               </div>
             </div>
 
-            {/* 6. Representante Legal */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>8. REPRESENTANTE LEGAL / PROPIETARIO *</span>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
-                borderRadius: '10px',
-                padding: '0 10px',
-                height: '38px'
-              }}>
-                <input
-                  type="text"
-                  placeholder="Nombre y apellidos del propietario"
-                  value={legalRepName}
-                  onChange={(e) => setLegalRepName(e.target.value)}
-                  required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-                />
-              </div>
+            {/* -------------------------------------------------------------
+                BLOQUE 4: CONTACTO, SEGURIDAD CON FACE ID Y CIFRADO
+                ------------------------------------------------------------- */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.16)',
+              borderRadius: '8px',
+              padding: '6px 10px',
+              marginTop: '4px'
+            }}>
+              <span style={{ fontSize: '13px' }}>🔐</span>
+              <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.4px', textTransform: 'uppercase' }}>
+                IV. Contacto y Seguridad de Acceso Empresarial
+              </span>
             </div>
 
-            {/* 7. Cédula del Representante */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>9. CÉDULA DE CIUDADANÍA DEL PROPIETARIO *</span>
+            {/* 4.1 Correo Corporativo */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                12. CORREO ELECTRÓNICO CORPORATIVO *
+              </span>
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
                 borderRadius: '10px',
                 padding: '0 10px',
-                height: '38px'
-              }}>
-                <input
-                  type="text"
-                  placeholder="Ej: 1.045.678.901"
-                  value={docNumber}
-                  onChange={(e) => setDocNumber(e.target.value)}
-                  required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-                />
-              </div>
-            </div>
-
-            {/* 8. WhatsApp / Teléfono del Negocio */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>10. TELÉFONO / WHATSAPP DEL LOCAL *</span>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
-                borderRadius: '10px',
-                padding: '0 10px',
-                height: '38px'
-              }}>
-                <input
-                  type="tel"
-                  placeholder="Ej: 312 458 9021"
-                  value={regPhone}
-                  onChange={(e) => setRegPhone(e.target.value)}
-                  required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
-                />
-              </div>
-            </div>
-
-            {/* 9. Correo Corporativo */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>11. CORREO ELECTRÓNICO CORPORATIVO *</span>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                background: 'rgba(3, 38, 25, 0.90)',
-                border: '1.2px solid rgba(226, 176, 74, 0.35)',
-                borderRadius: '10px',
-                padding: '0 10px',
-                height: '38px'
+                height: '38px',
+                boxSizing: 'border-box'
               }}>
                 <input
                   type="email"
@@ -1567,15 +1885,41 @@ function IngresoContent() {
                   value={regEmail}
                   onChange={(e) => setRegEmail(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12px', width: '100%' }}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
               </div>
             </div>
 
-            {/* 12. Contraseña Empresa / Comercio */}
+            {/* 4.2 Teléfono / WhatsApp del Local */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff', letterSpacing: '0.2px' }}>
+                13. TELÉFONO / WHATSAPP DE ATENCIÓN DEL LOCAL *
+              </span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: 'rgba(3, 38, 25, 0.92)',
+                border: '1.4px solid rgba(255, 255, 255, 0.32)',
+                borderRadius: '10px',
+                padding: '0 10px',
+                height: '38px',
+                boxSizing: 'border-box'
+              }}>
+                <input
+                  type="tel"
+                  placeholder="Ej: 312 458 9021"
+                  value={regPhone}
+                  onChange={(e) => setRegPhone(e.target.value)}
+                  required
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
+                />
+              </div>
+            </div>
+
+            {/* 4.3 Contraseña Empresa */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
-                🔐 CONTRASEÑA DE ACCESO ADMINISTRATIVO (EMPRESA / COMERCIO) *
+                14. 🔐 CONTRASEÑA DE ACCESO ADMINISTRATIVO (EMPRESA / COMERCIO) *
               </span>
               <div style={{
                 display: 'flex',
@@ -1596,7 +1940,8 @@ function IngresoContent() {
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
                   required
-                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '12.5px', width: '100%' }}
+                  minLength={6}
+                  style={{ background: 'transparent', border: 'none', outline: 'none', color: '#ffffff', fontSize: '13px', width: '100%' }}
                 />
                 <button
                   type="button"
@@ -1607,16 +1952,12 @@ function IngresoContent() {
                   <EyeToggleIcon hide={!showRegPassword} />
                 </button>
               </div>
-              <small style={{ fontSize: '9.5px', color: '#e2e8f0', lineHeight: '1.25' }}>
-                🛡️ Esta contraseña da acceso exclusivo al panel <strong>/empresario</strong> para publicar rifas y gestionar ventas.
-              </small>
             </div>
 
-            {/* Declaración Legal */}
-            {/* 13. Confirmar Contraseña Empresa */}
+            {/* 4.4 Confirmar Contraseña Empresa */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
               <span style={{ fontSize: '11px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.3px' }}>
-                13. 🔒 CONFIRMAR CONTRASEÑA EMPRESARIAL *
+                15. 🔒 CONFIRMAR CONTRASEÑA EMPRESARIAL *
               </span>
               <div style={{
                 display: 'flex',
@@ -1651,8 +1992,35 @@ function IngresoContent() {
               </div>
             </div>
 
+            {/* 4.5 Cifrado de Alta Seguridad y Face ID */}
+            <label style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: '1.2px solid rgba(255, 255, 255, 0.22)',
+              borderRadius: '10px',
+              padding: '8px 10px',
+              cursor: 'pointer'
+            }}>
+              <input
+                type="checkbox"
+                checked={enableBiometrics}
+                onChange={(e) => setEnableBiometrics(e.target.checked)}
+                style={{ accentColor: '#10b981', width: '16px', height: '16px' }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '11px', fontWeight: 800, color: '#ffffff' }}>
+                  🛡️ Cifrado de Alta Seguridad (AES-256) & Face ID / Huella
+                </span>
+                <span style={{ fontSize: '9.5px', color: '#cbd5e1' }}>
+                  Habilitar inicio de sesión biométrico rápido para administrar tu local desde este dispositivo.
+                </span>
+              </div>
+            </label>
+
             {/* Declaración Legal Coljuegos */}
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer', fontSize: '11px', color: '#ffffff', lineHeight: '1.3', marginTop: '4px' }}>
+            <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer', fontSize: '11px', color: '#ffffff', lineHeight: '1.3', marginTop: '2px' }}>
               <input
                 type="checkbox"
                 checked={ageConfirmed}
@@ -1660,7 +2028,7 @@ function IngresoContent() {
                 required
                 style={{ marginTop: '2px', accentColor: '#10b981' }}
               />
-              <span>Certifico bajo gravedad de juramento ser el <strong>representante legal / propietario</strong> del establecimiento, adjuntar RUT y Cámara de Comercio verídicos, y cumplir con la regulación oficial de Coljuegos (Ley 643/2001 & Decreto 1486/2024).</span>
+              <span>Certifico bajo gravedad de juramento ser el <strong>representante legal / propietario</strong> del establecimiento, adjuntar fotos de cédula, RUT y Cámara de Comercio verídicos, y cumplir con la regulación oficial de Coljuegos (Ley 643/2001 & Decreto 1486/2024).</span>
             </label>
 
             {/* Botón Registrar Empresa */}
@@ -1668,7 +2036,7 @@ function IngresoContent() {
               type="submit"
               className="btn-2030-login"
               disabled={authBusy}
-              style={{ width: '100%', height: '40px', fontSize: '13px', marginTop: '4px' }}
+              style={{ width: '100%', height: '42px', fontSize: '13.5px', marginTop: '4px' }}
             >
               <span>{authBusy ? "AUTORIZANDO Y ABRIENDO PANEL…" : "REGISTRAR MI EMPRESA Y ABRIR PANEL"}</span>
               <span className="chevron-right">›</span>
