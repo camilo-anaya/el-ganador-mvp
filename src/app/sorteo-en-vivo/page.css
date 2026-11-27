@@ -8657,10 +8657,92 @@
    SOPORTE TÁCTIL NATIVO PARA LA VERSIÓN WEB MÓVIL Y TABLET
    ========================================================================== */
 
-/* Eliminación total del retardo táctil de 300ms y resaltado gris en móviles */
-html, body, button, a, input, select, textarea, .liveDemoMachine, .drawResultBlocksNav, .drawResultBlockCard {
+/* Eliminación total del retardo táctil de 300ms y resaltado gris SOLO en controles táctiles (NUNCA en html/body para no bloquear el touchpad del portátil) */
+button, a, input, select, textarea, .btnInfinityDisplayToggle, .cinemaInfinityDisplayPill, .resultBlockTabBtn, .reactionBtn {
   touch-action: manipulation !important;
   -webkit-tap-highlight-color: transparent !important;
+}
+
+html, body {
+  touch-action: auto !important;
+  overflow-y: auto !important;
+}
+
+/* En portátiles (>= 768px), permitir siempre scroll libre con mouse y trackpad */
+@media (min-width: 768px) {
+  .liveDemoPage {
+    overflow-y: auto !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+  .liveDemoPage.isCinemaStageLocked {
+    overflow-y: auto !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+}
+
+/* Selector de Modo de Dispositivo (Portátil vs Celular) en la barra superior */
+.deviceModeSelector {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 10px !important;
+  padding: 3px !important;
+  gap: 3px !important;
+}
+
+.btnDeviceMode {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 5px 12px !important;
+  border-radius: 7px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #cbd5e1 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+.btnDeviceMode:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.btnDeviceMode.isActive {
+  background: #ffffff !important;
+  color: #053b22 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Flechas para navegar bloques con ratón/touchpad en portátiles */
+.blockNavArrowBtn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #cbd5e1 !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+  transition: all 0.2s ease !important;
+}
+
+.blockNavArrowBtn:hover {
+  background: #f1f5f9 !important;
+  border-color: #007AFF !important;
+  color: #007AFF !important;
 }
 
 /* Esfera de balotera táctil */

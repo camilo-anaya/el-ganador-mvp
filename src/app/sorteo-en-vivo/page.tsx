@@ -349,10 +349,11 @@ export default function LiveDrawDemoPage() {
   const [winnerChatMessages, setWinnerChatMessages] = useState<Array<{ sender: "merchant" | "client"; text: string; time: string }>>([]);
   const [winnerChatInput, setWinnerChatInput] = useState<string>("");
 
-  // Bloqueo de scroll y fullscreen inmersivo para el motor de sorteos
+  // Bloqueo de scroll inteligente: sólo en móviles (< 768px) en fullscreen; en portátiles permite navegar libremente
   useEffect(() => {
     if (typeof document !== "undefined") {
-      if (isCinemaFullscreen) {
+      const isMobileScreen = typeof window !== "undefined" && window.innerWidth < 768;
+      if (isCinemaFullscreen && isMobileScreen) {
         document.body.style.overflow = "hidden";
       } else {
         document.body.style.overflow = "";
@@ -365,6 +366,33 @@ export default function LiveDrawDemoPage() {
     };
   }, [isCinemaFullscreen]);
 
+  // Soporte de navegación con portátil por teclado (ESC salir fullscreen, flechas ← → para cambiar bloques)
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        if (isCinemaFullscreen) {
+          exitCinemaFullscreen();
+        }
+      } else if (e.key === "ArrowLeft") {
+        const tabs: Array<"ganador" | "seguridad" | "detalles" | "auditoria"> = ["ganador", "seguridad", "detalles", "auditoria"];
+        const idx = tabs.indexOf(activeResultTab);
+        if (idx > 0) setActiveResultTab(tabs[idx - 1]);
+      } else if (e.key === "ArrowRight") {
+        const tabs: Array<"ganador" | "seguridad" | "detalles" | "auditoria"> = ["ganador", "seguridad", "detalles", "auditoria"];
+        const idx = tabs.indexOf(activeResultTab);
+        if (idx < tabs.length - 1) setActiveResultTab(tabs[idx + 1]);
+      }
+    }
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("keydown", handleKeyDown);
+      }
+    };
+  }, [isCinemaFullscreen, activeResultTab]);
+
   // Perfil del usuario y autorización de controles de operador vs espectador
   const [clientAccount, setClientAccount] = useState<{ displayName: string; email: string; role: string } | null>(null);
   const isOperator = Boolean(
@@ -372,9 +400,12 @@ export default function LiveDrawDemoPage() {
     (typeof window !== "undefined" && readSurface() === "business")
   );
   const [isViewerMode, setIsViewerMode] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
+    if (typeof window === "undefined") return false;
     const params = new URLSearchParams(window.location.search);
     if (params.get("viewer") === "1" || params.get("modo") === "cliente") return true;
+    if (params.get("portatil") === "1" || params.get("modo") === "portatil" || params.get("modo") === "empresario") return false;
+    // Si la pantalla es de portátil o computador (>= 768px), activar Modo Portátil con navegación completa por defecto
+    if (typeof window !== "undefined" && window.innerWidth >= 768) return false;
     return readSurface() !== "business";
   });
   const [userTicketNumber, setUserTicketNumber] = useState<string>("");
@@ -2308,8 +2339,10 @@ export default function LiveDrawDemoPage() {
     }
     stopWinnerVoice();
 
-    // Iniciar siempre en Imagen Completa (Modo Teatro Oficial) al comenzar el sorteo
-    enterCinemaFullscreen();
+    // En celulares (< 768px) iniciar en pantalla completa; en portátiles mantener el scroll libre
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      enterCinemaFullscreen();
+    }
 
     const startedAtEpochMs = Date.now();
     const startAngle = ((currentWheelAngleRef.current % 360) + 360) % 360;
@@ -2483,6 +2516,32 @@ export default function LiveDrawDemoPage() {
                 <span className="studioBackArrow">←</span>
                 <span className="studioBackLabel">Volver al Inicio</span>
               </Link>
+
+              {/* SELECTOR DE NAVEGACIÓN: PORTÁTIL VS CELULAR */}
+              <div className="deviceModeSelector" role="group" aria-label="Navegar con portátil o celular">
+                <button
+                  type="button"
+                  className={`btnDeviceMode ${!isViewerMode ? "isActive" : ""}`}
+                  onClick={() => {
+                    setIsViewerMode(false);
+                    triggerHaptic(15);
+                  }}
+                  title="Navegar en Modo Portátil con controles completos y libre movimiento"
+                >
+                  💻 Portátil
+                </button>
+                <button
+                  type="button"
+                  className={`btnDeviceMode ${isViewerMode ? "isActive" : ""}`}
+                  onClick={() => {
+                    setIsViewerMode(true);
+                    triggerHaptic(15);
+                  }}
+                  title="Navegar en Modo Celular (Espectador)"
+                >
+                  📱 Celular
+                </button>
+              </div>
             </div>
 
             {/* DERECHA: RECAUDO EN VIVO (EL RECUADRO GRANDE A LA DERECHA) */}
@@ -4271,7 +4330,21 @@ export default function LiveDrawDemoPage() {
             }}
           >
             {/* BARRA SELECTORA DE BLOQUES */}
-            <div className="drawResultBlocksNav" role="tablist" aria-label="Navegación de bloques de información">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}>
+            <button
+              type="button"
+              className="blockNavArrowBtn"
+              onClick={() => {
+                const tabs: Array<"ganador" | "seguridad" | "detalles" | "auditoria"> = ["ganador", "seguridad", "detalles", "auditoria"];
+                const idx = tabs.indexOf(activeResultTab);
+                if (idx > 0) setActiveResultTab(tabs[idx - 1]);
+              }}
+              title="Bloque anterior (tecla ← en portátil)"
+              aria-label="Bloque anterior"
+            >
+              ‹
+            </button>
+            <div className="drawResultBlocksNav" role="tablist" aria-label="Navegación de bloques de información" style={{ flex: 1 }}>
               <button
                 type="button"
                 role="tab"
@@ -4318,6 +4391,20 @@ export default function LiveDrawDemoPage() {
                 <span className="tabLabel">4. Auditoría Coljuegos</span>
               </button>
             </div>
+            <button
+              type="button"
+              className="blockNavArrowBtn"
+              onClick={() => {
+                const tabs: Array<"ganador" | "seguridad" | "detalles" | "auditoria"> = ["ganador", "seguridad", "detalles", "auditoria"];
+                const idx = tabs.indexOf(activeResultTab);
+                if (idx < tabs.length - 1) setActiveResultTab(tabs[idx + 1]);
+              }}
+              title="Siguiente bloque (tecla → en portátil)"
+              aria-label="Siguiente bloque"
+            >
+              ›
+            </button>
+          </div>
 
             {/* CONTENIDO DE LA TARJETA DEL BLOQUE SELECCIONADO */}
             <div className="drawResultBlockCard">
