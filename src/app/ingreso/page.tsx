@@ -911,7 +911,7 @@ function IngresoContent() {
             type="button"
             onClick={() => setRole("customer")}
             style={{
-              border: 'none',
+              border: role === "customer" ? '1px solid rgba(226, 176, 74, 0.5)' : 'none',
               borderRadius: '999px',
               padding: '6px 8px',
               fontSize: '11px',
@@ -919,7 +919,6 @@ function IngresoContent() {
               cursor: 'pointer',
               background: role === "customer" ? '#222523' : 'transparent',
               color: role === "customer" ? '#ffffff' : '#94a3b8',
-              border: role === "customer" ? '1px solid rgba(226, 176, 74, 0.5)' : 'none',
               transition: 'all 0.15s ease'
             }}
           >
@@ -929,7 +928,7 @@ function IngresoContent() {
             type="button"
             onClick={() => setRole("business")}
             style={{
-              border: 'none',
+              border: role === "business" ? '1px solid rgba(226, 176, 74, 0.5)' : 'none',
               borderRadius: '999px',
               padding: '6px 8px',
               fontSize: '11px',
@@ -937,7 +936,6 @@ function IngresoContent() {
               cursor: 'pointer',
               background: role === "business" ? '#222523' : 'transparent',
               color: role === "business" ? '#ffffff' : '#94a3b8',
-              border: role === "business" ? '1px solid rgba(226, 176, 74, 0.5)' : 'none',
               transition: 'all 0.15s ease'
             }}
           >
