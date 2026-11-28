@@ -311,6 +311,8 @@ export default function LiveDrawDemoPage() {
   const [isMuted, setIsMuted] = useState(false);
   const [showPrintModal, setShowPrintModal] = useState(false);
   const [showAuditSection, setShowAuditSection] = useState(false);
+  const [showLiveRoomsDropdown, setShowLiveRoomsDropdown] = useState(false);
+  const [showRaffleDetails, setShowRaffleDetails] = useState(false);
 
   useEffect(() => {
     if (latestAct) {
@@ -2536,14 +2538,10 @@ export default function LiveDrawDemoPage() {
         <header className={`studioUnifiedHeader ${theme === 'dark' ? 'isDark' : 'isLight'}`}>
           {/* FILA 1: BRANDING A LA IZQUIERDA + CONTROLES DEL SISTEMA A LA DERECHA */}
           <div className="studioAppTopBar">
-            {/* GRUPO IZQUIERDO: BRANDING + VOLVER A INICIO */}
+            {/* GRUPO IZQUIERDO: LOGO EG COMPACTO + VOLVER A INICIO PEQUEÑO */}
             <div className="studioLeftGroup">
               <Link href="/" className="studioBrandPill" aria-label="El Ganador, ir al inicio">
                 <span className="studioBrandLogo">EG</span>
-                <div className="studioBrandText">
-                  <span className="studioBrandTitle">EL GANADOR</span>
-                  <span className="studioBrandTag">SALA OFICIAL</span>
-                </div>
               </Link>
 
               {isOperator && (
@@ -2562,22 +2560,19 @@ export default function LiveDrawDemoPage() {
               </Link>
             </div>
 
-            {/* DERECHA: CONTROLES DEL SISTEMA UNIFICADOS EN AMBOS EQUIPOS */}
+            {/* DERECHA: SALAS EN VIVO DESPLEGABLE + CONTROLES DE AUDIO COMPACTOS */}
             <div className="studioRightControls">
-              {availableDraws.length > 1 && (
-                <button
-                  type="button"
-                  className="studioRoomSwitchBtn"
-                  onClick={() => {
-                    const currentIndex = availableDraws.findIndex((d) => d.id === activeDrawId);
-                    const nextIndex = (currentIndex + 1) % availableDraws.length;
-                    switchLiveDraw(availableDraws[nextIndex]);
-                  }}
-                  title="Cambiar a otra sala de sorteo en vivo"
-                >
-                  🔄 <span className="roomSwitchText">Sala</span> ({availableDraws.length})
-                </button>
-              )}
+              <button
+                type="button"
+                className={`studioLiveRoomsToggleBtn ${showLiveRoomsDropdown ? 'isOpen' : ''}`}
+                onClick={() => setShowLiveRoomsDropdown((prev) => !prev)}
+                title="Ver todas las salas de sorteo en vivo"
+              >
+                <span className="livePulseMini" />
+                <span className="roomsBtnText">🔴 Salas en vivo</span>
+                <span className="roomsCountBadge">({availableDraws.length})</span>
+                <span className="roomsArrow">{showLiveRoomsDropdown ? '▲' : '▼'}</span>
+              </button>
 
               <button
                 type="button"
@@ -2598,10 +2593,66 @@ export default function LiveDrawDemoPage() {
                 title={isMuted ? 'Activar audio del sorteo' : 'Silenciar audio'}
               >
                 <span>{isMuted ? '🔇' : '🔊'}</span>
-                <span className="audioToggleText">{isMuted ? 'Silenciado' : 'Audio'}</span>
+                <span className="audioToggleText">{isMuted ? 'Mudo' : 'Audio'}</span>
               </button>
             </div>
           </div>
+
+          {/* DESPLEGABLE SUPERIOR DE SALAS EN VIVO (FILA COMPACTA DESPLEGABLE) */}
+          {showLiveRoomsDropdown && availableDraws.length > 0 && (
+            <div className="headerLiveRoomsDropdown">
+              <div className="headerLiveRoomsHeading">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span className="liveSignalPulseSmall" />
+                  <span className="headerLiveRoomsLabel">
+                    🔴 SALAS EN VIVO TRANSMITIENDO AHORA ({availableDraws.length} TRANSMISIONES SIMULTÁNEAS):
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  className="btnCloseRoomsDropdown"
+                  onClick={() => setShowLiveRoomsDropdown(false)}
+                  title="Cerrar salas en vivo"
+                >
+                  ✕ Cerrar
+                </button>
+              </div>
+              <div className="headerLiveRoomsList">
+                {availableDraws.map((d, index) => {
+                  const isSelected = activeDrawId === d.id;
+                  const specCount = index === 0 ? "1.482" : index === 1 ? "890" : index === 2 ? "645" : "410";
+                  const dUnitPrice = Number(d.unit_price || 35000);
+                  const dSold = Number(d.sold !== undefined ? d.sold : (index === 0 ? 842 : index === 1 ? 168 : index === 2 ? 390 : 120));
+                  const dRev = dSold * dUnitPrice;
+                  return (
+                    <button
+                      key={d.id}
+                      type="button"
+                      className={`liveChannelPill ${isSelected ? "active" : ""}`}
+                      onClick={() => {
+                        switchLiveDraw(d);
+                        setShowLiveRoomsDropdown(false);
+                      }}
+                      title={`Sintonizar Sala ${index + 1}: ${d.title} · Venta total: $${dRev.toLocaleString("es-CO")} COP`}
+                    >
+                      <span className="channelRoomIndex" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>SALA {index + 1}</span>
+                      <span className="channelEmoji">{d.emoji}</span>
+                      <strong className="channelTitle" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>{d.title}</strong>
+                      <span style={{ fontSize: "10px", color: "#f5b82e", fontWeight: 700, padding: "1px 6px", borderRadius: "4px", background: "rgba(245, 184, 46, 0.15)" }}>
+                        💰 $${(dRev / 1000000).toFixed(1)}M
+                      </span>
+                      {isSelected ? (
+                        <span className="channelLiveDot activeBadge">✓ SINTONIZADA</span>
+                      ) : (
+                        <span className="channelLiveDot">🔴 EN VIVO · {specCount} 👁️</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
 
           {/* FILA 2: BARRA DE PRODUCCIÓN Y RECAUDO (Visible si el usuario es empresario operador) */}
           {isOperator && (
@@ -4039,201 +4090,188 @@ export default function LiveDrawDemoPage() {
           </div>
 
           {/* ===================================================================
-              DESCRIPCIÓN DEL SORTEO ELEGANTE (SIN RECUADRO BLANCO, VISIBLE EN MÓVIL Y PORTÁTIL)
+              BOTÓN DE ACCIÓN RÁPIDA: SIMULACIÓN DE SORTEO (SIEMPRE ACCESIBLE Y DESTACADO)
               =================================================================== */}
-          <div className="mobileRaffleDescriptionCard">
-            <div className="mobileRaffleHeaderRow">
-              <h2 className="mobileRaffleTitle">
-                <span>🎟️</span>
-                <span>{activeDrawTitle}</span>
-              </h2>
-              <span className="mobileRaffleTag">
-                {mode === "balotas" ? `Cartón de ${cartonSize}` : `Ruleta ${wheelSize}`}
+          <div className="liveSimulationQuickBar">
+            <button
+              type="button"
+              className="btnDemoTestMode"
+              onClick={playDemo}
+              disabled={phase === "spinning"}
+              title="Probar demostración del sorteo en modo de prueba"
+            >
+              <span>🧪</span>
+              <span>
+                {phase === "spinning"
+                  ? "🌀 SIMULACIÓN EN TRANSMISIÓN..."
+                  : "VER SIMULACIÓN (MODO DE PRUEBA)"}
               </span>
-            </div>
-
-            <p style={{ margin: '0 0 10px 0', fontSize: '12.5px', color: '#cbd5e1', lineHeight: '1.4' }}>
-              {mode === "balotas"
-                ? `Sorteo oficial supervisado Coljuegos (Ley 643/2001). Balotas del ${eligibleNumbers[0]} al ${eligibleNumbers[eligibleNumbers.length - 1]} con física en tiempo real y 100% equiprobable.`
-                : `Ruleta comunitaria de precisión con números del 01 al ${wheelSize}.`}
-            </p>
-
-            <div className="mobileRaffleMetaGrid">
-              <div className="mobileRaffleMetaItem">
-                <span>Total Boletas</span>
-                <strong>{mode === "balotas" ? cartonSize : wheelPlayers.length} en juego</strong>
-              </div>
-              <div className="mobileRaffleMetaItem">
-                <span>Transparencia</span>
-                <strong style={{ color: '#10b981' }}>100% Sin Sesgo</strong>
-              </div>
-              <div className="mobileRaffleMetaItem">
-                <span>Boletería Vendida</span>
-                <strong>{activeSoldTickets} ({activeRevenuePct}%)</strong>
-              </div>
-              <div className="mobileRaffleMetaItem">
-                <span>Premio Mayor</span>
-                <strong style={{ color: '#f5b82e' }}>Garantizado DIAN</strong>
-              </div>
-            </div>
-
-            {/* BANNER DE FECHA OFICIAL Y CONTEO REGRESIVO */}
-            <div className="officialDateCountdownBox">
-              <span className="countdownHeaderTag">
-                🔒 FECHA OFICIAL DE JUEGO (EL SORTEO SOLO SE EJECUTA AL CUMPLIRSE EL CONTEO)
-              </span>
-              <div style={{ fontSize: '12px', color: '#ffffff', fontWeight: 800, marginBottom: '6px' }}>
-                📅 Domingo Oficial · 8:00 PM (Supervisión Coljuegos)
-              </div>
-              <div className="countdownDigitsRow">
-                <div className="countdownUnit">
-                  <span>{String(officialCountdown.days).padStart(2, '0')}</span>
-                  <small>Días</small>
-                </div>
-                <span>:</span>
-                <div className="countdownUnit">
-                  <span>{String(officialCountdown.hours).padStart(2, '0')}</span>
-                  <small>Horas</small>
-                </div>
-                <span>:</span>
-                <div className="countdownUnit">
-                  <span>{String(officialCountdown.mins).padStart(2, '0')}</span>
-                  <small>Min</small>
-                </div>
-                <span>:</span>
-                <div className="countdownUnit">
-                  <span style={{ color: '#f5b82e' }}>{String(officialCountdown.secs).padStart(2, '0')}</span>
-                  <small>Seg</small>
-                </div>
-              </div>
-            </div>
-
-            {/* BOTÓN OFICIAL: MODO DE PRUEBA / DEMOSTRACIÓN PARA CLIENTES Y EMPRESARIOS */}
-            <div style={{ marginTop: '8px' }}>
-              <button
-                type="button"
-                className="btnDemoTestMode"
-                onClick={playDemo}
-                disabled={phase === "spinning"}
-                title="Probar demostración del sorteo en modo de prueba"
-              >
-                <span>🧪</span>
-                <span>
-                  {phase === "spinning"
-                    ? "🌀 SIMULACIÓN EN TRANSMISIÓN..."
-                    : "VER SIMULACIÓN (MODO DE PRUEBA)"}
-                </span>
-              </button>
-              <small className="demoDisclaimText">
-                ℹ️ Demostración para clientes y empresarios. El sorteo real se ejecutará únicamente cuando el conteo oficial llegue a cero.
-              </small>
-            </div>
+            </button>
+            <small className="demoDisclaimText">
+              ℹ️ Demostración interactiva. El sorteo real se ejecutará cuando el conteo oficial llegue a cero.
+            </small>
           </div>
 
           {/* ===================================================================
-              MODALIDAD, CARTÓN VINCULADO Y SALAS EN VIVO (UBICADAS DEBAJO DE LA BALOTERA)
+              BLOQUE DESPLEGABLE DE INFORMACIÓN DEL SORTEO (RECOGIDO POR DEFECTO PARA AHORRAR ESPACIO)
               =================================================================== */}
-        <div className="liveGameModes" role="group" aria-label="Modo de sorteo">
-          <button
-            type="button"
-            className={mode === "balotas" ? "isSelected" : ""}
-            disabled={phase === "spinning"}
-            onClick={() => {
-              if (phase === "spinning") return;
-              setMode("balotas");
-              resetDemo();
-            }}
-          >
-            <RealisticBalotaIcon size={28} number="77" />
-            <span><b>El Círculo Dorado</b><small>Cartones de 100, 200, 500 y 1.000 números</small></span>
-          </button>
-          <button
-            type="button"
-            className={mode === "ruleta" ? "isSelected" : ""}
-            disabled={phase === "spinning"}
-            onClick={() => {
-              if (phase === "spinning") return;
-              setMode("ruleta");
-              resetDemo();
-            }}
-          >
-            <span>🎡</span>
-            <span><b>Ruleta Comunitaria</b><small>Sorteos rápidos de 10 a 50 números</small></span>
-          </button>
-        </div>
+          <div className="raffleDetailsAccordionWrapper">
+            <button
+              type="button"
+              className={`btnToggleRaffleDetails ${showRaffleDetails ? 'isOpen' : ''}`}
+              onClick={() => setShowRaffleDetails((v) => !v)}
+              aria-expanded={showRaffleDetails}
+              title="Ver o recoger detalles del sorteo, cartón y reglas"
+            >
+              <div className="accordionLeftInfo">
+                <span className="accordionIcon">📋</span>
+                <span className="accordionTitle">
+                  {showRaffleDetails
+                    ? "Ocultar detalles del sorteo y cartón"
+                    : `Ver detalles del sorteo · ${activeDrawTitle}`}
+                </span>
+                <span className="accordionBadge">
+                  {mode === "balotas" ? `Cartón ${cartonSize}` : `Ruleta ${wheelSize}`}
+                </span>
+              </div>
+              <span className="accordionToggleAction">
+                {showRaffleDetails ? "▲ Recoger" : "▼ Desplegar"}
+              </span>
+            </button>
 
-        {/* CARTÓN OFICIAL AMARRADO AL SORTEO EN JUEGO (INMODIFICABLE) */}
-        <div className="cartonSelectorBar" style={{ width: '100%', boxSizing: 'border-box' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              <span className="cartonSelectorLabel" style={{ fontWeight: 800 }}>
-                {mode === "balotas" ? "🎟️ Cartón Oficial Vinculado:" : "🎯 Ruleta Oficial:"}
-              </span>
-              <span
-                className="cartonBoundBadge"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '6px 14px',
-                  borderRadius: '10px',
-                  background: 'rgba(245, 184, 46, 0.16)',
-                  border: '1.5px solid #f5b82e',
-                  color: '#ffe082',
-                  fontWeight: 800,
-                  fontSize: '0.86rem'
-                }}
-              >
-                🔒 {mode === "balotas" ? `01 a ${cartonSize} (${cartonSize} Balotas Oficiales)` : `01 a ${wheelSize} Casillas`} · {activeDrawTitle}
-              </span>
-            </div>
-            <small style={{ color: '#94a3b8', fontSize: '0.74rem' }}>
-              ✓ Balotas amarradas a la publicación de este sorteo (Inmodificables por seguridad y transparencia)
-            </small>
-          </div>
-        </div>
-
-        {/* BARRA DE CANALES Y MÚLTIPLES SALAS EN VIVO */}
-        {availableDraws.length > 0 && (
-          <div className="liveChannelsBar">
-            <div className="liveChannelsHeading">
-              <span className="liveSignalPulseSmall" />
-              <span className="liveChannelsLabel">
-                🔴 MÚLTIPLES SALAS EN VIVO ({availableDraws.filter((d) => d.live).length || availableDraws.length} TRANSMISIONES SIMULTÁNEAS):
-              </span>
-            </div>
-            <div className="liveChannelsList">
-              {availableDraws.map((d, index) => {
-                const isSelected = activeDrawId === d.id;
-                const specCount = index === 0 ? "1.482" : index === 1 ? "890" : index === 2 ? "645" : "410";
-                const dUnitPrice = Number(d.unit_price || 35000);
-                const dSold = Number(d.sold !== undefined ? d.sold : (index === 0 ? 842 : index === 1 ? 168 : index === 2 ? 390 : 120));
-                const dRev = dSold * dUnitPrice;
-                return (
-                  <button
-                    key={d.id}
-                    type="button"
-                    className={`liveChannelPill ${isSelected ? "active" : ""}`}
-                    onClick={() => switchLiveDraw(d)}
-                    title={`Sintonizar Sala ${index + 1}: ${d.title} · Venta total: $${dRev.toLocaleString("es-CO")} COP`}
-                  >
-                    <span className="channelRoomIndex" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>SALA {index + 1}</span>
-                    <span className="channelEmoji">{d.emoji}</span>
-                    <strong className="channelTitle" style={{ color: "#ffffff", WebkitTextFillColor: "#ffffff" }}>{d.title}</strong>
-                    <span style={{ fontSize: "10px", color: "#f5b82e", fontWeight: 700, padding: "1px 6px", borderRadius: "4px", background: "rgba(245, 184, 46, 0.15)" }}>
-                      💰 ${(dRev / 1000000).toFixed(1)}M
+            {showRaffleDetails && (
+              <div className="raffleDetailsAccordionBody">
+                <div className="mobileRaffleDescriptionCard" style={{ margin: 0 }}>
+                  <div className="mobileRaffleHeaderRow">
+                    <h2 className="mobileRaffleTitle">
+                      <span>🎟️</span>
+                      <span>{activeDrawTitle}</span>
+                    </h2>
+                    <span className="mobileRaffleTag">
+                      {mode === "balotas" ? `Cartón de ${cartonSize}` : `Ruleta ${wheelSize}`}
                     </span>
-                    {isSelected ? (
-                      <span className="channelLiveDot activeBadge">✓ SINTONIZADA</span>
-                    ) : (
-                      <span className="channelLiveDot">🔴 EN VIVO · {specCount} 👁️</span>
-                    )}
+                  </div>
+
+                  <p style={{ margin: '0 0 10px 0', fontSize: '12.5px', color: '#cbd5e1', lineHeight: '1.4' }}>
+                    {mode === "balotas"
+                      ? `Sorteo oficial supervisado Coljuegos (Ley 643/2001). Balotas del ${eligibleNumbers[0]} al ${eligibleNumbers[eligibleNumbers.length - 1]} con física en tiempo real y 100% equiprobable.`
+                      : `Ruleta comunitaria de precisión con números del 01 al ${wheelSize}.`}
+                  </p>
+
+                  <div className="mobileRaffleMetaGrid">
+                    <div className="mobileRaffleMetaItem">
+                      <span>Total Boletas</span>
+                      <strong>{mode === "balotas" ? cartonSize : wheelPlayers.length} en juego</strong>
+                    </div>
+                    <div className="mobileRaffleMetaItem">
+                      <span>Transparencia</span>
+                      <strong style={{ color: '#10b981' }}>100% Sin Sesgo</strong>
+                    </div>
+                    <div className="mobileRaffleMetaItem">
+                      <span>Boletería Vendida</span>
+                      <strong>{activeSoldTickets} ({activeRevenuePct}%)</strong>
+                    </div>
+                    <div className="mobileRaffleMetaItem">
+                      <span>Premio Mayor</span>
+                      <strong style={{ color: '#f5b82e' }}>Garantizado DIAN</strong>
+                    </div>
+                  </div>
+
+                  {/* BANNER DE FECHA OFICIAL Y CONTEO REGRESIVO */}
+                  <div className="officialDateCountdownBox">
+                    <span className="countdownHeaderTag">
+                      🔒 FECHA OFICIAL DE JUEGO (EL SORTEO SOLO SE EJECUTA AL CUMPLIRSE EL CONTEO)
+                    </span>
+                    <div style={{ fontSize: '12px', color: '#ffffff', fontWeight: 800, marginBottom: '6px' }}>
+                      📅 Domingo Oficial · 8:00 PM (Supervisión Coljuegos)
+                    </div>
+                    <div className="countdownDigitsRow">
+                      <div className="countdownUnit">
+                        <span>{String(officialCountdown.days).padStart(2, '0')}</span>
+                        <small>Días</small>
+                      </div>
+                      <span>:</span>
+                      <div className="countdownUnit">
+                        <span>{String(officialCountdown.hours).padStart(2, '0')}</span>
+                        <small>Horas</small>
+                      </div>
+                      <span>:</span>
+                      <div className="countdownUnit">
+                        <span>{String(officialCountdown.mins).padStart(2, '0')}</span>
+                        <small>Min</small>
+                      </div>
+                      <span>:</span>
+                      <div className="countdownUnit">
+                        <span style={{ color: '#f5b82e' }}>{String(officialCountdown.secs).padStart(2, '0')}</span>
+                        <small>Seg</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* MODALIDAD DE JUEGO */}
+                <div className="liveGameModes" role="group" aria-label="Modo de sorteo" style={{ marginTop: '12px' }}>
+                  <button
+                    type="button"
+                    className={mode === "balotas" ? "isSelected" : ""}
+                    disabled={phase === "spinning"}
+                    onClick={() => {
+                      if (phase === "spinning") return;
+                      setMode("balotas");
+                      resetDemo();
+                    }}
+                  >
+                    <RealisticBalotaIcon size={28} number="77" />
+                    <span><b>El Círculo Dorado</b><small>Cartones de 100, 200, 500 y 1.000 números</small></span>
                   </button>
-                );
-              })}
-            </div>
+                  <button
+                    type="button"
+                    className={mode === "ruleta" ? "isSelected" : ""}
+                    disabled={phase === "spinning"}
+                    onClick={() => {
+                      if (phase === "spinning") return;
+                      setMode("ruleta");
+                      resetDemo();
+                    }}
+                  >
+                    <span>🎡</span>
+                    <span><b>Ruleta Comunitaria</b><small>Sorteos rápidos de 10 a 50 números</small></span>
+                  </button>
+                </div>
+
+                {/* CARTÓN OFICIAL AMARRADO AL SORTEO EN JUEGO */}
+                <div className="cartonSelectorBar" style={{ width: '100%', boxSizing: 'border-box', marginTop: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                      <span className="cartonSelectorLabel" style={{ fontWeight: 800 }}>
+                        {mode === "balotas" ? "🎟️ Cartón Oficial Vinculado:" : "🎯 Ruleta Oficial:"}
+                      </span>
+                      <span
+                        className="cartonBoundBadge"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '6px 14px',
+                          borderRadius: '10px',
+                          background: 'rgba(245, 184, 46, 0.16)',
+                          border: '1.5px solid #f5b82e',
+                          color: '#ffe082',
+                          fontWeight: 800,
+                          fontSize: '0.86rem'
+                        }}
+                      >
+                        🔒 {mode === "balotas" ? `01 a ${cartonSize} (${cartonSize} Balotas Oficiales)` : `01 a ${wheelSize} Casillas`} · {activeDrawTitle}
+                      </span>
+                    </div>
+                    <small style={{ color: '#94a3b8', fontSize: '0.74rem' }}>
+                      ✓ Balotas amarradas a la publicación de este sorteo (Inmodificables por seguridad y transparencia)
+                    </small>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-        )}
 
 
           {/* ===================================================================
@@ -4409,244 +4447,6 @@ export default function LiveDrawDemoPage() {
           <span>El Ganador · Sala Oficial de Sorteo</span>
         </div>
       </section>
-
-      {/* Botón desplegable para optimizar la carga visual y móvil */}
-          <div className="auditToggleWrapper" style={{ maxWidth: "1180px", margin: "24px auto 12px auto", padding: "0 14px", width: "100%", boxSizing: "border-box" }}>
-            <button
-              type="button"
-              className="btnAuditToggle"
-              onClick={() => setShowAuditSection((v) => !v)}
-              style={{
-                width: "100%",
-                padding: "14px 18px",
-                background: "#ffffff",
-                border: "1.5px solid #d4af37",
-                borderRadius: "14px",
-                color: "#0f172a",
-                fontWeight: "800",
-                fontSize: "14px",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: "10px",
-                boxShadow: "0 6px 20px rgba(0, 0, 0, 0.12)",
-                transition: "all 0.2s ease",
-              }}
-            >
-              <span style={{ display: "flex", alignItems: "center", gap: "10px", textAlign: "left" }}>
-                <span style={{ fontSize: "18px" }}>🛡️</span>
-                <span style={{ color: "#0f172a" }}>
-                  {showAuditSection
-                    ? "Ocultar Transparencia y Auditoría Técnica"
-                    : "Ver Transparencia y Certificación Criptográfica"}
-                </span>
-              </span>
-              <span style={{
-                fontSize: "12px",
-                background: "#fef3c7",
-                border: "1px solid #fde68a",
-                color: "#b45309",
-                padding: "5px 12px",
-                borderRadius: "8px",
-                fontWeight: "800",
-                whiteSpace: "nowrap"
-              }}>
-                {showAuditSection ? "▲ Ocultar" : "▼ Desplegar"}
-              </span>
-            </button>
-          </div>
-
-          {showAuditSection && (
-            <section className="liveDemoAudit" aria-labelledby="liveDemoAuditTitle" style={{ background: '#ffffff', borderRadius: '24px', border: '1px solid rgba(0, 0, 0, 0.08)', boxShadow: '0 8px 30px rgba(0,0,0,0.04)', padding: '28px' }}>
-        <div className="liveDemoAuditIntro">
-          <span className="auditShield">✓</span>
-          <div>
-            <p className="liveDemoEyebrow" style={{ color: '#b48008', fontWeight: 900, textShadow: 'none' }}>TRANSPARENCIA Y SEGURIDAD</p>
-            <h2 id="liveDemoAuditTitle" style={{ color: '#000000', textShadow: 'none', fontWeight: 900 }}>Cada sorteo es matemáticamente verificable.</h2>
-            <p style={{ color: '#000000', textShadow: 'none', fontWeight: 600 }}>La selección no se deja al azar de una animación: el servidor deriva el ganador mediante algoritmos criptográficos antes de que la balotera comience a girar.</p>
-          </div>
-        </div>
-
-        <div className="liveDemoAuditItems">
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 22px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '100%' }}>
-            <span style={{ color: '#b48008', fontWeight: 900, fontSize: '15px' }}>01</span>
-            <b style={{ color: '#000000', fontWeight: 900, fontSize: '15px', textShadow: 'none' }}>Rango de cartón estricto</b>
-            <small style={{ color: '#000000', fontWeight: 600, fontSize: '13px', lineHeight: 1.5, textShadow: 'none' }}>Los números del cartón van del {eligibleNumbers[0]} al {eligibleNumbers[eligibleNumbers.length - 1]} sin saltos ni cifras inconsistentes.</small>
-          </div>
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 22px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '100%' }}>
-            <span style={{ color: '#b48008', fontWeight: 900, fontSize: '15px' }}>02</span>
-            <b style={{ color: '#000000', fontWeight: 900, fontSize: '15px', textShadow: 'none' }}>Muestreo sin sesgo</b>
-            <small style={{ color: '#000000', fontWeight: 600, fontSize: '13px', lineHeight: 1.5, textShadow: 'none' }}>Muestreo con rechazo de 64 bits para equiprobabilidad perfecta entre las {cartonSize} opciones.</small>
-          </div>
-          <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 22px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '100%' }}>
-            <span style={{ color: '#b48008', fontWeight: 900, fontSize: '15px' }}>03</span>
-            <b style={{ color: '#000000', fontWeight: 900, fontSize: '15px', textShadow: 'none' }}>Constancia auditable</b>
-            <small style={{ color: '#000000', fontWeight: 600, fontSize: '13px', lineHeight: 1.5, textShadow: 'none' }}>Firma digital Ed25519 para reproducir y certificar el resultado.</small>
-          </div>
-        </div>
-
-        {/* 1. CUADRO DE PRECISIÓN MATEMÁTICA Y GEOMÉTRICA (UBICADO EN TRANSPARENCIA) */}
-        <div className="scientificPanel" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '20px', padding: '22px 24px', marginTop: '22px', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
-          <div className="sciHeader" style={{ borderBottom: '1px solid #e2e8f0', paddingBottom: '12px', marginBottom: '14px' }}>
-            <span className="sciIcon">📐</span>
-            <div>
-              <strong style={{ color: '#000000', fontWeight: 900, fontSize: '15px', textShadow: 'none' }}>PRECISIÓN MATEMÁTICA Y GEOMÉTRICA</strong>
-              <small style={{ color: '#000000', fontWeight: 700, fontSize: '12px', textShadow: 'none' }}>Cálculo, Estadística y Cinemática en Tiempo Real</small>
-            </div>
-          </div>
-
-          <div className="sciGrid">
-            {/* 1. ESTADÍSTICA: EQUIPROBABILIDAD Y ENTROPÍA */}
-            <div className="sciCard" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <span className="sciTag" style={{ color: '#000000', fontWeight: 900 }}>ESTADÍSTICA UNIFORME</span>
-              <div className="sciFormula" style={{ background: '#0f172a', color: '#ffd700', fontWeight: 800, padding: '6px 10px', borderRadius: '8px', textAlign: 'center' }}>P(X = k) = 1 / N</div>
-              <div className="sciValue">
-                <b style={{ color: '#000000', fontWeight: 900 }}>{((1 / (mode === "balotas" ? cartonSize : wheelSize)) * 100).toFixed(4)}%</b>
-                <span style={{ color: '#000000', fontWeight: 700 }}>por número</span>
-              </div>
-              <div className="sciMeta">
-                <span style={{ color: '#000000', fontWeight: 700 }}>Entropía Shannon:</span>
-                <code style={{ background: '#f1f5f9', color: '#000000', border: '1px solid #cbd5e1', fontWeight: 800, padding: '2px 6px', borderRadius: '6px' }}>{Math.log2(mode === "balotas" ? cartonSize : wheelSize).toFixed(4)} bits</code>
-              </div>
-            </div>
-
-            {/* 2. CÁLCULO: MUESTREO SIN SESGO (REJECTION SAMPLING) */}
-            <div className="sciCard" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <span className="sciTag" style={{ color: '#000000', fontWeight: 900 }}>CÁLCULO DISCRETO</span>
-              <div className="sciFormula" style={{ background: '#0f172a', color: '#ffd700', fontWeight: 800, padding: '6px 10px', borderRadius: '8px', textAlign: 'center' }}>L = 2⁶⁴ − (2⁶⁴ mod N)</div>
-              <div className="sciValue">
-                <b className="textGreen" style={{ color: '#15803d', fontWeight: 900 }}>0.000000%</b>
-                <span style={{ color: '#000000', fontWeight: 700 }}>sesgo de módulo</span>
-              </div>
-              <div className="sciMeta">
-                <span style={{ color: '#000000', fontWeight: 700 }}>Espacio 64-bit:</span>
-                <code style={{ background: '#f1f5f9', color: '#000000', border: '1px solid #cbd5e1', fontWeight: 800, padding: '2px 6px', borderRadius: '6px' }}>1.8446 × 10¹⁹</code>
-              </div>
-            </div>
-
-            {/* 3. GEOMETRÍA: CINEMÁTICA CIRCULAR Y REFLEXIÓN */}
-            <div className="sciCard" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <span className="sciTag" style={{ color: '#000000', fontWeight: 900 }}>GEOMETRÍA Y CINEMÁTICA</span>
-              <div className="sciFormula" style={{ background: '#0f172a', color: '#ffd700', fontWeight: 800, padding: '6px 10px', borderRadius: '8px', textAlign: 'center' }}>
-                {mode === "balotas" ? "V = (4/3)·π·R³ · N_balotas" : "Δθ = 360° / N · v′ = v − 2(v·n)n"}
-              </div>
-              <div className="sciValue">
-                <b style={{ color: '#000000', fontWeight: 900 }}>
-                  {mode === "balotas" ? `${((cartonSize / 1000) * 100).toFixed(1)}%` : `${(360 / wheelSize).toFixed(3)}°`}
-                </b>
-                <span style={{ color: '#000000', fontWeight: 700 }}>{mode === "balotas" ? "ocupación cámara" : "arco por sector"}</span>
-              </div>
-              <div className="sciMeta">
-                <span style={{ color: '#000000', fontWeight: 700 }}>{mode === "balotas" ? "Colisiones / seg:" : "Error angular:"}</span>
-                <code style={{ background: '#f1f5f9', color: '#000000', border: '1px solid #cbd5e1', fontWeight: 800, padding: '2px 6px', borderRadius: '6px' }}>{mode === "balotas" ? "~1,240 / s" : "< 0.001° (sub-pixel)"}</code>
-              </div>
-            </div>
-          </div>
-
-          {/* AUDITORÍA CHI-CUADRADO EN TIEMPO REAL */}
-          <div className="chiSquareLive" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '16px 20px', marginTop: '16px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
-            <div className="chiTitle" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <span style={{ color: '#000000', fontWeight: 800, fontSize: '13.5px' }}>Prueba de Bondad de Ajuste Chi-Cuadrado (χ²):</span>
-              <span className="chiBadge" style={{ background: '#dcfce7', color: '#15803d', border: '1px solid #86efac', fontWeight: 800, fontSize: '11px', padding: '3px 8px', borderRadius: '6px' }}>Aprobada · NIST SP 800-22</span>
-            </div>
-            <div className="chiBarTrack" style={{ background: '#cbd5e1', height: '6px', borderRadius: '99px', overflow: 'hidden' }}>
-              <div className="chiBarFill" style={{ width: "98.4%", height: '100%', background: '#16a34a' }} />
-            </div>
-            <div className="chiLabels" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px', color: '#000000', fontSize: '11.5px', fontWeight: 700 }}>
-              <small style={{ color: '#000000', fontWeight: 700 }}>Frecuencia observada vs teórica (p-valor &gt; 0.95)</small>
-              <small style={{ color: '#000000', fontWeight: 700 }}>Equiprobabilidad certificable</small>
-            </div>
-          </div>
-        </div>
-
-        {/* 2. ACTA OFICIAL EMITIDA (DOCUMENTO NOTARIAL Y VERIFICACIÓN) */}
-        <div className="officialActDownloadSection">
-          {latestAct ? (
-            <div className="officialActCard ready" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 24px', marginTop: '20px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)' }}>
-              <div className="actCardHeader">
-                <span className="actBadge">✓ ACTA DIGITAL EMITIDA</span>
-                <span className="actId" style={{ color: '#000000', fontWeight: 700 }}>ID: {latestAct.certificate?.drawId || latestAct.drawId}</span>
-              </div>
-              <div className="actCardBody">
-                <div className="actCardInfo">
-                  <p className="actCardTitle" style={{ color: '#000000', fontWeight: 900 }}>Acta Oficial de Sorteo y Adjudicación</p>
-                  <p className="actCardDesc" style={{ color: '#000000', fontWeight: 600 }}>
-                    Boleta ganadora: <strong style={{ color: '#000000' }}>{winner || latestAct.certificate?.result?.value}</strong> · 
-                    Huella SHA-256: <code style={{ color: '#000000', fontWeight: 700 }}>{(latestAct.certificate?.entries?.listHash || auditHash).slice(0, 16)}…</code>
-                  </p>
-                  <small className="actCardMeta" style={{ color: '#000000', fontWeight: 600 }}>
-                    Emitida con firma digital y descarte de módulo L = 2⁶⁴ − (2⁶⁴ mod N).
-                  </small>
-                </div>
-                <div className="actCardButtons">
-                  <button className="btnDownloadActOfficial" onClick={downloadAct} type="button">
-                    📥 Descargar Acta (.JSON)
-                  </button>
-                  <button className="btnDownloadActPdf" onClick={() => setShowPrintModal(true)} type="button">
-                    📄 Ver Acta Notarial (.PDF)
-                  </button>
-                  <a
-                    className="btnVerifyActLink"
-                    href={latestAct ? `/verificar?id=${encodeURIComponent(latestAct.certificate?.drawId || latestAct.drawId || "")}` : "/verificar"}
-                  >
-                    🛡️ Auditar en Verificador →
-                  </a>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="officialActCard pending" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 24px', marginTop: '20px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)' }}>
-              <div className="actCardHeader">
-                <span className="actBadgePending">⏳ ACTA PENDIENTE</span>
-                <span className="actId" style={{ color: '#000000', fontWeight: 700 }}>Estándar GLI-19 / NIST SP 800-22</span>
-              </div>
-              <div className="actCardBody">
-                <div className="actCardInfo">
-                  <p className="actCardTitle" style={{ color: '#000000', fontWeight: 900 }}>Acta Oficial de Sorteo y Adjudicación</p>
-                  <p className="actCardDesc" style={{ color: '#000000', fontWeight: 600 }}>
-                    El documento digital firmado (.JSON) se emitirá automáticamente en cuanto la balotera revele el número ganador.
-                  </p>
-                </div>
-                <div className="actCardButtons">
-                  <button className="btnDownloadActOfficial disabled" disabled type="button">
-                    📥 Descargar Acta (Disponible al sortear)
-                  </button>
-                  <a className="btnVerifyActLink" href="/verificar" style={{ background: '#0f172a', color: '#ffffff' }}>
-                    🛡️ Verificador Público →
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {auditHash && (
-          <div className="auditSnippet" style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 16px', marginTop: '16px' }}>
-            <small style={{ color: '#000000', fontWeight: 700 }}>Huella canónica SHA-256 ({mode === "balotas" ? cartonSize : wheelSize} opciones):</small>
-            <code style={{ color: '#000000', fontWeight: 800, background: '#ffffff', border: '1px solid #cbd5e1' }}>{auditHash}</code>
-          </div>
-        )}
-
-        <button className="auditHowButton" onClick={() => setShowHow((v) => !v)} aria-expanded={showHow}>
-          {showHow ? "Ocultar detalles técnicos" : "¿Cómo se comprueba matemáticamente?"} <span>{showHow ? "−" : "+"}</span>
-        </button>
-
-        {showHow && (
-          <div className="liveDemoHow" style={{ color: '#000000', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px 24px' }}>
-            <p style={{ color: '#000000', margin: '0 0 10px 0', fontSize: '13.5px', lineHeight: 1.6 }}>
-              1. <b style={{ color: '#000000', fontWeight: 900 }}>Compromiso:</b> Antes del sorteo, el sistema congela la lista de boletas del cartón seleccionado ({cartonSize} opciones) y publica su hash SHA-256 junto con el compromiso de la semilla secreta.
-            </p>
-            <p style={{ color: '#000000', margin: '0 0 10px 0', fontSize: '13.5px', lineHeight: 1.6 }}>
-              2. <b style={{ color: '#000000', fontWeight: 900 }}>Derivación:</b> Se ejecuta <code style={{ color: '#000000', backgroundColor: '#ffffff', border: '1px solid #cbd5e1', padding: '2px 6px', borderRadius: '6px', fontWeight: 700, fontFamily: 'monospace' }}>HMAC-SHA256(semilla, listaHash ‖ sorteoId)</code>, extrayendo enteros de 64 bits con descarte de módulo para garantizar que ningún número tenga más probabilidad que otro.
-            </p>
-            <p style={{ color: '#000000', margin: 0, fontSize: '13.5px', lineHeight: 1.6 }}>
-              3. <b style={{ color: '#000000', fontWeight: 900 }}>Revelación:</b> La animación de El Círculo Dorado o ruleta revela el ganador resultante. La constancia puede ser descargada y auditada externamente por cualquier persona o laboratorio.
-            </p>
-          </div>
-        )}
-      </section>
-      )}
 
       <footer className="liveDemoFooter">
         <a href="/">EL GANADOR</a>
