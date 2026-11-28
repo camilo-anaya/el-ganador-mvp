@@ -4275,170 +4275,192 @@ export default function LiveDrawDemoPage() {
 
 
           {/* ===================================================================
-              BLOQUES MINIMIZADOS PLEGABLES (CERO RECUADRO BLANCO GIGANTE)
-              Por defecto están minimizados en chips. Si el usuario toca uno, se expande ese bloque.
+              BLOQUES DESPLEGABLES INDIVIDUALES: CADA RECUADRO DESPLIEGA SU CONTENIDO DEBAJO
+              (Ganador, Sello Criptográfico, Historial y Auditoría Legal - Cero Caos)
               =================================================================== */}
-          <div id="draw-result-blocks" className="drawResultBlocksContainer">
-            {/* BARRA DE CHIPS MINIMIZADOS */}
-            <div className="minimizedChipsBar" role="tablist" aria-label="Bloques de información colapsables">
+          <div id="draw-result-blocks" className="drawResultAccordionsContainer">
+            {/* 1. RECUADRO: GANADOR OFICIAL */}
+            <div className={`resultAccordionItem ${activeResultTab === "ganador" ? "isOpen" : ""}`}>
               <button
                 type="button"
-                className={`minimizedBlockChipBtn ${activeResultTab === "ganador" ? "isOpen" : ""}`}
+                className={`resultAccordionHeaderBtn ${activeResultTab === "ganador" ? "isOpen" : ""}`}
                 onClick={() => setActiveResultTab((prev) => (prev === "ganador" ? null : "ganador"))}
+                aria-expanded={activeResultTab === "ganador"}
                 title="Ver detalles del ganador y entrega"
               >
-                <span>🏆</span>
-                <span>{activeResultTab === "ganador" ? "▲ Ocultar Ganador" : "Ver Ganador"}</span>
-                {phase === "winner" && <span style={{ color: '#f5b82e' }}>★</span>}
+                <div className="accordionItemLeft">
+                  <span className="accordionItemIcon">🏆</span>
+                  <span className="accordionItemTitle">Ver Ganador Oficial</span>
+                  {phase === "winner" && <span className="winnerActiveStar">★ GANADOR EXTRAÍDO</span>}
+                </div>
+                <span className="accordionActionPill">
+                  {activeResultTab === "ganador" ? "▲ Ocultar" : "▼ Desplegar"}
+                </span>
               </button>
 
-              <button
-                type="button"
-                className={`minimizedBlockChipBtn ${activeResultTab === "seguridad" ? "isOpen" : ""}`}
-                onClick={() => setActiveResultTab((prev) => (prev === "seguridad" ? null : "seguridad"))}
-                title="Ver sello notarial SHA-256"
-              >
-                <span>🔒</span>
-                <span>{activeResultTab === "seguridad" ? "▲ Ocultar Seguridad" : "Ver Sello SHA-256"}</span>
-              </button>
+              {activeResultTab === "ganador" && (
+                <div className="resultAccordionContent">
+                  {phase === "winner" && winner ? (
+                    <div className="ganadorOficialCelebrationHero" style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #007AFF' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '12px' }}>
+                        <RealisticBalotaIcon size={60} number={mode === "balotas" ? winner : rouletteWinnerNum} />
+                        <div>
+                          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 800 }}>NÚMERO EXTRAÍDO</span>
+                          <div style={{ fontSize: '24px', fontWeight: 900, color: '#007AFF' }}>
+                            #{mode === "balotas" ? winner : rouletteWinnerNum} · {numberToSpanishWords(mode === "balotas" ? winner : rouletteWinnerNum).toUpperCase()}
+                          </div>
+                        </div>
+                      </div>
 
-              <button
-                type="button"
-                className={`minimizedBlockChipBtn ${activeResultTab === "detalles" ? "isOpen" : ""}`}
-                onClick={() => setActiveResultTab((prev) => (prev === "detalles" ? null : "detalles"))}
-                title="Ver historial de balotas extraídas"
-              >
-                <span>📊</span>
-                <span>{activeResultTab === "detalles" ? "▲ Ocultar Historial" : `Ver Historial (${history.length})`}</span>
-              </button>
-
-              <button
-                type="button"
-                className={`minimizedBlockChipBtn ${activeResultTab === "auditoria" ? "isOpen" : ""}`}
-                onClick={() => setActiveResultTab((prev) => (prev === "auditoria" ? null : "auditoria"))}
-                title="Ver auditoría Coljuegos"
-              >
-                <span>📜</span>
-                <span>{activeResultTab === "auditoria" ? "▲ Ocultar Auditoría" : "Ver Auditoría Legal"}</span>
-              </button>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '12px' }}>
+                        <button
+                          type="button"
+                          className="btnWinnerChatCoordination"
+                          onClick={() => {
+                            const wonNum = mode === "balotas" ? winner : rouletteWinnerNum;
+                            const shareUrl = typeof window !== 'undefined' ? `${window.location.origin}/sorteo-en-vivo` : 'https://elganador.co';
+                            const text = `🎉 ¡Resultado oficial en vivo de El Ganador! El número ganador es el #${wonNum}. Puedes auditarlo en: ${shareUrl}`;
+                            window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                          }}
+                          style={{ padding: '10px 14px', fontSize: '12.5px' }}
+                        >
+                          💬 Notificar por WhatsApp
+                        </button>
+                        <button
+                          type="button"
+                          className="btnManualSaveAndHome"
+                          onClick={() => router.push("/")}
+                          style={{ padding: '10px 14px', fontSize: '12.5px' }}
+                        >
+                          🏆 Guardar en mis Premios
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: 'center', padding: '18px 10px', color: '#cbd5e1' }}>
+                      <span style={{ fontSize: '30px', display: 'block', marginBottom: '6px' }}>🎯</span>
+                      <strong style={{ fontSize: '13.5px', color: '#ffffff' }}>El sorteo oficial se ejecutará en la fecha programada</strong>
+                      <p style={{ fontSize: '12px', margin: '4px 0 0 0', color: '#94a3b8' }}>
+                        Usa el botón de arriba para probar la demostración de la balotera o ruleta en modo de prueba.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* CONTENIDO SOLO CUANDO UN BLOQUE ESTÁ EXPLÍCITAMENTE ABIERTO */}
-            {activeResultTab !== null && (
-              <div className="expandedBlockWrapper">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '12px', fontWeight: 800, color: '#64748b', textTransform: 'uppercase' }}>
-                    Bloque Desplegado
-                  </span>
+            {/* 2. RECUADRO: SELLO CRIPTOGRÁFICO SHA-256 */}
+            <div className={`resultAccordionItem ${activeResultTab === "seguridad" ? "isOpen" : ""}`}>
+              <button
+                type="button"
+                className={`resultAccordionHeaderBtn ${activeResultTab === "seguridad" ? "isOpen" : ""}`}
+                onClick={() => setActiveResultTab((prev) => (prev === "seguridad" ? null : "seguridad"))}
+                aria-expanded={activeResultTab === "seguridad"}
+                title="Ver sello notarial SHA-256"
+              >
+                <div className="accordionItemLeft">
+                  <span className="accordionItemIcon">🔒</span>
+                  <span className="accordionItemTitle">Ver Sello Criptográfico SHA-256</span>
+                </div>
+                <span className="accordionActionPill">
+                  {activeResultTab === "seguridad" ? "▲ Ocultar" : "▼ Desplegar"}
+                </span>
+              </button>
+
+              {activeResultTab === "seguridad" && (
+                <div className="resultAccordionContent">
+                  <strong style={{ fontSize: '13px', color: '#f8fafc', display: 'block', marginBottom: '6px' }}>
+                    🔒 Hash Criptográfico Notarial HMAC-SHA256
+                  </strong>
+                  <code style={{ display: 'block', background: '#090f1d', color: '#38bdf8', padding: '10px 12px', borderRadius: '8px', fontSize: '11px', wordBreak: 'break-all', fontFamily: 'monospace', border: '1px solid rgba(56, 189, 248, 0.3)' }}>
+                    {auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+                  </code>
                   <button
                     type="button"
-                    className="btnMinimizeBlock"
-                    onClick={() => setActiveResultTab(null)}
+                    onClick={() => setShowPrintModal(true)}
+                    style={{ marginTop: '12px', width: '100%', padding: '10px 14px', background: '#053b22', border: '1.5px solid #d4af37', color: '#ffffff', borderRadius: '10px', fontWeight: 800, fontSize: '12.5px', cursor: 'pointer' }}
                   >
-                    ▲ Minimizar y cerrar bloque
+                    📜 Ver y Descargar Constancia Notarial (.PDF)
                   </button>
                 </div>
+              )}
+            </div>
 
-                {/* BLOQUE 1: GANADOR */}
-                {activeResultTab === "ganador" && (
-                  <div className="blockContent">
-                    {phase === "winner" && winner ? (
-                      <div className="ganadorOficialCelebrationHero" style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px solid #007AFF' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '12px' }}>
-                          <RealisticBalotaIcon size={60} number={mode === "balotas" ? winner : rouletteWinnerNum} />
-                          <div>
-                            <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 800 }}>NÚMERO EXTRAÍDO</span>
-                            <div style={{ fontSize: '24px', fontWeight: 900, color: '#007AFF' }}>
-                              #{mode === "balotas" ? winner : rouletteWinnerNum} · {numberToSpanishWords(mode === "balotas" ? winner : rouletteWinnerNum).toUpperCase()}
-                            </div>
-                          </div>
+            {/* 3. RECUADRO: HISTORIAL DE BALOTAS */}
+            <div className={`resultAccordionItem ${activeResultTab === "detalles" ? "isOpen" : ""}`}>
+              <button
+                type="button"
+                className={`resultAccordionHeaderBtn ${activeResultTab === "detalles" ? "isOpen" : ""}`}
+                onClick={() => setActiveResultTab((prev) => (prev === "detalles" ? null : "detalles"))}
+                aria-expanded={activeResultTab === "detalles"}
+                title="Ver historial de balotas extraídas"
+              >
+                <div className="accordionItemLeft">
+                  <span className="accordionItemIcon">📊</span>
+                  <span className="accordionItemTitle">Ver Historial de Balotas ({history.length})</span>
+                </div>
+                <span className="accordionActionPill">
+                  {activeResultTab === "detalles" ? "▲ Ocultar" : "▼ Desplegar"}
+                </span>
+              </button>
+
+              {activeResultTab === "detalles" && (
+                <div className="resultAccordionContent">
+                  <strong style={{ fontSize: '13px', color: '#f8fafc', display: 'block', marginBottom: '8px' }}>
+                    📊 Bandeja de Balotas Extraídas en la Sesión ({history.length})
+                  </strong>
+                  {history.length > 0 ? (
+                    <div className="historyChips" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                      {history.map((item, idx) => (
+                        <div key={idx} className="historyChip" style={{ padding: '5px 12px', background: '#1e293b', border: '1px solid #334155', color: '#f8fafc', borderRadius: '8px', fontSize: '11.5px', fontWeight: 800 }}>
+                          #{item.number} · {item.time}
                         </div>
-
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '12px' }}>
-                          <button
-                            type="button"
-                            className="btnWinnerChatCoordination"
-                            onClick={() => setShowWinnerChatModal(true)}
-                            style={{ padding: '10px 14px', fontSize: '12.5px' }}
-                          >
-                            💬 Coordinar Entrega por Chat
-                          </button>
-                          <button
-                            type="button"
-                            className="btnManualSaveAndHome"
-                            onClick={() => router.push("/")}
-                            style={{ padding: '10px 14px', fontSize: '12.5px' }}
-                          >
-                            🏆 Guardar en mis Premios
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div style={{ textAlign: 'center', padding: '20px 10px', color: '#475569' }}>
-                        <span style={{ fontSize: '32px', display: 'block', marginBottom: '6px' }}>🎯</span>
-                        <strong style={{ fontSize: '14px', color: '#0f172a' }}>El sorteo oficial se ejecutará en la fecha programada</strong>
-                        <p style={{ fontSize: '12px', margin: '4px 0 0 0', color: '#64748b' }}>
-                          Usa el botón de arriba para probar la demostración de la balotera o ruleta en modo de prueba.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* BLOQUE 2: SEGURIDAD SHA-256 */}
-                {activeResultTab === "seguridad" && (
-                  <div className="blockContent">
-                    <strong style={{ fontSize: '13px', color: '#0f172a', display: 'block', marginBottom: '6px' }}>
-                      🔒 Hash Criptográfico Notarial HMAC-SHA256
-                    </strong>
-                    <code style={{ display: 'block', background: '#0f172a', color: '#38bdf8', padding: '10px', borderRadius: '8px', fontSize: '11px', wordBreak: 'break-all', fontFamily: 'monospace' }}>
-                      {auditHash || "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
-                    </code>
-                    <button
-                      type="button"
-                      onClick={() => setShowPrintModal(true)}
-                      style={{ marginTop: '10px', width: '100%', padding: '9px 14px', background: '#053b22', border: '1px solid #d4af37', color: '#ffffff', borderRadius: '8px', fontWeight: 800, fontSize: '12px', cursor: 'pointer' }}
-                    >
-                      📜 Ver y Descargar Constancia Notarial PDF
-                    </button>
-                  </div>
-                )}
-
-                {/* BLOQUE 3: HISTORIAL */}
-                {activeResultTab === "detalles" && (
-                  <div className="blockContent">
-                    <strong style={{ fontSize: '13px', color: '#0f172a', display: 'block', marginBottom: '6px' }}>
-                      📊 Bandeja de Balotas Extraídas ({history.length})
-                    </strong>
-                    {history.length > 0 ? (
-                      <div className="historyChips" style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                        {history.map((item, idx) => (
-                          <div key={idx} className="historyChip" style={{ padding: '4px 10px', background: '#f1f5f9', borderRadius: '8px', fontSize: '11px', fontWeight: 800 }}>
-                            #{item.number} · {item.time}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, fontStyle: 'italic' }}>
-                        No hay balotas extraídas aún en esta sesión.
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* BLOQUE 4: AUDITORÍA LEGAL */}
-                {activeResultTab === "auditoria" && (
-                  <div className="blockContent" style={{ fontSize: '12px', color: '#475569', lineHeight: '1.4' }}>
-                    <strong style={{ fontSize: '13px', color: '#0f172a', display: 'block', marginBottom: '4px' }}>
-                      📜 Supervisión Regulatoria Coljuegos (Ley 643/2001)
-                    </strong>
-                    <p style={{ margin: '0 0 6px 0' }}>
-                      La plataforma opera con algoritmos CSPRNG blindados contra predicción. El sorteo oficial solo se activará de forma sincronizada con los servidores al cumplirse la fecha de juego oficial.
+                      ))}
+                    </div>
+                  ) : (
+                    <p style={{ fontSize: '12px', color: '#94a3b8', margin: 0, fontStyle: 'italic' }}>
+                      No hay balotas extraídas aún en esta sesión de sorteo.
                     </p>
-                  </div>
-                )}
-              </div>
-            )}
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* 4. RECUADRO: AUDITORÍA LEGAL */}
+            <div className={`resultAccordionItem ${activeResultTab === "auditoria" ? "isOpen" : ""}`}>
+              <button
+                type="button"
+                className={`resultAccordionHeaderBtn ${activeResultTab === "auditoria" ? "isOpen" : ""}`}
+                onClick={() => setActiveResultTab((prev) => (prev === "auditoria" ? null : "auditoria"))}
+                aria-expanded={activeResultTab === "auditoria"}
+                title="Ver auditoría Coljuegos"
+              >
+                <div className="accordionItemLeft">
+                  <span className="accordionItemIcon">📜</span>
+                  <span className="accordionItemTitle">Ver Auditoría Legal y Supervisión Coljuegos</span>
+                </div>
+                <span className="accordionActionPill">
+                  {activeResultTab === "auditoria" ? "▲ Ocultar" : "▼ Desplegar"}
+                </span>
+              </button>
+
+              {activeResultTab === "auditoria" && (
+                <div className="resultAccordionContent" style={{ fontSize: '12.5px', color: '#cbd5e1', lineHeight: '1.5' }}>
+                  <strong style={{ fontSize: '13px', color: '#f8fafc', display: 'block', marginBottom: '6px' }}>
+                    📜 Supervisión Regulatoria Coljuegos (Ley 643/2001 & Decreto 1486/2024)
+                  </strong>
+                  <p style={{ margin: '0 0 8px 0' }}>
+                    La plataforma opera con algoritmos CSPRNG con descarte de módulo de 64 bits para equiprobabilidad perfecta. El sorteo oficial solo se activará de forma sincronizada con los servidores al cumplirse la fecha y hora de juego estipulada.
+                  </p>
+                  <a
+                    href="/verificar"
+                    style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#f5b82e', fontWeight: 800, textDecoration: 'none', fontSize: '12px' }}
+                  >
+                    🛡️ Abrir Verificador Notarial Público →
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
