@@ -5439,9 +5439,10 @@
    ESCENARIO PROTAGONISTA EN PANTALLA COMPLETA (BLANCO PURO DE ESTUDIO)
    ============================================================================ */
 .liveDemoPage.isCinemaStageLocked {
-  height: 100dvh !important;
-  max-height: 100dvh !important;
-  overflow: hidden !important;
+  height: auto !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  overflow-y: visible !important;
 }
 
 .liveDemoMachine.cinemaFullscreenActive {
@@ -8704,12 +8705,16 @@ button, a, input, select, textarea, .btnInfinityDisplayToggle, .cinemaInfinityDi
 }
 
 html {
-  touch-action: auto !important;
+  touch-action: pan-y manipulation !important;
   overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
 }
 body {
-  touch-action: auto !important;
-  overflow: visible !important;
+  touch-action: pan-y manipulation !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: auto !important;
 }
 
 /* En portátiles (>= 768px), permitir siempre scroll libre con mouse y trackpad */
@@ -8869,20 +8874,24 @@ body {
    REGLA SIN BORDES (FULL-BLEED) & BLOQUES MINIMIZADOS & SCROLL NATIVO DE PORTÁTIL
    ========================================================================== */
 
-/* 1. Desbloqueo absoluto de scroll para touchpad de portátil y mouse */
+/* 1. Desbloqueo absoluto de scroll para pantalla táctil, touchpad y mouse */
 html {
   overflow-y: auto !important;
   overflow-x: hidden !important;
   height: auto !important;
   min-height: 100% !important;
-  touch-action: auto !important;
+  touch-action: pan-y manipulation !important;
+  -webkit-overflow-scrolling: touch !important;
 }
 
 body {
-  overflow: visible !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
   height: auto !important;
   min-height: 100% !important;
-  touch-action: auto !important;
+  touch-action: pan-y manipulation !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: auto !important;
 }
 
 @media (min-width: 768px) {
@@ -9576,4 +9585,44 @@ body {
   .resultAccordionContent {
     padding: 12px !important;
   }
+}
+
+
+/* ==========================================================================
+   DESBLOQUEO INTEGRAL TÁCTIL MÓVIL Y FEEDBACK FÍSICO HÁPTICO
+   ========================================================================== */
+.liveDemoPage,
+.liveDemoContentContainer,
+.liveDemoStage,
+.liveDemoStageGrid,
+.liveDemoMachine,
+.globeChassis,
+.realisticSphereViewport,
+.realisticBallPhysicsContainer,
+.wheelCasinoWrapper,
+.machineStandWrapper,
+.raffleDetailsAccordionWrapper,
+.drawResultAccordionsContainer,
+.resultAccordionItem {
+  touch-action: pan-y manipulation !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Feedback visual instantáneo al tocar cualquier botón o acordeón */
+button:active,
+.studioLiveRoomsToggleBtn:active,
+.btnDemoTestMode:active,
+.btnToggleRaffleDetails:active,
+.resultAccordionHeaderBtn:active,
+.studioBackBtn:active,
+.btnCloseRoomsDropdown:active,
+.reactionBtn:active {
+  transform: scale(0.965) !important;
+  transition: transform 0.08s ease !important;
+}
+
+/* Asegurar que las tarjetas de salas en vivo tengan scroll horizontal fluido */
+.headerLiveRoomsList {
+  touch-action: pan-x pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
 }

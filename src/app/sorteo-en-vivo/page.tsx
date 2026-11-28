@@ -387,24 +387,25 @@ export default function LiveDrawDemoPage() {
   const [winnerChatMessages, setWinnerChatMessages] = useState<Array<{ sender: "merchant" | "client"; text: string; time: string }>>([]);
   const [winnerChatInput, setWinnerChatInput] = useState<string>("");
 
-  // Desbloqueo nativo absoluto para pad mouse y touchpad de portátil
+  // Desbloqueo nativo absoluto para táctil móvil y touchpad de portátil
   useEffect(() => {
     if (typeof document !== "undefined") {
       document.documentElement.style.setProperty("overflow-y", "auto", "important");
       document.documentElement.style.setProperty("overflow-x", "hidden", "important");
-      document.body.style.setProperty("overflow", "visible", "important");
-      document.body.style.setProperty("touch-action", "auto", "important");
-      const isMobileScreen = typeof window !== "undefined" && window.innerWidth < 768;
-      if (isCinemaFullscreen && isMobileScreen) {
-        document.body.style.setProperty("overflow", "hidden", "important");
-      }
+      document.documentElement.style.setProperty("touch-action", "pan-y manipulation", "important");
+      document.documentElement.style.setProperty("-webkit-overflow-scrolling", "touch", "important");
+      document.body.style.setProperty("overflow-y", "auto", "important");
+      document.body.style.setProperty("overflow-x", "hidden", "important");
+      document.body.style.setProperty("touch-action", "pan-y manipulation", "important");
+      document.body.style.setProperty("-webkit-overflow-scrolling", "touch", "important");
+      document.body.style.setProperty("overscroll-behavior-y", "auto", "important");
     }
     return () => {
       if (typeof document !== "undefined") {
         document.body.style.overflow = "";
       }
     };
-  }, [isCinemaFullscreen]);
+  }, []);
 
   // Soporte de navegación con portátil por teclado (ESC salir fullscreen, flechas ← → para cambiar bloques)
   useEffect(() => {
@@ -2304,7 +2305,7 @@ export default function LiveDrawDemoPage() {
       if (session.status === "running" && elapsedSec < revealStart) {
         // ¡SORTEO EN PLENO VUELO! Continuar sin detenerse en pantalla completa y en el segundo exacto real
         setIsRecoveredDraw(true);
-        setIsCinemaFullscreen(true);
+        setIsCinemaFullscreen(false);
         setPhase("spinning");
         setShowTicketModal(false);
         setShowCelebration(false);
@@ -2380,10 +2381,8 @@ export default function LiveDrawDemoPage() {
     }
     stopWinnerVoice();
 
-    // En celulares (< 768px) iniciar en pantalla completa; en portátiles mantener el scroll libre
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
-      enterCinemaFullscreen();
-    }
+    // En celulares (< 768px) mantener scroll vertical libre para ver simulación y resultados sin bloqueo
+    setIsCinemaFullscreen(false);
 
     const startedAtEpochMs = Date.now();
     const startAngle = ((currentWheelAngleRef.current % 360) + 360) % 360;
@@ -2553,6 +2552,8 @@ export default function LiveDrawDemoPage() {
               <Link
                 href="/"
                 className="studioBackBtn"
+                onClick={() => triggerHaptic(15)}
+                onTouchStart={() => triggerHaptic(12)}
                 title="Volver al Inicio / Vitrina Principal"
               >
                 <span className="studioBackArrow">←</span>
@@ -2565,7 +2566,7 @@ export default function LiveDrawDemoPage() {
               <button
                 type="button"
                 className={`studioLiveRoomsToggleBtn ${showLiveRoomsDropdown ? 'isOpen' : ''}`}
-                onClick={() => setShowLiveRoomsDropdown((prev) => !prev)}
+                onClick={() => { triggerHaptic(15); setShowLiveRoomsDropdown((prev) => !prev); }} onTouchStart={() => triggerHaptic(12)}
                 title="Ver todas las salas de sorteo en vivo"
               >
                 <span className="livePulseMini" />
@@ -4096,7 +4097,8 @@ export default function LiveDrawDemoPage() {
             <button
               type="button"
               className="btnDemoTestMode"
-              onClick={playDemo}
+              onClick={() => { triggerHaptic([25, 15, 25]); playDemo(); }}
+              onTouchStart={() => triggerHaptic(15)}
               disabled={phase === "spinning"}
               title="Probar demostración del sorteo en modo de prueba"
             >
@@ -4119,7 +4121,7 @@ export default function LiveDrawDemoPage() {
             <button
               type="button"
               className={`btnToggleRaffleDetails ${showRaffleDetails ? 'isOpen' : ''}`}
-              onClick={() => setShowRaffleDetails((v) => !v)}
+              onClick={() => { triggerHaptic(15); setShowRaffleDetails((v) => !v); }} onTouchStart={() => triggerHaptic(12)}
               aria-expanded={showRaffleDetails}
               title="Ver o recoger detalles del sorteo, cartón y reglas"
             >
@@ -4284,7 +4286,8 @@ export default function LiveDrawDemoPage() {
               <button
                 type="button"
                 className={`resultAccordionHeaderBtn ${activeResultTab === "ganador" ? "isOpen" : ""}`}
-                onClick={() => setActiveResultTab((prev) => (prev === "ganador" ? null : "ganador"))}
+                onClick={() => { triggerHaptic(15); setActiveResultTab((prev) => (prev === "ganador" ? null : "ganador")); }}
+                onTouchStart={() => triggerHaptic(12)}
                 aria-expanded={activeResultTab === "ganador"}
                 title="Ver detalles del ganador y entrega"
               >
@@ -4354,7 +4357,8 @@ export default function LiveDrawDemoPage() {
               <button
                 type="button"
                 className={`resultAccordionHeaderBtn ${activeResultTab === "seguridad" ? "isOpen" : ""}`}
-                onClick={() => setActiveResultTab((prev) => (prev === "seguridad" ? null : "seguridad"))}
+                onClick={() => { triggerHaptic(15); setActiveResultTab((prev) => (prev === "seguridad" ? null : "seguridad")); }}
+                onTouchStart={() => triggerHaptic(12)}
                 aria-expanded={activeResultTab === "seguridad"}
                 title="Ver sello notarial SHA-256"
               >
@@ -4391,7 +4395,8 @@ export default function LiveDrawDemoPage() {
               <button
                 type="button"
                 className={`resultAccordionHeaderBtn ${activeResultTab === "detalles" ? "isOpen" : ""}`}
-                onClick={() => setActiveResultTab((prev) => (prev === "detalles" ? null : "detalles"))}
+                onClick={() => { triggerHaptic(15); setActiveResultTab((prev) => (prev === "detalles" ? null : "detalles")); }}
+                onTouchStart={() => triggerHaptic(12)}
                 aria-expanded={activeResultTab === "detalles"}
                 title="Ver historial de balotas extraídas"
               >
@@ -4431,7 +4436,8 @@ export default function LiveDrawDemoPage() {
               <button
                 type="button"
                 className={`resultAccordionHeaderBtn ${activeResultTab === "auditoria" ? "isOpen" : ""}`}
-                onClick={() => setActiveResultTab((prev) => (prev === "auditoria" ? null : "auditoria"))}
+                onClick={() => { triggerHaptic(15); setActiveResultTab((prev) => (prev === "auditoria" ? null : "auditoria")); }}
+                onTouchStart={() => triggerHaptic(12)}
                 aria-expanded={activeResultTab === "auditoria"}
                 title="Ver auditoría Coljuegos"
               >
