@@ -4306,6 +4306,10 @@
 
 .liveDemoContentContainer {
   padding: 0 clamp(18px, 5vw, 78px) calc(36px + env(safe-area-inset-bottom, 0px));
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .confetti_2 {
@@ -5888,16 +5892,22 @@
   }
 
   .liveDemoStageGrid {
-    grid-template-columns: minmax(540px, 1.45fr) minmax(380px, 1fr) !important;
-    gap: clamp(24px, 2.5vw, 56px) !important;
-    padding: 24px clamp(16px, 2vw, 36px) 34px !important;
+    display: flex !important;
+    flex-direction: column !important;
     align-items: center !important;
+    gap: 16px !important;
+    padding: 20px clamp(16px, 2vw, 36px) 30px !important;
     width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
     box-sizing: border-box !important;
   }
 
   .liveDemoMachine {
-    min-height: clamp(740px, 78vh, 940px) !important;
+    min-height: clamp(540px, 60vh, 700px) !important;
+    height: auto !important;
+    width: 100% !important;
+    max-width: 1100px !important;
     padding: 28px 20px;
     border-radius: 26px;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -6997,14 +7007,21 @@
 
 @media (min-width: 980px) {
   .liveDemoStageGrid {
-    grid-template-columns: minmax(560px, 1.45fr) minmax(380px, 1fr) !important;
-    gap: clamp(28px, 2.8vw, 56px) !important;
-    padding: 28px clamp(18px, 2.5vw, 36px) 36px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 18px !important;
+    padding: 24px clamp(18px, 2.5vw, 36px) 36px !important;
     width: 100% !important;
+    max-width: 1240px !important;
+    margin: 0 auto !important;
     box-sizing: border-box !important;
   }
   .liveDemoMachine {
-    min-height: clamp(760px, 80vh, 960px) !important;
+    min-height: clamp(560px, 62vh, 720px) !important;
+    height: auto !important;
+    width: 100% !important;
+    max-width: 1150px !important;
   }
   .wheelCasinoWrapper {
     --wheel-size: clamp(400px, 44vw, 780px) !important;

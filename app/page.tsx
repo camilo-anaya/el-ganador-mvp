@@ -2078,7 +2078,7 @@ export default function CompactWhiteMarketplacePage() {
                 <span>📜</span> Marco Legal &amp; Coljuegos
               </Link>
               {/* RECUADRO CERTIFICADO MATEMÁTICO EN LA TABLA/MENÚ IZQUIERDO */}
-              <MathematicalCertificateCard defaultOpen={true} />
+              <MathematicalCertificateCard defaultOpen={false} />
             </nav>
 
             {/* Botón Cerrar Sesión en el menú móvil */}
@@ -3107,7 +3107,7 @@ export default function CompactWhiteMarketplacePage() {
                       Descarte de Módulo 64-bit
                     </h4>
                     <p style={{ margin: 0, fontSize: '12px', color: theme === 'dark' ? '#cbd5e1' : '#475569', lineHeight: 1.5 }}>
-                      Rejection sampling con descarte de sesgo L = 2⁶⁴ − (2⁶⁴ mod N). Equiprobabilidad matemática absoluta (0.000000% sesgo).
+                      Muestreo criptográfico con descarte de sesgo residual de 64 bits (Rejection Sampling). Equiprobabilidad matemática absoluta (0.000000% sesgo bajo norma GLI-19).
                     </p>
                   </div>
 

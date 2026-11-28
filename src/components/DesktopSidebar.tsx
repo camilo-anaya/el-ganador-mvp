@@ -128,7 +128,7 @@ export default function DesktopSidebar() {
             <span>📜</span> Marco Legal &amp; Coljuegos
           </Link>
           {/* RECUADRO OFICIAL: CERTIFICADO MATEMÁTICO & CRIPTOGRÁFICO */}
-          <MathematicalCertificateCard defaultOpen={true} />
+          <MathematicalCertificateCard defaultOpen={false} />
           <Link
             href="/terminos"
             className={`toc-link ${pathname === '/terminos' ? 'active' : ''}`}
