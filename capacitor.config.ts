@@ -10,6 +10,18 @@ const config: CapacitorConfig = {
     url: process.env.CAP_SERVER_URL || "https://el-ganador-mvp.vercel.app",
     cleartext: true,
     androidScheme: "https",
+    allowNavigation: [
+      "*.wompi.co",
+      "checkout.wompi.co",
+      "production.wompi.co",
+      "sandbox.wompi.co",
+      "*.pse.com.co",
+      "*.bancolombia.com",
+      "*.nequi.com.co",
+      "*.daviplata.com",
+      "*.supabase.co",
+      "el-ganador-mvp.vercel.app",
+    ],
   },
   android: {
     ...({ adjustMarginsForEdgeToEdge: "auto" } as any),
