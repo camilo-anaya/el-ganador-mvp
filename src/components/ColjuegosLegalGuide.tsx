@@ -133,6 +133,17 @@ interface ColjuegosLegalGuideProps {
 export default function ColjuegosLegalGuide({ embeddedMode = false, onClose }: ColjuegosLegalGuideProps) {
   const [checkedItems, setCheckedItems] = useState<{ [key: number]: boolean }>({});
   const [activeTab, setActiveTab] = useState<'requisitos' | 'tiempos' | 'finanzas' | 'certificacion'>('requisitos');
+
+  // Leer parámetro ?tab=certificacion de la URL para abrir directamente la pestaña solicitada
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (tabParam === 'certificacion' || tabParam === 'requisitos' || tabParam === 'tiempos' || tabParam === 'finanzas') {
+        setActiveTab(tabParam as typeof activeTab);
+      }
+    }
+  }, []);
   const [filterCategory, setFilterCategory] = useState<'all' | 'identidad' | 'premio' | 'garantias' | 'operacion'>('all');
   const [searchFilter, setSearchFilter] = useState('');
 

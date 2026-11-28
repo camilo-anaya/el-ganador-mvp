@@ -25,6 +25,7 @@ const CLIENT_ONLY_PREFIXES = [
 const LEGACY_BUSINESS_REDIRECTS: Record<string, string> = {
   '/publicidad': '/empresario/publicidad',
   '/crear-rifa': '/empresario/crear-rifa',
+  '/marco-legal': '/empresario/marco-legal',
 };
 
 function isClientOnly(pathname: string) {
@@ -45,6 +46,11 @@ export function middleware(req: NextRequest) {
 
   // 2) Superficie empresarial: solo con sesión empresarial
   if (pathname === '/empresario' || pathname.startsWith('/empresario/')) {
+    // Permitir acceso público y libre al Marco Legal y Certificación Coljuegos
+    if (pathname === '/empresario/marco-legal' || pathname.startsWith('/empresario/marco-legal/')) {
+      return NextResponse.next();
+    }
+
     if (surface !== 'business') {
       const url = req.nextUrl.clone();
       url.pathname = '/ingreso';
