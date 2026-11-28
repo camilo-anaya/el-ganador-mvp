@@ -8722,27 +8722,32 @@ button, a, input, select, textarea, .btnInfinityDisplayToggle, .cinemaInfinityDi
 }
 
 html {
-  touch-action: pan-y manipulation !important;
-  overflow-y: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-}
-body {
-  touch-action: pan-y manipulation !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100% !important;
+  touch-action: auto !important;
   -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: auto !important;
+}
+body {
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+  height: auto !important;
+  min-height: 100% !important;
+  touch-action: auto !important;
   overscroll-behavior-y: auto !important;
 }
 
 /* En portátiles (>= 768px), permitir siempre scroll libre con mouse y trackpad */
 @media (min-width: 768px) {
   .liveDemoPage {
-    overflow-y: auto !important;
+    overflow-y: visible !important;
     height: auto !important;
     max-height: none !important;
   }
   .liveDemoPage.isCinemaStageLocked {
-    overflow-y: auto !important;
+    overflow-y: visible !important;
     height: auto !important;
     max-height: none !important;
   }
@@ -8897,17 +8902,17 @@ html {
   overflow-x: hidden !important;
   height: auto !important;
   min-height: 100% !important;
-  touch-action: pan-y manipulation !important;
+  touch-action: auto !important;
   -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-y: auto !important;
 }
 
 body {
-  overflow-y: auto !important;
+  overflow-y: visible !important;
   overflow-x: hidden !important;
   height: auto !important;
   min-height: 100% !important;
-  touch-action: pan-y manipulation !important;
-  -webkit-overflow-scrolling: touch !important;
+  touch-action: auto !important;
   overscroll-behavior-y: auto !important;
 }
 
@@ -9652,4 +9657,11 @@ button:active,
 .btnCloseRoomsDropdown > *,
 .studioBackBtn > * {
   pointer-events: none !important;
+}
+
+
+@media (min-width: 768px) {
+  html, body, .liveDemoPage, .liveDemoContentContainer, .liveDemoStage, .liveDemoStageGrid {
+    touch-action: auto !important;
+  }
 }
