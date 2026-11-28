@@ -9626,3 +9626,13 @@ button:active,
   touch-action: pan-x pan-y !important;
   -webkit-overflow-scrolling: touch !important;
 }
+
+/* Blindaje de eventos táctiles en botones: los hijos nunca interceptan el tap del botón */
+.studioLiveRoomsToggleBtn > *,
+.btnToggleRaffleDetails > *,
+.resultAccordionHeaderBtn > *,
+.btnDemoTestMode > *,
+.btnCloseRoomsDropdown > *,
+.studioBackBtn > * {
+  pointer-events: none !important;
+}

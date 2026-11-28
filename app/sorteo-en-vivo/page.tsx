@@ -2600,7 +2600,7 @@ export default function LiveDrawDemoPage() {
           </div>
 
           {/* DESPLEGABLE SUPERIOR DE SALAS EN VIVO (FILA COMPACTA DESPLEGABLE) */}
-          {showLiveRoomsDropdown && availableDraws.length > 0 && (
+          {showLiveRoomsDropdown && (
             <div className="headerLiveRoomsDropdown">
               <div className="headerLiveRoomsHeading">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -2619,6 +2619,11 @@ export default function LiveDrawDemoPage() {
                 </button>
               </div>
               <div className="headerLiveRoomsList">
+                {availableDraws.length === 0 && (
+                  <div style={{ padding: "8px 12px", color: "#94a3b8", fontSize: "11.5px", fontStyle: "italic" }}>
+                    ⏳ Conectando con las transmisiones en vivo...
+                  </div>
+                )}
                 {availableDraws.map((d, index) => {
                   const isSelected = activeDrawId === d.id;
                   const specCount = index === 0 ? "1.482" : index === 1 ? "890" : index === 2 ? "645" : "410";
@@ -3134,6 +3139,14 @@ export default function LiveDrawDemoPage() {
                 {/* CHASIS MECÁNICO INDUSTRIAL Y ESFERA DE CRISTAL 3D */}
                 <div
                   className="globeChassis"
+                  onTouchStart={() => triggerHaptic(15)}
+                  onClick={() => {
+                    triggerHaptic(20);
+                    if (phase !== "spinning") {
+                      drawAudio.playQuickSoundCheck();
+                    }
+                  }}
+                  title="Esfera de cristal presurizada con física en tiempo real"
                 >
                   {/* Micropartículas luminosas doradas aleatorias en el aire exterior (r > 53%, cero contacto con el cristal) */}
                   <div className="baloteraSparkleHalo" aria-hidden="true">
@@ -3455,6 +3468,14 @@ export default function LiveDrawDemoPage() {
               <div
                 className="wheelCasinoWrapper"
                 data-wheel-size={wheelSize}
+                onTouchStart={() => triggerHaptic(15)}
+                onClick={() => {
+                  triggerHaptic(20);
+                  if (phase !== "spinning") {
+                    drawAudio.playQuickSoundCheck();
+                  }
+                }}
+                title="Ruleta estilo casino Monte Carlo con derivación CSPRNG"
               >
                 {/* 1. Flapper / Puntero Superior Triángulo Dorado con Flecha Rubí */}
                 <div

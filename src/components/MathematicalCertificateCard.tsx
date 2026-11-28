@@ -3,6 +3,12 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 
+function triggerHaptic(ms = 15) {
+  if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+    try { navigator.vibrate(ms); } catch {}
+  }
+}
+
 export default function MathematicalCertificateCard({ defaultOpen = false }: { defaultOpen?: boolean }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -24,7 +30,7 @@ export default function MathematicalCertificateCard({ defaultOpen = false }: { d
     >
       <button
         type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => { triggerHaptic(15); setIsOpen((prev) => !prev); }} onTouchStart={() => triggerHaptic(12)}
         style={{
           width: '100%',
           padding: '10px 12px',
