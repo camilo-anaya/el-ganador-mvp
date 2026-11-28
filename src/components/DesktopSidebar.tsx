@@ -1,7 +1,10 @@
+'use client';
+
+import MathematicalCertificateCard from '@/components/MathematicalCertificateCard';
 // components/DesktopSidebar.tsx
 // Navegación de escritorio EXCLUSIVA de la superficie CLIENTE.
 // La navegación empresarial vive en components/business/BusinessSidebar.tsx.
-'use client';
+
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -124,30 +127,8 @@ export default function DesktopSidebar() {
           >
             <span>📜</span> Marco Legal &amp; Coljuegos
           </Link>
-          <Link
-            href="/empresario/marco-legal?tab=certificacion"
-            className={`toc-link ${pathname === '/empresario/marco-legal' ? 'active' : ''}`}
-            style={{
-              background: 'rgba(212, 175, 55, 0.1)',
-              border: '1px solid rgba(212, 175, 55, 0.35)',
-              borderRadius: '8px',
-              padding: '8px 10px',
-              margin: '3px 0',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-            }}
-          >
-            <span style={{ fontSize: '15px' }}>🛡️</span>
-            <div>
-              <strong style={{ display: 'block', fontSize: '11px', color: '#f5b82e', lineHeight: 1.2 }}>
-                Seguridad &amp; Certificación Coljuegos
-              </strong>
-              <small style={{ fontSize: '9.5px', color: '#94a3b8' }}>
-                Res. 20260019624 · ISO 17025
-              </small>
-            </div>
-          </Link>
+          {/* RECUADRO OFICIAL: CERTIFICADO MATEMÁTICO & CRIPTOGRÁFICO */}
+          <MathematicalCertificateCard defaultOpen={true} />
           <Link
             href="/terminos"
             className={`toc-link ${pathname === '/terminos' ? 'active' : ''}`}

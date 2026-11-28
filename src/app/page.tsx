@@ -1,5 +1,8 @@
-// src/app/page.tsx
 'use client';
+
+import MathematicalCertificateCard from '@/components/MathematicalCertificateCard';
+// src/app/page.tsx
+
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -2074,6 +2077,8 @@ export default function CompactWhiteMarketplacePage() {
               <Link href="/empresario/marco-legal" onClick={() => setShowMobileMenu(false)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', borderRadius: '10px', textDecoration: 'none', color: '#f5b82e', fontWeight: 700 }}>
                 <span>📜</span> Marco Legal &amp; Coljuegos
               </Link>
+              {/* RECUADRO CERTIFICADO MATEMÁTICO EN LA TABLA/MENÚ IZQUIERDO */}
+              <MathematicalCertificateCard defaultOpen={true} />
             </nav>
 
             {/* Botón Cerrar Sesión en el menú móvil */}
